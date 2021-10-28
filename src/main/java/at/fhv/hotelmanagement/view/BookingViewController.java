@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+@Controller
 public class BookingViewController {
 
     private static final String ALL_BOOKINGS_URL = "/bookings";
