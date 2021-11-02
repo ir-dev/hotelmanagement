@@ -1,31 +1,49 @@
 package at.fhv.hotelmanagement.view;
 
+import at.fhv.hotelmanagement.application.api.ViewBookingsService;
+import at.fhv.hotelmanagement.application.dto.BookingDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
+
+@Controller
 public class BookingViewController {
 
     private static final String ALL_BOOKINGS_URL = "/bookings";
     private static final String CREATE_BOOKING_URL = "/bookings/create";
-    private static final String POST_BOOKING_URL = "/bookings/create";
     private static final String ERROR_URL = "/displayerror";
+
+    private static final String POST_BOOKING_URL = "/bookings/create";
 
     private static final String ALL_BOOKINGS_VIEW = "allBookings";
     private static final String CREATE_BOOKING_VIEW = "createBooking";
     private static final String ERROR_VIEW = "errorView";
 
+    @Autowired
+    private ViewBookingsService viewBookingsService;
+
+    @GetMapping(ALL_BOOKINGS_URL)
+    public String allBookings(Model model) {
+        final List<BookingDTO> bookings = viewBookingsService.getAll();
+
+        model.addAttribute("bookings", bookings);
+        return ALL_BOOKINGS_VIEW;
+    }
+
+
     @GetMapping(CREATE_BOOKING_URL)
-    public String createBooking() {
+    public String createBooking(Model model) {
+
+
         return CREATE_BOOKING_VIEW;
     }
+
 
     @GetMapping(ERROR_URL)
     public String displayError(@RequestParam("msg") String msg, Model model) {
@@ -39,13 +57,6 @@ public class BookingViewController {
     }
 
     /*
-    private static final String ERROR_URL = "/displayerror";
-
-    private static final String ALL_CUSTOMERS_VIEW = "allCustomers";
-    private static final String CUSTOMER_VIEW = "customer";
-    private static final String ACCOUNT_VIEW = "account";
-    private static final String ERROR_VIEW = "errorView";
-
     // TODO: inject Application Service Interfaces
 
     @GetMapping(ALL_CUSTOMERS_URL)
