@@ -10,7 +10,7 @@ public class BookingDTO {
     private LocalDate departure;
     private BookingStatus status;
     private int nrOfRooms;
-
+//    private BookingDetailsDTO details;
 
     public static Builder builder(){
         return new Builder();
