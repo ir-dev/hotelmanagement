@@ -15,6 +15,7 @@ public class GuestDTO {
     private LocalDate birthDate;
     private Address address;
     private String nationality;
+    private String eMail;
     private Gender gender;
     private List<PaymentInformation> paymentInformation;
 
@@ -48,6 +49,10 @@ public class GuestDTO {
 
     public String nationality() {
         return this.nationality;
+    }
+
+    public String eMail() {
+        return this.eMail;
     }
 
     public Gender gender() {
@@ -98,6 +103,11 @@ public class GuestDTO {
             return this;
         }
 
+        public Builder withEmail(String eMail) {
+            this.instance.eMail = eMail;
+            return this;
+        }
+
         public Builder withGender(Gender gender) {
             this.instance.gender = gender;
             return this;
@@ -115,10 +125,74 @@ public class GuestDTO {
             Objects.requireNonNull(this.instance.birthDate, "birthdate must be set in GuestDTO");
             Objects.requireNonNull(this.instance.address, "address must be set in GuestDTO");
             Objects.requireNonNull(this.instance.nationality, "nationality must be set in GuestDTO");
+            Objects.requireNonNull(this.instance.eMail, "email must be set in GuestDTO");
             Objects.requireNonNull(this.instance.gender, "gender must be set in GuestDTO");
             Objects.requireNonNull(this.instance.paymentInformation, "paymentInformation must be set in GuestDTO");
 
             return this.instance;
         }
+
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        GuestDTO other = (GuestDTO) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        if (firstName == null) {
+            if (other.firstName != null) {
+                return false;
+            }
+        } else if (!firstName.equals(other.firstName)) {
+            return false;
+        }
+        if (lastName == null) {
+            if (other.lastName != null) {
+                return false;
+            }
+        } else if (!lastName.equals(other.lastName)) {
+            return false;
+        }
+
+        if (birthDate == null) {
+            if (other.birthDate != null) {
+                return false;
+            }
+        } else if (!birthDate.equals(other.birthDate)) {
+            return false;
+        }
+
+        if (address == null) {
+            if (other.address != null) {
+                return false;
+            }
+        } else if (!address.equals(other.address)) {
+            return false;
+        }
+
+        if (eMail == null) {
+            if (other.eMail != null) {
+                return false;
+            }
+        } else if (!eMail.equals(other.eMail)) {
+            return false;
+        }
+
+        return true;
     }
 }

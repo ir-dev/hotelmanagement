@@ -3,13 +3,16 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
 public class BookingDetailsDTO {
     private String bookingNr;
     private LocalDate arrival;
+    private LocalTime arrivalTime;
     private LocalDate departure;
+    private LocalDate optionDate;
     private BookingStatus status;
     private List<CategoryDTO> categories;
     private CancellationModality cancellationModality;
@@ -30,8 +33,16 @@ public class BookingDetailsDTO {
         return this.arrival;
     }
 
+    public LocalTime arrivalTime() {
+        return this.arrivalTime;
+    }
+
     public LocalDate departure() {
         return this.departure;
+    }
+
+    public LocalDate optionDate() {
+        return this.optionDate;
     }
 
     public String bookingStatus() {
@@ -83,8 +94,18 @@ public class BookingDetailsDTO {
             return this;
         }
 
+        public BookingDetailsDTO.Builder withArrivalTime(LocalTime arrivalTime) {
+            this.instance.arrivalTime = arrivalTime;
+            return this;
+        }
+
         public BookingDetailsDTO.Builder withDeparture(LocalDate departure) {
             this.instance.departure = departure;
+            return this;
+        }
+
+        public BookingDetailsDTO.Builder withOptionDate(LocalDate optionDate) {
+            this.instance.optionDate = optionDate;
             return this;
         }
 
@@ -126,7 +147,9 @@ public class BookingDetailsDTO {
         public BookingDetailsDTO build() {
             Objects.requireNonNull(this.instance.bookingNr, "id must be set in BookingDTO");
             Objects.requireNonNull(this.instance.arrival, "arrival must be set in BookingDTO");
+            Objects.requireNonNull(this.instance.arrivalTime, "arrivaltime must be set in BookingDTO");
             Objects.requireNonNull(this.instance.departure, "departure must be set in BookingDTO");
+            Objects.requireNonNull(this.instance.optionDate, "optiondate must be set in BookingDTO");
             Objects.requireNonNull(this.instance.status, "status must be set in BookingDTO");
             Objects.requireNonNull(this.instance.categories, "categories must be set in BookingDTO");
             Objects.requireNonNull(this.instance.cancellationModality, "cancellationmodality must be set in BookingDTO");
@@ -140,5 +163,28 @@ public class BookingDetailsDTO {
 
             return this.instance;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BookingDetailsDTO other = (BookingDetailsDTO) obj;
+        if (bookingNr == null) {
+            if (other.bookingNr != null) {
+                return false;
+            }
+        } else if (!bookingNr.equals(other.bookingNr)) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -10,9 +10,9 @@ public class BookingDTO {
     private LocalDate departure;
     private BookingStatus status;
     private int nrOfRooms;
-//    private BookingDetailsDTO details;
+    //    private BookingDetailsDTO details;
 
-    public static Builder builder(){
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -61,15 +61,16 @@ public class BookingDTO {
             return this;
         }
 
-        public Builder withArrival(LocalDate arrival){
+        public Builder withArrival(LocalDate arrival) {
             this.instance.arrival = arrival;
             return this;
         }
 
-        public Builder withDeparture(LocalDate departure){
+        public Builder withDeparture(LocalDate departure) {
             this.instance.departure = departure;
             return this;
         }
+
         public Builder withBookingStatus(BookingStatus status) {
             this.instance.status = status;
             return this;
@@ -81,12 +82,35 @@ public class BookingDTO {
         }
 
 
-        public BookingDTO build(){
+        public BookingDTO build() {
             Objects.requireNonNull(this.instance.bookingNr, "id must be set in BookingDTO");
             Objects.requireNonNull(this.instance.arrival, "arrival must be set in BookingDTO");
             Objects.requireNonNull(this.instance.departure, "departure must be set in BookingDTO");
 
             return this.instance;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BookingDTO other = (BookingDTO) obj;
+        if (bookingNr == null) {
+            if (other.bookingNr != null) {
+                return false;
+            }
+        } else if (!bookingNr.equals(other.bookingNr)) {
+            return false;
+        }
+
+        return true;
     }
 }
