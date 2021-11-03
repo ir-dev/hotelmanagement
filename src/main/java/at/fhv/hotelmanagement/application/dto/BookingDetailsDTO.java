@@ -16,7 +16,7 @@ public class BookingDetailsDTO {
     private OrganizationDTO organization;
     private GuestDTO guest;
     private List<AdditionalService> additionalServices;
-    private Address billingaddress;
+    private Address billingAddress;
 
     public static BookingDetailsDTO.Builder builder() {
         return new BookingDetailsDTO.Builder();
@@ -59,7 +59,7 @@ public class BookingDetailsDTO {
     }
 
     public Address address() {
-        return this.billingaddress;
+        return this.billingAddress;
     }
 
     private BookingDetailsDTO() {
@@ -114,7 +114,7 @@ public class BookingDetailsDTO {
         }
 
         public BookingDetailsDTO.Builder withBillingAddress(Address billingAddress) {
-            this.instance.billingaddress = billingAddress;
+            this.instance.billingAddress = billingAddress;
             return this;
         }
 
@@ -136,7 +136,7 @@ public class BookingDetailsDTO {
                 Objects.requireNonNull(this.instance.guest, "guest must be set in BookingDTO");
             }
             //            Objects.requireNonNull(this.instance.additionalServices, "additionalservices must be set in BookingDTO");
-            //            Objects.requireNonNull(this.instance.billingaddress, "billingaddress must be set in BookingDTO");
+            //            Objects.requireNonNull(this.instance.billingAddress, "billingaddress must be set in BookingDTO");
 
             return this.instance;
         }
