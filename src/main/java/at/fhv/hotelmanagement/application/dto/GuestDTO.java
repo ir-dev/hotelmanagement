@@ -136,63 +136,19 @@ public class GuestDTO {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        GuestDTO other = (GuestDTO) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        if (firstName == null) {
-            if (other.firstName != null) {
-                return false;
-            }
-        } else if (!firstName.equals(other.firstName)) {
-            return false;
-        }
-        if (lastName == null) {
-            if (other.lastName != null) {
-                return false;
-            }
-        } else if (!lastName.equals(other.lastName)) {
-            return false;
-        }
+        GuestDTO guestDTO = (GuestDTO) o;
+        return Objects.equals(this.id, guestDTO.id) && Objects.equals(this.firstName, guestDTO.firstName) && Objects.equals(this.lastName, guestDTO.lastName) && Objects.equals(this.birthDate, guestDTO.birthDate) && Objects.equals(this.address, guestDTO.address) && Objects.equals(this.nationality, guestDTO.nationality) && Objects.equals(this.eMail, guestDTO.eMail) && this.gender == guestDTO.gender && Objects.equals(this.paymentInformation, guestDTO.paymentInformation);
+    }
 
-        if (birthDate == null) {
-            if (other.birthDate != null) {
-                return false;
-            }
-        } else if (!birthDate.equals(other.birthDate)) {
-            return false;
-        }
-
-        if (address == null) {
-            if (other.address != null) {
-                return false;
-            }
-        } else if (!address.equals(other.address)) {
-            return false;
-        }
-
-        if (eMail == null) {
-            if (other.eMail != null) {
-                return false;
-            }
-        } else if (!eMail.equals(other.eMail)) {
-            return false;
-        }
-
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.firstName, this.lastName, this.birthDate, this.address, this.nationality, this.eMail, this.gender, this.paymentInformation);
     }
 }
