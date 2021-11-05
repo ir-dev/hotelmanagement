@@ -3,15 +3,19 @@ package at.fhv.hotelmanagement.view;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Controller
@@ -61,10 +65,33 @@ public class BookingViewController {
         return new ModelAndView(BOOKING_VIEW);
     }
 
-
-
     @GetMapping(CREATE_BOOKING_URL)
     public String createBooking(Model model) {
+        model.addAttribute("step", "enterStayDetails");
+
+        return CREATE_BOOKING_VIEW;
+    }
+
+    @PostMapping(CREATE_BOOKING_URL)
+    public String createBookingPost(
+            @RequestParam("step") String step,
+            @ModelAttribute BookingForm form,
+            Model model) {
+        final Set<String> wizardSteps = Set.of(
+                "enterStayDetails",
+                "enterRoomCategories",
+                "enterGuestDetails",
+                "enterPayment",
+                "confirmSummary"
+        );
+        if (!wizardSteps.contains(step)) {
+            redirectError("Invalid create booking step.");
+        }
+
+        System.out.println(form.getFirstName());
+
+        model.addAttribute("step", step);
+        model.addAttribute("form", form);
 
         return CREATE_BOOKING_VIEW;
     }
