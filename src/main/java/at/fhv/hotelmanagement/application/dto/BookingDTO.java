@@ -1,16 +1,18 @@
 package at.fhv.hotelmanagement.application.dto;
 
+import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.BookingStatus;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class BookingDTO {
     private String bookingNr;
-    private String guestName;
+    private String guestId;
     private LocalDate arrival;
     private LocalDate departure;
     private BookingStatus status;
     private int nrOfRooms;
-    //    private BookingDetailsDTO details;
 
     public static Builder builder() {
         return new Builder();
@@ -28,8 +30,8 @@ public class BookingDTO {
         return this.bookingNr;
     }
 
-    public String guestName() {
-        return this.guestName;
+    public String guestId() {
+        return this.guestId;
     }
 
     public String bookingStatus() {
@@ -51,36 +53,15 @@ public class BookingDTO {
             this.instance = new BookingDTO();
         }
 
-        public Builder withBookingNr(String bookingNr) {
-            this.instance.bookingNr = bookingNr;
+        public Builder withBookingEntity(Booking booking) {
+            this.instance.bookingNr = booking.bookingNr();
+            this.instance.guestId = booking.guestId();
+            this.instance.arrival = booking.arrival();
+            this.instance.departure = booking.departure();
+            this.instance.status = booking.status();
+            this.instance.nrOfRooms = booking.nrOfRooms();
             return this;
         }
-
-        public Builder withGuestName(String name) {
-            this.instance.guestName = name;
-            return this;
-        }
-
-        public Builder withArrival(LocalDate arrival) {
-            this.instance.arrival = arrival;
-            return this;
-        }
-
-        public Builder withDeparture(LocalDate departure) {
-            this.instance.departure = departure;
-            return this;
-        }
-
-        public Builder withBookingStatus(BookingStatus status) {
-            this.instance.status = status;
-            return this;
-        }
-
-        public Builder withNrOfRooms(int nrOfRooms) {
-            this.instance.nrOfRooms = nrOfRooms;
-            return this;
-        }
-
 
         public BookingDTO build() {
             Objects.requireNonNull(this.instance.bookingNr, "id must be set in BookingDTO");

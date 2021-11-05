@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -18,19 +18,15 @@
             crossorigin="anonymous"></script>
 
 
-
     <ul class="list-group list-group-flush">
-        <li class="list-group-item" th:each="n : ${bookings}">
-            <a th:href="@{/booking(id=${n.bookingNr})}">
-            <h1 th:text="${n.bookingNr}"></h1>
-            <h1 th:text="${n.arrival}"></h1>
-            <h1 th:text="${n.departure}"></h1>
-            <h1 th:text="${n.bookingStatus}"></h1>
-            <h1 th:text="${n.nrOfRooms}"></h1></a>
-        </li>
+            <h1 th:text="${bookingDetail.details.bookingNr}"></h1>
+            <h1 th:text="${bookingDetail.details.arrival}"></h1>
+            <h1 th:text="${bookingDetail.details.departure}"></h1>
+            <h1 th:text="${bookingDetail.details.bookingStatus}"></h1>
+
     </ul>
 
 
-</body>
 
+</body>
 </html>

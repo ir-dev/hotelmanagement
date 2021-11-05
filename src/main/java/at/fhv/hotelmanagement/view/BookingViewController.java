@@ -1,7 +1,8 @@
 package at.fhv.hotelmanagement.view;
 
-import at.fhv.hotelmanagement.application.api.ViewBookingsService;
+import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
+import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,40 +11,63 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
 public class BookingViewController {
 
     private static final String ALL_BOOKINGS_URL = "/bookings";
+    private static final String BOOKINGS_URL = "/booking";
+
     private static final String CREATE_BOOKING_URL = "/bookings/create";
     private static final String ERROR_URL = "/displayerror";
 
     private static final String POST_BOOKING_URL = "/bookings/create";
 
     private static final String ALL_BOOKINGS_VIEW = "allBookings";
+    private static final String BOOKING_VIEW = "booking";
     private static final String CREATE_BOOKING_VIEW = "createBooking";
     private static final String ERROR_VIEW = "errorView";
 
     @Autowired
-    private ViewBookingsService viewBookingsService;
+    private BookingsService bookingsService;
+
 
     @GetMapping(ALL_BOOKINGS_URL)
     public String allBookings(Model model) {
-        final List<BookingDTO> bookings = viewBookingsService.getAll();
+        final List<BookingDTO> bookings = bookingsService.getAll();
+
+        if(bookings.isEmpty()){
+            redirectError("No Bookings found");
+        }
 
         model.addAttribute("bookings", bookings);
         return ALL_BOOKINGS_VIEW;
     }
 
+    @GetMapping(BOOKINGS_URL)
+    public ModelAndView booking(
+            @RequestParam("id") String bookingNr,
+            Model model){
+
+        final Optional<BookingDetailsDTO> bookingDetail = bookingsService.getDetailsByBookingNr(bookingNr);
+
+        if(bookingDetail.isEmpty()){
+            redirectError("Booking with id: " + bookingNr + " not found");
+        }
+
+        model.addAttribute("bookingDetail", bookingDetail.get());
+        return new ModelAndView(BOOKING_VIEW);
+    }
+
+
 
     @GetMapping(CREATE_BOOKING_URL)
     public String createBooking(Model model) {
 
-
         return CREATE_BOOKING_VIEW;
     }
-
 
     @GetMapping(ERROR_URL)
     public String displayError(@RequestParam("msg") String msg, Model model) {
