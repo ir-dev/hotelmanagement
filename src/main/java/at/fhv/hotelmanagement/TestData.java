@@ -2,7 +2,7 @@ package at.fhv.hotelmanagement;
 
 import at.fhv.hotelmanagement.domain.model.Address;
 import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.BookingStatus;
+import at.fhv.hotelmanagement.domain.model.Enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

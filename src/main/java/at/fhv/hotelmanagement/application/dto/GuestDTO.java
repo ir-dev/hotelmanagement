@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Address;
-import at.fhv.hotelmanagement.domain.model.Gender;
+import at.fhv.hotelmanagement.domain.model.Enums.Gender;
 import at.fhv.hotelmanagement.domain.model.PaymentInformation;
 
 import java.time.LocalDate;

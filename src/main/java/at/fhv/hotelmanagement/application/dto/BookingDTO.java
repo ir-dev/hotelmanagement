@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.BookingStatus;
+import at.fhv.hotelmanagement.domain.model.Enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.util.Objects;

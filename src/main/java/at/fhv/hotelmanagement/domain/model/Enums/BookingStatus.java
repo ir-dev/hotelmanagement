@@ -1,4 +1,4 @@
-package at.fhv.hotelmanagement.domain.model;
+package at.fhv.hotelmanagement.domain.model.Enums;
 
 public enum BookingStatus {
     Pending,
