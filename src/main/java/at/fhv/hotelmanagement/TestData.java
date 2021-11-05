@@ -20,7 +20,7 @@ public class TestData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Address ad1 = new Address("Baumgarten", 2, "6850", "Dornbirn", "Austria");
+        Address ad1 = new Address("Baumgarten", "26850", "Dornbirn", "Austria");
 
         Booking bk1 = new Booking("5678","1", LocalDate.of(2021,12,12),LocalDate.of(2021,12,24),
                 BookingStatus.Pending, 4, LocalTime.of(11,30), ad1);

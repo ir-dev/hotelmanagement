@@ -2,36 +2,30 @@ package at.fhv.hotelmanagement.domain.model;
 
 public class Address {
     private String street;
-    private Integer number;
-    private String zipCode;
+    private String zipcode;
     private String city;
-    private String state;
+    private String country;
 
-    public Address(String street, Integer number, String zipCode, String city, String state) {
+    public Address(String street, String zipcode, String city, String country) {
         this.street = street;
-        this.number = number;
-        this.zipCode = zipCode;
+        this.zipcode = zipcode;
         this.city = city;
-        this.state = state;
+        this.country = country;
     }
 
     public String street() {
         return this.street;
     }
 
-    public Integer number() {
-        return this.number;
-    }
-
-    public String zipCode() {
-        return this.zipCode;
+    public String zipcode() {
+        return this.zipcode;
     }
 
     public String city() {
         return this.city;
     }
 
-    public String state() {
-        return this.state;
+    public String country() {
+        return this.country;
     }
 }
