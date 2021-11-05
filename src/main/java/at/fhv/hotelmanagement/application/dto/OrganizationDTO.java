@@ -86,48 +86,19 @@ public class OrganizationDTO {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        OrganizationDTO other = (OrganizationDTO) obj;
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
+        OrganizationDTO that = (OrganizationDTO) o;
+        return Objects.equals(this.id, that.id) && Objects.equals(this.name, that.name) && Objects.equals(this.address, that.address) && Objects.equals(this.eMail, that.eMail) && Objects.equals(this.paymentInformation, that.paymentInformation);
+    }
 
-        if (address == null) {
-            if (other.address != null) {
-                return false;
-            }
-        } else if (!address.equals(other.address)) {
-            return false;
-        }
-
-        if (eMail == null) {
-            if (other.eMail != null) {
-                return false;
-            }
-        } else if (!eMail.equals(other.eMail)) {
-            return false;
-        }
-
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.address, this.eMail, this.paymentInformation);
     }
 }

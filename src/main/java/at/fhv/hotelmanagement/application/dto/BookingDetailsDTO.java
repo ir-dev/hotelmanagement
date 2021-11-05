@@ -166,25 +166,19 @@ public class BookingDetailsDTO {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        BookingDetailsDTO other = (BookingDetailsDTO) obj;
-        if (bookingNr == null) {
-            if (other.bookingNr != null) {
-                return false;
-            }
-        } else if (!bookingNr.equals(other.bookingNr)) {
-            return false;
-        }
+        BookingDetailsDTO that = (BookingDetailsDTO) o;
+        return Objects.equals(this.bookingNr, that.bookingNr) && Objects.equals(this.arrival, that.arrival) && Objects.equals(this.arrivalTime, that.arrivalTime) && Objects.equals(this.departure, that.departure) && Objects.equals(this.optionDate, that.optionDate) && this.status == that.status && Objects.equals(this.categories, that.categories) && Objects.equals(this.cancellationModality, that.cancellationModality) && Objects.equals(this.organization, that.organization) && Objects.equals(this.guest, that.guest) && Objects.equals(this.additionalServices, that.additionalServices) && Objects.equals(this.billingAddress, that.billingAddress);
+    }
 
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.bookingNr, this.arrival, this.arrivalTime, this.departure, this.optionDate, this.status, this.categories, this.cancellationModality, this.organization, this.guest, this.additionalServices, this.billingAddress);
     }
 }

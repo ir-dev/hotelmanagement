@@ -61,36 +61,22 @@ public class CategoryDTO {
             return this.instance;
         }
 
-
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (obj == null) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CategoryDTO other = (CategoryDTO) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        if (description == null) {
-            if (other.description != null) {
-                return false;
-            }
-        } else if (!description.equals(other.description)) {
-            return false;
-        }
+        CategoryDTO that = (CategoryDTO) o;
+        return Objects.equals(this.name, that.name) && Objects.equals(this.description, that.description) && Objects.equals(this.seasonPrice, that.seasonPrice);
+    }
 
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.description, this.seasonPrice);
     }
 }
