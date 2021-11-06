@@ -6,7 +6,7 @@ public class Category {
     private String name;
     private String description;
     private List<Room> roomList;
-    private SeasonPrice seasonPrice;
+//    private SeasonPrice seasonPrice;
 
 
 

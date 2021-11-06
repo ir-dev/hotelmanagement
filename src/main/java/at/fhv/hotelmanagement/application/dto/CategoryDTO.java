@@ -1,16 +1,12 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Category;
-import at.fhv.hotelmanagement.domain.model.SeasonPrice;
-
-import java.util.List;
 import java.util.Objects;
 
 public class CategoryDTO {
     private String name;
     private String description;
     // private List<Room> roomList;
-    private SeasonPrice seasonPrice;
+//    private SeasonPrice seasonPrice;
 
     public static CategoryDTO.Builder builder() {
         return new CategoryDTO.Builder();
@@ -24,9 +20,9 @@ public class CategoryDTO {
         return this.description;
     }
 
-    public SeasonPrice seasonPrice() {
-        return this.seasonPrice;
-    }
+//    public SeasonPrice seasonPrice() {
+//        return this.seasonPrice;
+//    }
 
     private CategoryDTO() {
     }
@@ -48,15 +44,15 @@ public class CategoryDTO {
             return this;
         }
 
-        public CategoryDTO.Builder withSeasonPrice(SeasonPrice seasonPrice) {
-            this.instance.seasonPrice = seasonPrice;
-            return this;
-        }
+//        public CategoryDTO.Builder withSeasonPrice(SeasonPrice seasonPrice) {
+//            this.instance.seasonPrice = seasonPrice;
+//            return this;
+//        }
 
         public CategoryDTO build() {
             Objects.requireNonNull(this.instance.name, "name must be set in CategoryDTO");
             Objects.requireNonNull(this.instance.description, "firstName must be set in CategoryDTO");
-            Objects.requireNonNull(this.instance.seasonPrice, "lastName must be set in CategoryDTO");
+//            Objects.requireNonNull(this.instance.seasonPrice, "lastName must be set in CategoryDTO");
 
             return this.instance;
         }

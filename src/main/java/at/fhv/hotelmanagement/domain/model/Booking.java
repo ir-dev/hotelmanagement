@@ -15,9 +15,9 @@ public class Booking {
     private int nrOfBookedRooms;
     private LocalTime arrivalTime;
     private List<Category> categories;
-    private CancellationModality cancellationModality;
+//    private CancellationModality cancellationModality;
     private Organization organization;
-    private List<AdditionalService> additionalServices;
+//    private List<AdditionalService> additionalServices;
     //private Address billingAddress;
 
     public Booking(String bookingNr, String guestId, LocalDate arrival, LocalDate departure, BookingStatus status,
@@ -63,17 +63,17 @@ public class Booking {
         return this.categories;
     }
 
-    public CancellationModality cancellationModality() {
-        return this.cancellationModality;
-    }
+//    public CancellationModality cancellationModality() {
+//        return this.cancellationModality;
+//    }
 
     public Organization organization() {
         return this.organization;
     }
 
-    public List<AdditionalService> additionalServices() {
-        return this.additionalServices;
-    }
+//    public List<AdditionalService> additionalServices() {
+//        return this.additionalServices;
+//    }
 
 
 }

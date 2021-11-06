@@ -8,9 +8,9 @@ import java.util.Objects;
 public class BookingDetailsDTO {
     private BookingDTO details;
     private List<CategoryDTO> categories;
-    private CancellationModality cancellationModality;
+//    private CancellationModality cancellationModality;
     private OrganizationDTO organization;
-    private List<AdditionalService> additionalServices;
+//    private List<AdditionalService> additionalServices;
     private Address billingAddress;
 
     public static BookingDetailsDTO.Builder builder() {
@@ -25,17 +25,17 @@ public class BookingDetailsDTO {
         return this.categories;
     }
 
-    public String cancellationModality() {
-        return this.cancellationModality.toString();
-    }
+//    public String cancellationModality() {
+//        return this.cancellationModality.toString();
+//    }
 
     public OrganizationDTO organization() {
         return this.organization;
     }
 
-    public List<AdditionalService> additionalService() {
-        return this.additionalServices;
-    }
+//    public List<AdditionalService> additionalService() {
+//        return this.additionalServices;
+//    }
 
     public Address address() {
         return this.billingAddress;
@@ -59,9 +59,9 @@ public class BookingDetailsDTO {
 
         public BookingDetailsDTO.Builder withBookingEntity(Booking booking) {
             //this.instance.categories = booking.categories();
-            this.instance.cancellationModality = booking.cancellationModality();
+//            this.instance.cancellationModality = booking.cancellationModality();
             //this.instance.organization = booking.organization();
-            this.instance.additionalServices = booking.additionalServices();
+//            this.instance.additionalServices = booking.additionalServices();
             //this.instance.billingAddress = booking.billingAddress();
             return this;
         }
