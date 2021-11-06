@@ -19,7 +19,7 @@ public class ArrayListBookingRepository implements BookingRepository {
     }
 
     @Override
-    public ArrayList<Booking> getAll() {
+    public List<Booking> getAll() {
         return bookingList;
     }
 

@@ -19,10 +19,26 @@
 
 
     <ul class="list-group list-group-flush">
-            <h1 th:text="${bookingDetail.details.bookingNr}"></h1>
-            <h1 th:text="${bookingDetail.details.arrival}"></h1>
-            <h1 th:text="${bookingDetail.details.departure}"></h1>
-            <h1 th:text="${bookingDetail.details.bookingStatus}"></h1>
+            <h1 th:text="${booking.details.bookingNr}"></h1>
+            <h1 th:text="${booking.details.arrival}"></h1>
+            <h1 th:text="${booking.details.departure}"></h1>
+            <h1 th:text="${booking.details.bookingStatus}"></h1>
+            <h1 th:text="${booking.details.nrOfBookedRooms}"></h1>
+             <h1 th:text="${booking.details.arrivalTime}"></h1>
+
+             <h2>Guest:</h2>
+            <h2 th:text="${guest.guestId}"></h2>
+             <h2 th:text="${guest.firstName}"></h2>
+            <h2 th:text="${guest.birthday}"></h2>
+
+        <h2>Address:</h2>
+        <h2 th:text="${guest.address.street}"></h2>
+        <h2 th:text="${guest.address.zipcode}"></h2>
+        <h2 th:text="${guest.address.city}"></h2>
+        <h2 th:text="${guest.address.country}"></h2>
+
+
+
 
     </ul>
 
