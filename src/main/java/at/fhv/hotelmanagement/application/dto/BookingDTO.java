@@ -82,28 +82,4 @@ public class BookingDTO {
             return this.instance;
         }
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        BookingDTO other = (BookingDTO) obj;
-        if (bookingNr == null) {
-            if (other.bookingNr != null) {
-                return false;
-            }
-        } else if (!bookingNr.equals(other.bookingNr)) {
-            return false;
-        }
-
-        return true;
-    }
-
 }

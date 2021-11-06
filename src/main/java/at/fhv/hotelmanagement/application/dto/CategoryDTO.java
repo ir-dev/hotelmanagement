@@ -62,21 +62,4 @@ public class CategoryDTO {
         }
 
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || this.getClass() != o.getClass()) {
-            return false;
-        }
-        CategoryDTO that = (CategoryDTO) o;
-        return Objects.equals(this.name, that.name) && Objects.equals(this.description, that.description) && Objects.equals(this.seasonPrice, that.seasonPrice);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.name, this.description, this.seasonPrice);
-    }
 }
