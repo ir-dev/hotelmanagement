@@ -24,7 +24,7 @@
                                         <a th:href="@{/bookings}" class="breadcrumb-link">Bookings</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        <span th:text="${bookingDetail.details.bookingNr}"/>
+                                        <span th:text="${booking.details.bookingNr}"/>
                                     </li>
                                 </ol>
                             </nav>
@@ -41,22 +41,24 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th> Booking #</th>
-                                        <th> Guest #</th>
-                                        <th> Arrival</th>
-                                        <th> Departure</th>
-                                        <th> Status</th>
-                                        <th> # of Rooms</th>
+                                        <th>Booking #</th>
+                                        <th>Guest #</th>
+                                        <th>Arrival</th>
+                                        <th>Arrival Time</th>
+                                        <th>Departure</th>
+                                        <th>Status</th>
+                                        <th># of Rooms</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><span th:text="${bookingDetail.details.bookingNr}"/></td>
-                                        <td><span th:text="${bookingDetail.details.guestId}"/></td>
-                                        <td><span th:text="${bookingDetail.details.arrival}"/></td>
-                                        <td><span th:text="${bookingDetail.details.departure}"/></td>
-                                        <td><span th:text="${bookingDetail.details.bookingStatus}"/></td>
-                                        <td><span th:text="${bookingDetail.details.nrOfRooms}"/></td>
+                                        <td><span th:text="${booking.details.bookingNr}"/></td>
+                                        <td><span th:text="${booking.details.guestId}"/></td>
+                                        <td><span th:text="${booking.details.arrival}"/></td>
+                                        <td><span th:text="${booking.details.arrivalTime}"/></td>
+                                        <td><span th:text="${booking.details.departure}"/></td>
+                                        <td><span th:text="${booking.details.bookingStatus()}"/></td>
+                                        <td><span th:text="${booking.details.nrOfBookedRooms}"/></td>
                                     </tr>
                                     </tbody>
                                 </table>
