@@ -14,7 +14,6 @@ public class BookingForm {
 
     // Categories?!
     private List<Category> selectedCategories;
-
     private String nrOfCategoryRooms;
 
     private Boolean organization;
@@ -50,46 +49,6 @@ public class BookingForm {
     public void setNrOfCategoryRooms(String nrOfCategoryRooms) {
         this.nrOfCategoryRooms = nrOfCategoryRooms;
     }
-
-    //    public LocalDate getArrivalDate() {
-//        return this.arrivalDate;
-//    }
-//
-//    public void setArrivalDate(String arrivalDate) {
-//        this.arrivalDate = LocalDate.parse(arrivalDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//    }
-//
-//    public LocalDate getDepartureDate() {
-//        return this.departureDate;
-//    }
-//
-//    public void setDepartureDate(String departureDate) {
-//        this.departureDate = LocalDate.parse(departureDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//    }
-//
-//    public LocalTime getArrivalTime() {
-//        return this.arrivalTime;
-//    }
-//
-//    public void setArrivalTime(String arrivalTime) {
-//        this.arrivalTime = LocalTime.parse(arrivalTime, DateTimeFormatter.ofPattern("H:mm"));
-//    }
-//
-//    public Integer getNumberOfPersons() {
-//        return this.numberOfPersons;
-//    }
-//
-//    public void setNumberOfPersons(String numberOfPersons) {
-//        this.numberOfPersons = Integer.parseInt(numberOfPersons);
-//    }
-//    public LocalDate getBirthday() {
-//        return this.birthday;
-//    }
-//
-//    public void setBirthday(String birthday) {
-//        this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//    }
-
 
     public String getArrivalDate() {
         return this.arrivalDate;

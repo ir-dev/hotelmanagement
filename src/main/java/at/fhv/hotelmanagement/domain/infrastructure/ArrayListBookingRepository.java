@@ -14,7 +14,7 @@ public class ArrayListBookingRepository implements BookingRepository {
     private ArrayList<Booking> bookingList = new ArrayList<>();
 
     @Override
-    public void addBooking(Booking booking){
+    public void save(Booking booking){
         bookingList.add(booking);
     }
 

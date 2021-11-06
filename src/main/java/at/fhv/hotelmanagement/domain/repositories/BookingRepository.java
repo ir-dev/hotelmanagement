@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository {
 
-    void addBooking(Booking booking);
+    void save(Booking booking);
 
     List<Booking> getAll();
 

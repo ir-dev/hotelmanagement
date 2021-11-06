@@ -28,8 +28,8 @@ public class TestData implements ApplicationRunner {
         Booking bk2 = new Booking("5679","1", LocalDate.of(2021,12,12),LocalDate.of(2021,12,24),
                 BookingStatus.Pending, 4, LocalTime.of(11,30), ad1);
 
-        bookingRepository.addBooking(bk1);
-        bookingRepository.addBooking(bk2);
+        bookingRepository.save(bk1);
+        bookingRepository.save(bk2);
 
     }
 }

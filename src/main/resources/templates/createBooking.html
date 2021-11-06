@@ -61,8 +61,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                     <a th:href="@{/bookings}" class="btn btn-space btn-secondary">Back</a>
+                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -138,8 +138,8 @@
                                             </table>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                     <a th:href="@{/bookings/create(step='enterStayDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -209,8 +209,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                     <a th:href="@{/bookings/create(step='enterRoomCategories')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -263,8 +263,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                     <a th:href="@{/bookings/create(step='enterGuestDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
                                         </div>
@@ -273,7 +273,7 @@
 
                                 <th:block th:if="${#strings.equals(step, 'confirmSummary')}">
                                     <h5 class="card-header">Booking Summary</h5>
-                                    <form th:object="${form}" method="post">
+                                    <form th:action="@{/bookings/create/new}" th:object="${form}" method="post">
                                         <input type="hidden" th:field="*{arrivalDate}">
                                         <input type="hidden" th:field="*{departureDate}">
                                         <input type="hidden" th:field="*{arrivalTime}">
@@ -295,6 +295,14 @@
                                         <input type="hidden" th:field="*{cardValidThru}">
                                         <input type="hidden" th:field="*{cardCvc}">
                                         <input type="hidden" th:field="*{paymentType}">
+
+                                        <div class="form-group">
+                                            <p class="text-right">
+
+                                                <a th:href="@{/bookings/create(step='enterGuestDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                <button type="submit" class="btn btn-space btn-primary">Create</button>
+                                            </p>
+                                        </div>
                                     </form>
                                     <!-- TODO: add summary -->
                                 </th:block>

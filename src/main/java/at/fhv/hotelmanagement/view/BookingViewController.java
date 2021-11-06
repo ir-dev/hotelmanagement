@@ -69,12 +69,11 @@ public class BookingViewController {
     @GetMapping(CREATE_BOOKING_URL)
     public String createBooking(Model model) {
         model.addAttribute("step", "enterStayDetails");
-
         return CREATE_BOOKING_VIEW;
     }
 
     @PostMapping(CREATE_BOOKING_URL)
-    public String createBookingPost(
+    public String createBookingWizard(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
             Model model) {
@@ -89,13 +88,21 @@ public class BookingViewController {
             redirectError("Invalid create booking step.");
         }
 
-
         model.addAttribute("form", form);
         model.addAttribute("step", step);
-        //model.addAttribute("form", form);
 
         return CREATE_BOOKING_VIEW;
     }
+
+    @PostMapping(CREATE_BOOKING_URL + "/new")
+    public ModelAndView createBookingPost(@ModelAttribute BookingForm form){
+        bookingsService.store(form);
+        System.out.println("arrivalDate:" + form.getArrivalDate());
+
+        return new ModelAndView("redirect:/bookings");
+    }
+
+
 
     @GetMapping(ERROR_URL)
     public String displayError(@RequestParam("msg") String msg, Model model) {
