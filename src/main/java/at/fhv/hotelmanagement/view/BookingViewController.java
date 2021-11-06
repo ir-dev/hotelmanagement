@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -88,10 +89,10 @@ public class BookingViewController {
             redirectError("Invalid create booking step.");
         }
 
-        System.out.println(form.getFirstName());
 
-        model.addAttribute("step", step);
         model.addAttribute("form", form);
+        model.addAttribute("step", step);
+        //model.addAttribute("form", form);
 
         return CREATE_BOOKING_VIEW;
     }

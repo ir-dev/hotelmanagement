@@ -7,7 +7,6 @@ import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,7 @@ public class BookingServiceImpl implements BookingsService {
         }
         Booking booking = b.get();
 
-        return Optional.ofNullable(BookingDTO.builder()
+        return Optional.of(BookingDTO.builder()
                 .withBookingEntity(booking)
                 .build());
     }
@@ -48,14 +47,13 @@ public class BookingServiceImpl implements BookingsService {
     @Override
     public Optional<BookingDetailsDTO> getDetailsByBookingNr(String bookingNr) {
         Optional<BookingDTO> b = getByBookingNr(bookingNr);
-
         Optional<Booking> b2 = bookingRepository.findByBookingNr(bookingNr);
-        if(b.isEmpty()){
+
+        if(b.isEmpty() || b2.isEmpty()){
             return Optional.empty();
         }
         Booking booking = b2.get();
-
-        return Optional.ofNullable(BookingDetailsDTO.builder()
+        return Optional.of(BookingDetailsDTO.builder()
                 .withBookingDTO(b.get())
                 .withBookingEntity(booking)
                 .build());

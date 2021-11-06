@@ -97,8 +97,9 @@
                                                         <input type="number" style="width:60px;"
                                                                class="input-category-rooms"
                                                                data-available-category-no="0" value="0"
-                                                               name="categoryRooms[0]"
+                                                               name="nrOfCategoryRooms"
                                                                id="categoryRooms0">
+
                                                         <button type="button" class="btn button-plus-category-rooms"
                                                                 data-available-category-no="0"><i
                                                                 class="fas fa-plus-circle"></i></button>
@@ -120,7 +121,7 @@
                                                         <input type="number" style="width:60px;"
                                                                class="input-category-rooms"
                                                                data-available-category-no="1" value="0"
-                                                               name="categoryRooms[1]"
+                                                               name="nrOfCategoryRooms"
                                                                id="categoryRooms1">
                                                         <button type="button" class="btn button-plus-category-rooms"
                                                                 data-available-category-no="1"><i
@@ -147,7 +148,13 @@
 
                                 <th:block th:if="${#strings.equals(step, 'enterGuestDetails')}">
                                     <h5 class="card-header">Guest Details</h5>
-                                    <form th:action="@{/bookings/create(step='enterPayment')}" method="post">
+                                    <form th:action="@{/bookings/create(step='enterPayment')}" th:object="${form}" method="post">
+                                        <input type="hidden" th:field="*{arrivalDate}">
+                                        <input type="hidden" th:field="*{departureDate}">
+                                        <input type="hidden" th:field="*{arrivalTime}">
+                                        <input type="hidden" th:field="*{numberOfPersons}">
+                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+
                                         <div class="card-body">
                                             <label class="custom-control custom-checkbox">
                                                 <input id="organization" name="organization" type="checkbox" class="custom-control-input"><span class="custom-control-label">Organization</span>
@@ -212,7 +219,24 @@
 
                                 <th:block th:if="${#strings.equals(step, 'enterPayment')}">
                                     <h5 class="card-header">Payment</h5>
-                                    <form th:action="@{/bookings/create(step='confirmSummary')}" method="post">
+                                    <form th:action="@{/bookings/create(step='confirmSummary')}" th:object="${form}" method="post">
+                                        <input type="hidden" th:field="*{arrivalDate}">
+                                        <input type="hidden" th:field="*{departureDate}">
+                                        <input type="hidden" th:field="*{arrivalTime}">
+                                        <input type="hidden" th:field="*{numberOfPersons}">
+                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+                                        <input type="hidden" th:field="*{organizationName}">
+                                        <input type="hidden" th:field="*{agreementCode}">
+                                        <input type="hidden" th:field="*{salutation}">
+                                        <input type="hidden" th:field="*{firstName}">
+                                        <input type="hidden" th:field="*{lastName}">
+                                        <input type="hidden" th:field="*{birthday}">
+                                        <input type="hidden" th:field="*{street}">
+                                        <input type="hidden" th:field="*{zipcode}">
+                                        <input type="hidden" th:field="*{city}">
+                                        <input type="hidden" th:field="*{country}">
+                                        <input type="hidden" th:field="*{specialNotes}">
+
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="cardHolderName" class="col-form-label">Card Holder Name</label>
@@ -249,6 +273,29 @@
 
                                 <th:block th:if="${#strings.equals(step, 'confirmSummary')}">
                                     <h5 class="card-header">Booking Summary</h5>
+                                    <form th:object="${form}" method="post">
+                                        <input type="hidden" th:field="*{arrivalDate}">
+                                        <input type="hidden" th:field="*{departureDate}">
+                                        <input type="hidden" th:field="*{arrivalTime}">
+                                        <input type="hidden" th:field="*{numberOfPersons}">
+                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+                                        <input type="hidden" th:field="*{organizationName}">
+                                        <input type="hidden" th:field="*{agreementCode}">
+                                        <input type="hidden" th:field="*{salutation}">
+                                        <input type="hidden" th:field="*{firstName}">
+                                        <input type="hidden" th:field="*{lastName}">
+                                        <input type="hidden" th:field="*{birthday}">
+                                        <input type="hidden" th:field="*{street}">
+                                        <input type="hidden" th:field="*{zipcode}">
+                                        <input type="hidden" th:field="*{city}">
+                                        <input type="hidden" th:field="*{country}">
+                                        <input type="hidden" th:field="*{specialNotes}">
+                                        <input type="hidden" th:field="*{cardHolderName}">
+                                        <input type="hidden" th:field="*{cardNumber}">
+                                        <input type="hidden" th:field="*{cardValidThru}">
+                                        <input type="hidden" th:field="*{cardCvc}">
+                                        <input type="hidden" th:field="*{paymentType}">
+                                    </form>
                                     <!-- TODO: add summary -->
                                 </th:block>
 

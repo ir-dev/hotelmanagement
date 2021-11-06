@@ -1,22 +1,21 @@
 package at.fhv.hotelmanagement.view.forms;
 
 import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.Enums.PaymentType;
-import at.fhv.hotelmanagement.domain.model.Enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
+import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BookingForm {
-    private LocalDate arrivalDate;
-    private LocalDate departureDate;
-    private LocalTime arrivalTime;
-    private Integer numberOfPersons;
+    private String arrivalDate;
+    private String departureDate;
+    private String arrivalTime;
+    private String numberOfPersons;
 
     // Categories?!
-    //private List<Category> selectedCategories;
-    //private int nrOfRooms;
+    private List<Category> selectedCategories;
+
+    private String nrOfCategoryRooms;
 
     private Boolean organization;
     private String organizationName;
@@ -25,9 +24,14 @@ public class BookingForm {
     private Salutation salutation;
     private String firstName;
     private String lastName;
-    private LocalDate birthday;
-    private Address address;
+    private String birthday;
     private String specialNotes;
+
+    private Address address;
+    private String street;
+    private String zipcode;
+    private String city;
+    private String country;
 
     private String cardHolderName;
     private String cardNumber;
@@ -39,36 +43,92 @@ public class BookingForm {
     public BookingForm() {
     }
 
-    public LocalDate getArrivalDate() {
+    public String getNrOfCategoryRooms() {
+        return this.nrOfCategoryRooms;
+    }
+
+    public void setNrOfCategoryRooms(String nrOfCategoryRooms) {
+        this.nrOfCategoryRooms = nrOfCategoryRooms;
+    }
+
+    //    public LocalDate getArrivalDate() {
+//        return this.arrivalDate;
+//    }
+//
+//    public void setArrivalDate(String arrivalDate) {
+//        this.arrivalDate = LocalDate.parse(arrivalDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//    }
+//
+//    public LocalDate getDepartureDate() {
+//        return this.departureDate;
+//    }
+//
+//    public void setDepartureDate(String departureDate) {
+//        this.departureDate = LocalDate.parse(departureDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//    }
+//
+//    public LocalTime getArrivalTime() {
+//        return this.arrivalTime;
+//    }
+//
+//    public void setArrivalTime(String arrivalTime) {
+//        this.arrivalTime = LocalTime.parse(arrivalTime, DateTimeFormatter.ofPattern("H:mm"));
+//    }
+//
+//    public Integer getNumberOfPersons() {
+//        return this.numberOfPersons;
+//    }
+//
+//    public void setNumberOfPersons(String numberOfPersons) {
+//        this.numberOfPersons = Integer.parseInt(numberOfPersons);
+//    }
+//    public LocalDate getBirthday() {
+//        return this.birthday;
+//    }
+//
+//    public void setBirthday(String birthday) {
+//        this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//    }
+
+
+    public String getArrivalDate() {
         return this.arrivalDate;
     }
 
     public void setArrivalDate(String arrivalDate) {
-        this.arrivalDate = LocalDate.parse(arrivalDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.arrivalDate = arrivalDate;
     }
 
-    public LocalDate getDepartureDate() {
+    public String getDepartureDate() {
         return this.departureDate;
     }
 
     public void setDepartureDate(String departureDate) {
-        this.departureDate = LocalDate.parse(departureDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.departureDate = departureDate;
     }
 
-    public LocalTime getArrivalTime() {
+    public String getArrivalTime() {
         return this.arrivalTime;
     }
 
     public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = LocalTime.parse(arrivalTime, DateTimeFormatter.ofPattern("H:mm"));
+        this.arrivalTime = arrivalTime;
     }
 
-    public Integer getNumberOfPersons() {
+    public String getNumberOfPersons() {
         return this.numberOfPersons;
     }
 
     public void setNumberOfPersons(String numberOfPersons) {
-        this.numberOfPersons = Integer.parseInt(numberOfPersons);
+        this.numberOfPersons = numberOfPersons;
+    }
+
+    public String getBirthday() {
+        return this.birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public boolean isOrganization() {
@@ -95,8 +155,8 @@ public class BookingForm {
         this.AgreementCode = agreementCode;
     }
 
-    public Salutation getSalutation() {
-        return this.salutation;
+    public String getSalutation() {
+        return this.salutation.toString();
     }
 
     public void setSalutation(String salutation) {
@@ -119,22 +179,51 @@ public class BookingForm {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
-    }
 
-    public void setBirthday(String birthday) {
-        this.birthday = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
 
     public Address getAddress() {
         return this.address;
     }
 
-    //TODO: How to map all fields to method call
-//    public void setAddress(String street, String zipcode, String city, String country) {
-//        this.address = new Address(street, zipcode, city, country);
+//    //TODO: How to map all fields to method call
+//    //DONE: (Possible Solution?)
+//    public void setAddress() {
+//        this.address = new Address(getStreet(), getZipcode(), getCity(), getCountry());
 //    }
+
+    public String getStreet() {
+        return this.street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getZipcode() {
+        return this.zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return this.country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+
 
     public String getSpecialNotes() {
         return this.specialNotes;
@@ -176,8 +265,8 @@ public class BookingForm {
         this.cardCvc = cardCvc;
     }
 
-    public PaymentType getPaymentType() {
-        return this.paymentType;
+    public String getPaymentType() {
+        return this.paymentType.toString();
     }
 
     public void setPaymentType(String paymentType) {
