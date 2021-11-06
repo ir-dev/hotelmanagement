@@ -4,15 +4,17 @@ import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class BookingDTO {
     private String bookingNr;
     private String guestId;
     private LocalDate arrival;
+    private LocalTime arrivalTime;
     private LocalDate departure;
     private BookingStatus status;
-    private int nrOfRooms;
+    private int nrOfBookedRooms;
 
     public static Builder builder() {
         return new Builder();
@@ -24,6 +26,10 @@ public class BookingDTO {
 
     public LocalDate departure() {
         return this.departure;
+    }
+
+    public LocalTime arrivalTime() {
+        return this.arrivalTime;
     }
 
     public String bookingNr() {
@@ -38,9 +44,11 @@ public class BookingDTO {
         return this.status.toString();
     }
 
-    public int nrOfRooms() {
-        return this.nrOfRooms;
+    public int nrOfBookedRooms() {
+        return this.nrOfBookedRooms;
     }
+
+
 
     private BookingDTO() {
 
@@ -53,13 +61,16 @@ public class BookingDTO {
             this.instance = new BookingDTO();
         }
 
+
+
         public Builder withBookingEntity(Booking booking) {
             this.instance.bookingNr = booking.bookingNr();
             this.instance.guestId = booking.guestId();
             this.instance.arrival = booking.arrival();
             this.instance.departure = booking.departure();
+            this.instance.arrivalTime = booking.arrivalTime();
             this.instance.status = booking.status();
-            this.instance.nrOfRooms = booking.nrOfRooms();
+            this.instance.nrOfBookedRooms = booking.nrOfBookedRooms();
             return this;
         }
 
@@ -94,6 +105,5 @@ public class BookingDTO {
 
         return true;
     }
-
 
 }

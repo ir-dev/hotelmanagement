@@ -3,9 +3,12 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.domain.model.Address;
 import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
+import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ public class BookingServiceImpl implements BookingsService {
 
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    GuestRepository guestRepository;
 
     @Override
     public List<BookingDTO> getAll() {
@@ -63,13 +69,21 @@ public class BookingServiceImpl implements BookingsService {
     }
 
     @Override
-    public void store(BookingForm b) {
-        LocalDate arrivalDate = LocalDate.parse(b.getArrivalDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate departureDate = LocalDate.parse(b.getDepartureDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalTime arrivalTime = LocalTime.parse(b.getArrivalTime(), DateTimeFormatter.ofPattern("H:mm"));
+    public void store(BookingForm bf) {
+        LocalDate arrivalDate = LocalDate.parse(bf.getArrivalDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate departureDate = LocalDate.parse(bf.getDepartureDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalTime arrivalTime = LocalTime.parse(bf.getArrivalTime(), DateTimeFormatter.ofPattern("H:mm"));
+        LocalDate birthday = LocalDate.parse(bf.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
+        Address address = new Address(bf.getStreet(),bf.getZipcode(),bf.getCity(),bf.getCountry());
+        Guest guest = new Guest("1", bf.getFirstName(), bf.getLastName(), birthday, address);
 
-        Booking booking = new Booking("1234", "1",arrivalDate, departureDate, BookingStatus.Pending, 2, arrivalTime, b.getAddress());
+        guestRepository.save(guest);
+
+        //e.g '2,1' - means two of category1 and one of category2
+        System.out.println("nrOf: " + bf.getNrOfCategoryRooms());
+
+        Booking booking = new Booking("1234", guest.id(),arrivalDate, departureDate, BookingStatus.Pending, 2, arrivalTime);
 
         bookingRepository.save(booking);
     }

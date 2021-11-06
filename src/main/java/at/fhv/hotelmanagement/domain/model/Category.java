@@ -9,5 +9,7 @@ public class Category {
     private SeasonPrice seasonPrice;
 
 
+
+
     //Methode für verfügbare Zimmer - Repo?
 }

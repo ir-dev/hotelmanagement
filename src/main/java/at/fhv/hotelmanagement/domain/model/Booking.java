@@ -12,24 +12,23 @@ public class Booking {
     private LocalDate arrival;
     private LocalDate departure;
     private BookingStatus status;
-    private int nrOfRooms;
+    private int nrOfBookedRooms;
     private LocalTime arrivalTime;
     private List<Category> categories;
     private CancellationModality cancellationModality;
     private Organization organization;
     private List<AdditionalService> additionalServices;
-    private Address billingAddress;
+    //private Address billingAddress;
 
     public Booking(String bookingNr, String guestId, LocalDate arrival, LocalDate departure, BookingStatus status,
-                   int nrOfRooms, LocalTime arrivalTime, Address billingAddress) {
+                   int nrOfBookedRooms, LocalTime arrivalTime) {
         this.bookingNr = bookingNr;
         this.guestId = guestId;
         this.arrival = arrival;
         this.departure = departure;
         this.status = status;
-        this.nrOfRooms = nrOfRooms;
+        this.nrOfBookedRooms = nrOfBookedRooms;
         this.arrivalTime = arrivalTime;
-        this.billingAddress = billingAddress;
     }
 
     public String bookingNr() {
@@ -52,8 +51,8 @@ public class Booking {
         return this.status;
     }
 
-    public int nrOfRooms() {
-        return this.nrOfRooms;
+    public int nrOfBookedRooms() {
+        return this.nrOfBookedRooms;
     }
 
     public LocalTime arrivalTime() {
@@ -76,7 +75,5 @@ public class Booking {
         return this.additionalServices;
     }
 
-    public Address billingAddress() {
-        return this.billingAddress;
-    }
+
 }

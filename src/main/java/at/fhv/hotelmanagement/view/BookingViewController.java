@@ -1,8 +1,10 @@
 package at.fhv.hotelmanagement.view;
 
 import at.fhv.hotelmanagement.application.api.BookingsService;
+import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,9 @@ public class BookingViewController {
     @Autowired
     private BookingsService bookingsService;
 
+    @Autowired
+    private GuestService guestService;
+
 
     @GetMapping(ALL_BOOKINGS_URL)
     public String allBookings(Model model) {
@@ -62,7 +67,12 @@ public class BookingViewController {
             redirectError("Booking with id: " + bookingNr + " not found");
         }
 
-        model.addAttribute("bookingDetail", bookingDetail.get());
+        final Optional<GuestDTO> guest = guestService.getById(bookingDetail.get().details().guestId());
+
+        System.out.println("guestId:" + guest.get().guestId());
+
+        model.addAttribute("booking", bookingDetail.get());
+        model.addAttribute("guest", guest.get());
         return new ModelAndView(BOOKING_VIEW);
     }
 
@@ -97,7 +107,6 @@ public class BookingViewController {
     @PostMapping(CREATE_BOOKING_URL + "/new")
     public ModelAndView createBookingPost(@ModelAttribute BookingForm form){
         bookingsService.store(form);
-        System.out.println("arrivalDate:" + form.getArrivalDate());
 
         return new ModelAndView("redirect:/bookings");
     }

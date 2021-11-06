@@ -13,7 +13,6 @@ public class BookingForm {
     private String numberOfPersons;
 
     // Categories?!
-    private List<Category> selectedCategories;
     private String nrOfCategoryRooms;
 
     private Boolean organization;
@@ -26,12 +25,13 @@ public class BookingForm {
     private String birthday;
     private String specialNotes;
 
-    private Address address;
+    //Address
     private String street;
     private String zipcode;
     private String city;
     private String country;
 
+    //Payment Details
     private String cardHolderName;
     private String cardNumber;
     private String cardValidThru;
@@ -138,18 +138,6 @@ public class BookingForm {
         this.lastName = lastName;
     }
 
-
-
-    public Address getAddress() {
-        return this.address;
-    }
-
-//    //TODO: How to map all fields to method call
-//    //DONE: (Possible Solution?)
-//    public void setAddress() {
-//        this.address = new Address(getStreet(), getZipcode(), getCity(), getCountry());
-//    }
-
     public String getStreet() {
         return this.street;
     }
@@ -181,8 +169,6 @@ public class BookingForm {
     public void setCountry(String country) {
         this.country = country;
     }
-
-
 
     public String getSpecialNotes() {
         return this.specialNotes;
