@@ -36,27 +36,44 @@
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
-                                <table class="table">
+                                <table class="table" style="text-align: center">
                                     <thead>
                                     <tr>
                                         <th>Booking #</th>
                                         <th>Arrival</th>
                                         <th>Departure</th>
                                         <th>Status</th>
-                                        <th># of Rooms</th>
+                                        <th># of Persons</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:if="${bookings.isEmpty()}">
-                                        <td colspan="2"> no bookings available</td>
+                                        <td colspan="6"> no bookings available</td>
                                     </tr>
                                     <tr th:each="b : ${bookings}">
-                                        <td><a th:href="@{/booking(id=${b.bookingNr})}"><span th:text="${b.bookingNr}"/></a>
+                                        <td><a th:href="@{/booking(id=${b.bookingNo})}"><span th:text="${b.bookingNo}"/></a>
                                         </td>
-                                        <td><span th:text="${b.arrival}"/></td>
-                                        <td><span th:text="${b.departure}"/></td>
+                                        <td><span th:text="${b.arrivalDate}"/></td>
+                                        <td><span th:text="${b.departureDate}"/></td>
                                         <td><span th:text="${b.bookingStatus}"/></td>
-                                        <td><span th:text="${b.nrOfBookedRooms}"/></td>
+                                        <td><span th:text="${b.numberOfPersons}"/></td>
+                                        <td th:width="100">
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<!--                                                    <a class="dropdown-item" href="#">Check-In</a>-->
+                                                    <a class="dropdown-item" th:href="@{/booking(id=${b.bookingNo})}">View</a>
+<!--                                                    <a class="dropdown-item" href="#">Edit</a>-->
+<!--                                                    <a class="dropdown-item" href="#">Cancel</a>-->
+<!--                                                    <a class="dropdown-item" href="#">Guest</a>-->
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
