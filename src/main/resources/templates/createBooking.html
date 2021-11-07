@@ -367,17 +367,18 @@
         agreementCodeText.value = "";
     }
 
-    //Calculate days between two dates
-    function dateDifference() {
-        var arrival = new Date(document.getElementById("arrivalDate").value);
-        var departure = new Date(document.getElementById("departureDate").value);
+    // Calculate nights (number of days between two dates resp. date difference)
+    function calcNights() {
+        let arrivalDate = document.querySelector("#arrivalDate");
+        let departureDate = document.querySelector("#departureDate");
+        let nightsText = document.querySelector("#nights");
 
-        // To calculate the time difference of two dates
-        var Difference_In_Time = departure.getTime() - arrival.getTime();
+        if (arrivalDate && departureDate) {
+            let diffTime = ( new Date(departureDate.value) ).getTime() - ( new Date(arrivalDate.value) ).getTime();
+            let diffDays = diffTime / (1000 * 3600 * 24);
 
-        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-
-        document.getElementById("nights").value = Difference_In_Days;
+            nightsText.value = (diffDays >= 0) ? diffDays : "";
+        }
     }
 
     // Register Events
@@ -385,6 +386,8 @@
         let categoryRoomsMinusButtons = document.querySelectorAll(".button-minus-category-rooms");
         let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
         let organizationCheckbox = document.querySelector("#organization");
+        let arrivalDate = document.querySelector("#arrivalDate");
+        let departureDate = document.querySelector("#departureDate");
 
         categoryRoomsMinusButtons.forEach(function (btn) {
             btn.addEventListener('click', decrementCategoryRooms)
@@ -394,6 +397,10 @@
         });
         if (organizationCheckbox) {
             organizationCheckbox.addEventListener('click', updateOrganizationInputs);
+        }
+        if (arrivalDate && departureDate) {
+            arrivalDate.addEventListener('input', calcNights);
+            departureDate.addEventListener('input', calcNights);
         }
     });
 </script>
