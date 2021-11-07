@@ -8,11 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface BookingRepository {
+    List<Booking> findAll();
 
-    void save(Booking booking);
+    Optional<Booking> findByNo(String bookingNo);
 
-    List<Booking> getAll();
-
-    Optional<Booking> findByBookingNr(String bookingNr);
-
+    void store(Booking booking);
 }

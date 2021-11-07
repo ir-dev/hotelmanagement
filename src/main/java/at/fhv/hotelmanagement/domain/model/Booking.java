@@ -5,75 +5,71 @@ import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public class Booking {
-    private String bookingNr;
-    private String guestId;
-    private LocalDate arrival;
-    private LocalDate departure;
-    private BookingStatus status;
-    private int nrOfBookedRooms;
+    // TODO: generate bookingNo (maybe use generated no of db; factory for generation may also be an idea..)
+    private String bookingNo;
+    private BookingStatus bookingStatus;
+
+    // TODO: copy to stay at check-in
+    private LocalDate arrivalDate;
+    private LocalDate departureDate;
     private LocalTime arrivalTime;
-    private List<Category> categories;
-    private CancellationModality cancellationModality;
-    private Organization organization;
-    private List<AdditionalService> additionalServices;
-    //private Address billingAddress;
+    private Integer numberOfPersons;
 
-    public Booking(String bookingNr, String guestId, LocalDate arrival, LocalDate departure, BookingStatus status,
-                   int nrOfBookedRooms, LocalTime arrivalTime) {
-        this.bookingNr = bookingNr;
-        this.guestId = guestId;
-        this.arrival = arrival;
-        this.departure = departure;
-        this.status = status;
-        this.nrOfBookedRooms = nrOfBookedRooms;
+    private Map<String, Integer> selectedCategoriesRoomCount;
+    private Guest guest;
+    private PaymentInformation paymentInformation;
+//    private CancellationModality cancellationModality;
+//    private List<AdditionalService> additionalServices;
+
+
+    public Booking(String bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, Guest guest, PaymentInformation paymentInformation) {
+        this.bookingNo = bookingNo;
+        this.bookingStatus = bookingStatus;
+        this.arrivalDate = arrivalDate;
+        this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;
+        this.numberOfPersons = numberOfPersons;
+        this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
+        this.guest = guest;
+        this.paymentInformation = paymentInformation;
     }
 
-    public String bookingNr() {
-        return this.bookingNr;
+    public String getBookingNo() {
+        return this.bookingNo;
     }
 
-    public String guestId() {
-        return this.guestId;
+    public BookingStatus getBookingStatus() {
+        return this.bookingStatus;
     }
 
-    public LocalDate arrival() {
-        return this.arrival;
+    public LocalDate getArrivalDate() {
+        return this.arrivalDate;
     }
 
-    public LocalDate departure() {
-        return this.departure;
+    public LocalDate getDepartureDate() {
+        return this.departureDate;
     }
 
-    public BookingStatus status() {
-        return this.status;
-    }
-
-    public int nrOfBookedRooms() {
-        return this.nrOfBookedRooms;
-    }
-
-    public LocalTime arrivalTime() {
+    public LocalTime getArrivalTime() {
         return this.arrivalTime;
     }
 
-    public List<Category> categories() {
-        return this.categories;
+    public Integer getNumberOfPersons() {
+        return this.numberOfPersons;
     }
 
-    public CancellationModality cancellationModality() {
-        return this.cancellationModality;
+    public Map<String, Integer> getSelectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
     }
 
-    public Organization organization() {
-        return this.organization;
+    public Guest getGuest() {
+        return this.guest;
     }
 
-    public List<AdditionalService> additionalServices() {
-        return this.additionalServices;
+    public PaymentInformation getPaymentInformation() {
+        return this.paymentInformation;
     }
-
-
 }

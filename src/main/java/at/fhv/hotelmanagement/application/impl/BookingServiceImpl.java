@@ -3,9 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
-import at.fhv.hotelmanagement.domain.model.Address;
-import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.Guest;
+import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -13,16 +11,12 @@ import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class BookingServiceImpl implements BookingsService {
-
     @Autowired
     BookingRepository bookingRepository;
 
@@ -30,67 +24,63 @@ public class BookingServiceImpl implements BookingsService {
     GuestRepository guestRepository;
 
     @Override
-    public List<BookingDTO> getAll() {
-        List<Booking> bookings = bookingRepository.getAll();
-
+    public List<BookingDTO> allBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
         List<BookingDTO> bookingsDto = new ArrayList<>();
-        for(Booking b: bookings){
-            bookingsDto.add(BookingDTO.builder().withBookingEntity(b).build());
+
+        for (Booking booking : bookings){
+            bookingsDto.add(BookingDTO.builder()
+                    .withBookingEntity(booking)
+                    .withDetails(buildBookingDetailsDto(booking))
+                    .build());
         }
+
         return bookingsDto;
     }
 
     @Override
-    public Optional<BookingDTO> getByBookingNr(String bookingNr) {
-        Optional<Booking> b = bookingRepository.findByBookingNr(bookingNr);
-        if(b.isEmpty()){
+    public Optional<BookingDTO> bookingByBookingNo(String bookingNo) {
+        Optional<Booking> booking = bookingRepository.findByNo(bookingNo);
+        if (booking.isEmpty()){
             return Optional.empty();
         }
-        Booking booking = b.get();
 
         return Optional.of(BookingDTO.builder()
-                .withBookingEntity(booking)
+                .withBookingEntity(booking.get())
+                .withDetails(buildBookingDetailsDto(booking.get()))
                 .build());
     }
 
     @Override
-    public Optional<BookingDetailsDTO> getDetailsByBookingNr(String bookingNr) {
-        Optional<BookingDTO> b = getByBookingNr(bookingNr);
-        Optional<Booking> b2 = bookingRepository.findByBookingNr(bookingNr);
-
-        if(b.isEmpty() || b2.isEmpty()){
+    public Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo) {
+        Optional<Booking> booking = bookingRepository.findByNo(bookingNo);
+        if(booking.isEmpty()){
             return Optional.empty();
         }
-        Booking booking = b2.get();
-        return Optional.of(BookingDetailsDTO.builder()
-                .withBookingDTO(b.get())
+
+        return Optional.of(buildBookingDetailsDto(booking.get()));
+    }
+
+    private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
+        return BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
-                .build());
+                .build();
     }
 
     @Override
-    public void store(BookingForm bf) {
-        LocalDate arrivalDate = LocalDate.parse(bf.getArrivalDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate departureDate = LocalDate.parse(bf.getDepartureDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalTime arrivalTime = LocalTime.parse(bf.getArrivalTime(), DateTimeFormatter.ofPattern("H:mm"));
-        LocalDate birthday = LocalDate.parse(bf.getBirthday(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    public void createBooking(BookingForm bookingForm) {
+        Optional<Organization> organization;
+        if (bookingForm.getIsOrganizationValue()) {
+            organization = Optional.of(new Organization(bookingForm.getOrganizationNameValue(), bookingForm.getAgreementCodeValue()));
+        } else {
+            organization = Optional.empty();
+        }
+        Address address = new Address(bookingForm.getStreetValue(), bookingForm.getZipcodeValue(), bookingForm.getCityValue(), bookingForm.getCountryValue());
+        Guest guest = new Guest("1", organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
+        guestRepository.store(guest);
 
-        Address address = new Address(bf.getStreet(),bf.getZipcode(),bf.getCity(),bf.getCountry());
-        Guest guest = new Guest("1", bf.getFirstName(), bf.getLastName(), birthday, address);
-
-        guestRepository.save(guest);
-
-        //e.g '2,1' - means two of category1 and one of category2
-        System.out.println("nrOf: " + bf.getNrOfCategoryRooms());
-
-        Booking booking = new Booking("1234", guest.id(),arrivalDate, departureDate, BookingStatus.Pending, 2, arrivalTime);
-
-        bookingRepository.save(booking);
-    }
-
-
-    public void setArrivalDate(String arrivalDate) {
-        //        this.arrivalDate = LocalDate.parse(arrivalDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        //    }
+        PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderNameValue(), bookingForm.getCardNumberValue(), bookingForm.getCardValidThruValue(), bookingForm.getCardCvcValue(), bookingForm.getPaymentTypeValue());
+        Booking booking = new Booking("1234", BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest, paymentInformation);
+        bookingRepository.store(booking);
     }
 }

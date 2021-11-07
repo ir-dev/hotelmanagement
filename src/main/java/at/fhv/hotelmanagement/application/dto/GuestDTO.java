@@ -2,29 +2,40 @@ package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Address;
 import at.fhv.hotelmanagement.domain.model.Guest;
-import at.fhv.hotelmanagement.domain.model.enums.Gender;
-import at.fhv.hotelmanagement.domain.model.PaymentInformation;
+import at.fhv.hotelmanagement.domain.model.Organization;
+import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class GuestDTO {
     private String id;
+    private Optional<Organization> organization;
+    private Salutation salutation;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
     private Address address;
-    private String nationality;
-    private String email;
-    private Gender gender;
+    private String specialNotes;
+
+//    private String nationality;
+//    private String email;
 
     public static GuestDTO.Builder builder() {
         return new GuestDTO.Builder();
     }
 
-    public String guestId() {
+    public String id() {
         return this.id;
+    }
+
+    public Optional<Organization> organization() {
+        return this.organization;
+    }
+
+    public Salutation salutation() {
+        return this.salutation;
     }
 
     public String firstName() {
@@ -35,10 +46,6 @@ public class GuestDTO {
         return this.lastName;
     }
 
-    public String fullName() {
-        return this.firstName + this.lastName;
-    }
-
     public LocalDate birthday() {
         return this.birthday;
     }
@@ -47,17 +54,17 @@ public class GuestDTO {
         return this.address;
     }
 
-    public String nationality() {
-        return this.nationality;
+    public String specialNotes() {
+        return this.specialNotes;
     }
 
-    public String email() {
-        return this.email;
-    }
-
-    public Gender gender() {
-        return this.gender;
-    }
+//    public String nationality() {
+//        return this.nationality;
+//    }
+//
+//    public String email() {
+//        return this.email;
+//    }
 
     private GuestDTO() {
     }
@@ -70,26 +77,22 @@ public class GuestDTO {
         }
 
         public Builder withGuestEntity(Guest guest) {
-            this.instance.id = guest.id();
-            this.instance.firstName = guest.firstName();
-            this.instance.lastName = guest.lastName();
-            this.instance.birthday = guest.birthday();
-            this.instance.address = guest.address();
-            this.instance.nationality = guest.nationality();
-            this.instance.email = guest.email();
-            this.instance.gender = guest.gender();
+            this.instance.id = guest.getId();
+            this.instance.organization = guest.getOrganization();
+            this.instance.salutation = guest.getSalutation();
+            this.instance.firstName = guest.getFirstName();
+            this.instance.lastName = guest.getLastName();
+            this.instance.birthday = guest.getBirthday();
+            this.instance.address = guest.getAddress();
+            this.instance.specialNotes = guest.getSpecialNotes();
+//            this.instance.nationality = guest.getNationality();
+//            this.instance.email = guest.getEmail();
             return this;
         }
 
         public GuestDTO build() {
-//            Objects.requireNonNull(this.instance.id, "id must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.firstName, "firstName must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.lastName, "lastName must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.birthDate, "birthdate must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.address, "address must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.nationality, "nationality must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.email, "email must be set in GuestDTO");
-//            Objects.requireNonNull(this.instance.gender, "gender must be set in GuestDTO");
+            Objects.requireNonNull(this.instance.id, "id must be set in GuestDTO");
+
             return this.instance;
         }
 

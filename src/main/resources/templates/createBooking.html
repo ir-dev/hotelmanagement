@@ -41,15 +41,15 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="arrivalDate" class="col-form-label">Arrival Date</label>
-                                                <input id="arrivalDate" name="arrivalDate"  type="date" class="form-control" oninput="dateDifference()" required>
+                                                <input id="arrivalDate" name="arrivalDate"  type="date" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="departureDate" class="col-form-label">Departure Date</label>
-                                                <input id="departureDate" name="departureDate" type="date" class="form-control" oninput="dateDifference()" required>
+                                                <input id="departureDate" name="departureDate" type="date" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nights" class="col-form-label">Nights</label>
-                                                <input id="nights" name="nights" type="number" class="form-control" min="1" disabled>
+                                                <input id="nights" type="text" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
                                                 <label for="arrivalTime" class="col-form-label">Arrival Time</label>
@@ -80,65 +80,49 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th scope="col">#</th>
                                                     <th scope="col">Category</th>
                                                     <th scope="col">Selected Rooms</th>
                                                     <th scope="col">Available Rooms</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>Category Economy</td>
+                                                <tr th:each="category, state: ${categories}">
+                                                    <td>
+                                                        <div data-toggle="tooltip"
+                                                             data-placement="top"
+                                                             th:title="${category.description}"
+                                                             th:text="${category.name}"></div>
+                                                    </td>
                                                     <td>
                                                         <button type="button" class="btn button-minus-category-rooms"
-                                                                data-available-category-no="0"><i
-                                                                class="fas fa-minus-circle"></i></button>
+                                                                th:attr="data-available-category-no=${state.index}">
+                                                            <i class="fas fa-minus-circle"></i>
+                                                        </button>
                                                         <input type="number" style="width:60px;"
                                                                class="input-category-rooms"
-                                                               data-available-category-no="0" value="0"
-                                                               name="nrOfCategoryRooms"
-                                                               id="categoryRooms0">
-
+                                                               min="0"
+                                                               th:max="${category.availableRoomsCount}"
+                                                               th:attr="data-available-category-no=${state.index}"
+                                                               th:field="*{selectedCategoriesRoomCount['__${category.name()}__']}"
+                                                               th:value="0">
                                                         <button type="button" class="btn button-plus-category-rooms"
-                                                                data-available-category-no="0"><i
-                                                                class="fas fa-plus-circle"></i></button>
+                                                                th:attr="data-available-category-no=${state.index}">
+                                                            <i class="fas fa-plus-circle"></i>
+                                                        </button>
                                                     </td>
                                                     <td>
                                                         <input type="number" style="width:60px;"
                                                                class="input-category-max-rooms"
-                                                               data-available-category-no="0"
-                                                               value="44" id="categoryMaxRooms0" disabled>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>Category Deluxe</td>
-                                                    <td>
-                                                        <button type="button" class="btn button-minus-category-rooms"
-                                                                data-available-category-no="1"><i
-                                                                class="fas fa-minus-circle"></i></button>
-                                                        <input type="number" style="width:60px;"
-                                                               class="input-category-rooms"
-                                                               data-available-category-no="1" value="0"
-                                                               name="nrOfCategoryRooms"
-                                                               id="categoryRooms1">
-                                                        <button type="button" class="btn button-plus-category-rooms"
-                                                                data-available-category-no="1"><i
-                                                                class="fas fa-plus-circle"></i></button>
-                                                    </td>
-                                                    <td>
-                                                        <input type="number" style="width:60px;"
-                                                               class="input-category-max-rooms"
-                                                               data-available-category-no="1"
-                                                               value="13" id="categoryMaxRooms1" disabled>
+                                                               th:attr="data-available-category-no=${state.index}"
+                                                               th:value="${category.availableRoomsCount}"
+                                                               disabled>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <a th:href="@{/bookings/create(step='enterStayDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
                                                     <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
@@ -153,19 +137,21 @@
                                         <input type="hidden" th:field="*{departureDate}">
                                         <input type="hidden" th:field="*{arrivalTime}">
                                         <input type="hidden" th:field="*{numberOfPersons}">
-                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+                                        <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+                                            <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+                                        </th:block>
 
                                         <div class="card-body">
                                             <label class="custom-control custom-checkbox">
-                                                <input id="organization" name="organization" type="checkbox" class="custom-control-input"><span class="custom-control-label">Organization</span>
+                                                <input id="isOrganization" name="organization" type="checkbox" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
                                             </label>
                                             <div class="form-group">
                                                 <label for="organizationName" class="col-form-label">Organization Name</label>
-                                                <input id="organizationName" name="organizationName" type="text" class="form-control" disabled>
+                                                <input id="organizationName" name="organizationName" type="text" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label for="agreementCode" class="col-form-label">Agreement Code</label>
-                                                <input id="agreementCode" name="agreementCode" type="text" class="form-control" disabled>
+                                                <input id="agreementCode" name="agreementCode" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="card-body border-top">
@@ -209,7 +195,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <a th:href="@{/bookings/create(step='enterRoomCategories')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
                                                     <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
@@ -224,7 +210,10 @@
                                         <input type="hidden" th:field="*{departureDate}">
                                         <input type="hidden" th:field="*{arrivalTime}">
                                         <input type="hidden" th:field="*{numberOfPersons}">
-                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+                                        <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+                                            <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+                                        </th:block>
+                                        <input type="hidden" th:field="*{isOrganization}">
                                         <input type="hidden" th:field="*{organizationName}">
                                         <input type="hidden" th:field="*{agreementCode}">
                                         <input type="hidden" th:field="*{salutation}">
@@ -263,7 +252,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
-                                                    <a th:href="@{/bookings/create(step='enterGuestDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                    <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
                                                     <button type="submit" class="btn btn-space btn-primary">Next</button>
                                                 </p>
                                             </div>
@@ -273,12 +262,15 @@
 
                                 <th:block th:if="${#strings.equals(step, 'confirmSummary')}">
                                     <h5 class="card-header">Booking Summary</h5>
-                                    <form th:action="@{/bookings/create/new}" th:object="${form}" method="post">
+                                    <form th:action="@{/bookings/create(step='storeBooking')}" th:object="${form}" method="post">
                                         <input type="hidden" th:field="*{arrivalDate}">
                                         <input type="hidden" th:field="*{departureDate}">
                                         <input type="hidden" th:field="*{arrivalTime}">
                                         <input type="hidden" th:field="*{numberOfPersons}">
-                                        <input type="hidden" th:field="*{nrOfCategoryRooms}">
+                                        <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+                                            <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+                                        </th:block>
+                                        <input type="hidden" th:field="*{isOrganization}">
                                         <input type="hidden" th:field="*{organizationName}">
                                         <input type="hidden" th:field="*{agreementCode}">
                                         <input type="hidden" th:field="*{salutation}">
@@ -299,7 +291,7 @@
                                         <div class="form-group">
                                             <p class="text-right">
 
-                                                <a th:href="@{/bookings/create(step='enterGuestDetails')}" class="btn btn-space btn-secondary">Back</a>
+                                                <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
                                                 <button type="submit" class="btn btn-space btn-primary">Create</button>
                                             </p>
                                         </div>
@@ -346,62 +338,77 @@
         }
     }
 
-    function updateOrganizationInputs(e) {
-        let isCheckboxChecked = e.currentTarget.checked;
-        let organizationNameText = document.querySelector("#organizationName");
-        let agreementCodeText = document.querySelector("#agreementCode");
-
-        if (isCheckboxChecked) {
-            organizationNameText.disabled = false;
-            agreementCodeText.disabled = false;
-            organizationNameText.required = true;
-            agreementCodeText.required = true;
-        } else {
-            organizationNameText.disabled = true;
-            agreementCodeText.disabled = true;
-            organizationNameText.required = false;
-            agreementCodeText.required = false;
-        }
-
-        organizationNameText.value = "";
-        agreementCodeText.value = "";
-    }
-
-    // Calculate nights (number of days between two dates resp. date difference)
-    function calcNights() {
-        let arrivalDate = document.querySelector("#arrivalDate");
-        let departureDate = document.querySelector("#departureDate");
-        let nightsText = document.querySelector("#nights");
-
-        if (arrivalDate && departureDate) {
-            let diffTime = ( new Date(departureDate.value) ).getTime() - ( new Date(arrivalDate.value) ).getTime();
-            let diffDays = diffTime / (1000 * 3600 * 24);
-
-            nightsText.value = (diffDays >= 0) ? diffDays : "";
-        }
-    }
-
-    // Register Events
     document.addEventListener('DOMContentLoaded', function () {
         let categoryRoomsMinusButtons = document.querySelectorAll(".button-minus-category-rooms");
         let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
         let organizationCheckbox = document.querySelector("#organization");
+        let organizationNameText = document.querySelector("#organizationName");
+        let agreementCodeText = document.querySelector("#agreementCode");
         let arrivalDate = document.querySelector("#arrivalDate");
         let departureDate = document.querySelector("#departureDate");
+        let nightsText = document.querySelector("#nights");
 
+        function updateOrganizationInputs() {
+            if (organizationCheckbox.checked) {
+                organizationNameText.disabled = false;
+                agreementCodeText.disabled = false;
+                organizationNameText.required = true;
+                agreementCodeText.required = true;
+            } else {
+                organizationNameText.disabled = true;
+                agreementCodeText.disabled = true;
+                organizationNameText.required = false;
+                agreementCodeText.required = false;
+            }
+
+            organizationNameText.value = "";
+            agreementCodeText.value = "";
+        }
+
+        // Calculate nights (number of days between two dates resp. date difference)
+        function calcNights() {
+            if (arrivalDate && departureDate) {
+                let diffTime = ( new Date(departureDate.value) ).getTime() - ( new Date(arrivalDate.value) ).getTime();
+                let diffDays = diffTime / (1000 * 3600 * 24);
+
+                nightsText.value = (diffDays >= 0) ? diffDays : "";
+            }
+        }
+
+        function doActiveFieldsAction(fields, fieldAction) {
+            let fieldsActive = false;
+
+            if (Array.isArray(fields)) {
+                fieldsActive = fields.every((field) => isFieldActive(field));
+            } else {
+                fieldsActive = isFieldActive(fields);
+            }
+
+            if (fieldsActive) {
+                fieldAction();
+            }
+        }
+
+        function isFieldActive(field) {
+            return field && (field.type != "hidden");
+        }
+
+        // Register Events
         categoryRoomsMinusButtons.forEach(function (btn) {
             btn.addEventListener('click', decrementCategoryRooms)
         });
         categoryRoomsPlusButtons.forEach(function (btn) {
             btn.addEventListener('click', incrementCategoryRooms)
         });
-        if (organizationCheckbox) {
+        doActiveFieldsAction(organizationCheckbox, function () {
             organizationCheckbox.addEventListener('click', updateOrganizationInputs);
-        }
-        if (arrivalDate && departureDate) {
+            updateOrganizationInputs();
+        });
+        doActiveFieldsAction([arrivalDate, departureDate], function () {
             arrivalDate.addEventListener('input', calcNights);
             departureDate.addEventListener('input', calcNights);
-        }
+            calcNights();
+        });
     });
 </script>
 </body>

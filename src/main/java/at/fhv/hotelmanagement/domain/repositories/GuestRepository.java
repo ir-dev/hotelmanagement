@@ -9,10 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface GuestRepository {
-
-    void save(Guest guest);
-
-    List<Guest> getAll();
+    List<Guest> findAll();
 
     Optional<Guest> findById(String guestId);
+
+    void store(Guest guest);
 }
