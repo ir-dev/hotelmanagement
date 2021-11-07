@@ -17,20 +17,17 @@
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
 
-
-
     <ul class="list-group list-group-flush">
-        <li class="list-group-item" th:each="n : ${bookings}">
-            <a th:href="@{/booking(id=${n.bookingNr})}">
-            <h1 th:text="${n.bookingNr}"></h1>
-            <h1 th:text="${n.arrival}"></h1>
-            <h1 th:text="${n.departure}"></h1>
-            <h1 th:text="${n.bookingStatus}"></h1>
-            <h1 th:text="${n.nrOfBookedRooms}"></h1>
-            <h1 th:text="${n.arrivalTime}"></h1></a>
+        <li class="list-group-item" th:each="booking : ${bookings}">
+            <a th:href="@{/booking(id=${booking.bookingNo})}">
+            <h1 th:text="${booking.bookingNo}"></h1>
+            <h1 th:text="${booking.bookingStatus}"></h1>
+            <h1 th:text="${booking.arrivalDate}"></h1>
+            <h1 th:text="${booking.departureDate}"></h1>
+            <h1 th:text="${booking.arrivalTime}"></h1></a>
+            <h1 th:text="${booking.numberOfPersons}"></h1>
         </li>
     </ul>
-
 
 </body>
 
