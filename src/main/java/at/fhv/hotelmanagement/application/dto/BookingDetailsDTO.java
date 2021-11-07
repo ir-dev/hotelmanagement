@@ -3,46 +3,33 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class BookingDetailsDTO {
-    private BookingDTO details;
-    private List<CategoryDTO> categories;
-//    private CancellationModality cancellationModality;
-    private OrganizationDTO organization;
-//    private List<AdditionalService> additionalServices;
-    private Address billingAddress;
+    private Map<String, Integer> selectedCategoriesRoomCount;
+    private Guest guest;
+    private PaymentInformation paymentInformation;
+    //    private CancellationModality cancellationModality;
+    //    private List<AdditionalService> additionalServices;
 
     public static BookingDetailsDTO.Builder builder() {
         return new BookingDetailsDTO.Builder();
     }
 
-    public BookingDTO details() {
-        return this.details;
+    public Map<String, Integer> selectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
     }
 
-    public List<CategoryDTO> categories() {
-        return this.categories;
+    public Guest guest() {
+        return this.guest;
     }
 
-//    public String cancellationModality() {
-//        return this.cancellationModality.toString();
-//    }
-
-    public OrganizationDTO organization() {
-        return this.organization;
-    }
-
-//    public List<AdditionalService> additionalService() {
-//        return this.additionalServices;
-//    }
-
-    public Address address() {
-        return this.billingAddress;
+    public PaymentInformation paymentInformation() {
+        return this.paymentInformation;
     }
 
     private BookingDetailsDTO() {
-
     }
 
     public static class Builder {
@@ -52,32 +39,19 @@ public class BookingDetailsDTO {
             this.instance = new BookingDetailsDTO();
         }
 
-        public BookingDetailsDTO.Builder withBookingDTO(BookingDTO details) {
-            this.instance.details = details;
-            return this;
-        }
-
         public BookingDetailsDTO.Builder withBookingEntity(Booking booking) {
-            //this.instance.categories = booking.categories();
-//            this.instance.cancellationModality = booking.cancellationModality();
-            //this.instance.organization = booking.organization();
-//            this.instance.additionalServices = booking.additionalServices();
-            //this.instance.billingAddress = booking.billingAddress();
+            this.instance.selectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
+            this.instance.guest = booking.getGuest();
+            this.instance.paymentInformation = booking.getPaymentInformation();
             return this;
         }
 
 
         public BookingDetailsDTO build() {
-            Objects.requireNonNull(this.instance.details, "details must be set in BookingDetailsDTO");
-            //Objects.requireNonNull(this.instance.categories, "categories must be set in BookingDetailsDTO");
-            //Objects.requireNonNull(this.instance.cancellationModality, "cancellationmodality must be set in BookingDetailsDTO");
-//            if (this.instance.details.guestId() == null) {
-//                Objects.requireNonNull(this.instance.organization, "organization must be set in BookingDetailsDTO");
-//            } else {
-//                Objects.requireNonNull(this.instance.details.guestId(), "guest must be set in BookingDetailsDTO");
-//            }
-            //Objects.requireNonNull(this.instance.additionalServices, "additionalservices must be set in BookingDetailsDTO");
-            //Objects.requireNonNull(this.instance.billingAddress, "billingaddress must be set in BookingDetailsDTO");
+            Objects.requireNonNull(this.instance.selectedCategoriesRoomCount, "selectedCategoriesRoomCount must be set in BookingDetailsDTO");
+            Objects.requireNonNull(this.instance.guest, "guest must be set in BookingDetailsDTO");
+            Objects.requireNonNull(this.instance.paymentInformation, "paymentInformation must be set in BookingDetailsDTO");
+
             return this.instance;
         }
     }

@@ -1,81 +1,67 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.Gender;
+import at.fhv.hotelmanagement.domain.model.enums.Country;
+import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 public class Guest {
     private String id;
+    // * Organization Details
+    private Optional<Organization> organization;
+    // * Billing Address
+    private Salutation salutation;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
     private Address address;
-    private String nationality;
-    private String eMail;
-    private Gender gender;
-    private List<PaymentInformation> paymentInformation;
+    private String specialNotes;
 
+//    private Country nationality;
+//    private String email;
 
-    public Guest(String id, String firstName, String lastName, LocalDate birthday, Address address) {
+    public Guest(String id, Optional<Organization> organization, Salutation salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.id = id;
+        this.organization = organization;
+        this.salutation = salutation;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
         this.address = address;
+        this.specialNotes = specialNotes;
     }
 
-    public String id() {
+    public String getId() {
         return this.id;
     }
 
-    public String firstName() {
+    public Optional<Organization> getOrganization() {
+        return this.organization;
+    }
+
+    public Salutation getSalutation() {
+        return this.salutation;
+    }
+
+    public String getFirstName() {
         return this.firstName;
     }
 
-    public String lastName() {
+    public String getLastName() {
         return this.lastName;
     }
 
-    public LocalDate birthday() {
+    public LocalDate getBirthday() {
         return this.birthday;
     }
 
-    public Address address() {
+    public Address getAddress() {
         return this.address;
     }
 
-    public String nationality() {
-        return this.nationality;
-    }
-
-    public String email() {
-        return this.eMail;
-    }
-
-    public Gender gender() {
-        return this.gender;
-    }
-
-    public List<PaymentInformation> paymentInformation() {
-        return this.paymentInformation;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || this.getClass() != o.getClass()) {
-            return false;
-        }
-        Guest guest = (Guest) o;
-        return Objects.equals(this.id, guest.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id);
+    public String getSpecialNotes() {
+        return this.specialNotes;
     }
 }
