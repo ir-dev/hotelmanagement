@@ -10,12 +10,11 @@ import java.util.Optional;
 
 @Component
 public interface BookingsService {
+    List<BookingDTO> allBookings();
 
-    List<BookingDTO> getAll();
+    Optional<BookingDTO> bookingByBookingNo(String bookingNo);
 
-    Optional<BookingDTO> getByBookingNr(String bookingNr);
+    Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo);
 
-    Optional<BookingDetailsDTO> getDetailsByBookingNr(String bookingNr);
-
-    void store(BookingForm bookingForm);
+    void createBooking(BookingForm bookingForm);
 }

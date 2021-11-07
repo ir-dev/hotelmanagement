@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Component
 public interface GuestService {
-    List<GuestDTO> getAll();
+    List<GuestDTO> allGuests();
 
-    Optional<GuestDTO> getById(String guestId);
+    Optional<GuestDTO> guestByGuestId(String guestId);
 }
