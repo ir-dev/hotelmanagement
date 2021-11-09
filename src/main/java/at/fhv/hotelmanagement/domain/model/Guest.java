@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Guest {
-    private String id;
+    private GuestId id;
     // * Organization Details
     private Optional<Organization> organization;
     // * Billing Address
@@ -22,7 +22,7 @@ public class Guest {
 //    private Country nationality;
 //    private String email;
 
-    public Guest(String id, Optional<Organization> organization, Salutation salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+    public Guest(GuestId id, Optional<Organization> organization, Salutation salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.id = id;
         this.organization = organization;
         this.salutation = salutation;
@@ -33,7 +33,7 @@ public class Guest {
         this.specialNotes = specialNotes;
     }
 
-    public String getId() {
+    public GuestId getId() {
         return this.id;
     }
 

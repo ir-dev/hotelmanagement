@@ -10,6 +10,7 @@ import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class BookingServiceImpl implements BookingsService {
 
     @Autowired
     GuestRepository guestRepository;
-
+    @Transactional(readOnly = true)
     @Override
     public List<BookingDTO> allBookings() {
         List<Booking> bookings = bookingRepository.findAll();
@@ -37,10 +38,10 @@ public class BookingServiceImpl implements BookingsService {
 
         return bookingsDto;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public Optional<BookingDTO> bookingByBookingNo(String bookingNo) {
-        Optional<Booking> booking = bookingRepository.findByNo(bookingNo);
+        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
         if (booking.isEmpty()){
             return Optional.empty();
         }
@@ -50,10 +51,10 @@ public class BookingServiceImpl implements BookingsService {
                 .withDetails(buildBookingDetailsDto(booking.get()))
                 .build());
     }
-
+    @Transactional(readOnly = true)
     @Override
     public Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo) {
-        Optional<Booking> booking = bookingRepository.findByNo(bookingNo);
+        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
         if(booking.isEmpty()){
             return Optional.empty();
         }
@@ -66,7 +67,7 @@ public class BookingServiceImpl implements BookingsService {
                 .withBookingEntity(booking)
                 .build();
     }
-
+    @Transactional
     @Override
     public void createBooking(BookingForm bookingForm) {
         Optional<Organization> organization;
@@ -76,11 +77,11 @@ public class BookingServiceImpl implements BookingsService {
             organization = Optional.empty();
         }
         Address address = new Address(bookingForm.getStreetValue(), bookingForm.getZipcodeValue(), bookingForm.getCityValue(), bookingForm.getCountryValue());
-        Guest guest = new Guest("1", organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
+        Guest guest = new Guest(new GuestId("1"), organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
         guestRepository.store(guest);
 
         PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderNameValue(), bookingForm.getCardNumberValue(), bookingForm.getCardValidThruValue(), bookingForm.getCardCvcValue(), bookingForm.getPaymentTypeValue());
-        Booking booking = new Booking("1234", BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest, paymentInformation);
+        Booking booking = new Booking(new BookingNo("1234"), BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest.getId(), paymentInformation);
         bookingRepository.store(booking);
     }
 }

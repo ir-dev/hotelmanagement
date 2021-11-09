@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.BookingNo;
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.PaymentInformation;
 import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class BookingDTO {
     private BookingDetailsDTO details;
 
-    private String bookingNo;
+    private BookingNo bookingNo;
     private BookingStatus bookingStatus;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
@@ -28,7 +29,7 @@ public class BookingDTO {
         return this.details;
     }
 
-    public String bookingNo() {
+    public BookingNo bookingNo() {
         return this.bookingNo;
     }
 

@@ -11,6 +11,9 @@ public class PaymentInformation {
     // Payment Type (used for billing)
     private PaymentType paymentType;
 
+    private PaymentInformation() {
+
+    }
     public PaymentInformation(String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, PaymentType paymentType) {
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;

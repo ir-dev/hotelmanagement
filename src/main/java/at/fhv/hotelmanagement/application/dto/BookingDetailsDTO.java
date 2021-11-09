@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class BookingDetailsDTO {
     private Map<String, Integer> selectedCategoriesRoomCount;
-    private Guest guest;
+    private GuestId guest;
     private PaymentInformation paymentInformation;
     //    private CancellationModality cancellationModality;
     //    private List<AdditionalService> additionalServices;
@@ -21,7 +21,7 @@ public class BookingDetailsDTO {
         return this.selectedCategoriesRoomCount;
     }
 
-    public Guest guest() {
+    public GuestId guest() {
         return this.guest;
     }
 
@@ -41,7 +41,7 @@ public class BookingDetailsDTO {
 
         public BookingDetailsDTO.Builder withBookingEntity(Booking booking) {
             this.instance.selectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
-            this.instance.guest = booking.getGuest();
+            this.instance.guest = booking.getGuestId();
             this.instance.paymentInformation = booking.getPaymentInformation();
             return this;
         }

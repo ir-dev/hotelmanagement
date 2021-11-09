@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Address;
 import at.fhv.hotelmanagement.domain.model.Guest;
+import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.model.Organization;
 import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class GuestDTO {
-    private String id;
+    private GuestId id;
     private Optional<Organization> organization;
     private Salutation salutation;
     private String firstName;
@@ -26,7 +27,7 @@ public class GuestDTO {
         return new GuestDTO.Builder();
     }
 
-    public String id() {
+    public GuestId id() {
         return this.id;
     }
 

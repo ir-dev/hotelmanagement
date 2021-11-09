@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.domain.infrastructure;
 
 import at.fhv.hotelmanagement.application.api.exceptions.AlreadyExistsStoreException;
 import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.BookingNo;
 import at.fhv.hotelmanagement.domain.model.Category;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class ArrayListBookingRepository implements BookingRepository {
     }
 
     @Override
-    public Optional<Booking> findByNo(String bookingNo) {
+    public Optional<Booking> findByNo(BookingNo bookingNo) {
         return bookings.stream()
                 .filter(booking -> booking.getBookingNo().equals(bookingNo))
                 .findFirst();

@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class Booking {
     // TODO: generate bookingNo (maybe use generated no of db; factory for generation may also be an idea..)
-    private String bookingNo;
+    private Long id;
+    private BookingNo bookingNo;
     private BookingStatus bookingStatus;
 
     // TODO: copy to stay at check-in
@@ -19,13 +20,17 @@ public class Booking {
     private Integer numberOfPersons;
 
     private Map<String, Integer> selectedCategoriesRoomCount;
-    private Guest guest;
+    private GuestId guest;
     private PaymentInformation paymentInformation;
 //    private CancellationModality cancellationModality;
 //    private List<AdditionalService> additionalServices;
 
+    //for Hibernate
+    private Booking(){
 
-    public Booking(String bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, Guest guest, PaymentInformation paymentInformation) {
+    }
+
+    public Booking(BookingNo bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
         this.bookingStatus = bookingStatus;
         this.arrivalDate = arrivalDate;
@@ -37,7 +42,8 @@ public class Booking {
         this.paymentInformation = paymentInformation;
     }
 
-    public String getBookingNo() {
+
+    public BookingNo getBookingNo() {
         return this.bookingNo;
     }
 
@@ -65,7 +71,7 @@ public class Booking {
         return this.selectedCategoriesRoomCount;
     }
 
-    public Guest getGuest() {
+    public GuestId getGuestId() {
         return this.guest;
     }
 
