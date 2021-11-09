@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all Bookings')"/>
+    <title>View Bookings | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">View Bookings</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/bookings}" class="breadcrumb-link">Bookings</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">View</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <table class="table" style="text-align: center">
+                                    <thead>
+                                    <tr>
+                                        <th>Booking #</th>
+                                        <th>Arrival</th>
+                                        <th>Departure</th>
+                                        <th>Status</th>
+                                        <th># of Persons</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${bookings.isEmpty()}">
+                                        <td colspan="6"> no bookings available</td>
+                                    </tr>
+                                    <tr th:each="b : ${bookings}">
+                                        <td><a th:href="@{/booking(id=${b.bookingNo})}"><span th:text="${b.bookingNo}"/></a>
+                                        </td>
+                                        <td><span th:text="${b.arrivalDate}"/></td>
+                                        <td><span th:text="${b.departureDate}"/></td>
+                                        <td><span th:text="${b.bookingStatus}"/></td>
+                                        <td><span th:text="${b.numberOfPersons}"/></td>
+                                        <td th:width="100">
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<!--                                                    <a class="dropdown-item" href="#">Check-In</a>-->
+                                                    <a class="dropdown-item" th:href="@{/booking(id=${b.bookingNo})}">View</a>
+<!--                                                    <a class="dropdown-item" href="#">Edit</a>-->
+<!--                                                    <a class="dropdown-item" href="#">Cancel</a>-->
+<!--                                                    <a class="dropdown-item" href="#">Guest</a>-->
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--                <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-12">-->
+                <!--                    <ul class="list-group">-->
+                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterStayDetails')} ? active : ''">Stay Details</li>-->
+                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterRoomCategories')} ? active : ''">Room Categories</li>-->
+                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterGuestDetails')} ? active : ''">Guest Details</li>-->
+                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterPayment')} ? active : ''">Payment</li>-->
+                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'confirmSummary')} ? active : ''">Booking Summary</li>-->
+                <!--                    </ul>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/fragments/layout/page :: js"/>
+
+</body>
+
+</html>
