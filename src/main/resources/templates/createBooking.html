@@ -118,12 +118,16 @@
                                                                disabled>
                                                     </td>
                                                 </tr>
+                                                <tr th:if="${#lists.isEmpty(categories)}">
+                                                    <td colspan="3" class="text-muted text-center">There are no free rooms available in the given timespan</td>
+                                                </tr>
+
                                                 </tbody>
                                             </table>
                                             <div class="form-group">
                                                 <p class="text-right">
                                                     <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
-                                                    <button type="submit" class="btn btn-space btn-primary">Next</button>
+                                                    <button type="submit" class="btn btn-space btn-primary" th:unless="${#lists.isEmpty(categories)}">Next</button>
                                                 </p>
                                             </div>
                                         </div>
