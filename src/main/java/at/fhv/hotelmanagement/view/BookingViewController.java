@@ -48,9 +48,12 @@ public class BookingViewController {
     private CategoryService categoryService;
 
     @GetMapping(ALL_BOOKINGS_URL)
-    public String allBookings(Model model) {
+    public String allBookings(
+            @RequestParam("msg") String msg,
+            Model model) {
         final List<BookingDTO> bookings = bookingsService.allBookings();
 
+        model.addAttribute("msg", msg);
         model.addAttribute("bookings", bookings);
 
         return ALL_BOOKINGS_VIEW;
@@ -64,7 +67,7 @@ public class BookingViewController {
     }
 
     @PostMapping(CREATE_BOOKING_URL)
-    public String createBookingWizard(
+    public ModelAndView createBookingWizard(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
             Model model) {
@@ -79,7 +82,7 @@ public class BookingViewController {
         );
 
         if (!wizardSteps.contains(step)) {
-            redirectError("Invalid state in create booking wizard.");
+            return redirectError("Invalid step in create booking wizard.");
         }
 
         if (step.equals("enterRoomCategories")) {
@@ -92,13 +95,14 @@ public class BookingViewController {
 
         if (step.equals("storeBooking")) {
             bookingsService.createBooking(form);
-            redirect(ALL_BOOKINGS_URL);
+
+            return redirect(ALL_BOOKINGS_URL, "Booking successfully created");
         }
 
         model.addAttribute("step", step);
         model.addAttribute("form", form);
 
-        return CREATE_BOOKING_VIEW;
+        return new ModelAndView(CREATE_BOOKING_VIEW);
     }
 
     @GetMapping(BOOKING_URL)
@@ -118,10 +122,6 @@ public class BookingViewController {
         return new ModelAndView(BOOKING_VIEW);
     }
 
-    private static ModelAndView redirect(String URL) {
-        return new ModelAndView("redirect:" + URL);
-    }
-
     @GetMapping(ERROR_URL)
     public String displayError(@RequestParam("msg") String msg, Model model) {
         model.addAttribute("msg", msg);
@@ -129,8 +129,15 @@ public class BookingViewController {
         return ERROR_VIEW;
     }
 
-    @SuppressWarnings("unused")
     private static ModelAndView redirectError(String msg) {
-        return new ModelAndView("redirect:" + ERROR_URL + "?msg=" + msg);
+        return redirect(ERROR_URL, msg);
+    }
+
+    private static ModelAndView redirect(String URL, String msg) {
+        return new ModelAndView("redirect:" + URL  + "?msg=" + msg);
+    }
+
+    private static ModelAndView redirect(String URL) {
+        return new ModelAndView("redirect:" + URL);
     }
 }
