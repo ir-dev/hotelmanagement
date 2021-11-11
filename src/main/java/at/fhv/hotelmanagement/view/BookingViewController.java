@@ -38,6 +38,22 @@ public class BookingViewController {
     // generic views
     private static final String ERROR_VIEW = "errorView";
 
+    // create booking steps
+    private static final String CREATE_BOOKING_STAY_DETAILS_STEP = "enterStayDetails";
+    private static final String CREATE_BOOKING_ROOM_CATEGORIES_STEP = "enterRoomCategories";
+    private static final String CREATE_BOOKING_GUEST_DETAILS_STEP = "enterGuestDetails";
+    private static final String CREATE_BOOKING_PAYMENT_STEP = "enterPayment";
+    private static final String CREATE_BOOKING_SUMMARY_STEP = "confirmSummary";
+    private static final String CREATE_BOOKING_STORE_STEP = "storeBooking";
+    private static final Set<String> wizardSteps = Set.of(
+            CREATE_BOOKING_STAY_DETAILS_STEP,
+            CREATE_BOOKING_ROOM_CATEGORIES_STEP,
+            CREATE_BOOKING_GUEST_DETAILS_STEP,
+            CREATE_BOOKING_PAYMENT_STEP,
+            CREATE_BOOKING_SUMMARY_STEP,
+            CREATE_BOOKING_STORE_STEP
+    );
+
     @Autowired
     private BookingsService bookingsService;
 
@@ -72,20 +88,11 @@ public class BookingViewController {
             @ModelAttribute BookingForm form,
             Model model) {
 
-        final Set<String> wizardSteps = Set.of(
-                "enterStayDetails",
-                "enterRoomCategories",
-                "enterGuestDetails",
-                "enterPayment",
-                "confirmSummary",
-                "storeBooking"
-        );
-
         if (!wizardSteps.contains(step)) {
             return redirectError("Invalid step in create booking wizard.");
         }
 
-        if (step.equals("enterRoomCategories")) {
+        if (step.equals(CREATE_BOOKING_ROOM_CATEGORIES_STEP)) {
             // Fetch categories in given stay timespan for which rooms are available
             List<AvailableCategoryDTO> availableCategories = categoryService.availableCategories(form.getArrivalDateValue(), form.getDepartureDateValue());
 
@@ -93,7 +100,7 @@ public class BookingViewController {
             model.addAttribute("categories", availableCategories);
         }
 
-        if (step.equals("storeBooking")) {
+        if (step.equals(CREATE_BOOKING_STORE_STEP)) {
             bookingsService.createBooking(form);
 
             return redirect(ALL_BOOKINGS_URL, "Booking successfully created");

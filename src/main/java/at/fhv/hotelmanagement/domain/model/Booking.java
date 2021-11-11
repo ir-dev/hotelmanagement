@@ -42,7 +42,6 @@ public class Booking {
         this.paymentInformation = paymentInformation;
     }
 
-
     public BookingNo getBookingNo() {
         return this.bookingNo;
     }
