@@ -94,7 +94,7 @@ public class BookingViewController {
 
         if (step.equals(CREATE_BOOKING_ROOM_CATEGORIES_STEP)) {
             // Fetch categories in given stay timespan for which rooms are available
-            List<AvailableCategoryDTO> availableCategories = categoryService.availableCategories(form.getArrivalDateValue(), form.getDepartureDateValue());
+            List<AvailableCategoryDTO> availableCategories = categoryService.availableCategories(form.getArrivalDate(), form.getDepartureDate());
 
             // Attach to "enter room categories" view
             model.addAttribute("categories", availableCategories);

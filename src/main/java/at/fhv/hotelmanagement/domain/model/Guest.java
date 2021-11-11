@@ -22,10 +22,10 @@ public class Guest {
 //    private Country nationality;
 //    private String email;
 
-    public Guest(GuestId id, Optional<Organization> organization, Salutation salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+    public Guest(GuestId id, Optional<Organization> organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.id = id;
         this.organization = organization;
-        this.salutation = salutation;
+        this.salutation = Salutation.valueOf(salutation);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;

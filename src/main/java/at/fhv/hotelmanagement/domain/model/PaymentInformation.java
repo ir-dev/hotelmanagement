@@ -14,11 +14,11 @@ public class PaymentInformation {
     private PaymentInformation() {
 
     }
-    public PaymentInformation(String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, PaymentType paymentType) {
+    public PaymentInformation(String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, String paymentType) {
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;
         this.cardValidThru = cardValidThru;
         this.cardCvc = cardCvc;
-        this.paymentType = paymentType;
+        this.paymentType = PaymentType.valueOf(paymentType);
     }
 }

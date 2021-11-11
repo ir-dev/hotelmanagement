@@ -71,17 +71,17 @@ public class BookingServiceImpl implements BookingsService {
     @Override
     public void createBooking(BookingForm bookingForm) {
         Optional<Organization> organization;
-        if (bookingForm.getIsOrganizationValue()) {
-            organization = Optional.of(new Organization(bookingForm.getOrganizationNameValue(), bookingForm.getAgreementCodeValue()));
+        if (bookingForm.getIsOrganization()) {
+            organization = Optional.of(new Organization(bookingForm.getOrganizationName(), bookingForm.getAgreementCode()));
         } else {
             organization = Optional.empty();
         }
-        Address address = new Address(bookingForm.getStreetValue(), bookingForm.getZipcodeValue(), bookingForm.getCityValue(), bookingForm.getCountryValue());
-        Guest guest = new Guest(new GuestId("1"), organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
+        Address address = new Address(bookingForm.getStreet(), bookingForm.getZipcode(), bookingForm.getCity(), bookingForm.getCountry());
+        Guest guest = new Guest(new GuestId("1"), organization, bookingForm.getSalutation(), bookingForm.getFirstName(), bookingForm.getLastName(), bookingForm.getBirthday(), address, bookingForm.getSpecialNotes());
         guestRepository.store(guest);
 
-        PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderNameValue(), bookingForm.getCardNumberValue(), bookingForm.getCardValidThruValue(), bookingForm.getCardCvcValue(), bookingForm.getPaymentTypeValue());
-        Booking booking = new Booking(new BookingNo("1234"), BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest.getId(), paymentInformation);
+        PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderName(), bookingForm.getCardNumber(), bookingForm.getCardValidThru(), bookingForm.getCardCvc(), bookingForm.getPaymentType());
+        Booking booking = new Booking(new BookingNo("1234"), BookingStatus.PENDING, bookingForm.getArrivalDate(), bookingForm.getDepartureDate(), bookingForm.getArrivalTime(), bookingForm.getNumberOfPersons(), bookingForm.getSelectedCategoriesRoomCount(), guest.getId(), paymentInformation);
         bookingRepository.store(booking);
     }
 }

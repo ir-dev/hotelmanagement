@@ -8,11 +8,11 @@ public class Address {
     private String city;
     private Country country;
 
-    public Address(String street, String zipcode, String city, Country country) {
+    public Address(String street, String zipcode, String city, String country) {
         this.street = street;
         this.zipcode = zipcode;
         this.city = city;
-        this.country = country;
+        this.country = Country.valueOf(country);
     }
 
     public String getStreet() {
