@@ -147,7 +147,7 @@
 
                                         <div class="card-body">
                                             <label class="custom-control custom-checkbox">
-                                                <input id="isOrganization" name="organization" type="checkbox" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
+                                                <input id="isOrganization" name="isOrganization" type="checkbox" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
                                             </label>
                                             <div class="form-group">
                                                 <label for="organizationName" class="col-form-label">Organization Name</label>
@@ -345,7 +345,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         let categoryRoomsMinusButtons = document.querySelectorAll(".button-minus-category-rooms");
         let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
-        let organizationCheckbox = document.querySelector("#organization");
+        let isOrganizationCheckbox = document.querySelector("#isOrganization");
         let organizationNameText = document.querySelector("#organizationName");
         let agreementCodeText = document.querySelector("#agreementCode");
         let arrivalDate = document.querySelector("#arrivalDate");
@@ -353,7 +353,7 @@
         let nightsText = document.querySelector("#nights");
 
         function updateOrganizationInputs() {
-            if (organizationCheckbox.checked) {
+            if (isOrganizationCheckbox.checked) {
                 organizationNameText.disabled = false;
                 agreementCodeText.disabled = false;
                 organizationNameText.required = true;
@@ -404,8 +404,8 @@
         categoryRoomsPlusButtons.forEach(function (btn) {
             btn.addEventListener('click', incrementCategoryRooms)
         });
-        doActiveFieldsAction(organizationCheckbox, function () {
-            organizationCheckbox.addEventListener('click', updateOrganizationInputs);
+        doActiveFieldsAction(isOrganizationCheckbox, function () {
+            isOrganizationCheckbox.addEventListener('click', updateOrganizationInputs);
             updateOrganizationInputs();
         });
         doActiveFieldsAction([arrivalDate, departureDate], function () {
