@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.application.api.exceptions.AlreadyExistsStoreException;
+import at.fhv.hotelmanagement.domain.infrastructure.AlreadyExistsStoreException;
 import at.fhv.hotelmanagement.domain.model.Category;
 import org.springframework.stereotype.Repository;
 

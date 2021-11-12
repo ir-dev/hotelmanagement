@@ -1,4 +1,4 @@
-package at.fhv.hotelmanagement.application.api.exceptions;
+package at.fhv.hotelmanagement.domain.infrastructure;
 
 public class AlreadyExistsStoreException extends Exception {
 
