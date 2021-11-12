@@ -37,27 +37,27 @@
 
                                 <th:block th:if="${#strings.equals(step, 'enterStayDetails')}">
                                     <h5 class="card-header">Stay Details</h5>
-                                    <form th:action="@{/bookings/create(step='enterRoomCategories')}" method="post">
+                                    <form th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}" method="post">
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="arrivalDate" class="col-form-label">Arrival Date</label>
-                                                <input id="arrivalDate" name="arrivalDate" type="date" class="form-control" required>
+                                                <input type="date" th:field="*{arrivalDate}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="departureDate" class="col-form-label">Departure Date</label>
-                                                <input id="departureDate" name="departureDate" type="date" class="form-control" required>
+                                                <input type="date" th:field="*{departureDate}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nights" class="col-form-label">Nights</label>
-                                                <input id="nights" type="text" class="form-control" disabled>
+                                                <input type="text" id="nights" class="form-control" disabled>
                                             </div>
                                             <div class="form-group">
                                                 <label for="arrivalTime" class="col-form-label">Arrival Time</label>
-                                                <input id="arrivalTime" name="arrivalTime" type="time" class="form-control">
+                                                <input type="time"  th:field="*{arrivalTime}" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label for="numberOfPersons" class="col-form-label">Number of Persons</label>
-                                                <input id="numberOfPersons" name="numberOfPersons" type="number" class="form-control" min="1" required>
+                                                <input type="number" th:field="*{numberOfPersons}" class="form-control" min="1" required>
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
@@ -147,55 +147,55 @@
 
                                         <div class="card-body">
                                             <label class="custom-control custom-checkbox">
-                                                <input id="isOrganization" name="isOrganization" type="checkbox" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
+                                                <input type="checkbox" th:field="*{isOrganization}" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
                                             </label>
                                             <div class="form-group">
                                                 <label for="organizationName" class="col-form-label">Organization Name</label>
-                                                <input id="organizationName" name="organizationName" type="text" class="form-control">
+                                                <input type="text" th:field="*{organizationName}" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label for="agreementCode" class="col-form-label">Agreement Code</label>
-                                                <input id="agreementCode" name="agreementCode" type="text" class="form-control">
+                                                <input type="text" th:field="*{agreementCode}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="card-body border-top">
                                             <div class="form-group">
                                                 <label for="salutation">Salutation</label>
-                                                <select id="salutation" name="salutation" class="form-control"
+                                                <select th:field="*{salutation}" class="form-control"
                                                         th:insert="/fragments/optionsets :: salutation" required></select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="firstName" class="col-form-label">First Name</label>
-                                                <input id="firstName" name="firstName" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{firstName}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="lastName" class="col-form-label">Last Name</label>
-                                                <input id="lastName" name="lastName" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{lastName}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="birthday" class="col-form-label">Birthday</label>
-                                                <input id="birthday" name="birthday" type="date" class="form-control" required>
+                                                <input type="date" th:field="*{birthday}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="street" class="col-form-label">Street</label>
-                                                <input id="street" name="street" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{street}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="zipcode" class="col-form-label">Zipcode</label>
-                                                <input id="zipcode" name="zipcode" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{zipcode}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="city" class="col-form-label">City</label>
-                                                <input id="city" name="city" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{city}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="country">Country</label>
-                                                <select id="country" name="country" class="form-control"
+                                                <select th:field="*{country}" class="form-control"
                                                         th:insert="/fragments/optionsets :: country" required></select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="specialNotes" class="col-form-label">Special Notes</label>
-                                                <textarea id="specialNotes" name="specialNotes" class="form-control" rows="3"></textarea>
+                                                <textarea th:field="*{specialNotes}" class="form-control" rows="3"></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <p class="text-right">
@@ -233,19 +233,19 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="cardHolderName" class="col-form-label">Card Holder Name</label>
-                                                <input id="cardHolderName" name="cardHolderName" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{cardHolderName}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cardNumber" class="col-form-label">Card Number</label>
-                                                <input id="cardNumber" name="cardNumber" type="text" class="form-control" required>
+                                                <input th:field="*{cardNumber}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cardValidThru" class="col-form-label">Valid thru</label>
-                                                <input id="cardValidThru" name="cardValidThru" type="text" class="form-control" required>
+                                                <input type="text" th:field="*{cardValidThru}" class="form-control" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cardCvc" class="col-form-label">CVC</label>
-                                                <input id="cardCvc" name="cardCvc" type="password" class="form-control">
+                                                <input type="password" th:field="*{cardCvc}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="card-body border-top">

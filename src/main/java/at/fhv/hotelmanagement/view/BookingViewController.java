@@ -85,6 +85,7 @@ public class BookingViewController {
     @GetMapping(CREATE_BOOKING_URL)
     public String createBooking(Model model) {
         model.addAttribute("step", "enterStayDetails");
+        model.addAttribute("form", new BookingForm());
 
         return CREATE_BOOKING_VIEW;
     }
