@@ -72,11 +72,14 @@ public class BookingViewController {
 
     @GetMapping(ALL_BOOKINGS_URL)
     public String allBookings(
-            @RequestParam("msg") String msg,
+            @RequestParam("msg") Optional<String> msg,
             Model model) {
         final List<BookingDTO> bookings = bookingsService.allBookings();
 
-        model.addAttribute("msg", msg);
+        if (msg.isPresent()) {
+            model.addAttribute("msg", msg);
+        }
+
         model.addAttribute("bookings", bookings);
 
         return ALL_BOOKINGS_VIEW;
