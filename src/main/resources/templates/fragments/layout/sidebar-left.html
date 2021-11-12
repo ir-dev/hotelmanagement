@@ -8,11 +8,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav flex-column">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link active" href="#"> -->
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="fas fa-tachometer-alt"></i>Dashboard
+                        </a>
+                    </li>
                     <li class="nav-divider">
                         Front-Office
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="true"
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="true"
                            data-target="#submenu-1" aria-controls="submenu-1"><i
                                 class="fas fa-fw fa-bold"></i>Bookings</a>
                         <div id="submenu-1" class="collapse submenu show">

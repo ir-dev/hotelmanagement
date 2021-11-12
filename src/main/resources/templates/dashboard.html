@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='Create a booking for your stay at the hotel.')"/>
+    <title>Create Booking | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">Dashboard</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-10">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/fragments/layout/footer :: content"/>
+</div>
+</div>
+<th:block th:replace="/fragments/layout/page :: js"/>
+</body>
+
+</html>

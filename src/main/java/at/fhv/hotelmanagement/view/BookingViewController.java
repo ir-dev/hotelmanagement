@@ -24,6 +24,7 @@ import java.util.Set;
 
 @Controller
 public class BookingViewController {
+    private static final String DASHBOARD_URL = "/";
     // bookings urls
     private static final String ALL_BOOKINGS_URL = "/bookings";
     private static final String CREATE_BOOKING_URL = "/bookings/create";
@@ -31,6 +32,7 @@ public class BookingViewController {
     // generic urls
     private static final String ERROR_URL = "/displayerror";
 
+    private static final String DASHBOARD_VIEW = "dashboard";
     // bookings views
     private static final String ALL_BOOKINGS_VIEW = "allBookings";
     private static final String CREATE_BOOKING_VIEW = "createBooking";
@@ -62,6 +64,11 @@ public class BookingViewController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @GetMapping(DASHBOARD_URL)
+    public String dashboard() {
+        return DASHBOARD_VIEW;
+    }
 
     @GetMapping(ALL_BOOKINGS_URL)
     public String allBookings(
