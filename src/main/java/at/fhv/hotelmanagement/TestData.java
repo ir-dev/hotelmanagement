@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-@Transactional
 @Component
+@Transactional
 public class TestData implements ApplicationRunner {
 
     @Autowired

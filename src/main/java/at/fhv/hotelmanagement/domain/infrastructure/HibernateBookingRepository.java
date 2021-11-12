@@ -4,12 +4,13 @@ import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.BookingNo;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+
+
 @Component
 public class HibernateBookingRepository implements BookingRepository {
     @PersistenceContext
@@ -25,12 +26,11 @@ public class HibernateBookingRepository implements BookingRepository {
     public Optional<Booking> findByNo(BookingNo bookingNo) {
         TypedQuery<Booking> query = this.em.createQuery("FROM Booking AS b WHERE b.bookingNo = :bookingNo", Booking.class);
         query.setParameter("bookingId", bookingNo);
-        return singleResultOptional(query);
+        return query.getResultStream().findFirst();
     }
 
     @Override
     public void store(Booking booking) {
         this.em.persist(booking);
-        this.em.flush();
     }
 }
