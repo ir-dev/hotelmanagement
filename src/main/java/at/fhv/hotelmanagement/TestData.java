@@ -34,13 +34,13 @@ public class TestData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<Room> roomRange1 = new ArrayList<>();
-        roomRange1.add(new Room());
-        roomRange1.add(new Room());
-        roomRange1.add(new Room());
-        roomRange1.add(new Room());
+        roomRange1.add(new Room("120"));
+        roomRange1.add(new Room("121"));
+        roomRange1.add(new Room("122"));
+        roomRange1.add(new Room("123"));
         List<Room> roomRange2 = new ArrayList<>();
-        roomRange2.add(new Room());
-        roomRange2.add(new Room());
+        roomRange2.add(new Room("150"));
+        roomRange2.add(new Room("151"));
         Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", roomRange1);
         Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", roomRange2);
         categoryRepository.store(c1);

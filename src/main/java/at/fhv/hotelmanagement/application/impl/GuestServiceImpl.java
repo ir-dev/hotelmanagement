@@ -4,6 +4,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.model.Guest;
+import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public Optional<GuestDTO> guestByGuestId(String guestId) {
+    public Optional<GuestDTO> guestByGuestId(GuestId guestId) {
         Optional<Guest> guest = guestRepository.findById(guestId);
         if (guest.isEmpty()) {
             return Optional.empty();

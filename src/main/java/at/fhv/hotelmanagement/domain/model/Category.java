@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class Category {
+    private Long id;
     private String name;
     private String description;
     private List<Room> rooms;
+
+    public Category(){}
 
     public Category(String name, String description, List<Room> rooms) {
         this.name = name;

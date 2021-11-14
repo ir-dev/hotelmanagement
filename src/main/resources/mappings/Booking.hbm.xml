@@ -5,12 +5,12 @@
     <class name="at.fhv.hotelmanagement.domain.model.Booking" table="booking" lazy="true">
         <cache usage="read-write"/>
 
-        <id name="id" type="long" column="booking_id" unsaved-value="-1">
+        <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
         <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.BookingNo">
-            <property name="id" column="booking_domain_no" type="java.lang.String" />
+            <property name="id" column="booking_no" type="java.lang.String" />
         </component>
 
         <property name="bookingStatus">
@@ -19,11 +19,6 @@
                 <param name="useNamed">true</param>
             </type>
         </property>
-
-
-<!--        <component name="bookingStatus" class="at.fhv.hotelmanagement.domain.model.enums.BookingStatus">-->
-<!--            <property name="" column="booking_domain_id" type="org.hibernate.type.EnumType" />-->
-<!--        </component>-->
 
         <property name="arrivalDate" column="arrival_date" type="java.time.LocalDate" />
 
@@ -40,10 +35,8 @@
         </map>
 
         <component name="guest" class="at.fhv.hotelmanagement.domain.model.GuestId">
-            <property name="id" column="guest_domain_id" type="java.lang.String" />
+            <property name="id" column="guest_id" type="java.lang.String" />
         </component>
-
-
 
         <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.PaymentInformation">
             <property name="cardHolderName" column="card_holder_name" type="java.lang.String" />
