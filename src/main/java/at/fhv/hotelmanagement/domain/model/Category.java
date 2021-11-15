@@ -8,11 +8,13 @@ import java.util.List;
 public class Category {
     private String name;
     private String description;
+    private Integer maxPersons;
     private List<Room> rooms;
 
-    public Category(String name, String description, List<Room> rooms) {
+    public Category(String name, String description, Integer maxPersons, List<Room> rooms) {
         this.name = name;
         this.description = description;
+        this.maxPersons = maxPersons;
         this.rooms = rooms;
     }
 
@@ -22,6 +24,10 @@ public class Category {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public Integer getMaxPersons() {
+        return this.maxPersons;
     }
 
     public List<Room> getRooms() {

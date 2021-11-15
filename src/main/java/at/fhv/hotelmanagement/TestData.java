@@ -41,8 +41,8 @@ public class TestData implements ApplicationRunner {
         List<Room> roomRange2 = new ArrayList<>();
         roomRange2.add(new Room());
         roomRange2.add(new Room());
-        Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", roomRange1);
-        Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", roomRange2);
+        Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, roomRange1);
+        Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", 1, roomRange2);
         categoryRepository.store(c1);
         categoryRepository.store(c2);
 
