@@ -1,7 +1,5 @@
 package at.fhv.hotelmanagement;
 
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateBookingRepository;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.model.enums.Country;
@@ -65,9 +63,9 @@ public class TestData implements ApplicationRunner {
         PaymentInformation paymentInformation1 = new PaymentInformation("Hüseyin Arziman", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
         Booking bk1 = new Booking(bookingRepository.nextIdentity(), BookingStatus.PENDING, LocalDate.of(2021,12,12),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getId(), paymentInformation1);
+                LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
         Booking bk2 = new Booking(bookingRepository.nextIdentity(), BookingStatus.PENDING, LocalDate.of(2021,12,12),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 1, categoryRooms2, g2.getId(), paymentInformation2);
+                LocalDate.of(2021,12,24), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
         bookingRepository.store(bk1);
         bookingRepository.store(bk2);
     }

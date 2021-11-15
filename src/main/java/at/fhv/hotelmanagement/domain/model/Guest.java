@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class Guest {
-    // private Long id;
-    private GuestId id;
+    private Long id;
+    private GuestId guestId;
     // * Organization Details
     private Optional<Organization> organization;
     // * Billing Address
@@ -23,8 +23,8 @@ public class Guest {
 //    private Country nationality;
 //    private String email;
 
-    public Guest(GuestId id, Optional<Organization> organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
-        this.id = id;
+    public Guest(GuestId guestId, Optional<Organization> organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+        this.guestId = guestId;
         this.organization = organization;
         this.salutation = Salutation.valueOf(salutation);
         this.firstName = firstName;
@@ -34,8 +34,8 @@ public class Guest {
         this.specialNotes = specialNotes;
     }
 
-    public GuestId getId() {
-        return this.id;
+    public GuestId getGuestId() {
+        return this.guestId;
     }
 
     public Optional<Organization> getOrganization() {

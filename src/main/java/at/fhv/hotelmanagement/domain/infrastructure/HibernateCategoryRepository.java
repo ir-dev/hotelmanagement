@@ -23,7 +23,7 @@ public class HibernateCategoryRepository implements CategoryRepository {
 
     @Override
     public Optional<Category> findByName(String categoryName) {
-        TypedQuery<Category> query = this.em.createQuery("FROM Category AS c WHERE c.categoryName = :categoryName", Category.class);
+        TypedQuery<Category> query = this.em.createQuery("FROM Category AS c WHERE c.name = :categoryName", Category.class);
         query.setParameter("categoryName", categoryName);
         return query.getResultStream().findFirst();
     }

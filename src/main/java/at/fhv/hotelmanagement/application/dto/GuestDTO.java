@@ -78,7 +78,7 @@ public class GuestDTO {
         }
 
         public Builder withGuestEntity(Guest guest) {
-            this.instance.id = guest.getId();
+            this.instance.id = guest.getGuestId();
             this.instance.organization = guest.getOrganization();
             this.instance.salutation = guest.getSalutation();
             this.instance.firstName = guest.getFirstName();
