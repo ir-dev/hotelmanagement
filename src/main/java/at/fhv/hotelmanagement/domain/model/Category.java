@@ -1,9 +1,9 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Category {
     private Long id;
