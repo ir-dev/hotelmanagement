@@ -18,7 +18,7 @@ public class BookingForm {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
-    private String AgreementCode;
+    private String organizationAgreementCode;
     private String salutation;
     private String firstName;
     private String lastName;
@@ -97,12 +97,12 @@ public class BookingForm {
         this.organizationName = organizationName;
     }
 
-    public String getAgreementCode() {
-        return this.AgreementCode;
+    public String getOrganizationAgreementCode() {
+        return this.organizationAgreementCode;
     }
 
-    public void setAgreementCode(String agreementCode) {
-        this.AgreementCode = agreementCode;
+    public void setOrganizationAgreementCode(String organizationAgreementCode) {
+        this.organizationAgreementCode = organizationAgreementCode;
     }
 
     public String getSalutation() {

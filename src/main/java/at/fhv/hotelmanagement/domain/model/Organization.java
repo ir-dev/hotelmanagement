@@ -2,10 +2,21 @@ package at.fhv.hotelmanagement.domain.model;
 
 public class Organization {
     private String organizationName;
-    private String agreementCode;
+    private String organizationAgreementCode;
 
-    public Organization(String organizationName, String agreementCode) {
+    // required by hibernate
+    private Organization() {}
+
+    public Organization(String organizationName, String organizationAgreementCode) {
         this.organizationName = organizationName;
-        this.agreementCode = agreementCode;
+        this.organizationAgreementCode = organizationAgreementCode;
+    }
+
+    public String getOrganizationName() {
+        return this.organizationName;
+    }
+
+    public String getOrganizationAgreementCode() {
+        return this.organizationAgreementCode;
     }
 }

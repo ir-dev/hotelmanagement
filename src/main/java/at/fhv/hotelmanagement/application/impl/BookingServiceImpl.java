@@ -4,7 +4,6 @@ import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -126,11 +125,9 @@ public class BookingServiceImpl implements BookingsService {
             throw new CreateBookingException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
         }
 
-        Optional<Organization> organization;
+        Organization organization = null;
         if (bookingForm.getIsOrganization()) {
-            organization = Optional.of(new Organization(bookingForm.getOrganizationName(), bookingForm.getAgreementCode()));
-        } else {
-            organization = Optional.empty();
+            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
         }
 
         Address address = new Address(bookingForm.getStreet(), bookingForm.getZipcode(), bookingForm.getCity(), bookingForm.getCountry());

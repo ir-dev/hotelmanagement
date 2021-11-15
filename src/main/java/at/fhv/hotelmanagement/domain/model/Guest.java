@@ -9,7 +9,8 @@ public class Guest {
     // generated hibernate id
     private Long id;
     private GuestId guestId;
-    private Optional<Organization> organization;
+    // organization may be null
+    private Organization organization;
     private Salutation salutation;
     private String firstName;
     private String lastName;
@@ -17,7 +18,7 @@ public class Guest {
     private Address address;
     private String specialNotes;
 
-    public Guest(GuestId guestId, Optional<Organization> organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+    public Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.guestId = guestId;
         this.organization = organization;
         this.salutation = Salutation.valueOf(salutation);
@@ -33,7 +34,7 @@ public class Guest {
     }
 
     public Optional<Organization> getOrganization() {
-        return this.organization;
+        return Optional.ofNullable(this.organization);
     }
 
     public Salutation getSalutation() {

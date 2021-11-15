@@ -46,8 +46,8 @@ public class TestData implements ApplicationRunner {
         categoryRepository.store(c1);
         categoryRepository.store(c2);
 
-        Optional<Organization> orgaEmpty = Optional.empty();
-        Optional<Organization> orga1 = Optional.of(new Organization("FHV", "PROMOCODE-XMAS2021"));
+        Organization orgaEmpty = null;
+        Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
         Address ad1 = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         Address ad2 = new Address("Musterstr. 123", "12345", "München", String.valueOf(Country.DE));
         Guest g1 = new Guest(guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Hüseyin", "Arziman", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
