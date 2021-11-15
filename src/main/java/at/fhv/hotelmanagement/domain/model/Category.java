@@ -10,11 +10,11 @@ public class Category {
     private String name;
     private String description;
     private Integer maxPersons;
-    private List<Room> rooms;
+    private Set<Room> rooms;
 
     private Category() {}
 
-    public Category(String name, String description, Integer maxPersons, List<Room> rooms) {
+    public Category(String name, String description, Integer maxPersons, Set<Room> rooms) {
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
@@ -33,12 +33,12 @@ public class Category {
         return this.maxPersons;
     }
 
-    public List<Room> getRooms() {
-        return Collections.unmodifiableList(this.rooms);
+    public Set<Room> getRooms() {
+        return Collections.unmodifiableSet(this.rooms);
     }
 
-    public List<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
-        final List<Room> availableRooms = new ArrayList<>();
+    public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
+        final Set<Room> availableRooms = new HashSet<>();
 
         for (Room room : rooms) {
             if(room.isAvailable(fromDate, toDate)) {
@@ -46,7 +46,7 @@ public class Category {
             }
         }
 
-        return Collections.unmodifiableList(availableRooms);
+        return Collections.unmodifiableSet(availableRooms);
     }
 
     public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
