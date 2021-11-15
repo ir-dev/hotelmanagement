@@ -6,12 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Category {
+    // generated hibernate id
     private Long id;
     private String name;
     private String description;
     private Integer maxPersons;
     private Set<Room> rooms;
 
+    // required for hibernate
     private Category() {}
 
     public Category(String name, String description, Integer maxPersons, Set<Room> rooms) {
@@ -40,8 +42,8 @@ public class Category {
     public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
         final Set<Room> availableRooms = new HashSet<>();
 
-        for (Room room : rooms) {
-            if(room.isAvailable(fromDate, toDate)) {
+        for (Room room : this.rooms) {
+            if (room.isAvailable(fromDate, toDate)) {
                 availableRooms.add(room);
             }
         }
