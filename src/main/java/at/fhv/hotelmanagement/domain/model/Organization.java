@@ -4,7 +4,7 @@ public class Organization {
     private String organizationName;
     private String organizationAgreementCode;
 
-    // required by hibernate
+    // required for hibernate
     private Organization() {}
 
     public Organization(String organizationName, String organizationAgreementCode) {

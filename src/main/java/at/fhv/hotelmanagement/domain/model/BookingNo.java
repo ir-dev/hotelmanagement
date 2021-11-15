@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.domain.model;
 public class BookingNo {
     private String no;
 
+    // required for hibernate
     private BookingNo() {}
 
     public BookingNo(String bookingNo) {
