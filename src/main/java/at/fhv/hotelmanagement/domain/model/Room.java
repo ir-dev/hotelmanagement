@@ -3,10 +3,12 @@ package at.fhv.hotelmanagement.domain.model;
 import java.time.LocalDate;
 
 public class Room {
+    // generated hibernate id
     private Long id;
     private String number;
 
-    public Room(){}
+    // required for hibernate
+    private Room() {}
 
     public Room(String number){
         this.number = number;
