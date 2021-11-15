@@ -1,6 +1,5 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.domain.infrastructure.AlreadyExistsStoreException;
 import at.fhv.hotelmanagement.domain.model.Category;
 import org.springframework.stereotype.Repository;
 
@@ -11,11 +10,9 @@ import java.util.Optional;
 public interface CategoryRepository {
     List<Category> findAll();
 
-    // this is possible because name is unique
+    // find by name is possible because name is unique
     Optional<Category> findByName(String categoryName);
 
-    boolean exists(String categoryName);
-
-    void store(Category category) throws AlreadyExistsStoreException;
+    void store(Category category);
 }
 

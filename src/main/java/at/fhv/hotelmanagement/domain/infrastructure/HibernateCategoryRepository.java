@@ -29,16 +29,7 @@ public class HibernateCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public boolean exists(String categoryName) {
-        Optional<Category> category = findByName(categoryName);
-        if(category.isPresent()){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void store(Category category) throws AlreadyExistsStoreException {
+    public void store(Category category) {
         this.em.persist(category);
     }
 }
