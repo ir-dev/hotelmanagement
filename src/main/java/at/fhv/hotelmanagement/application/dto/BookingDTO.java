@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.Map;
 import java.util.Objects;
 
-public class BookingDTO {
+public final class BookingDTO {
     private BookingDetailsDTO details;
 
     private BookingNo bookingNo;
@@ -22,7 +22,7 @@ public class BookingDTO {
     private Integer numberOfPersons;
 
     public static Builder builder() {
-        return new Builder();
+        return new BookingDTO.Builder();
     }
 
     public BookingDetailsDTO details() {

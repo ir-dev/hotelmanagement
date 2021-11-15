@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class BookingDetailsDTO {
+public final class BookingDetailsDTO {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private GuestId guest;
     private PaymentInformation paymentInformation;
-    //    private CancellationModality cancellationModality;
-    //    private List<AdditionalService> additionalServices;
 
     public static BookingDetailsDTO.Builder builder() {
         return new BookingDetailsDTO.Builder();
