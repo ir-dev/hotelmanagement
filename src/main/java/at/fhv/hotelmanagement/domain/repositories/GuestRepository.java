@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface GuestRepository {
+    GuestId nextIdentity();
+
     List<Guest> findAll();
 
     Optional<Guest> findById(GuestId guestId);
-
-    GuestId nextIdentity();
 
     void store(Guest guest);
 }

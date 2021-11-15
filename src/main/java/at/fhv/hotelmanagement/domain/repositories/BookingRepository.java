@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface BookingRepository {
+    BookingNo nextIdentity();
+
     List<Booking> findAll();
 
     Optional<Booking> findByNo(BookingNo bookingNo);
-
-    BookingNo nextIdentity();
 
     void store(Booking booking);
 }

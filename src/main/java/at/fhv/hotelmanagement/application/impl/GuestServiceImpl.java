@@ -1,6 +1,5 @@
 package at.fhv.hotelmanagement.application.impl;
 
-
 import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.model.Guest;
