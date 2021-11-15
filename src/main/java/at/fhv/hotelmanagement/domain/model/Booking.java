@@ -26,9 +26,7 @@ public class Booking {
 //    private List<AdditionalService> additionalServices;
 
     //for Hibernate
-    private Booking(){
-
-    }
+    private Booking(){}
 
     public Booking(BookingNo bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;

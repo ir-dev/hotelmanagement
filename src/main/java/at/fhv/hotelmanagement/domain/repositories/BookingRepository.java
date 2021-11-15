@@ -13,5 +13,7 @@ public interface BookingRepository {
 
     Optional<Booking> findByNo(BookingNo bookingNo);
 
+    BookingNo nextIdentity();
+
     void store(Booking booking);
 }

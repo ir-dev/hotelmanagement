@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Guest {
+    // private Long id;
     private GuestId id;
     // * Organization Details
     private Optional<Organization> organization;
