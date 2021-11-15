@@ -28,9 +28,9 @@ public class Booking {
     //for Hibernate
     private Booking(){}
 
-    public Booking(BookingNo bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
+    public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
-        this.bookingStatus = bookingStatus;
+        this.bookingStatus = BookingStatus.PENDING;
         this.arrivalDate = arrivalDate;
         this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;

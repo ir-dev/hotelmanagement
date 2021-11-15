@@ -138,7 +138,7 @@ public class BookingServiceImpl implements BookingsService {
         guestRepository.store(guest);
 
         PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderName(), bookingForm.getCardNumber(), bookingForm.getCardValidThru(), bookingForm.getCardCvc(), bookingForm.getPaymentType());
-        Booking booking = new Booking(bookingRepository.nextIdentity(), BookingStatus.PENDING, bookingForm.getArrivalDate(), bookingForm.getDepartureDate(), bookingForm.getArrivalTime(), bookingForm.getNumberOfPersons(), bookingForm.getSelectedCategoriesRoomCount(), guest.getGuestId(), paymentInformation);
+        Booking booking = new Booking(bookingRepository.nextIdentity(), bookingForm.getArrivalDate(), bookingForm.getDepartureDate(), bookingForm.getArrivalTime(), bookingForm.getNumberOfPersons(), bookingForm.getSelectedCategoriesRoomCount(), guest.getGuestId(), paymentInformation);
         bookingRepository.store(booking);
     }
 }
