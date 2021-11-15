@@ -4,7 +4,6 @@ import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Map;
 
 public class Booking {
