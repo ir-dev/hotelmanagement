@@ -132,13 +132,39 @@ public class BookingServiceImpl implements BookingsService {
         if (bookingForm.getIsOrganization()) {
             organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
         }
+        Address address = new Address(
+                bookingForm.getStreet(),
+                bookingForm.getZipcode(),
+                bookingForm.getCity(),
+                bookingForm.getCountry());
+        Guest guest = new Guest(
+                guestRepository.nextIdentity(),
+                organization,
+                bookingForm.getSalutation(),
+                bookingForm.getFirstName(),
+                bookingForm.getLastName(),
+                bookingForm.getBirthday(),
+                address,
+                bookingForm.getSpecialNotes());
 
-        Address address = new Address(bookingForm.getStreet(), bookingForm.getZipcode(), bookingForm.getCity(), bookingForm.getCountry());
-        Guest guest = new Guest(guestRepository.nextIdentity(), organization, bookingForm.getSalutation(), bookingForm.getFirstName(), bookingForm.getLastName(), bookingForm.getBirthday(), address, bookingForm.getSpecialNotes());
         guestRepository.store(guest);
 
-        PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderName(), bookingForm.getCardNumber(), bookingForm.getCardValidThru(), bookingForm.getCardCvc(), bookingForm.getPaymentType());
-        Booking booking = new Booking(bookingRepository.nextIdentity(), bookingForm.getArrivalDate(), bookingForm.getDepartureDate(), bookingForm.getArrivalTime(), bookingForm.getNumberOfPersons(), bookingForm.getSelectedCategoriesRoomCount(), guest.getGuestId(), paymentInformation);
+        PaymentInformation paymentInformation = new PaymentInformation(
+                bookingForm.getCardHolderName(),
+                bookingForm.getCardNumber(),
+                bookingForm.getCardValidThru(),
+                bookingForm.getCardCvc(),
+                bookingForm.getPaymentType());
+        Booking booking = new Booking(
+                bookingRepository.nextIdentity(),
+                bookingForm.getArrivalDate(),
+                bookingForm.getDepartureDate(),
+                bookingForm.getArrivalTime(),
+                bookingForm.getNumberOfPersons(),
+                bookingForm.getSelectedCategoriesRoomCount(),
+                guest.getGuestId(),
+                paymentInformation);
+
         bookingRepository.store(booking);
     }
 }
