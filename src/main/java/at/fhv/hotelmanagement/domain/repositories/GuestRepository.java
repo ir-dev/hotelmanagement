@@ -1,6 +1,5 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.GuestId;
 import org.springframework.stereotype.Repository;
