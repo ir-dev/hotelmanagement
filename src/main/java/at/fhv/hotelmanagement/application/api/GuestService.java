@@ -1,7 +1,6 @@
 package at.fhv.hotelmanagement.application.api;
 
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.domain.model.GuestId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

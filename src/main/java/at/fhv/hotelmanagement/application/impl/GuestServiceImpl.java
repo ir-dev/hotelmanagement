@@ -33,8 +33,8 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public Optional<GuestDTO> guestByGuestId(GuestId guestId) {
-        Optional<Guest> guest = guestRepository.findById(guestId);
+    public Optional<GuestDTO> guestByGuestId(String guestId) {
+        Optional<Guest> guest = guestRepository.findById(new GuestId(guestId));
         if (guest.isEmpty()) {
             return Optional.empty();
         }
