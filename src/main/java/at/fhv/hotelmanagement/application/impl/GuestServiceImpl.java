@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.GuestService;
+import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -23,9 +25,7 @@ public class GuestServiceImpl implements GuestService {
         List<GuestDTO> guestsDto = new ArrayList<>();
 
         for (Guest guest : guests) {
-            guestsDto.add(GuestDTO.builder()
-                    .withGuestEntity(guest)
-                    .build());
+            guestsDto.add(buildGuestDto(guest));
         }
 
         return guestsDto;
@@ -38,8 +38,12 @@ public class GuestServiceImpl implements GuestService {
             return Optional.empty();
         }
 
-        return Optional.of(GuestDTO.builder()
-                .withGuestEntity(guest.get())
-                .build());
+        return Optional.of(buildGuestDto(guest.get()));
+    }
+
+    private GuestDTO buildGuestDto(Guest guest) {
+        return GuestDTO.builder()
+                .withGuestEntity(guest)
+                .build();
     }
 }

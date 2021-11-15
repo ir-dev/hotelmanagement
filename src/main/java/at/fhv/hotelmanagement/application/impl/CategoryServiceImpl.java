@@ -25,14 +25,20 @@ public class CategoryServiceImpl implements CategoryService {
             int availableRoomsCount = category.getAvailableRoomsCount(arrivalDate, departureDate);
 
             if (availableRoomsCount > 0) {
-                availableCategoriesDto.add(AvailableCategoryDTO.builder()
-                        .withName(category.getName())
-                        .withDescription(category.getDescription())
-                        .withAvailableRoomsCount(availableRoomsCount)
-                        .build());
+                availableCategoriesDto.add(
+                        buildAvailableCategoryDto(category, availableRoomsCount)
+                );
             }
         }
 
         return availableCategoriesDto;
+    }
+
+    private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
+        return AvailableCategoryDTO.builder()
+                .withName(category.getName())
+                .withDescription(category.getDescription())
+                .withAvailableRoomsCount(availableRoomsCount)
+                .build();
     }
 }

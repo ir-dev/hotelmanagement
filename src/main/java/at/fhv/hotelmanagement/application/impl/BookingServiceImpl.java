@@ -36,10 +36,7 @@ public class BookingServiceImpl implements BookingsService {
         List<BookingDTO> bookingsDto = new ArrayList<>();
 
         for (Booking booking : bookings) {
-            bookingsDto.add(BookingDTO.builder()
-                    .withBookingEntity(booking)
-                    .withDetails(buildBookingDetailsDto(booking))
-                    .build());
+            bookingsDto.add(buildBookingDto(booking));
         }
 
         return bookingsDto;
@@ -49,25 +46,31 @@ public class BookingServiceImpl implements BookingsService {
     @Override
     public Optional<BookingDTO> bookingByBookingNo(String bookingNo) {
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+
         if (booking.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(BookingDTO.builder()
-                .withBookingEntity(booking.get())
-                .withDetails(buildBookingDetailsDto(booking.get()))
-                .build());
+        return Optional.of(buildBookingDto(booking.get()));
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo) {
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+
         if (booking.isEmpty()) {
             return Optional.empty();
         }
 
         return Optional.of(buildBookingDetailsDto(booking.get()));
+    }
+
+    private BookingDTO buildBookingDto(Booking booking) {
+        return BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(buildBookingDetailsDto(booking))
+                .build();
     }
 
     private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
