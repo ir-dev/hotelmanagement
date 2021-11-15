@@ -30,6 +30,11 @@ public class HibernateBookingRepository implements BookingRepository {
     }
 
     @Override
+    public BookingNo nextIdentity() {
+        return new BookingNo(java.util.UUID.randomUUID().toString().toUpperCase());
+    }
+
+    @Override
     public void store(Booking booking) {
         this.em.persist(booking);
     }

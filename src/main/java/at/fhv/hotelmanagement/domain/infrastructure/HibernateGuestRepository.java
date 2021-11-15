@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
+
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -28,6 +28,11 @@ public class HibernateGuestRepository implements GuestRepository {
         TypedQuery<Guest> query = this.em.createQuery("FROM Guest AS g WHERE g.guestId = :guestId", Guest.class);
         query.setParameter("guestId", guestId);
         return query.getResultStream().findFirst();
+    }
+
+    @Override
+    public GuestId nextIdentity() {
+        return new GuestId(java.util.UUID.randomUUID().toString().toUpperCase());
     }
 
     @Override
