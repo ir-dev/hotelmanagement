@@ -14,5 +14,7 @@ public interface GuestRepository {
 
     Optional<Guest> findById(GuestId guestId);
 
+    GuestId nextIdentity();
+
     void store(Guest guest);
 }

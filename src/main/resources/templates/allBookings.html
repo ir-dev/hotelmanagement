@@ -40,6 +40,7 @@
                                     <thead>
                                     <tr>
                                         <th>Booking #</th>
+                                        <th>Guest</th>
                                         <th>Arrival</th>
                                         <th>Departure</th>
                                         <th>Status</th>
@@ -54,6 +55,7 @@
                                     <tr th:each="b : ${bookings}">
                                         <td><a th:href="@{/booking(id=${b.bookingNo.getBookingNo()})}"><span th:text="${b.bookingNo.getBookingNo()}"/></a>
                                         </td>
+                                        <td><span th:text="${b.details.guest.id}"/></td>
                                         <td><span th:text="${b.arrivalDate}"/></td>
                                         <td><span th:text="${b.departureDate}"/></td>
                                         <td><span th:text="${b.bookingStatus}"/></td>

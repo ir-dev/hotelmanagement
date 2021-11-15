@@ -77,11 +77,11 @@ public class BookingServiceImpl implements BookingsService {
             organization = Optional.empty();
         }
         Address address = new Address(bookingForm.getStreetValue(), bookingForm.getZipcodeValue(), bookingForm.getCityValue(), bookingForm.getCountryValue());
-        Guest guest = new Guest(new GuestId("1"), organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
+        Guest guest = new Guest(guestRepository.nextIdentity(), organization, bookingForm.getSalutationValue(), bookingForm.getFirstNameValue(), bookingForm.getLastNameValue(), bookingForm.getBirthdayValue(), address, bookingForm.getSpecialNotesValue());
         guestRepository.store(guest);
 
         PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderNameValue(), bookingForm.getCardNumberValue(), bookingForm.getCardValidThruValue(), bookingForm.getCardCvcValue(), bookingForm.getPaymentTypeValue());
-        Booking booking = new Booking(new BookingNo("1234"), BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest.getId(), paymentInformation);
+        Booking booking = new Booking(bookingRepository.nextIdentity(), BookingStatus.PENDING, bookingForm.getArrivalDateValue(), bookingForm.getDepartureDateValue(), bookingForm.getArrivalTimeValue(), bookingForm.getNumberOfPersonsValue(), bookingForm.getSelectedCategoriesRoomCountValue(), guest.getId(), paymentInformation);
         bookingRepository.store(booking);
     }
 }
