@@ -79,11 +79,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-<!--                                                    <a class="dropdown-item" href="#">Check-In</a>-->
+                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${b.bookingNo.getNo()})}">Check-In</a>
                                                     <a class="dropdown-item" th:href="@{/booking(no=${b.bookingNo.getNo()})}">View</a>
-<!--                                                    <a class="dropdown-item" href="#">Edit</a>-->
-<!--                                                    <a class="dropdown-item" href="#">Cancel</a>-->
-<!--                                                    <a class="dropdown-item" href="#">Guest</a>-->
                                                 </div>
                                             </div>
                                         </td>

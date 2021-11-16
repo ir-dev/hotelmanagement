@@ -1,38 +1,48 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.Board;
+import at.fhv.hotelmanagement.domain.model.enums.StayStatus;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class Stay {
     // generated hibernate id
     private Long id;
     private StayId stayId;
-    private String name;
-    private String description;
-    private Board board;
+    private BookingNo bookingNo;
+    private StayStatus stayStatus;
+    private LocalDateTime checkedInAt;
+    // may be null
+    private LocalDateTime checkedOutAt;
 
     // required for hibernate
     private Stay() {}
 
-    public Stay(StayId stayId, String name, String description, Board board) {
+    public Stay(StayId stayId, BookingNo bookingNo) {
         this.stayId = stayId;
-        this.name = name;
-        this.description = description;
-        this.board = board;
+        this.bookingNo = bookingNo;
+        this.stayStatus = StayStatus.CHECKED_IN;
+        this.checkedInAt = LocalDateTime.now();
+        this.checkedOutAt = null;
     }
 
     public StayId getStayId() {
         return this.stayId;
     }
 
-    public String getName() {
-        return this.name;
+    public BookingNo getBookingNo() {
+        return this.bookingNo;
     }
 
-    public String getDescription() {
-        return this.description;
+    public StayStatus getStayStatus() {
+        return this.stayStatus;
     }
 
-    public Board getBoard() {
-        return this.board;
+    public LocalDateTime getCheckedInAt() {
+        return this.checkedInAt;
+    }
+
+    public Optional<LocalDateTime> getCheckedOutAt() {
+        return Optional.ofNullable(this.checkedOutAt);
     }
 }
