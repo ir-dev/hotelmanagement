@@ -29,7 +29,7 @@ public class HibernateBookingRepository implements BookingRepository {
     @Override
     public Optional<Booking> findByNo(BookingNo bookingNo) {
         TypedQuery<Booking> query = this.em.createQuery("FROM Booking AS b WHERE b.bookingNo = :bookingNo", Booking.class);
-        query.setParameter("bookingId", bookingNo);
+        query.setParameter("bookingNo", bookingNo);
         return query.getResultStream().findFirst();
     }
 

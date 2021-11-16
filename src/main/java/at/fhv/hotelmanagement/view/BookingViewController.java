@@ -2,7 +2,6 @@ package at.fhv.hotelmanagement.view;
 
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.CategoryService;
-import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
@@ -121,7 +120,7 @@ public class BookingViewController {
 
     @GetMapping(BOOKING_URL)
     public ModelAndView booking(
-            @RequestParam("id") String bookingNo,
+            @RequestParam("no") String bookingNo,
             Model model) {
         final Optional<BookingDTO> booking = bookingsService.bookingByBookingNo(bookingNo);
         final Optional<BookingDetailsDTO> bookingDetail = bookingsService.bookingDetailsByBookingNo(bookingNo);
