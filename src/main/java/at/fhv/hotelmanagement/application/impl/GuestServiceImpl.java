@@ -20,6 +20,7 @@ public class GuestServiceImpl implements GuestService {
     @Autowired
     GuestRepository guestRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<GuestDTO> allGuests() {
         List<Guest> guests = guestRepository.findAll();
