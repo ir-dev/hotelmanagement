@@ -34,13 +34,13 @@ public class TestData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Set<Room> roomRange1 = new HashSet<>();
-        roomRange1.add(new Room("120"));
-        roomRange1.add(new Room("121"));
-        roomRange1.add(new Room("122"));
-        roomRange1.add(new Room("123"));
+        roomRange1.add(new Room(new RoomNumber("120")));
+        roomRange1.add(new Room(new RoomNumber("121")));
+        roomRange1.add(new Room(new RoomNumber("122")));
+        roomRange1.add(new Room(new RoomNumber("123")));
         Set<Room> roomRange2 = new HashSet<>();
-        roomRange2.add(new Room("150"));
-        roomRange2.add(new Room("151"));
+        roomRange2.add(new Room(new RoomNumber("150")));
+        roomRange2.add(new Room(new RoomNumber("151")));
         Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, roomRange1);
         Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", 1, roomRange2);
         categoryRepository.store(c1);
@@ -68,5 +68,8 @@ public class TestData implements ApplicationRunner {
                 LocalDate.of(2021,12,24), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
         bookingRepository.store(bk1);
         bookingRepository.store(bk2);
+
+
+
     }
 }

@@ -9,7 +9,9 @@
             <generator class="native"/>
         </id>
 
-        <property name="number" column="number" type="java.lang.String" />
+        <component name="number" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
+            <property name="number" column="number" type="java.lang.String" />
+        </component>
 
     </class>
 </hibernate-mapping>
