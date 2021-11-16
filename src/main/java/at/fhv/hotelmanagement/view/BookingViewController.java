@@ -2,7 +2,6 @@ package at.fhv.hotelmanagement.view;
 
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.CategoryService;
-import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 
 @Controller
 public class BookingViewController {
@@ -59,9 +56,6 @@ public class BookingViewController {
 
     @Autowired
     private BookingsService bookingsService;
-
-    @Autowired
-    private GuestService guestService;
 
     @Autowired
     private CategoryService categoryService;
@@ -126,12 +120,13 @@ public class BookingViewController {
 
     @GetMapping(BOOKING_URL)
     public ModelAndView booking(
-            @RequestParam("id") String bookingNo,
+            @RequestParam("no") String bookingNo,
             Model model) {
         final Optional<BookingDTO> booking = bookingsService.bookingByBookingNo(bookingNo);
         final Optional<BookingDetailsDTO> bookingDetail = bookingsService.bookingDetailsByBookingNo(bookingNo);
-        if(booking.isEmpty() || bookingDetail.isEmpty()){
-            redirectError("Booking with no.: " + bookingNo + " not found");
+
+        if (booking.isEmpty() || bookingDetail.isEmpty()){
+            return redirectError("Booking with no.: " + bookingNo + " not found");
         }
 
         model.addAttribute("booking", booking.get());

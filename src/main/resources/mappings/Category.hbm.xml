@@ -13,13 +13,12 @@
         <property name="description" column="description" type="java.lang.String" />
         <property name="maxPersons" column="maxPersons" type="java.lang.Integer" />
 
-        <bag name="rooms" cascade="all" >
+        <set name="rooms" cascade="all" >
             <key>
                 <column name="category_id" />
             </key>
             <one-to-many class="at.fhv.hotelmanagement.domain.model.Room" />
-        </bag>
-
+        </set>
 
     </class>
 </hibernate-mapping>

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
-public class GuestDTO {
+public final class GuestDTO {
     private GuestId id;
     private Optional<Organization> organization;
     private Salutation salutation;
@@ -19,9 +19,6 @@ public class GuestDTO {
     private LocalDate birthday;
     private Address address;
     private String specialNotes;
-
-//    private String nationality;
-//    private String email;
 
     public static GuestDTO.Builder builder() {
         return new GuestDTO.Builder();
@@ -59,14 +56,6 @@ public class GuestDTO {
         return this.specialNotes;
     }
 
-//    public String nationality() {
-//        return this.nationality;
-//    }
-//
-//    public String email() {
-//        return this.email;
-//    }
-
     private GuestDTO() {
     }
 
@@ -86,8 +75,6 @@ public class GuestDTO {
             this.instance.birthday = guest.getBirthday();
             this.instance.address = guest.getAddress();
             this.instance.specialNotes = guest.getSpecialNotes();
-//            this.instance.nationality = guest.getNationality();
-//            this.instance.email = guest.getEmail();
             return this;
         }
 
@@ -99,6 +86,4 @@ public class GuestDTO {
 
 
     }
-
-
 }

@@ -10,11 +10,15 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-
 @Component
 public class HibernateBookingRepository implements BookingRepository {
     @PersistenceContext
     private EntityManager em;
+
+    @Override
+    public BookingNo nextIdentity() {
+        return new BookingNo(java.util.UUID.randomUUID().toString().toUpperCase());
+    }
 
     @Override
     public List<Booking> findAll() {
@@ -25,13 +29,8 @@ public class HibernateBookingRepository implements BookingRepository {
     @Override
     public Optional<Booking> findByNo(BookingNo bookingNo) {
         TypedQuery<Booking> query = this.em.createQuery("FROM Booking AS b WHERE b.bookingNo = :bookingNo", Booking.class);
-        query.setParameter("bookingId", bookingNo);
+        query.setParameter("bookingNo", bookingNo);
         return query.getResultStream().findFirst();
-    }
-
-    @Override
-    public BookingNo nextIdentity() {
-        return new BookingNo(java.util.UUID.randomUUID().toString().toUpperCase());
     }
 
     @Override

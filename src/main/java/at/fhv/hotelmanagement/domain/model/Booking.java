@@ -4,39 +4,34 @@ import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Map;
 
 public class Booking {
-    // TODO: generate bookingNo (maybe use generated no of db; factory for generation may also be an idea..)
+    // generated hibernate id
     private Long id;
     private BookingNo bookingNo;
     private BookingStatus bookingStatus;
-
-    // TODO: copy to stay at check-in
+    // TODO: copy to stay at check-in (maybe we shall use a value object for this purpose)
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private LocalTime arrivalTime;
     private Integer numberOfPersons;
-
     private Map<String, Integer> selectedCategoriesRoomCount;
-    private GuestId guest;
+    private GuestId guestId;
     private PaymentInformation paymentInformation;
-//    private CancellationModality cancellationModality;
-//    private List<AdditionalService> additionalServices;
 
-    //for Hibernate
-    private Booking(){}
+    // required for hibernate
+    private Booking() {}
 
-    public Booking(BookingNo bookingNo, BookingStatus bookingStatus, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
+    public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
-        this.bookingStatus = bookingStatus;
+        this.bookingStatus = BookingStatus.PENDING;
         this.arrivalDate = arrivalDate;
         this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;
         this.numberOfPersons = numberOfPersons;
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
-        this.guest = guest;
+        this.guestId = guestId;
         this.paymentInformation = paymentInformation;
     }
 
@@ -69,7 +64,7 @@ public class Booking {
     }
 
     public GuestId getGuestId() {
-        return this.guest;
+        return this.guestId;
     }
 
     public PaymentInformation getPaymentInformation() {

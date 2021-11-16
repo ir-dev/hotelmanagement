@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <form th:fragment="enterStayDetails" th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}" method="post">
     <div class="card-body">
         <div class="form-group">
@@ -109,8 +110,8 @@
             <input type="text" th:field="*{organizationName}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="agreementCode" class="col-form-label">Agreement Code</label>
-            <input type="text" th:field="*{agreementCode}" class="form-control">
+            <label for="organizationAgreementCode" class="col-form-label">Agreement Code</label>
+            <input type="text" th:field="*{organizationAgreementCode}" class="form-control">
         </div>
     </div>
     <div class="card-body border-top">
@@ -171,7 +172,7 @@
     </th:block>
     <input type="hidden" th:field="*{isOrganization}">
     <input type="hidden" th:field="*{organizationName}">
-    <input type="hidden" th:field="*{agreementCode}">
+    <input type="hidden" th:field="*{organizationAgreementCode}">
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
@@ -225,7 +226,7 @@
     </th:block>
     <input type="hidden" th:field="*{isOrganization}">
     <input type="hidden" th:field="*{organizationName}">
-    <input type="hidden" th:field="*{agreementCode}">
+    <input type="hidden" th:field="*{organizationAgreementCode}">
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
@@ -275,7 +276,7 @@
         let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
         let isOrganizationCheckbox = document.querySelector("#isOrganization1");
         let organizationNameText = document.querySelector("#organizationName");
-        let agreementCodeText = document.querySelector("#agreementCode");
+        let organizationAgreementCodeText = document.querySelector("#organizationAgreementCode");
         let arrivalDate = document.querySelector("#arrivalDate");
         let departureDate = document.querySelector("#departureDate");
         let nightsText = document.querySelector("#nights");
@@ -283,18 +284,18 @@
         function updateOrganizationInputs() {
             if (isOrganizationCheckbox.checked) {
                 organizationNameText.disabled = false;
-                agreementCodeText.disabled = false;
+                organizationAgreementCodeText.disabled = false;
                 organizationNameText.required = true;
-                agreementCodeText.required = true;
+                organizationAgreementCodeText.required = true;
             } else {
                 organizationNameText.disabled = true;
-                agreementCodeText.disabled = true;
+                organizationAgreementCodeText.disabled = true;
                 organizationNameText.required = false;
-                agreementCodeText.required = false;
+                organizationAgreementCodeText.required = false;
             }
 
             organizationNameText.value = "";
-            agreementCodeText.value = "";
+            organizationAgreementCodeText.value = "";
         }
 
         // Calculate nights (number of days between two dates resp. date difference)

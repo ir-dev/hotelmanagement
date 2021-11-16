@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.domain.model.Category;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate) {
         List<Category> categories = categoryRepository.findAll();
@@ -25,14 +27,20 @@ public class CategoryServiceImpl implements CategoryService {
             int availableRoomsCount = category.getAvailableRoomsCount(arrivalDate, departureDate);
 
             if (availableRoomsCount > 0) {
-                availableCategoriesDto.add(AvailableCategoryDTO.builder()
-                        .withName(category.getName())
-                        .withDescription(category.getDescription())
-                        .withAvailableRoomsCount(availableRoomsCount)
-                        .build());
+                availableCategoriesDto.add(
+                        buildAvailableCategoryDto(category, availableRoomsCount)
+                );
             }
         }
 
         return availableCategoriesDto;
+    }
+
+    private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
+        return AvailableCategoryDTO.builder()
+                .withName(category.getName())
+                .withDescription(category.getDescription())
+                .withAvailableRoomsCount(availableRoomsCount)
+                .build();
     }
 }

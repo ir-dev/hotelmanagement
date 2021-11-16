@@ -4,7 +4,6 @@ import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -37,10 +36,7 @@ public class BookingServiceImpl implements BookingsService {
         List<BookingDTO> bookingsDto = new ArrayList<>();
 
         for (Booking booking : bookings) {
-            bookingsDto.add(BookingDTO.builder()
-                    .withBookingEntity(booking)
-                    .withDetails(buildBookingDetailsDto(booking))
-                    .build());
+            bookingsDto.add(buildBookingDto(booking));
         }
 
         return bookingsDto;
@@ -50,25 +46,31 @@ public class BookingServiceImpl implements BookingsService {
     @Override
     public Optional<BookingDTO> bookingByBookingNo(String bookingNo) {
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+
         if (booking.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(BookingDTO.builder()
-                .withBookingEntity(booking.get())
-                .withDetails(buildBookingDetailsDto(booking.get()))
-                .build());
+        return Optional.of(buildBookingDto(booking.get()));
     }
 
     @Transactional(readOnly = true)
     @Override
     public Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo) {
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+
         if (booking.isEmpty()) {
             return Optional.empty();
         }
 
         return Optional.of(buildBookingDetailsDto(booking.get()));
+    }
+
+    private BookingDTO buildBookingDto(Booking booking) {
+        return BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(buildBookingDetailsDto(booking))
+                .build();
     }
 
     private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
@@ -126,19 +128,43 @@ public class BookingServiceImpl implements BookingsService {
             throw new CreateBookingException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
         }
 
-        Optional<Organization> organization;
+        Organization organization = null;
         if (bookingForm.getIsOrganization()) {
-            organization = Optional.of(new Organization(bookingForm.getOrganizationName(), bookingForm.getAgreementCode()));
-        } else {
-            organization = Optional.empty();
+            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
         }
+        Address address = new Address(
+                bookingForm.getStreet(),
+                bookingForm.getZipcode(),
+                bookingForm.getCity(),
+                bookingForm.getCountry());
+        Guest guest = new Guest(
+                guestRepository.nextIdentity(),
+                organization,
+                bookingForm.getSalutation(),
+                bookingForm.getFirstName(),
+                bookingForm.getLastName(),
+                bookingForm.getBirthday(),
+                address,
+                bookingForm.getSpecialNotes());
 
-        Address address = new Address(bookingForm.getStreet(), bookingForm.getZipcode(), bookingForm.getCity(), bookingForm.getCountry());
-        Guest guest = new Guest(guestRepository.nextIdentity(), organization, bookingForm.getSalutation(), bookingForm.getFirstName(), bookingForm.getLastName(), bookingForm.getBirthday(), address, bookingForm.getSpecialNotes());
         guestRepository.store(guest);
 
-        PaymentInformation paymentInformation = new PaymentInformation(bookingForm.getCardHolderName(), bookingForm.getCardNumber(), bookingForm.getCardValidThru(), bookingForm.getCardCvc(), bookingForm.getPaymentType());
-        Booking booking = new Booking(bookingRepository.nextIdentity(), BookingStatus.PENDING, bookingForm.getArrivalDate(), bookingForm.getDepartureDate(), bookingForm.getArrivalTime(), bookingForm.getNumberOfPersons(), bookingForm.getSelectedCategoriesRoomCount(), guest.getGuestId(), paymentInformation);
+        PaymentInformation paymentInformation = new PaymentInformation(
+                bookingForm.getCardHolderName(),
+                bookingForm.getCardNumber(),
+                bookingForm.getCardValidThru(),
+                bookingForm.getCardCvc(),
+                bookingForm.getPaymentType());
+        Booking booking = new Booking(
+                bookingRepository.nextIdentity(),
+                bookingForm.getArrivalDate(),
+                bookingForm.getDepartureDate(),
+                bookingForm.getArrivalTime(),
+                bookingForm.getNumberOfPersons(),
+                bookingForm.getSelectedCategoriesRoomCount(),
+                guest.getGuestId(),
+                paymentInformation);
+
         bookingRepository.store(booking);
     }
 }

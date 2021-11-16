@@ -1,15 +1,16 @@
 package at.fhv.hotelmanagement.domain.model;
 
 public class BookingNo {
-    private String id;
+    private String no;
 
+    // required for hibernate
     private BookingNo() {}
 
     public BookingNo(String bookingNo) {
-        this.id = bookingNo;
+        this.no = bookingNo;
     }
 
-    public String getBookingNo() {
-        return this.id;
+    public String getNo() {
+        return this.no;
     }
 }

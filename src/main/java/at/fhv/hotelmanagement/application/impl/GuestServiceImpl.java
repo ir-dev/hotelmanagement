@@ -1,13 +1,15 @@
 package at.fhv.hotelmanagement.application.impl;
 
-
 import at.fhv.hotelmanagement.application.api.GuestService;
+import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,23 +26,26 @@ public class GuestServiceImpl implements GuestService {
         List<GuestDTO> guestsDto = new ArrayList<>();
 
         for (Guest guest : guests) {
-            guestsDto.add(GuestDTO.builder()
-                    .withGuestEntity(guest)
-                    .build());
+            guestsDto.add(buildGuestDto(guest));
         }
 
         return guestsDto;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Optional<GuestDTO> guestByGuestId(GuestId guestId) {
-        Optional<Guest> guest = guestRepository.findById(guestId);
+    public Optional<GuestDTO> guestByGuestId(String guestId) {
+        Optional<Guest> guest = guestRepository.findById(new GuestId(guestId));
         if (guest.isEmpty()) {
             return Optional.empty();
         }
 
-        return Optional.of(GuestDTO.builder()
-                .withGuestEntity(guest.get())
-                .build());
+        return Optional.of(buildGuestDto(guest.get()));
+    }
+
+    private GuestDTO buildGuestDto(Guest guest) {
+        return GuestDTO.builder()
+                .withGuestEntity(guest)
+                .build();
     }
 }

@@ -8,7 +8,8 @@ public class Address {
     private String city;
     private Country country;
 
-    private Address(){}
+    // required for hibernate
+    private Address() {}
 
     public Address(String street, String zipcode, String city, String country) {
         this.street = street;

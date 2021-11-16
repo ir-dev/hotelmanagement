@@ -10,7 +10,7 @@
         </id>
 
         <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.BookingNo">
-            <property name="id" column="booking_no" type="java.lang.String" />
+            <property name="no" column="booking_no" type="java.lang.String" />
         </component>
 
         <property name="bookingStatus">
@@ -34,7 +34,7 @@
             <element column="number" type="java.lang.Integer"></element>
         </map>
 
-        <component name="guest" class="at.fhv.hotelmanagement.domain.model.GuestId">
+        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.GuestId">
             <property name="id" column="guest_id" type="java.lang.String" />
         </component>
 

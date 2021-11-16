@@ -1,20 +1,22 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Category {
+    // generated hibernate id
     private Long id;
     private String name;
     private String description;
     private Integer maxPersons;
-    private List<Room> rooms;
+    private Set<Room> rooms;
 
+    // required for hibernate
     private Category() {}
 
-    public Category(String name, String description, Integer maxPersons, List<Room> rooms) {
+    public Category(String name, String description, Integer maxPersons, Set<Room> rooms) {
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
@@ -33,20 +35,20 @@ public class Category {
         return this.maxPersons;
     }
 
-    public List<Room> getRooms() {
-        return Collections.unmodifiableList(this.rooms);
+    public Set<Room> getRooms() {
+        return Collections.unmodifiableSet(this.rooms);
     }
 
-    public List<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
-        final List<Room> availableRooms = new ArrayList<>();
+    public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
+        final Set<Room> availableRooms = new HashSet<>();
 
-        for (Room room : rooms) {
-            if(room.isAvailable(fromDate, toDate)) {
+        for (Room room : this.rooms) {
+            if (room.isAvailable(fromDate, toDate)) {
                 availableRooms.add(room);
             }
         }
 
-        return Collections.unmodifiableList(availableRooms);
+        return Collections.unmodifiableSet(availableRooms);
     }
 
     public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
