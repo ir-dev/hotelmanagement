@@ -9,6 +9,7 @@ import at.fhv.hotelmanagement.domain.model.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class GuestServiceImpl implements GuestService {
         return guestsDto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<GuestDTO> guestByGuestId(String guestId) {
         Optional<Guest> guest = guestRepository.findById(new GuestId(guestId));

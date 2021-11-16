@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.domain.model.Category;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate) {
         List<Category> categories = categoryRepository.findAll();
