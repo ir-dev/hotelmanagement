@@ -1,26 +1,23 @@
 package at.fhv.hotelmanagement.domain.model;
 
-
 import at.fhv.hotelmanagement.domain.model.enums.Board;
 
 public class Stay {
+    // generated hibernate id
     private Long id;
     private StayId stayId;
     private String name;
     private String description;
     private Board board;
 
-    public Stay(){}
+    // required for hibernate
+    private Stay() {}
 
     public Stay(StayId stayId, String name, String description, Board board) {
         this.stayId = stayId;
         this.name = name;
         this.description = description;
         this.board = board;
-    }
-
-    public Long getId() {
-        return this.id;
     }
 
     public StayId getStayId() {
