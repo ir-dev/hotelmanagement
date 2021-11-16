@@ -17,13 +17,13 @@ public class Booking {
     private LocalTime arrivalTime;
     private Integer numberOfPersons;
     private Map<String, Integer> selectedCategoriesRoomCount;
-    private GuestId guest;
+    private GuestId guestId;
     private PaymentInformation paymentInformation;
 
     // required for hibernate
     private Booking() {}
 
-    public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guest, PaymentInformation paymentInformation) {
+    public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
         this.bookingStatus = BookingStatus.PENDING;
         this.arrivalDate = arrivalDate;
@@ -31,7 +31,7 @@ public class Booking {
         this.arrivalTime = arrivalTime;
         this.numberOfPersons = numberOfPersons;
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
-        this.guest = guest;
+        this.guestId = guestId;
         this.paymentInformation = paymentInformation;
     }
 
@@ -64,7 +64,7 @@ public class Booking {
     }
 
     public GuestId getGuestId() {
-        return this.guest;
+        return this.guestId;
     }
 
     public PaymentInformation getPaymentInformation() {
