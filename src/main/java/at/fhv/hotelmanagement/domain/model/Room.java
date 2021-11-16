@@ -14,12 +14,12 @@ public class Room {
         this.number = number;
     }
 
+    public String getNumber() {
+        return this.number;
+    }
+
     // TODO: implement using rooms relation to RoomReservation
     public boolean isAvailable(LocalDate fromDate, LocalDate toDate) {
         return true;
-    }
-
-    public String getNumber() {
-        return this.number;
     }
 }
