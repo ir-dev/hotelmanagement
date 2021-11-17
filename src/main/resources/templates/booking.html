@@ -53,7 +53,7 @@
                                     <tbody>
                                     <tr>
                                         <td><span th:text="${booking.bookingNo.getNo()}"/></td>
-                                        <td><span th:text="${booking.details.guest.getId}"/></td>
+                                        <td><span th:text="${booking.details.guest.firstName()} + ' ' + ${booking.details.guest.lastName()}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
                                         <td><span th:text="${booking.arrivalTime}"/></td>
                                         <td><span th:text="${booking.departureDate}"/></td>

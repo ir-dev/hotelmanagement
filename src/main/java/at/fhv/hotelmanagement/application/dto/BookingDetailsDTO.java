@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public final class BookingDetailsDTO {
     private Map<String, Integer> selectedCategoriesRoomCount;
-    private GuestId guest;
+    private GuestDTO guest;
     private PaymentInformation paymentInformation;
 
     public static BookingDetailsDTO.Builder builder() {
@@ -19,7 +19,7 @@ public final class BookingDetailsDTO {
         return this.selectedCategoriesRoomCount;
     }
 
-    public GuestId guest() {
+    public GuestDTO guest() {
         return this.guest;
     }
 
@@ -39,11 +39,14 @@ public final class BookingDetailsDTO {
 
         public BookingDetailsDTO.Builder withBookingEntity(Booking booking) {
             this.instance.selectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
-            this.instance.guest = booking.getGuestId();
             this.instance.paymentInformation = booking.getPaymentInformation();
             return this;
         }
 
+        public Builder withGuestDTO(GuestDTO guest){
+            this.instance.guest = guest;
+            return this;
+        }
 
         public BookingDetailsDTO build() {
             Objects.requireNonNull(this.instance.selectedCategoriesRoomCount, "selectedCategoriesRoomCount must be set in BookingDetailsDTO");
