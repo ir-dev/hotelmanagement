@@ -20,6 +20,7 @@ public final class BookingDTO {
     private LocalDate departureDate;
     private LocalTime arrivalTime;
     private Integer numberOfPersons;
+    private Integer numberOfBookedRooms;
 
     public static Builder builder() {
         return new BookingDTO.Builder();
@@ -53,6 +54,10 @@ public final class BookingDTO {
         return this.numberOfPersons;
     }
 
+    public Integer getNumberOfBookedRooms() {
+        return this.numberOfBookedRooms;
+    }
+
     private BookingDTO() {
     }
 
@@ -70,6 +75,7 @@ public final class BookingDTO {
             this.instance.departureDate = booking.getDepartureDate();
             this.instance.arrivalTime = booking.getArrivalTime();
             this.instance.numberOfPersons = booking.getNumberOfPersons();
+            this.instance.numberOfBookedRooms = booking.getNumberOfBookedRooms();
             return this;
         }
 

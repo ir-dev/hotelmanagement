@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
@@ -76,6 +77,22 @@ public class BookingServiceImpl implements BookingsService {
     private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
         return BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
+                .withGuestDTO(guestByBooking(booking).get())
+                .build();
+    }
+
+    public Optional<GuestDTO> guestByBooking(Booking booking) {
+        Optional<Guest> guest = guestRepository.findById(booking.getGuestId());
+        if (guest.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(buildGuestDto(guest.get()));
+    }
+
+    private GuestDTO buildGuestDto(Guest guest) {
+        return GuestDTO.builder()
+                .withGuestEntity(guest)
                 .build();
     }
 

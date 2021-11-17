@@ -63,6 +63,10 @@ public class Booking {
         return this.selectedCategoriesRoomCount;
     }
 
+    public Integer getNumberOfBookedRooms() {
+        return selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
+    }
+
     public GuestId getGuestId() {
         return this.guestId;
     }
