@@ -54,7 +54,7 @@ public final class BookingDTO {
         return this.numberOfPersons;
     }
 
-    public Integer getNumberOfBookedRooms() {
+    public Integer numberOfBookedRooms() {
         return this.numberOfBookedRooms;
     }
 

@@ -63,14 +63,14 @@
                                     <tr th:if="${bookings.isEmpty()}">
                                         <td colspan="6"> no bookings available</td>
                                     </tr>
-                                    <tr th:each="b : ${bookings}">
-                                        <td><a th:href="@{/booking(no=${b.bookingNo.getNo()})}"><span th:text="${b.bookingNo.getNo()}"/></a>
+                                    <tr th:each="booking : ${bookings}">
+                                        <td><a th:href="@{/booking(no=${booking.bookingNo.getNo()})}"><span th:text="${booking.bookingNo.getNo()}"/></a>
                                         </td>
-                                        <td><span th:text="${b.details.guest.firstName()} + ' ' + ${b.details.guest.lastName()}"/></td>
-                                        <td><span th:text="${b.arrivalDate}"/></td>
-                                        <td><span th:text="${b.departureDate}"/></td>
-                                        <td><span th:text="${b.bookingStatus}"/></td>
-                                        <td><span th:text="${b.getNumberOfBookedRooms()}"/></td>
+                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
+                                        <td><span th:text="${booking.arrivalDate}"/></td>
+                                        <td><span th:text="${booking.departureDate}"/></td>
+                                        <td><span th:text="${booking.bookingStatus}"/></td>
+                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
                                         <td th:width="100">
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -79,8 +79,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${b.bookingNo.getNo()})}">Check-In</a>
-                                                    <a class="dropdown-item" th:href="@{/booking(no=${b.bookingNo.getNo()})}">View</a>
+                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${booking.bookingNo.getNo()})}">Check-In</a>
+                                                    <a class="dropdown-item" th:href="@{/booking(no=${booking.bookingNo.getNo()})}">View</a>
                                                 </div>
                                             </div>
                                         </td>

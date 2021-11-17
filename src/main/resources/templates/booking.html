@@ -53,12 +53,12 @@
                                     <tbody>
                                     <tr>
                                         <td><span th:text="${booking.bookingNo.getNo()}"/></td>
-                                        <td><span th:text="${booking.details.guest.firstName()} + ' ' + ${booking.details.guest.lastName()}"/></td>
+                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
                                         <td><span th:text="${booking.arrivalTime}"/></td>
                                         <td><span th:text="${booking.departureDate}"/></td>
                                         <td><span th:text="${booking.bookingStatus}"/></td>
-                                        <td><span th:text="${booking.getNumberOfBookedRooms()}"/></td>
+                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -18,6 +18,7 @@ public class Guest {
     private Address address;
     private String specialNotes;
 
+    // required for hibernate
     private Guest() {}
 
     public Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
