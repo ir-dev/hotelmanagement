@@ -24,7 +24,7 @@
                                         <a th:href="@{/bookings}" class="breadcrumb-link">Bookings</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        Booking No.: <span th:text="${booking.bookingNo.getNo()}"/>
+                                        Booking No.: <span th:text="${booking.bookingNo()}"/>
                                     </li>
                                 </ol>
                             </nav>
@@ -52,7 +52,7 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><span th:text="${booking.bookingNo.getNo()}"/></td>
+                                        <td><span th:text="${booking.bookingNo()}"/></td>
                                         <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
                                         <td><span th:text="${booking.arrivalTime}"/></td>

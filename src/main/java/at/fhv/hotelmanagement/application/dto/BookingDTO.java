@@ -14,8 +14,8 @@ import java.util.Objects;
 public final class BookingDTO {
     private BookingDetailsDTO details;
 
-    private BookingNo bookingNo;
-    private BookingStatus bookingStatus;
+    private String bookingNo;
+    private String bookingStatus;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private LocalTime arrivalTime;
@@ -30,11 +30,11 @@ public final class BookingDTO {
         return this.details;
     }
 
-    public BookingNo bookingNo() {
+    public String bookingNo() {
         return this.bookingNo;
     }
 
-    public BookingStatus bookingStatus() {
+    public String bookingStatus() {
         return this.bookingStatus;
     }
 
@@ -69,8 +69,8 @@ public final class BookingDTO {
         }
 
         public Builder withBookingEntity(Booking booking) {
-            this.instance.bookingNo = booking.getBookingNo();
-            this.instance.bookingStatus = booking.getBookingStatus();
+            this.instance.bookingNo = booking.getBookingNo().getNo();
+            this.instance.bookingStatus = String.valueOf(booking.getBookingStatus());
             this.instance.arrivalDate = booking.getArrivalDate();
             this.instance.departureDate = booking.getDepartureDate();
             this.instance.arrivalTime = booking.getArrivalTime();

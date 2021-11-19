@@ -64,7 +64,7 @@
                                         <td colspan="6"> no bookings available</td>
                                     </tr>
                                     <tr th:each="booking : ${bookings}">
-                                        <td><a th:href="@{/booking(no=${booking.bookingNo.getNo()})}"><span th:text="${booking.bookingNo.getNo()}"/></a>
+                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span th:text="${booking.bookingNo()}"/></a>
                                         </td>
                                         <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
@@ -79,8 +79,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${booking.bookingNo.getNo()})}">Check-In</a>
-                                                    <a class="dropdown-item" th:href="@{/booking(no=${booking.bookingNo.getNo()})}">View</a>
+                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}">Check-In</a>
+                                                    <a class="dropdown-item" th:href="@{/booking(no=${booking.bookingNo()})}">View</a>
                                                 </div>
                                             </div>
                                         </td>
