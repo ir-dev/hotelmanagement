@@ -1,24 +1,34 @@
 package at.fhv.hotelmanagement.application.impl;
 
+import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
-import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Component
 public class StayServiceImpl implements StayService {
     @Autowired
     StayRepository stayRepository;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    BookingRepository bookingRepository;
+
+    //    @Autowired
+    //    RoomRepository roomRepository;
+
+    //    @Autowired
+    //    RoomOccupationRepository roomOccupationRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -59,5 +69,40 @@ public class StayServiceImpl implements StayService {
         );
 
         stayRepository.store(stay);
+
+        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+        if (booking.isEmpty()) {
+            throw new IllegalArgumentException("Bookingnumber: " + bookingNo + " not found!");
+        }
+
+        LocalDate arrivalDate = booking.get().getArrivalDate();
+        LocalDate departureDate = booking.get().getDepartureDate();
+
+        assignRooms(stay.getStayId().getId(),
+                categoryService.getAvailableRooms(
+                        booking.get().getSelectedCategoriesRoomCount(),
+                        arrivalDate,
+                        departureDate),
+                arrivalDate,
+                departureDate);
     }
+
+
+    public void assignRooms(String stayId, Map<String, Set<RoomNumber>> selectedCategories, LocalDate fromDate, LocalDate toDate) {
+
+        // create RoomOccupation for each returned room
+        // change state of each returned room
+        for (Map.Entry<String, Set<RoomNumber>> category : selectedCategories.entrySet()) {
+            category.getValue().forEach((RoomNumber roomNumber) -> {
+                System.out.println(category.getKey() + ", " + roomNumber.getNumber());
+//                // create roomOccupation
+//                roomOccupationRepository.store(new RoomOccupation(new StayId(stayId), roomNumber, fromDate, toDate);
+//
+//                // change state
+//                roomRepository.getRoomByRoomNumber(roomNumber).changeState(RoomState.OCCUPIED);
+
+            });
+        }
+    }
+
 }
