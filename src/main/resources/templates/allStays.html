@@ -2,8 +2,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <th:block th:replace="/fragments/layout/page :: meta(description='View all Bookings')"/>
-    <title>View Bookings | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
+    <title>View Stays | Hotel Management</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -27,12 +27,12 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="page-header">
-                        <h2 class="pageheader-title">View Bookings</h2>
+                        <h2 class="pageheader-title">View Stays</h2>
                         <div class="page-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
-                                        <a th:href="@{/bookings}" class="breadcrumb-link">Bookings</a>
+                                        <a th:href="@{/stays}" class="breadcrumb-link">Stays</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">View</li>
                                 </ol>
@@ -50,27 +50,18 @@
                                 <table class="table" style="text-align: center">
                                     <thead>
                                     <tr>
-                                        <th>Booking #</th>
-                                        <th>Guest</th>
-                                        <th>Arrival</th>
-                                        <th>Departure</th>
+                                        <th>ID #</th>
                                         <th>Status</th>
-                                        <th># of Rooms</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${bookings.isEmpty()}">
-                                        <td colspan="6"> no bookings available</td>
+                                    <tr th:if="${stays.isEmpty()}">
+                                        <td colspan="3"> no stays available</td>
                                     </tr>
-                                    <tr th:each="booking : ${bookings}">
-                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span th:text="${booking.bookingNo()}"/></a>
-                                        </td>
-                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
-                                        <td><span th:text="${booking.arrivalDate}"/></td>
-                                        <td><span th:text="${booking.departureDate}"/></td>
-                                        <td><span th:text="${booking.bookingStatus}"/></td>
-                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
+                                    <tr th:each="stay: ${stays}">
+                                        <td><span th:text="${stay.stayId()}"/></td>
+                                        <td><span th:text="${stay.stayStatus()}"/></td>
                                         <td th:width="100">
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -79,8 +70,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}">Check-In</a>
-                                                    <a class="dropdown-item" th:href="@{/booking(no=${booking.bookingNo()})}">View</a>
+                                                    <a class="dropdown-item" th:href="@{/checkout(stayId=${stay.stayId()})}">Check-Out</a>
+                                                    <a class="dropdown-item" th:href="@{/stay(id=${stay.stayId()})}">View</a>
                                                 </div>
                                             </div>
                                         </td>

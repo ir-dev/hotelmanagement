@@ -10,25 +10,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class StayDTO {
-    private StayId stayId;
-    private StayStatus stayStatus;
-    private BookingNo bookingNo;
+    private String stayId;
+    private String stayStatus;
+    private String bookingNo;
     private LocalDateTime checkedInAt;
-    private Optional<LocalDateTime> checkedOutAt;
+    private LocalDateTime checkedOutAt;
 
     public static Builder builder() { return new StayDTO.Builder(); }
 
-    public StayId stayId() { return this.stayId;}
+    public String stayId() { return this.stayId;}
 
-    public StayStatus stayStatus() { return this.stayStatus;}
+    public String stayStatus() { return this.stayStatus;}
 
-    public BookingNo bookingNo() {
+    public String bookingNo() {
         return this.bookingNo;
     }
 
     public LocalDateTime checkedInAt() { return this.checkedInAt;}
 
-    public Optional<LocalDateTime> checkedOutAt() { return this.checkedOutAt;}
+    public LocalDateTime checkedOutAt() { return this.checkedOutAt;}
 
     private StayDTO() {
     }
@@ -39,11 +39,13 @@ public class StayDTO {
         private Builder() {this.instance = new StayDTO(); }
 
         public Builder withStayEntity(Stay stay) {
-            this.instance.stayId = stay.getStayId();
-            this.instance.stayStatus = stay.getStayStatus();
-            this.instance.bookingNo = stay.getBookingNo();
+            this.instance.stayId = stay.getStayId().getId();
+            this.instance.stayStatus = String.valueOf(stay.getStayStatus());
+            this.instance.bookingNo = stay.getBookingNo().getNo();
             this.instance.checkedInAt = stay.getCheckedInAt();
-            this.instance.checkedOutAt = stay.getCheckedOutAt();
+            if (stay.getCheckedOutAt().isPresent()) {
+                this.instance.checkedOutAt = stay.getCheckedOutAt().get();
+            }
             return this;
         }
 
@@ -52,7 +54,6 @@ public class StayDTO {
             Objects.requireNonNull(this.instance.stayStatus, "stayStatus must be set in StayDTO");
             Objects.requireNonNull(this.instance.bookingNo, "bookingNo must be set in StayDTO");
             Objects.requireNonNull(this.instance.checkedInAt, "checkedInAt must be set in StayDTO");
-            Objects.requireNonNull(this.instance.checkedOutAt, "checkedOutAt must be set in StayDTO");
 
             return this.instance;
         }

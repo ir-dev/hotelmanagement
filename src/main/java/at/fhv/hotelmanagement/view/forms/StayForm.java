@@ -1,19 +1,17 @@
 package at.fhv.hotelmanagement.view.forms;
 
+import at.fhv.hotelmanagement.application.dto.BookingDTO;
+import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BookingForm {
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate arrivalDate;
+public class StayForm {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate departureDate;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private LocalTime arrivalTime;
     private Integer numberOfPersons;
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
@@ -35,34 +33,44 @@ public class BookingForm {
     private String cardCvc;
     private String paymentType;
 
+    public void addBooking(BookingDTO bookingDTO) {
+        BookingDetailsDTO bookingDetailsDTO = bookingDTO.details();
+        GuestDTO guestDTO = bookingDetailsDTO.guest();
+
+        this.departureDate = bookingDTO.departureDate();
+        this.numberOfPersons = bookingDTO.numberOfPersons();
+        this.selectedCategoriesRoomCount = bookingDetailsDTO.selectedCategoriesRoomCount();
+        this.isOrganization = guestDTO.isOrganization();
+        this.organizationName = guestDTO.organizationName();
+        this.organizationAgreementCode = guestDTO.organizationAgreementCode();
+        this.salutation = String.valueOf(guestDTO.salutation());
+        this.firstName = guestDTO.firstName();
+        this.lastName = guestDTO.lastName();
+        this.birthday = guestDTO.birthday();
+        this.street = guestDTO.addressStreet();
+        this.zipcode = guestDTO.addressZipcode();
+        this.city = guestDTO.addressCity();
+        this.country = String.valueOf(guestDTO.addressCountry());
+        this.specialNotes = guestDTO.specialNotes();
+        this.cardHolderName = bookingDetailsDTO.cardHolderName();
+        this.cardNumber = bookingDetailsDTO.cardNumber();
+        this.cardValidThru = bookingDetailsDTO.cardValidThru();
+        this.cardCvc = bookingDetailsDTO.cardCvc();
+        this.paymentType = bookingDetailsDTO.paymentType();
+    }
+
     // default constructor required by spring/thymeleaf
-    public BookingForm() {
+    public StayForm() {
         this.selectedCategoriesRoomCount = new HashMap<>();
     }
 
     // required setters/getters for spring/thymeleaf
-    public LocalDate getArrivalDate() {
-        return this.arrivalDate;
-    }
-
-    public void setArrivalDate(LocalDate arrivalDate) {
-        this.arrivalDate = arrivalDate;
-    }
-
     public LocalDate getDepartureDate() {
         return this.departureDate;
     }
 
     public void setDepartureDate(LocalDate departureDate) {
         this.departureDate = departureDate;
-    }
-
-    public LocalTime getArrivalTime() {
-        return this.arrivalTime;
-    }
-
-    public void setArrivalTime(LocalTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
     }
 
     public Integer getNumberOfPersons() {
@@ -81,12 +89,12 @@ public class BookingForm {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
     }
 
-    public Boolean getIsOrganization() {
+    public Boolean getOrganization() {
         return this.isOrganization;
     }
 
-    public void setIsOrganization(Boolean isOrganization) {
-        this.isOrganization = isOrganization;
+    public void setOrganization(Boolean organization) {
+        this.isOrganization = organization;
     }
 
     public String getOrganizationName() {

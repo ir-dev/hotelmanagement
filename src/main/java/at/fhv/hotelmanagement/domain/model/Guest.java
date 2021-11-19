@@ -19,7 +19,8 @@ public class Guest {
     private String specialNotes;
 
     // required for hibernate
-    private Guest(){}
+    private Guest() {
+    }
 
     public Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.guestId = guestId;

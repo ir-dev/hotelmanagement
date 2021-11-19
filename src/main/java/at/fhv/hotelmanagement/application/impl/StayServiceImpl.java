@@ -68,6 +68,8 @@ public class StayServiceImpl implements StayService {
                 new BookingNo(bookingNo)
         );
 
+        // TODO: Set BookingStatus to CLOSED
+
         stayRepository.store(stay);
 
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
