@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     @Override
     public List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate) {
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAll();
         List<AvailableCategoryDTO> availableCategoriesDto = new ArrayList<>();
 
         for (Category category : categories) {
@@ -45,13 +45,14 @@ public class CategoryServiceImpl implements CategoryService {
         HashMap<String, Set<RoomNumber>> result = new HashMap<>();
         for (Map.Entry<String, Integer> categoryName : selectedCategories.entrySet()) {
 
-            Category category = categoryRepository.findByName(categoryName.getKey()).get();
+            Category category = this.categoryRepository.findByName(categoryName.getKey()).get();
             Set<Room> availableRooms = category.getAvailableRooms(fromDate, toDate);
 
             // get next available roomNumber
             Set<RoomNumber> roomNumbers = new HashSet<>();
+            Iterator<Room> iterator = availableRooms.iterator();
             while (roomNumbers.size() < categoryName.getValue()) {
-                roomNumbers.add(availableRooms.iterator().next().getNumber());
+                roomNumbers.add(iterator.next().getNumber());
             }
 
             result.put(categoryName.getKey(), roomNumbers);
