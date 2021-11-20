@@ -4,6 +4,7 @@ import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,7 +70,12 @@ public class StayViewController {
     public ModelAndView createAndCheckinStayForBooking(
             @RequestParam("bookingNo") String bookingNo,
             Model model) {
-        this.stayService.createAndCheckinStayForBooking(bookingNo);
+
+        try {
+            this.stayService.createAndCheckinStayForBooking(bookingNo);
+        } catch (CreateStayException e) {
+            return redirectError(e.getMessage());
+        }
 
         return redirect(ALL_STAYS_URL, "Check-In successful");
     }
@@ -80,7 +86,7 @@ public class StayViewController {
             Model model) {
         final Optional<StayDTO> stay = this.stayService.stayByStayId(stayId);
 
-        if (stay.isEmpty()){
+        if (stay.isEmpty()) {
             return redirectError("Stay with id.: " + stayId + " not found");
         }
 
