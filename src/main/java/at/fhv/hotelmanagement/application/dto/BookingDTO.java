@@ -1,21 +1,16 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.BookingNo;
-import at.fhv.hotelmanagement.domain.model.Guest;
-import at.fhv.hotelmanagement.domain.model.PaymentInformation;
-import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Map;
 import java.util.Objects;
 
 public final class BookingDTO {
     private BookingDetailsDTO details;
 
     private String bookingNo;
-    private String bookingStatus;
+    private String bookingState;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private LocalTime arrivalTime;
@@ -34,8 +29,8 @@ public final class BookingDTO {
         return this.bookingNo;
     }
 
-    public String bookingStatus() {
-        return this.bookingStatus;
+    public String bookingState() {
+        return this.bookingState;
     }
 
     public LocalDate arrivalDate() {
@@ -70,7 +65,7 @@ public final class BookingDTO {
 
         public Builder withBookingEntity(Booking booking) {
             this.instance.bookingNo = booking.getBookingNo().getNo();
-            this.instance.bookingStatus = String.valueOf(booking.getBookingStatus());
+            this.instance.bookingState = String.valueOf(booking.getBookingState());
             this.instance.arrivalDate = booking.getArrivalDate();
             this.instance.departureDate = booking.getDepartureDate();
             this.instance.arrivalTime = booking.getArrivalTime();
