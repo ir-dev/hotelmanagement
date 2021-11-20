@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.application.api;
 
 import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.RoomNumber;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public interface StayService {
 
     Optional<StayDTO> stayByStayId(String stayId);
 
-    void createAndCheckinStayForBooking(String bookingNo);
+    void createAndCheckinStayForBooking(String bookingNo) throws CreateStayException;
 
-    void assignRooms(String stayId, Map<String, Set<RoomNumber>> selectedCategories, LocalDate fromDate, LocalDate toDate);
+    void assignRooms(String stayId, Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws CreateStayException;
 }

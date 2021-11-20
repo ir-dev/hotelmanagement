@@ -11,5 +11,5 @@ import java.util.Set;
 public interface CategoryService {
     List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate);
 
-    Map<String, Set<RoomNumber>> getAvailableRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate);
+//    Map<String, Set<RoomNumber>> getAvailableRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate);
 }

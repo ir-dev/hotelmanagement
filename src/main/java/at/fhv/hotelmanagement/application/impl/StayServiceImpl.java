@@ -1,10 +1,12 @@
 package at.fhv.hotelmanagement.application.impl;
 
-import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.enums.BookingState;
+import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
+import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,20 +17,15 @@ import java.util.*;
 
 @Component
 public class StayServiceImpl implements StayService {
+
     @Autowired
     StayRepository stayRepository;
 
     @Autowired
-    CategoryService categoryService;
+    CategoryRepository categoryRepository;
 
     @Autowired
     BookingRepository bookingRepository;
-
-    //    @Autowired
-    //    RoomRepository roomRepository;
-
-    //    @Autowired
-    //    RoomOccupationRepository roomOccupationRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -62,48 +59,53 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public void createAndCheckinStayForBooking(String bookingNo) {
+    public void createAndCheckinStayForBooking(String bookingNo) throws CreateStayException {
         Stay stay = new Stay(
                 stayRepository.nextIdentity(),
                 new BookingNo(bookingNo)
         );
 
-        // TODO: Set BookingStatus to CLOSED
-
         stayRepository.store(stay);
 
         Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+
         if (booking.isEmpty()) {
-            throw new IllegalArgumentException("Bookingnumber: " + bookingNo + " not found!");
+            throw new IllegalArgumentException("Booking: " + bookingNo + " not found!");
         }
 
         LocalDate arrivalDate = booking.get().getArrivalDate();
         LocalDate departureDate = booking.get().getDepartureDate();
 
-        assignRooms(stay.getStayId().getId(),
-                categoryService.getAvailableRooms(
-                        booking.get().getSelectedCategoriesRoomCount(),
-                        arrivalDate,
-                        departureDate),
+        assignRooms(
+                stay.getStayId().getId(),
+                booking.get().getSelectedCategoriesRoomCount(),
                 arrivalDate,
-                departureDate);
+                departureDate
+        );
+
+        booking.get().changeState(BookingState.CLOSED);
     }
 
+    public void assignRooms(String stayId, Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws CreateStayException {
 
-    public void assignRooms(String stayId, Map<String, Set<RoomNumber>> selectedCategories, LocalDate fromDate, LocalDate toDate) {
+        for (Map.Entry<String, Integer> category : selectedCategories.entrySet()) {
 
-        // create RoomOccupation for each returned room
-        // change state of each returned room
-        for (Map.Entry<String, Set<RoomNumber>> category : selectedCategories.entrySet()) {
-            category.getValue().forEach((RoomNumber roomNumber) -> {
-                System.out.println(category.getKey() + ", " + roomNumber.getNumber());
-//                // create roomOccupation
-//                roomOccupationRepository.store(new RoomOccupation(new StayId(stayId), roomNumber, fromDate, toDate);
-//
-//                // change state
-//                roomRepository.getRoomByRoomNumber(roomNumber).changeState(RoomState.OCCUPIED);
+            List<Room> availableRooms = categoryRepository.findCategoryRoomsByState(category.getKey(), RoomState.AVAILABLE);
+            if (availableRooms.size() < category.getValue()) {
+                throw new CreateStayException("Not enough rooms available of: " + category.getKey());
+            }
+            Iterator<Room> iterator = availableRooms.iterator();
 
-            });
+            for (int i = 0; i < category.getValue(); i++) {
+
+                Room room = iterator.next();
+
+                // create RoomOccupancy
+                categoryRepository.store(new RoomOccupancy(categoryRepository.nextIdentity(), room.getNumber(), fromDate, toDate));
+
+                // change state of room to occupied
+                room.changeState(RoomState.OCCUPIED);
+            }
         }
     }
 

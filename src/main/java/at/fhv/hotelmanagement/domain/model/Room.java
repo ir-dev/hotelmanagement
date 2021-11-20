@@ -12,7 +12,8 @@ public class Room {
     private RoomState roomState;
 
     // required for hibernate
-    private Room() {}
+    private Room() {
+    }
 
     public Room(RoomNumber number) {
         this.number = number;
@@ -22,7 +23,7 @@ public class Room {
 
     //TODO: Cover all cases
     public boolean isAvailable(LocalDate fromDate, LocalDate toDate) {
-       return true;
+        return true;
     }
 
     public void setRoomState(RoomState roomState) {
@@ -37,4 +38,7 @@ public class Room {
         return this.roomState;
     }
 
+    public void changeState(RoomState roomState) {
+        this.roomState = roomState;
+    }
 }
