@@ -23,7 +23,7 @@ public class HibernateGuestRepository implements GuestRepository {
 
     @Override
     public List<Guest> findAll() {
-        TypedQuery<Guest> query = this.em.createQuery("SELECT b FROM Guest b", Guest.class);
+        TypedQuery<Guest> query = this.em.createQuery("SELECT g FROM Guest g", Guest.class);
         return query.getResultList();
     }
 
