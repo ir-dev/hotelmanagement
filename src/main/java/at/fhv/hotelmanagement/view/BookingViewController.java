@@ -41,7 +41,7 @@ public class BookingViewController {
     private static final String CREATE_BOOKING_GUEST_DETAILS_STEP = "enterGuestDetails";
     private static final String CREATE_BOOKING_PAYMENT_STEP = "enterPayment";
     private static final String CREATE_BOOKING_SUMMARY_STEP = "confirmSummary";
-    private static final String CREATE_BOOKING_STORE_STEP = "storeBooking";
+    private static final String CREATE_BOOKING_STORE_STEP = "store";
     private static final Set<String> wizardSteps = Set.of(
             CREATE_BOOKING_STAY_DETAILS_STEP,
             CREATE_BOOKING_ROOM_CATEGORIES_STEP,
@@ -73,7 +73,7 @@ public class BookingViewController {
     }
 
     @GetMapping(CREATE_BOOKING_URL)
-    public String createBooking(Model model) {
+    public String createBookingForm(Model model) {
         model.addAttribute("step", "enterStayDetails");
         model.addAttribute("form", new BookingForm());
 
@@ -81,7 +81,7 @@ public class BookingViewController {
     }
 
     @PostMapping(CREATE_BOOKING_URL)
-    public ModelAndView createBookingWizard(
+    public ModelAndView createBooking(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
             Model model) throws CreateBookingException {

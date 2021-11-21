@@ -1,11 +1,11 @@
 <!--suppress ALL -->
-<form th:fragment="enterStayDetails" th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}"
+<form th:fragment="enterStayDetails" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterRoomCategories')}" th:object="${form}"
       method="post">
+
+    <!-- required for nights calculation -->
+    <input type="hidden" id="arrivalDate" name="arrivalDate" th:value="${arrivalDate}">
+
     <div class="card-body">
-        <div class="form-group">
-            <label for="arrivalDate" class="col-form-label">Arrival Date</label>
-            <input type="date" th:field="*{arrivalDate}" class="form-control" required>
-        </div>
         <div class="form-group">
             <label for="departureDate" class="col-form-label">Departure Date</label>
             <input type="date" th:field="*{departureDate}" class="form-control" required>
@@ -15,27 +15,21 @@
             <input type="text" id="nights" class="form-control" disabled>
         </div>
         <div class="form-group">
-            <label for="arrivalTime" class="col-form-label">Arrival Time</label>
-            <input type="time" th:field="*{arrivalTime}" class="form-control">
-        </div>
-        <div class="form-group">
             <label for="numberOfPersons" class="col-form-label">Number of Persons</label>
             <input type="number" th:field="*{numberOfPersons}" class="form-control" min="1" required>
         </div>
         <div class="form-group">
             <p class="text-right">
-                <a th:href="@{/bookings}" class="btn btn-space btn-secondary">Back</a>
+                <a th:href="@{/stays}" class="btn btn-space btn-secondary">Back</a>
                 <button type="submit" class="btn btn-space btn-primary">Next</button>
             </p>
         </div>
     </div>
 </form>
 
-<form th:fragment="enterRoomCategories" th:action="@{/bookings/create(step='enterGuestDetails')}" th:object="${form}"
+<form th:fragment="enterRoomCategories" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterGuestDetails')}" th:object="${form}"
       method="post">
-    <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
-    <input type="hidden" th:field="*{arrivalTime}">
     <input type="hidden" th:field="*{numberOfPersons}">
     <div class="card-body">
         <table class="table table-striped">
@@ -96,11 +90,9 @@
     </div>
 </form>
 
-<form th:fragment="enterGuestDetails" th:action="@{/bookings/create(step='enterPayment')}" th:object="${form}"
+<form th:fragment="enterGuestDetails" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterPayment')}" th:object="${form}"
       method="post">
-    <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
-    <input type="hidden" th:field="*{arrivalTime}">
     <input type="hidden" th:field="*{numberOfPersons}">
     <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
         <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
@@ -168,11 +160,9 @@
     </div>
 </form>
 
-<form th:fragment="enterPayment" th:action="@{/bookings/create(step='confirmSummary')}" th:object="${form}"
+<form th:fragment="enterPayment" th:action="@{/checkin(bookingNo=${bookingNo}, step='confirmSummary')}" th:object="${form}"
       method="post">
-    <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
-    <input type="hidden" th:field="*{arrivalTime}">
     <input type="hidden" th:field="*{numberOfPersons}">
     <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
         <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
@@ -205,7 +195,7 @@
         </div>
         <div class="form-group">
             <label for="cardCvc" class="col-form-label">CVC</label>
-            <input type="password" th:field="*{cardCvc}" class="form-control">
+            <input type="password" id="cardCvc" name="cardCvc" th:value="*{cardCvc}" class="form-control">
         </div>
     </div>
     <div class="card-body border-top">
@@ -223,11 +213,9 @@
     </div>
 </form>
 
-<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='store')}" th:object="${form}"
+<form th:fragment="confirmSummary" th:action="@{/checkin(bookingNo=${bookingNo}, step='store')}" th:object="${form}"
       method="post">
-    <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
-    <input type="hidden" th:field="*{arrivalTime}">
     <input type="hidden" th:field="*{numberOfPersons}">
     <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
         <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
@@ -368,16 +356,8 @@
                     <table class="table">
                         <tbody>
                         <tr>
-                            <th scope="row">Arrival Date</th>
-                            <td><span th:text="*{arrivalDate}"/></td>
-                        </tr>
-                        <tr>
                             <th scope="row">Departure Date</th>
                             <td><span th:text="*{departureDate}"/></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Arrival Time</th>
-                            <td><span th:text="*{arrivalTime}"/></td>
                         </tr>
                         <tr>
                             <th scope="row"># of Persons</th>

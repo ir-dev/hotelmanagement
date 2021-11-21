@@ -7,30 +7,38 @@ import at.fhv.hotelmanagement.domain.model.enums.BookingState;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
+import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
+import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class StayServiceImpl implements StayService {
-
     @Autowired
     StayRepository stayRepository;
+
+    @Autowired
+    BookingRepository bookingRepository;
 
     @Autowired
     CategoryRepository categoryRepository;
 
     @Autowired
-    BookingRepository bookingRepository;
+    GuestRepository guestRepository;
 
     @Transactional(readOnly = true)
     @Override
     public List<StayDTO> allStays() {
-        List<Stay> stays = stayRepository.findAll();
+        List<Stay> stays = this.stayRepository.findAll();
         List<StayDTO> staysDto = new ArrayList<>();
 
         for (Stay stay : stays) {
@@ -43,7 +51,8 @@ public class StayServiceImpl implements StayService {
     @Transactional(readOnly = true)
     @Override
     public Optional<StayDTO> stayByStayId(String stayId) {
-        Optional<Stay> stay = stayRepository.findById(new StayId(stayId));
+        Optional<Stay> stay = this.stayRepository.findById(new StayId(stayId));
+
         if (stay.isEmpty()) {
             return Optional.empty();
         }
@@ -59,31 +68,113 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public void createAndCheckinStayForBooking(String bookingNo) throws CreateStayException {
-        Stay stay = new Stay(
-                stayRepository.nextIdentity(),
-                new BookingNo(bookingNo)
-        );
+    public void createStayForBooking(String bookingNo, StayForm stayForm) throws CreateStayException {
 
-        stayRepository.store(stay);
+        final Optional<Booking> optBooking = this.bookingRepository.findByNo(new BookingNo(bookingNo));
 
-        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
-
-        if (booking.isEmpty()) {
-            throw new IllegalArgumentException("Booking: " + bookingNo + " not found!");
+        if (optBooking.isEmpty()) {
+            throw new IllegalArgumentException("BookingNo invalid.");
         }
 
-        LocalDate arrivalDate = booking.get().getArrivalDate();
-        LocalDate departureDate = booking.get().getDepartureDate();
+        Booking booking = optBooking.get();
+
+        if (booking.getBookingState() != BookingState.PENDING) {
+            throw new CreateStayException("The status of the booking to check-in must be PENDING.");
+        }
+
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = stayForm.getDepartureDate();
+        Integer numberOfPersons = stayForm.getNumberOfPersons();
+        Map<String, Integer> selectedCategoriesRoomCount = stayForm.getSelectedCategoriesRoomCount();
+        LocalDate birthday = stayForm.getBirthday();
+
+        // DepartureDate must be after ArrivalDate (at least one day)
+        if (!departureDate.isAfter(arrivalDate)) {
+            throw new CreateStayException("DepartureDate must be after ArrivalDate.");
+        }
+
+        // NumberOfPersons must be greater or equal to 1
+        if (!(numberOfPersons >= 1)) {
+            throw new CreateStayException("NumberOfPersons must be greater or equal to 1");
+        }
+
+        // Age (Birthday) must be equal or greater than 18 years
+        if (!(birthday.isBefore(LocalDate.now().minusYears(18).plusDays(1)))) {
+            throw new CreateStayException("Age (Birthday) must be equal or greater than 18 years");
+        }
+
+        int totalMaxPersons = 0;
+        for (Map.Entry<String, Integer> selectedCategoryRoomCount: selectedCategoriesRoomCount.entrySet()) {
+            Category selectedCategory = this.categoryRepository.findByName(selectedCategoryRoomCount.getKey()).get();
+
+            // SelectedCategories for each category: - min. zero and max. count of available rooms for category
+            int roomCount = selectedCategoryRoomCount.getValue();
+            int availableRoomCount = selectedCategory.getAvailableRoomsCount(arrivalDate, departureDate);
+            int maxPersons = selectedCategory.getMaxPersons();
+            if (!(roomCount >= 0 && roomCount <= availableRoomCount)) {
+                throw new CreateStayException("SelectedCategoryRoomCount: min. zero, max. count of available rooms for category.");
+            }
+
+            totalMaxPersons += (roomCount * maxPersons);
+        }
+
+        // SelectedCategories total: - min. sum of all max. persons for each category multiplied by count
+        if (!(numberOfPersons <= totalMaxPersons)) {
+            throw new CreateStayException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
+        }
+
+        Organization organization = null;
+        if (stayForm.getIsOrganization()) {
+            organization = new Organization(stayForm.getOrganizationName(), stayForm.getOrganizationAgreementCode());
+        }
+        Address address = new Address(
+                stayForm.getStreet(),
+                stayForm.getZipcode(),
+                stayForm.getCity(),
+                stayForm.getCountry());
+        // TODO: check if guest already exists and then use this
+        Guest guest = new Guest(
+                this.guestRepository.nextIdentity(),
+                organization,
+                stayForm.getSalutation(),
+                stayForm.getFirstName(),
+                stayForm.getLastName(),
+                birthday,
+                address,
+                stayForm.getSpecialNotes());
+
+        this.guestRepository.store(guest);
+
+        PaymentInformation paymentInformation = new PaymentInformation(
+                stayForm.getCardHolderName(),
+                stayForm.getCardNumber(),
+                stayForm.getCardValidThru(),
+                stayForm.getCardCvc(),
+                stayForm.getPaymentType());
+
+        Stay stay = new Stay(
+                this.stayRepository.nextIdentity(),
+                new BookingNo(bookingNo),
+                arrivalDate,
+                departureDate,
+                LocalTime.now(),
+                numberOfPersons,
+                selectedCategoriesRoomCount,
+                guest.getGuestId(),
+                paymentInformation
+        );
+
+        this.stayRepository.store(stay);
 
         assignRooms(
                 stay.getStayId().getId(),
-                booking.get().getSelectedCategoriesRoomCount(),
+                booking.getSelectedCategoriesRoomCount(),
                 arrivalDate,
                 departureDate
         );
 
-        booking.get().changeState(BookingState.CLOSED);
+
+        booking.close();
     }
 
     public void assignRooms(String stayId, Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws CreateStayException {
