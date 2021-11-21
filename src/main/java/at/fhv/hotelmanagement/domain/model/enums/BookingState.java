@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.enums;
 
-public enum BookingStatus {
+public enum BookingState {
     PENDING,
     CONFIRMED,
     EXPIRED,

@@ -9,7 +9,18 @@
             <generator class="native"/>
         </id>
 
-        <property name="number" column="number" type="java.lang.String" />
+        <component name="number" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
+            <property name="number" column="number" type="java.lang.String" />
+        </component>
 
-    </class>
+<!--        <one-to-one name="number" class="at.fhv.hotelmanagement.domain.model.RoomOccupancy"/>-->
+
+        <property name="roomState">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.RoomState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+</class>
 </hibernate-mapping>

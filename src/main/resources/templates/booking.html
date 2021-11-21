@@ -24,7 +24,7 @@
                                         <a th:href="@{/bookings}" class="breadcrumb-link">Bookings</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        Booking No.: <span th:text="${booking.bookingNo.getNo()}"/>
+                                        Booking No.: <span th:text="${booking.bookingNo()}"/>
                                     </li>
                                 </ol>
                             </nav>
@@ -47,18 +47,18 @@
                                         <th>Arrival Time</th>
                                         <th>Departure</th>
                                         <th>Status</th>
-                                        <th># of Persons</th>
+                                        <th># of Rooms</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><span th:text="${booking.bookingNo.getNo()}"/></td>
-                                        <td><span th:text="${booking.details.guest.getId}"/></td>
+                                        <td><span th:text="${booking.bookingNo()}"/></td>
+                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
                                         <td><span th:text="${booking.arrivalTime}"/></td>
                                         <td><span th:text="${booking.departureDate}"/></td>
-                                        <td><span th:text="${booking.bookingStatus}"/></td>
-                                        <td><span th:text="${booking.numberOfPersons}"/></td>
+                                        <td><span th:text="${booking.bookingState}"/></td>
+                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
                                     </tr>
                                     </tbody>
                                 </table>

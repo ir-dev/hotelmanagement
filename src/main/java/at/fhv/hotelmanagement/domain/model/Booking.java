@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
+import at.fhv.hotelmanagement.domain.model.enums.BookingState;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ public class Booking {
     // generated hibernate id
     private Long id;
     private BookingNo bookingNo;
-    private BookingStatus bookingStatus;
+    private BookingState bookingState;
     // TODO: copy to stay at check-in (maybe we shall use a value object for this purpose)
     private LocalDate arrivalDate;
     private LocalDate departureDate;
@@ -25,7 +25,7 @@ public class Booking {
 
     public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
-        this.bookingStatus = BookingStatus.PENDING;
+        this.bookingState = BookingState.PENDING;
         this.arrivalDate = arrivalDate;
         this.departureDate = departureDate;
         this.arrivalTime = arrivalTime;
@@ -35,12 +35,20 @@ public class Booking {
         this.paymentInformation = paymentInformation;
     }
 
+    public void close() {
+        if (this.bookingState == BookingState.PENDING) {
+            this.bookingState = BookingState.CLOSED;
+        } else {
+            throw new IllegalStateException("Only booking with PENDING status can be closed.");
+        }
+    }
+
     public BookingNo getBookingNo() {
         return this.bookingNo;
     }
 
-    public BookingStatus getBookingStatus() {
-        return this.bookingStatus;
+    public BookingState getBookingState() {
+        return this.bookingState;
     }
 
     public LocalDate getArrivalDate() {
@@ -63,11 +71,19 @@ public class Booking {
         return this.selectedCategoriesRoomCount;
     }
 
+    public Integer getNumberOfBookedRooms() {
+        return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
+    }
+
     public GuestId getGuestId() {
         return this.guestId;
     }
 
     public PaymentInformation getPaymentInformation() {
         return this.paymentInformation;
+    }
+
+    public void changeState (BookingState bookingState) {
+        this.bookingState = bookingState;
     }
 }

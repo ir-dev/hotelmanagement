@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
+    <title>View Stays | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" th:if="${msg != null && msg.isPresent()}" role="alert">
+                        <th:block th:text="${msg.get()}"></th:block>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">View Stays</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/stays}" class="breadcrumb-link">Stays</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">View</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <table class="table" style="text-align: center">
+                                    <thead>
+                                    <tr>
+                                        <th>ID #</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${stays.isEmpty()}">
+                                        <td colspan="3"> no stays available</td>
+                                    </tr>
+                                    <tr th:each="stay: ${stays}">
+                                        <td><span th:text="${stay.stayId()}"/></td>
+                                        <td><span th:text="${stay.stayStatus()}"/></td>
+                                        <td th:width="100">
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" th:href="@{/checkout(stayId=${stay.stayId()})}">Check-Out</a>
+                                                    <a class="dropdown-item" th:href="@{/stay(id=${stay.stayId()})}">View</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/fragments/layout/page :: js"/>
+
+</body>
+
+</html>

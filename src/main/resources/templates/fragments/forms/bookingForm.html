@@ -1,5 +1,6 @@
 <!--suppress ALL -->
-<form th:fragment="enterStayDetails" th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}" method="post">
+<form th:fragment="enterStayDetails" th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}"
+      method="post">
     <div class="card-body">
         <div class="form-group">
             <label for="arrivalDate" class="col-form-label">Arrival Date</label>
@@ -15,7 +16,7 @@
         </div>
         <div class="form-group">
             <label for="arrivalTime" class="col-form-label">Arrival Time</label>
-            <input type="time"  th:field="*{arrivalTime}" class="form-control">
+            <input type="time" th:field="*{arrivalTime}" class="form-control">
         </div>
         <div class="form-group">
             <label for="numberOfPersons" class="col-form-label">Number of Persons</label>
@@ -30,7 +31,8 @@
     </div>
 </form>
 
-<form th:fragment="enterRoomCategories" th:action="@{/bookings/create(step='enterGuestDetails')}" th:object="${form}" method="post">
+<form th:fragment="enterRoomCategories" th:action="@{/bookings/create(step='enterGuestDetails')}" th:object="${form}"
+      method="post">
     <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{arrivalTime}">
@@ -62,8 +64,8 @@
                            min="0"
                            th:max="${category.availableRoomsCount}"
                            th:attr="data-available-category-no=${state.index}"
-                           th:field="*{selectedCategoriesRoomCount['__${category.name()}__']}"
-                           th:value="0">
+                           th:name="${'selectedCategoriesRoomCount[' + category.name() + ']'}"
+                           th:value="*{selectedCategoriesRoomCount.getOrDefault('__${category.name()}__', 0)}">
                     <button type="button" class="btn button-plus-category-rooms"
                             th:attr="data-available-category-no=${state.index}">
                         <i class="fas fa-plus-circle"></i>
@@ -78,7 +80,8 @@
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(categories)}">
-                <td colspan="3" class="text-muted text-center">There are no free rooms available in the given timespan</td>
+                <td colspan="3" class="text-muted text-center">There are no free rooms available in the given timespan
+                </td>
             </tr>
 
             </tbody>
@@ -86,13 +89,15 @@
         <div class="form-group">
             <p class="text-right">
                 <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
-                <button type="submit" class="btn btn-space btn-primary" th:unless="${#lists.isEmpty(categories)}">Next</button>
+                <button type="submit" class="btn btn-space btn-primary" th:unless="${#lists.isEmpty(categories)}">Next
+                </button>
             </p>
         </div>
     </div>
 </form>
 
-<form th:fragment="enterGuestDetails" th:action="@{/bookings/create(step='enterPayment')}" th:object="${form}" method="post">
+<form th:fragment="enterGuestDetails" th:action="@{/bookings/create(step='enterPayment')}" th:object="${form}"
+      method="post">
     <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{arrivalTime}">
@@ -103,7 +108,8 @@
 
     <div class="card-body">
         <label class="custom-control custom-checkbox">
-            <input type="checkbox" th:field="*{isOrganization}" class="custom-control-input" value="true"><span class="custom-control-label">Organization</span>
+            <input type="checkbox" th:field="*{isOrganization}" class="custom-control-input" value="true"><span
+                class="custom-control-label">Organization</span>
         </label>
         <div class="form-group">
             <label for="organizationName" class="col-form-label">Organization Name</label>
@@ -162,7 +168,8 @@
     </div>
 </form>
 
-<form th:fragment="enterPayment" th:action="@{/bookings/create(step='confirmSummary')}" th:object="${form}" method="post">
+<form th:fragment="enterPayment" th:action="@{/bookings/create(step='confirmSummary')}" th:object="${form}"
+      method="post">
     <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{arrivalTime}">
@@ -216,7 +223,8 @@
     </div>
 </form>
 
-<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='storeBooking')}" th:object="${form}" method="post">
+<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='store')}" th:object="${form}"
+      method="post">
     <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{arrivalTime}">
@@ -242,13 +250,157 @@
     <input type="hidden" th:field="*{cardCvc}">
     <input type="hidden" th:field="*{paymentType}">
 
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Guest Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr th:if="*{isOrganization}">
+                            <th scope="row">Organization</th>
+                            <td><span th:text="*{organizationName}"/></td>
+                        </tr>
+                        <tr th:if="*{isOrganization}">
+                            <th scope="row">Agreement Code</th>
+                            <td><span th:text="*{organizationAgreementCode}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Salutation</th>
+                            <td><span th:text="*{salutation}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Firstname</th>
+                            <td><span th:text="*{firstName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Lastname</th>
+                            <td><span th:text="*{lastName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Birthday</th>
+                            <td><span th:text="*{birthday}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Street</th>
+                            <td><span th:text="*{street}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zip Code</th>
+                            <td><span th:text="*{zipcode}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">City</th>
+                            <td><span th:text="*{city}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">County</th>
+                            <td><span th:text="*{country}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Special Notes</th>
+                            <td><span th:text="*{specialNotes}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Credit Card Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Card Holder Name</th>
+                            <td><span th:text="*{cardHolderName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Card Number</th>
+                            <td><span th:text="*{cardNumber}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Valid Thru</th>
+                            <td><span th:text="*{cardValidThru}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">CVC</th>
+                            <td><span th:text="*{cardCvc}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Payment Type</th>
+                            <td><span th:text="*{paymentType}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!--    <div class="card">-->
+            <!--        <div class="card-body">-->
+            <!--            <h5 class="card-title">Additional Services</h5>-->
+            <!--            <table class="table">-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span-->
+            <!--                        class="custom-control-label">Extra bed</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Dinner in room</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Washing Clothes</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Ironing Clothes</span>-->
+            <!--                </label>-->
+            <!--            </table>-->
+            <!--        </div>-->
+            <!--    </div>-->
+
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Stay Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Arrival Date</th>
+                            <td><span th:text="*{arrivalDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Departure Date</th>
+                            <td><span th:text="*{departureDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Arrival Time</th>
+                            <td><span th:text="*{arrivalTime}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"># of Persons</th>
+                            <td><span th:text="*{numberOfPersons}"/></td>
+                        </tr>
+                        <tr th:each="count : *{getSelectedCategoriesRoomCount}">
+                            <th scope="row" th:text="${count.key}">Category:</th>
+                            <td th:text="${count.value}">Count:</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group">
         <p class="text-right">
-
             <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
             <button type="submit" class="btn btn-space btn-primary">Create</button>
         </p>
     </div>
+
 </form>
 
 <script th:fragment="js">
@@ -292,16 +444,16 @@
                 organizationAgreementCodeText.disabled = true;
                 organizationNameText.required = false;
                 organizationAgreementCodeText.required = false;
-            }
 
-            organizationNameText.value = "";
-            organizationAgreementCodeText.value = "";
+                organizationNameText.value = "";
+                organizationAgreementCodeText.value = "";
+            }
         }
 
         // Calculate nights (number of days between two dates resp. date difference)
         function calcNights() {
             if (arrivalDate && departureDate) {
-                let diffTime = ( new Date(departureDate.value) ).getTime() - ( new Date(arrivalDate.value) ).getTime();
+                let diffTime = (new Date(departureDate.value)).getTime() - (new Date(arrivalDate.value)).getTime();
                 let diffDays = diffTime / (1000 * 3600 * 24);
 
                 nightsText.value = (diffDays >= 0) ? diffDays : "";
@@ -337,7 +489,7 @@
             isOrganizationCheckbox.addEventListener('click', updateOrganizationInputs);
             updateOrganizationInputs();
         });
-        doActiveFieldsAction([arrivalDate, departureDate], function () {
+        doActiveFieldsAction(nightsText, function () {
             arrivalDate.addEventListener('input', calcNights);
             departureDate.addEventListener('input', calcNights);
             calcNights();

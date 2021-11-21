@@ -20,23 +20,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static at.fhv.hotelmanagement.view.GenericViewController.redirect;
+import static at.fhv.hotelmanagement.view.GenericViewController.redirectError;
+
 @Controller
 public class BookingViewController {
-    private static final String DASHBOARD_URL = "/";
     // bookings urls
     private static final String ALL_BOOKINGS_URL = "/bookings";
     private static final String CREATE_BOOKING_URL = "/bookings/create";
     private static final String BOOKING_URL = "/booking";
-    // generic urls
-    private static final String ERROR_URL = "/displayerror";
 
-    private static final String DASHBOARD_VIEW = "dashboard";
     // bookings views
     private static final String ALL_BOOKINGS_VIEW = "allBookings";
     private static final String CREATE_BOOKING_VIEW = "createBooking";
     private static final String BOOKING_VIEW = "booking";
-    // generic views
-    private static final String ERROR_VIEW = "errorView";
 
     // create booking steps
     private static final String CREATE_BOOKING_STAY_DETAILS_STEP = "enterStayDetails";
@@ -44,7 +41,7 @@ public class BookingViewController {
     private static final String CREATE_BOOKING_GUEST_DETAILS_STEP = "enterGuestDetails";
     private static final String CREATE_BOOKING_PAYMENT_STEP = "enterPayment";
     private static final String CREATE_BOOKING_SUMMARY_STEP = "confirmSummary";
-    private static final String CREATE_BOOKING_STORE_STEP = "storeBooking";
+    private static final String CREATE_BOOKING_STORE_STEP = "store";
     private static final Set<String> wizardSteps = Set.of(
             CREATE_BOOKING_STAY_DETAILS_STEP,
             CREATE_BOOKING_ROOM_CATEGORIES_STEP,
@@ -60,16 +57,11 @@ public class BookingViewController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping(DASHBOARD_URL)
-    public String dashboard() {
-        return DASHBOARD_VIEW;
-    }
-
     @GetMapping(ALL_BOOKINGS_URL)
     public String allBookings(
             @RequestParam("msg") Optional<String> msg,
             Model model) {
-        final List<BookingDTO> bookings = bookingsService.allBookings();
+        final List<BookingDTO> bookings = this.bookingsService.allBookings();
 
         if (msg.isPresent()) {
             model.addAttribute("msg", msg);
@@ -81,7 +73,7 @@ public class BookingViewController {
     }
 
     @GetMapping(CREATE_BOOKING_URL)
-    public String createBooking(Model model) {
+    public String createBookingForm(Model model) {
         model.addAttribute("step", "enterStayDetails");
         model.addAttribute("form", new BookingForm());
 
@@ -89,7 +81,7 @@ public class BookingViewController {
     }
 
     @PostMapping(CREATE_BOOKING_URL)
-    public ModelAndView createBookingWizard(
+    public ModelAndView createBooking(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
             Model model) throws CreateBookingException {
@@ -100,14 +92,14 @@ public class BookingViewController {
 
         if (step.equals(CREATE_BOOKING_ROOM_CATEGORIES_STEP)) {
             // Fetch categories in given stay timespan for which rooms are available
-            List<AvailableCategoryDTO> availableCategories = categoryService.availableCategories(form.getArrivalDate(), form.getDepartureDate());
+            List<AvailableCategoryDTO> availableCategories = this.categoryService.availableCategories(form.getArrivalDate(), form.getDepartureDate());
 
             // Attach to "enter room categories" view
             model.addAttribute("categories", availableCategories);
         }
 
         if (step.equals(CREATE_BOOKING_STORE_STEP)) {
-            bookingsService.createBooking(form);
+            this.bookingsService.createBooking(form);
 
             return redirect(ALL_BOOKINGS_URL, "Booking successfully created");
         }
@@ -122,8 +114,8 @@ public class BookingViewController {
     public ModelAndView booking(
             @RequestParam("no") String bookingNo,
             Model model) {
-        final Optional<BookingDTO> booking = bookingsService.bookingByBookingNo(bookingNo);
-        final Optional<BookingDetailsDTO> bookingDetail = bookingsService.bookingDetailsByBookingNo(bookingNo);
+        final Optional<BookingDTO> booking = this.bookingsService.bookingByBookingNo(bookingNo);
+        final Optional<BookingDetailsDTO> bookingDetail = this.bookingsService.bookingDetailsByBookingNo(bookingNo);
 
         if (booking.isEmpty() || bookingDetail.isEmpty()){
             return redirectError("Booking with no.: " + bookingNo + " not found");
@@ -134,24 +126,5 @@ public class BookingViewController {
         model.addAttribute("guest", bookingDetail.get().guest());
 
         return new ModelAndView(BOOKING_VIEW);
-    }
-
-    @GetMapping(ERROR_URL)
-    public String displayError(@RequestParam("msg") String msg, Model model) {
-        model.addAttribute("msg", msg);
-
-        return ERROR_VIEW;
-    }
-
-    private static ModelAndView redirectError(String msg) {
-        return redirect(ERROR_URL, msg);
-    }
-
-    private static ModelAndView redirect(String URL, String msg) {
-        return new ModelAndView("redirect:" + URL  + "?msg=" + msg);
-    }
-
-    private static ModelAndView redirect(String URL) {
-        return new ModelAndView("redirect:" + URL);
     }
 }

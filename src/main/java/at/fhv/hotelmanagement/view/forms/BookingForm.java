@@ -37,7 +37,7 @@ public class BookingForm {
 
     // default constructor required by spring/thymeleaf
     public BookingForm() {
-        selectedCategoriesRoomCount = new HashMap<>();
+        this.selectedCategoriesRoomCount = new HashMap<>();
     }
 
     // required setters/getters for spring/thymeleaf

@@ -13,9 +13,9 @@
             <property name="no" column="booking_no" type="java.lang.String" />
         </component>
 
-        <property name="bookingStatus">
+        <property name="bookingState">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.BookingStatus</param>
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.BookingState</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
@@ -28,8 +28,8 @@
 
         <property name="numberOfPersons" column="number_persons" type="java.lang.Integer" />
 
-        <map name="selectedCategoriesRoomCount" table="selectedCategoriesRoomCounts" cascade="all">
-            <key column="id"></key>
+        <map name="selectedCategoriesRoomCount" table="bookingSelectedCategoriesRoomCounts" cascade="all">
+            <key column="booking_id"></key>
             <index column="category" type="java.lang.String"></index>
             <element column="number" type="java.lang.Integer"></element>
         </map>
