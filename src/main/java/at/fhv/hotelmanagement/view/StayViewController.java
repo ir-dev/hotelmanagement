@@ -8,7 +8,6 @@ import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
-import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -133,8 +132,11 @@ public class StayViewController {
                 break;
 
             case CREATE_STAY_STORE_STEP:
-                this.stayService.createStayForBooking(bookingNo, form);
-
+                try {
+                    this.stayService.createStayForBooking(bookingNo, form);
+                } catch (CreateStayException e) {
+                    return redirectError(e.getMessage());
+                }
                 return redirect(ALL_STAYS_URL, "Check-In successful");
         }
 

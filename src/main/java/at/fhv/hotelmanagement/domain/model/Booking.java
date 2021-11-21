@@ -36,8 +36,8 @@ public class Booking {
     }
 
     public void close() {
-        if (this.bookingStatus == BookingStatus.PENDING) {
-            this.bookingStatus = BookingStatus.CLOSED;
+        if (this.bookingState == BookingState.PENDING) {
+            this.bookingState = BookingState.CLOSED;
         } else {
             throw new IllegalStateException("Only booking with PENDING status can be closed.");
         }

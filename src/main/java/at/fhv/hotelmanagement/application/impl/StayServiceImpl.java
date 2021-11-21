@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class StayServiceImpl implements StayService {
@@ -104,7 +101,7 @@ public class StayServiceImpl implements StayService {
         }
 
         int totalMaxPersons = 0;
-        for (Map.Entry<String, Integer> selectedCategoryRoomCount: selectedCategoriesRoomCount.entrySet()) {
+        for (Map.Entry<String, Integer> selectedCategoryRoomCount : selectedCategoriesRoomCount.entrySet()) {
             Category selectedCategory = this.categoryRepository.findByName(selectedCategoryRoomCount.getKey()).get();
 
             // SelectedCategories for each category: - min. zero and max. count of available rooms for category
@@ -172,8 +169,6 @@ public class StayServiceImpl implements StayService {
                 arrivalDate,
                 departureDate
         );
-
-
         booking.close();
     }
 
@@ -182,6 +177,7 @@ public class StayServiceImpl implements StayService {
         for (Map.Entry<String, Integer> category : selectedCategories.entrySet()) {
 
             List<Room> availableRooms = categoryRepository.findCategoryRoomsByState(category.getKey(), RoomState.AVAILABLE);
+            //TODO: Fix issue with RoomOccupancy in case of failure
             if (availableRooms.size() < category.getValue()) {
                 throw new CreateStayException("Not enough rooms available of: " + category.getKey());
             }
