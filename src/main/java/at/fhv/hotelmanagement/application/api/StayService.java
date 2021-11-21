@@ -1,6 +1,9 @@
 package at.fhv.hotelmanagement.application.api;
 
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.impl.CreateStayException;
+import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,5 +15,5 @@ public interface StayService {
 
     Optional<StayDTO> stayByStayId(String stayId);
 
-    void createAndCheckinStayForBooking(String bookingNo);
+    void createStayForBooking(String bookingNo, StayForm stayForm) throws CreateStayException;
 }

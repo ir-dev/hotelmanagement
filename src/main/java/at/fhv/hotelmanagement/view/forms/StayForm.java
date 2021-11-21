@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,26 +38,26 @@ public class StayForm {
         BookingDetailsDTO bookingDetailsDTO = bookingDTO.details();
         GuestDTO guestDTO = bookingDetailsDTO.guest();
 
-        this.departureDate = bookingDTO.departureDate();
-        this.numberOfPersons = bookingDTO.numberOfPersons();
-        this.selectedCategoriesRoomCount = bookingDetailsDTO.selectedCategoriesRoomCount();
-        this.isOrganization = guestDTO.isOrganization();
-        this.organizationName = guestDTO.organizationName();
-        this.organizationAgreementCode = guestDTO.organizationAgreementCode();
-        this.salutation = String.valueOf(guestDTO.salutation());
-        this.firstName = guestDTO.firstName();
-        this.lastName = guestDTO.lastName();
-        this.birthday = guestDTO.birthday();
-        this.street = guestDTO.addressStreet();
-        this.zipcode = guestDTO.addressZipcode();
-        this.city = guestDTO.addressCity();
-        this.country = String.valueOf(guestDTO.addressCountry());
-        this.specialNotes = guestDTO.specialNotes();
-        this.cardHolderName = bookingDetailsDTO.cardHolderName();
-        this.cardNumber = bookingDetailsDTO.cardNumber();
-        this.cardValidThru = bookingDetailsDTO.cardValidThru();
-        this.cardCvc = bookingDetailsDTO.cardCvc();
-        this.paymentType = bookingDetailsDTO.paymentType();
+        this.departureDate                  = this.departureDate != null ? this.departureDate : bookingDTO.departureDate();
+        this.numberOfPersons                = this.numberOfPersons != null ? this.numberOfPersons : bookingDTO.numberOfPersons();
+        this.selectedCategoriesRoomCount    = !this.selectedCategoriesRoomCount.isEmpty() ? this.selectedCategoriesRoomCount : bookingDetailsDTO.selectedCategoriesRoomCount();
+        this.isOrganization                 = this.isOrganization != null ? this.isOrganization : guestDTO.isOrganization();
+        this.organizationName               = this.organizationName != null ? this.organizationName : guestDTO.organizationName();
+        this.organizationAgreementCode      = this.organizationAgreementCode != null ? this.organizationAgreementCode : guestDTO.organizationAgreementCode();
+        this.salutation                     = this.salutation != null ? this.salutation : String.valueOf(guestDTO.salutation());
+        this.firstName                      = this.firstName != null ? this.firstName : guestDTO.firstName();
+        this.lastName                       = this.lastName != null ? this.lastName : guestDTO.lastName();
+        this.birthday                       = this.birthday != null ? this.birthday : guestDTO.birthday();
+        this.street                         = this.street != null ? this.street : guestDTO.addressStreet();
+        this.zipcode                        = this.zipcode != null ? this.zipcode : guestDTO.addressZipcode();
+        this.city                           = this.city != null ? this.city : guestDTO.addressCity();
+        this.country                        = this.country != null ? this.country : String.valueOf(guestDTO.addressCountry());
+        this.specialNotes                   = this.specialNotes != null ? this.specialNotes : guestDTO.specialNotes();
+        this.cardHolderName                 = this.cardHolderName != null ? this.cardHolderName : bookingDetailsDTO.cardHolderName();
+        this.cardNumber                     = this.cardNumber != null ? this.cardNumber : bookingDetailsDTO.cardNumber();
+        this.cardValidThru                  = this.cardValidThru != null ? this.cardValidThru : bookingDetailsDTO.cardValidThru();
+        this.cardCvc                        = this.cardCvc != null ? this.cardCvc : bookingDetailsDTO.cardCvc();
+        this.paymentType                    = this.paymentType != null ? this.paymentType : bookingDetailsDTO.paymentType();
     }
 
     // default constructor required by spring/thymeleaf
@@ -89,7 +90,7 @@ public class StayForm {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
     }
 
-    public Boolean getOrganization() {
+    public Boolean getIsOrganization() {
         return this.isOrganization;
     }
 
