@@ -35,6 +35,14 @@ public class Booking {
         this.paymentInformation = paymentInformation;
     }
 
+    public void close() {
+        if (this.bookingStatus == BookingStatus.PENDING) {
+            this.bookingStatus = BookingStatus.CLOSED;
+        } else {
+            throw new IllegalStateException("Only booking with PENDING status can be closed.");
+        }
+    }
+
     public BookingNo getBookingNo() {
         return this.bookingNo;
     }

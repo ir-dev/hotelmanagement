@@ -64,8 +64,8 @@
                            min="0"
                            th:max="${category.availableRoomsCount}"
                            th:attr="data-available-category-no=${state.index}"
-                           th:field="*{selectedCategoriesRoomCount['__${category.name()}__']}"
-                           th:value="0">
+                           th:name="${'selectedCategoriesRoomCount[' + category.name() + ']'}"
+                           th:value="*{selectedCategoriesRoomCount.getOrDefault('__${category.name()}__', 0)}">
                     <button type="button" class="btn button-plus-category-rooms"
                             th:attr="data-available-category-no=${state.index}">
                         <i class="fas fa-plus-circle"></i>
@@ -223,7 +223,7 @@
     </div>
 </form>
 
-<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='storeBooking')}" th:object="${form}"
+<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='store')}" th:object="${form}"
       method="post">
     <input type="hidden" th:field="*{arrivalDate}">
     <input type="hidden" th:field="*{departureDate}">
@@ -444,10 +444,10 @@
                 organizationAgreementCodeText.disabled = true;
                 organizationNameText.required = false;
                 organizationAgreementCodeText.required = false;
-            }
 
-            organizationNameText.value = "";
-            organizationAgreementCodeText.value = "";
+                organizationNameText.value = "";
+                organizationAgreementCodeText.value = "";
+            }
         }
 
         // Calculate nights (number of days between two dates resp. date difference)
@@ -489,7 +489,7 @@
             isOrganizationCheckbox.addEventListener('click', updateOrganizationInputs);
             updateOrganizationInputs();
         });
-        doActiveFieldsAction([arrivalDate, departureDate], function () {
+        doActiveFieldsAction(nightsText, function () {
             arrivalDate.addEventListener('input', calcNights);
             departureDate.addEventListener('input', calcNights);
             calcNights();
