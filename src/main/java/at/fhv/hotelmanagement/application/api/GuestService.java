@@ -1,6 +1,5 @@
 package at.fhv.hotelmanagement.application.api;
 
-import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.stereotype.Component;
 

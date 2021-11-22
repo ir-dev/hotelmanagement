@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.Category" table="category" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <property name="name" column="name" type="java.lang.String" />
+        <property name="description" column="description" type="java.lang.String" />
+        <property name="maxPersons" column="maxPersons" type="java.lang.Integer" />
+
+        <set name="rooms" cascade="all" >
+            <key>
+                <column name="category_id" />
+            </key>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.Room" />
+        </set>
+
+    </class>
+</hibernate-mapping>

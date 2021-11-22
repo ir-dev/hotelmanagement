@@ -1,26 +1,25 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Address;
 import at.fhv.hotelmanagement.domain.model.Guest;
 import at.fhv.hotelmanagement.domain.model.Organization;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
-public class GuestDTO {
+public final class GuestDTO {
     private String id;
-    private Optional<Organization> organization;
-    private Salutation salutation;
+    private Boolean isOrganization;
+    private String organizationName;
+    private String organizationAgreementCode;
+    private String salutation;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
-    private Address address;
+    private String addressStreet;
+    private String addressZipcode;
+    private String addressCity;
+    private String addressCountry;
     private String specialNotes;
-
-//    private String nationality;
-//    private String email;
 
     public static GuestDTO.Builder builder() {
         return new GuestDTO.Builder();
@@ -30,11 +29,13 @@ public class GuestDTO {
         return this.id;
     }
 
-    public Optional<Organization> organization() {
-        return this.organization;
-    }
+    public Boolean isOrganization() { return this.isOrganization; }
 
-    public Salutation salutation() {
+    public String organizationName() { return this.organizationName; }
+
+    public String organizationAgreementCode() { return this.organizationAgreementCode; }
+
+    public String salutation() {
         return this.salutation;
     }
 
@@ -50,21 +51,17 @@ public class GuestDTO {
         return this.birthday;
     }
 
-    public Address address() {
-        return this.address;
+    public String addressStreet() { return this.addressStreet; }
+
+    public String addressZipcode() { return this.addressZipcode; }
+
+    public String addressCity() { return this.addressCity; }
+
+    public String addressCountry() {
+        return this.addressCountry;
     }
 
-    public String specialNotes() {
-        return this.specialNotes;
-    }
-
-//    public String nationality() {
-//        return this.nationality;
-//    }
-//
-//    public String email() {
-//        return this.email;
-//    }
+    public String specialNotes() { return this.specialNotes; }
 
     private GuestDTO() {
     }
@@ -77,27 +74,28 @@ public class GuestDTO {
         }
 
         public Builder withGuestEntity(Guest guest) {
-            this.instance.id = guest.getId();
-            this.instance.organization = guest.getOrganization();
-            this.instance.salutation = guest.getSalutation();
+            this.instance.id = guest.getGuestId().getId();
+            this.instance.isOrganization = guest.getOrganization().isPresent();
+            if (this.instance.isOrganization) {
+                Organization organization = guest.getOrganization().get();
+                this.instance.organizationName = organization.getOrganizationName();
+                this.instance.organizationAgreementCode = organization.getOrganizationAgreementCode();
+            }
+            this.instance.salutation = String.valueOf(guest.getSalutation());
             this.instance.firstName = guest.getFirstName();
             this.instance.lastName = guest.getLastName();
             this.instance.birthday = guest.getBirthday();
-            this.instance.address = guest.getAddress();
+            this.instance.addressStreet = guest.getAddress().getStreet();
+            this.instance.addressZipcode = guest.getAddress().getZipcode();
+            this.instance.addressCity = guest.getAddress().getCity();
+            this.instance.addressCountry = String.valueOf(guest.getAddress().getCountry());
             this.instance.specialNotes = guest.getSpecialNotes();
-//            this.instance.nationality = guest.getNationality();
-//            this.instance.email = guest.getEmail();
             return this;
         }
 
         public GuestDTO build() {
             Objects.requireNonNull(this.instance.id, "id must be set in GuestDTO");
-
             return this.instance;
         }
-
-
     }
-
-
 }

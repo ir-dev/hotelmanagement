@@ -1,0 +1,498 @@
+<!--suppress ALL -->
+<form th:fragment="enterStayDetails" th:action="@{/bookings/create(step='enterRoomCategories')}" th:object="${form}"
+      method="post">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="arrivalDate" class="col-form-label">Arrival Date</label>
+            <input type="date" th:field="*{arrivalDate}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="departureDate" class="col-form-label">Departure Date</label>
+            <input type="date" th:field="*{departureDate}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="nights" class="col-form-label">Nights</label>
+            <input type="text" id="nights" class="form-control" disabled>
+        </div>
+        <div class="form-group">
+            <label for="arrivalTime" class="col-form-label">Arrival Time</label>
+            <input type="time" th:field="*{arrivalTime}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="numberOfPersons" class="col-form-label">Number of Persons</label>
+            <input type="number" th:field="*{numberOfPersons}" class="form-control" min="1" required>
+        </div>
+        <div class="form-group">
+            <p class="text-right">
+                <a th:href="@{/bookings}" class="btn btn-space btn-secondary">Back</a>
+                <button type="submit" class="btn btn-space btn-primary">Next</button>
+            </p>
+        </div>
+    </div>
+</form>
+
+<form th:fragment="enterRoomCategories" th:action="@{/bookings/create(step='enterGuestDetails')}" th:object="${form}"
+      method="post">
+    <input type="hidden" th:field="*{arrivalDate}">
+    <input type="hidden" th:field="*{departureDate}">
+    <input type="hidden" th:field="*{arrivalTime}">
+    <input type="hidden" th:field="*{numberOfPersons}">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Selected Rooms</th>
+                <th scope="col">Available Rooms</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category, state: ${categories}">
+                <td>
+                    <div data-toggle="tooltip"
+                         data-placement="top"
+                         th:title="${category.description}"
+                         th:text="${category.name}"></div>
+                </td>
+                <td>
+                    <button type="button" class="btn button-minus-category-rooms"
+                            th:attr="data-available-category-no=${state.index}">
+                        <i class="fas fa-minus-circle"></i>
+                    </button>
+                    <input type="number" style="width:60px;"
+                           class="input-category-rooms"
+                           min="0"
+                           th:max="${category.availableRoomsCount}"
+                           th:attr="data-available-category-no=${state.index}"
+                           th:name="${'selectedCategoriesRoomCount[' + category.name() + ']'}"
+                           th:value="*{selectedCategoriesRoomCount.getOrDefault('__${category.name()}__', 0)}">
+                    <button type="button" class="btn button-plus-category-rooms"
+                            th:attr="data-available-category-no=${state.index}">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                </td>
+                <td>
+                    <input type="number" style="width:60px;"
+                           class="input-category-max-rooms"
+                           th:attr="data-available-category-no=${state.index}"
+                           th:value="${category.availableRoomsCount}"
+                           disabled>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(categories)}">
+                <td colspan="3" class="text-muted text-center">There are no free rooms available in the given timespan
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div class="form-group">
+            <p class="text-right">
+                <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
+                <button type="submit" class="btn btn-space btn-primary" th:unless="${#lists.isEmpty(categories)}">Next
+                </button>
+            </p>
+        </div>
+    </div>
+</form>
+
+<form th:fragment="enterGuestDetails" th:action="@{/bookings/create(step='enterPayment')}" th:object="${form}"
+      method="post">
+    <input type="hidden" th:field="*{arrivalDate}">
+    <input type="hidden" th:field="*{departureDate}">
+    <input type="hidden" th:field="*{arrivalTime}">
+    <input type="hidden" th:field="*{numberOfPersons}">
+    <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+        <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+    </th:block>
+
+    <div class="card-body">
+        <label class="custom-control custom-checkbox">
+            <input type="checkbox" th:field="*{isOrganization}" class="custom-control-input" value="true"><span
+                class="custom-control-label">Organization</span>
+        </label>
+        <div class="form-group">
+            <label for="organizationName" class="col-form-label">Organization Name</label>
+            <input type="text" th:field="*{organizationName}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="organizationAgreementCode" class="col-form-label">Agreement Code</label>
+            <input type="text" th:field="*{organizationAgreementCode}" class="form-control">
+        </div>
+    </div>
+    <div class="card-body border-top">
+        <div class="form-group">
+            <label for="salutation">Salutation</label>
+            <select th:field="*{salutation}" class="form-control"
+                    th:insert="/fragments/forms/optionsets :: salutation" required></select>
+        </div>
+        <div class="form-group">
+            <label for="firstName" class="col-form-label">First Name</label>
+            <input type="text" th:field="*{firstName}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName" class="col-form-label">Last Name</label>
+            <input type="text" th:field="*{lastName}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="birthday" class="col-form-label">Birthday</label>
+            <input type="date" th:field="*{birthday}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="street" class="col-form-label">Street</label>
+            <input type="text" th:field="*{street}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="zipcode" class="col-form-label">Zipcode</label>
+            <input type="text" th:field="*{zipcode}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="city" class="col-form-label">City</label>
+            <input type="text" th:field="*{city}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="country">Country</label>
+            <select th:field="*{country}" class="form-control"
+                    th:insert="/fragments/forms/optionsets :: country" required></select>
+        </div>
+        <div class="form-group">
+            <label for="specialNotes" class="col-form-label">Special Notes</label>
+            <textarea th:field="*{specialNotes}" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <p class="text-right">
+                <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
+                <button type="submit" class="btn btn-space btn-primary">Next</button>
+            </p>
+        </div>
+    </div>
+</form>
+
+<form th:fragment="enterPayment" th:action="@{/bookings/create(step='confirmSummary')}" th:object="${form}"
+      method="post">
+    <input type="hidden" th:field="*{arrivalDate}">
+    <input type="hidden" th:field="*{departureDate}">
+    <input type="hidden" th:field="*{arrivalTime}">
+    <input type="hidden" th:field="*{numberOfPersons}">
+    <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+        <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+    </th:block>
+    <input type="hidden" th:field="*{isOrganization}">
+    <input type="hidden" th:field="*{organizationName}">
+    <input type="hidden" th:field="*{organizationAgreementCode}">
+    <input type="hidden" th:field="*{salutation}">
+    <input type="hidden" th:field="*{firstName}">
+    <input type="hidden" th:field="*{lastName}">
+    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{street}">
+    <input type="hidden" th:field="*{zipcode}">
+    <input type="hidden" th:field="*{city}">
+    <input type="hidden" th:field="*{country}">
+    <input type="hidden" th:field="*{specialNotes}">
+
+    <div class="card-body">
+        <div class="form-group">
+            <label for="cardHolderName" class="col-form-label">Card Holder Name</label>
+            <input type="text" th:field="*{cardHolderName}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="cardNumber" class="col-form-label">Card Number</label>
+            <input th:field="*{cardNumber}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="cardValidThru" class="col-form-label">Valid thru</label>
+            <input type="text" th:field="*{cardValidThru}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="cardCvc" class="col-form-label">CVC</label>
+            <input type="password" th:field="*{cardCvc}" class="form-control">
+        </div>
+    </div>
+    <div class="card-body border-top">
+        <div class="form-group">
+            <label for="paymentType">Payment Type</label>
+            <select id="paymentType" name="paymentType" class="form-control"
+                    th:insert="/fragments/forms/optionsets :: paymentType" required></select>
+        </div>
+        <div class="form-group">
+            <p class="text-right">
+                <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
+                <button type="submit" class="btn btn-space btn-primary">Next</button>
+            </p>
+        </div>
+    </div>
+</form>
+
+<form th:fragment="confirmSummary" th:action="@{/bookings/create(step='store')}" th:object="${form}"
+      method="post">
+    <input type="hidden" th:field="*{arrivalDate}">
+    <input type="hidden" th:field="*{departureDate}">
+    <input type="hidden" th:field="*{arrivalTime}">
+    <input type="hidden" th:field="*{numberOfPersons}">
+    <th:block th:each="selectedCategoryRoomCount : *{selectedCategoriesRoomCount}">
+        <input type="hidden" th:field="*{selectedCategoriesRoomCount['__${selectedCategoryRoomCount.key}__']}">
+    </th:block>
+    <input type="hidden" th:field="*{isOrganization}">
+    <input type="hidden" th:field="*{organizationName}">
+    <input type="hidden" th:field="*{organizationAgreementCode}">
+    <input type="hidden" th:field="*{salutation}">
+    <input type="hidden" th:field="*{firstName}">
+    <input type="hidden" th:field="*{lastName}">
+    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{street}">
+    <input type="hidden" th:field="*{zipcode}">
+    <input type="hidden" th:field="*{city}">
+    <input type="hidden" th:field="*{country}">
+    <input type="hidden" th:field="*{specialNotes}">
+    <input type="hidden" th:field="*{cardHolderName}">
+    <input type="hidden" th:field="*{cardNumber}">
+    <input type="hidden" th:field="*{cardValidThru}">
+    <input type="hidden" th:field="*{cardCvc}">
+    <input type="hidden" th:field="*{paymentType}">
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Guest Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr th:if="*{isOrganization}">
+                            <th scope="row">Organization</th>
+                            <td><span th:text="*{organizationName}"/></td>
+                        </tr>
+                        <tr th:if="*{isOrganization}">
+                            <th scope="row">Agreement Code</th>
+                            <td><span th:text="*{organizationAgreementCode}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Salutation</th>
+                            <td><span th:text="*{salutation}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Firstname</th>
+                            <td><span th:text="*{firstName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Lastname</th>
+                            <td><span th:text="*{lastName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Birthday</th>
+                            <td><span th:text="*{birthday}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Street</th>
+                            <td><span th:text="*{street}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zip Code</th>
+                            <td><span th:text="*{zipcode}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">City</th>
+                            <td><span th:text="*{city}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">County</th>
+                            <td><span th:text="*{country}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Special Notes</th>
+                            <td><span th:text="*{specialNotes}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Credit Card Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Card Holder Name</th>
+                            <td><span th:text="*{cardHolderName}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Card Number</th>
+                            <td><span th:text="*{cardNumber}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Valid Thru</th>
+                            <td><span th:text="*{cardValidThru}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">CVC</th>
+                            <td><span th:text="*{cardCvc}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Payment Type</th>
+                            <td><span th:text="*{paymentType}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!--    <div class="card">-->
+            <!--        <div class="card-body">-->
+            <!--            <h5 class="card-title">Additional Services</h5>-->
+            <!--            <table class="table">-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span-->
+            <!--                        class="custom-control-label">Extra bed</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Dinner in room</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Washing Clothes</span>-->
+            <!--                </label>-->
+            <!--                <label class="custom-control custom-checkbox">-->
+            <!--                    <input type="checkbox" class="custom-control-input"><span class="custom-control-label">Ironing Clothes</span>-->
+            <!--                </label>-->
+            <!--            </table>-->
+            <!--        </div>-->
+            <!--    </div>-->
+
+        </div>
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Stay Details</h5>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Arrival Date</th>
+                            <td><span th:text="*{arrivalDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Departure Date</th>
+                            <td><span th:text="*{departureDate}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Arrival Time</th>
+                            <td><span th:text="*{arrivalTime}"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"># of Persons</th>
+                            <td><span th:text="*{numberOfPersons}"/></td>
+                        </tr>
+                        <tr th:each="count : *{getSelectedCategoriesRoomCount}">
+                            <th scope="row" th:text="${count.key}">Category:</th>
+                            <td th:text="${count.value}">Count:</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <p class="text-right">
+            <a href="javascript: history.back();" class="btn btn-space btn-secondary">Back</a>
+            <button type="submit" class="btn btn-space btn-primary">Create</button>
+        </p>
+    </div>
+
+</form>
+
+<script th:fragment="js">
+    function decrementCategoryRooms(e) {
+        let availableCategoryNo = e.currentTarget.dataset.availableCategoryNo;
+        let categoryRoomsInput = document.querySelector(".input-category-rooms[data-available-category-no=\"" + availableCategoryNo + "\"]");
+
+        if (parseInt(categoryRoomsInput.value) > 0) {
+            categoryRoomsInput.value--;
+        }
+    }
+
+    function incrementCategoryRooms(e) {
+        let availableCategoryNo = e.currentTarget.dataset.availableCategoryNo;
+        let categoryRoomsInput = document.querySelector(".input-category-rooms[data-available-category-no=\"" + availableCategoryNo + "\"]");
+        let categoryMaxRoomsInput = document.querySelector(".input-category-max-rooms[data-available-category-no=\"" + availableCategoryNo + "\"]");
+
+        if (parseInt(categoryRoomsInput.value) < parseInt(categoryMaxRoomsInput.value)) {
+            categoryRoomsInput.value++;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let categoryRoomsMinusButtons = document.querySelectorAll(".button-minus-category-rooms");
+        let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
+        let isOrganizationCheckbox = document.querySelector("#isOrganization1");
+        let organizationNameText = document.querySelector("#organizationName");
+        let organizationAgreementCodeText = document.querySelector("#organizationAgreementCode");
+        let arrivalDate = document.querySelector("#arrivalDate");
+        let departureDate = document.querySelector("#departureDate");
+        let nightsText = document.querySelector("#nights");
+
+        function updateOrganizationInputs() {
+            if (isOrganizationCheckbox.checked) {
+                organizationNameText.disabled = false;
+                organizationAgreementCodeText.disabled = false;
+                organizationNameText.required = true;
+                organizationAgreementCodeText.required = true;
+            } else {
+                organizationNameText.disabled = true;
+                organizationAgreementCodeText.disabled = true;
+                organizationNameText.required = false;
+                organizationAgreementCodeText.required = false;
+
+                organizationNameText.value = "";
+                organizationAgreementCodeText.value = "";
+            }
+        }
+
+        // Calculate nights (number of days between two dates resp. date difference)
+        function calcNights() {
+            if (arrivalDate && departureDate) {
+                let diffTime = (new Date(departureDate.value)).getTime() - (new Date(arrivalDate.value)).getTime();
+                let diffDays = diffTime / (1000 * 3600 * 24);
+
+                nightsText.value = (diffDays >= 0) ? diffDays : "";
+            }
+        }
+
+        function doActiveFieldsAction(fields, fieldAction) {
+            let fieldsActive = false;
+
+            if (Array.isArray(fields)) {
+                fieldsActive = fields.every((field) => isFieldActive(field));
+            } else {
+                fieldsActive = isFieldActive(fields);
+            }
+
+            if (fieldsActive) {
+                fieldAction();
+            }
+        }
+
+        function isFieldActive(field) {
+            return field && (field.type != "hidden");
+        }
+
+        // Register Events
+        categoryRoomsMinusButtons.forEach(function (btn) {
+            btn.addEventListener('click', decrementCategoryRooms)
+        });
+        categoryRoomsPlusButtons.forEach(function (btn) {
+            btn.addEventListener('click', incrementCategoryRooms)
+        });
+        doActiveFieldsAction(isOrganizationCheckbox, function () {
+            isOrganizationCheckbox.addEventListener('click', updateOrganizationInputs);
+            updateOrganizationInputs();
+        });
+        doActiveFieldsAction(nightsText, function () {
+            arrivalDate.addEventListener('input', calcNights);
+            departureDate.addEventListener('input', calcNights);
+            calcNights();
+        });
+    });
+</script>

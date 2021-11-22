@@ -14,6 +14,17 @@
     <div class="dashboard-wrapper">
         <div class="container-fluid dashboard-content">
             <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show" th:if="${msg != null && msg.isPresent()}" role="alert">
+                        <th:block th:text="${msg.get()}"></th:block>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="page-header">
                         <h2 class="pageheader-title">View Bookings</h2>
@@ -40,10 +51,11 @@
                                     <thead>
                                     <tr>
                                         <th>Booking #</th>
+                                        <th>Guest</th>
                                         <th>Arrival</th>
                                         <th>Departure</th>
                                         <th>Status</th>
-                                        <th># of Persons</th>
+                                        <th># of Rooms</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -51,13 +63,14 @@
                                     <tr th:if="${bookings.isEmpty()}">
                                         <td colspan="6"> no bookings available</td>
                                     </tr>
-                                    <tr th:each="b : ${bookings}">
-                                        <td><a th:href="@{/booking(id=${b.bookingNo})}"><span th:text="${b.bookingNo}"/></a>
+                                    <tr th:each="booking : ${bookings}">
+                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span th:text="${booking.bookingNo()}"/></a>
                                         </td>
-                                        <td><span th:text="${b.arrivalDate}"/></td>
-                                        <td><span th:text="${b.departureDate}"/></td>
-                                        <td><span th:text="${b.bookingStatus}"/></td>
-                                        <td><span th:text="${b.numberOfPersons}"/></td>
+                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
+                                        <td><span th:text="${booking.arrivalDate}"/></td>
+                                        <td><span th:text="${booking.departureDate}"/></td>
+                                        <td><span th:text="${booking.bookingState}"/></td>
+                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
                                         <td th:width="100">
                                             <div class="dropdown">
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -66,11 +79,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-<!--                                                    <a class="dropdown-item" href="#">Check-In</a>-->
-                                                    <a class="dropdown-item" th:href="@{/booking(id=${b.bookingNo})}">View</a>
-<!--                                                    <a class="dropdown-item" href="#">Edit</a>-->
-<!--                                                    <a class="dropdown-item" href="#">Cancel</a>-->
-<!--                                                    <a class="dropdown-item" href="#">Guest</a>-->
+                                                    <a class="dropdown-item" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}">Check-In</a>
+                                                    <a class="dropdown-item" th:href="@{/booking(no=${booking.bookingNo()})}">View</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -81,15 +91,6 @@
                         </div>
                     </div>
                 </div>
-                <!--                <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-12">-->
-                <!--                    <ul class="list-group">-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterStayDetails')} ? active : ''">Stay Details</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterRoomCategories')} ? active : ''">Room Categories</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterGuestDetails')} ? active : ''">Guest Details</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterPayment')} ? active : ''">Payment</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'confirmSummary')} ? active : ''">Booking Summary</li>-->
-                <!--                    </ul>-->
-                <!--                </div>-->
             </div>
         </div>
     </div>

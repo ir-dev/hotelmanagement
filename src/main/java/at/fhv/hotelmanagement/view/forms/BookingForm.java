@@ -1,127 +1,92 @@
 package at.fhv.hotelmanagement.view.forms;
 
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BookingForm {
-    private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ISO_DATE;
-    private static final DateTimeFormatter FORMAT_TIME = DateTimeFormatter.ISO_TIME;
-
-    // Stay Details
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate arrivalDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate departureDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalTime arrivalTime;
     private Integer numberOfPersons;
-
-    // Categories Room Selection
     private Map<String, Integer> selectedCategoriesRoomCount;
-
-    // Guest Details
-    // * Organization Details
     private Boolean isOrganization;
     private String organizationName;
-    private String AgreementCode;
-    // * Billing Address
-    private Salutation salutation;
+    private String organizationAgreementCode;
+    private String salutation;
     private String firstName;
     private String lastName;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthday;
     private String street;
     private String zipcode;
     private String city;
-    private Country country;
+    private String country;
     private String specialNotes;
-
-    // Payment Details
     private String cardHolderName;
     private String cardNumber;
     private String cardValidThru;
     private String cardCvc;
-    private PaymentType paymentType;
+    private String paymentType;
 
     // default constructor required by spring/thymeleaf
     public BookingForm() {
-        selectedCategoriesRoomCount = new HashMap<>();
+        this.selectedCategoriesRoomCount = new HashMap<>();
     }
 
     // required setters/getters for spring/thymeleaf
-    public String getArrivalDate() {
-        if (this.arrivalDate == null) {
-            return null;
-        }
-
-        return this.arrivalDate.format(FORMAT_DATE);
+    public LocalDate getArrivalDate() {
+        return this.arrivalDate;
     }
 
-    public void setArrivalDate(String arrivalDate) {
-        this.arrivalDate = LocalDate.parse(arrivalDate, FORMAT_DATE);
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 
-    public String getDepartureDate() {
-        if (this.departureDate == null) {
-            return null;
-        }
-
-        return this.departureDate.format(FORMAT_DATE);
+    public LocalDate getDepartureDate() {
+        return this.departureDate;
     }
 
-    public void setDepartureDate(String departureDate) {
-        this.departureDate = LocalDate.parse(departureDate, FORMAT_DATE);
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 
-    public String getArrivalTime() {
-        if (this.arrivalTime == null) {
-            return null;
-        }
-
-        return this.arrivalTime.format(FORMAT_TIME);
+    public LocalTime getArrivalTime() {
+        return this.arrivalTime;
     }
 
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = LocalTime.parse(arrivalTime, FORMAT_TIME);
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 
-    public String getNumberOfPersons() {
-        return String.valueOf(this.numberOfPersons.toString());
+    public Integer getNumberOfPersons() {
+        return this.numberOfPersons;
     }
 
-    public void setNumberOfPersons(String numberOfPersons) {
-        this.numberOfPersons = Integer.parseInt(numberOfPersons);
+    public void setNumberOfPersons(Integer numberOfPersons) {
+        this.numberOfPersons = numberOfPersons;
     }
 
-    public Map<String, String> getSelectedCategoriesRoomCount() {
-        Map<String, String> selectedCategoriesRoomCountParsed = new HashMap<>();
-
-        for (Map.Entry<String, Integer> selectedCategoryRoomCount : this.selectedCategoriesRoomCount.entrySet()) {
-            selectedCategoriesRoomCountParsed.put(selectedCategoryRoomCount.getKey(), String.valueOf(selectedCategoryRoomCount.getValue()));
-        }
-
-        return selectedCategoriesRoomCountParsed;
+    public Map<String, Integer> getSelectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
     }
 
-    public void setSelectedCategoriesRoomCount(Map<String, String> selectedCategoriesRoomCount) {
-        Map<String, Integer> selectedCategoriesRoomCountParsed = new HashMap<>();
-
-        for (Map.Entry<String, String> selectedCategoryRoomCount : selectedCategoriesRoomCount.entrySet()) {
-            selectedCategoriesRoomCountParsed.put(selectedCategoryRoomCount.getKey(), Integer.parseInt(selectedCategoryRoomCount.getValue()));
-        }
-
-        this.selectedCategoriesRoomCount = selectedCategoriesRoomCountParsed;
+    public void setSelectedCategoriesRoomCount(Map<String, Integer> selectedCategoriesRoomCount) {
+        this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
     }
 
-    public String getIsOrganization() {
-        return String.valueOf(this.isOrganization);
+    public Boolean getIsOrganization() {
+        return this.isOrganization;
     }
 
-    public void setIsOrganization(String isOrganization) {
-        this.isOrganization = Boolean.parseBoolean(isOrganization);
+    public void setIsOrganization(Boolean isOrganization) {
+        this.isOrganization = isOrganization;
     }
 
     public String getOrganizationName() {
@@ -132,20 +97,20 @@ public class BookingForm {
         this.organizationName = organizationName;
     }
 
-    public String getAgreementCode() {
-        return this.AgreementCode;
+    public String getOrganizationAgreementCode() {
+        return this.organizationAgreementCode;
     }
 
-    public void setAgreementCode(String agreementCode) {
-        this.AgreementCode = agreementCode;
+    public void setOrganizationAgreementCode(String organizationAgreementCode) {
+        this.organizationAgreementCode = organizationAgreementCode;
     }
 
     public String getSalutation() {
-        return String.valueOf(this.salutation);
+        return this.salutation;
     }
 
     public void setSalutation(String salutation) {
-        this.salutation = Salutation.valueOf(salutation);
+        this.salutation = salutation;
     }
 
     public String getFirstName() {
@@ -164,16 +129,12 @@ public class BookingForm {
         this.lastName = lastName;
     }
 
-    public String getBirthday() {
-        if (this.birthday == null) {
-            return null;
-        }
-
-        return this.birthday.format(FORMAT_DATE);
+    public LocalDate getBirthday() {
+        return this.birthday;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = LocalDate.parse(birthday, FORMAT_DATE);
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     public String getStreet() {
@@ -201,11 +162,11 @@ public class BookingForm {
     }
 
     public String getCountry() {
-        return String.valueOf(this.country);
+        return this.country;
     }
 
     public void setCountry(String country) {
-        this.country = Country.valueOf(country);
+        this.country = country;
     }
 
     public String getSpecialNotes() {
@@ -249,99 +210,10 @@ public class BookingForm {
     }
 
     public String getPaymentType() {
-        return String.valueOf(this.paymentType.toString());
+        return this.paymentType;
     }
 
     public void setPaymentType(String paymentType) {
-        this.paymentType = PaymentType.valueOf(paymentType);
-    }
-
-    // getters to directly access attribute values
-    public LocalDate getArrivalDateValue() {
-        return this.arrivalDate;
-    }
-
-    public LocalDate getDepartureDateValue() {
-        return this.departureDate;
-    }
-
-    public LocalTime getArrivalTimeValue() {
-        return this.arrivalTime;
-    }
-
-    public Integer getNumberOfPersonsValue() {
-        return this.numberOfPersons;
-    }
-
-    public Map<String, Integer> getSelectedCategoriesRoomCountValue() {
-        return this.selectedCategoriesRoomCount;
-    }
-
-    public Boolean getIsOrganizationValue() {
-        return this.isOrganization;
-    }
-
-    public String getOrganizationNameValue() {
-        return this.organizationName;
-    }
-
-    public String getAgreementCodeValue() {
-        return this.AgreementCode;
-    }
-
-    public Salutation getSalutationValue() {
-        return this.salutation;
-    }
-
-    public String getFirstNameValue() {
-        return this.firstName;
-    }
-
-    public String getLastNameValue() {
-        return this.lastName;
-    }
-
-    public LocalDate getBirthdayValue() {
-        return this.birthday;
-    }
-
-    public String getStreetValue() {
-        return this.street;
-    }
-
-    public String getZipcodeValue() {
-        return this.zipcode;
-    }
-
-    public String getCityValue() {
-        return this.city;
-    }
-
-    public Country getCountryValue() {
-        return this.country;
-    }
-
-    public String getSpecialNotesValue() {
-        return this.specialNotes;
-    }
-
-    public String getCardHolderNameValue() {
-        return this.cardHolderName;
-    }
-
-    public String getCardNumberValue() {
-        return this.cardNumber;
-    }
-
-    public String getCardValidThruValue() {
-        return this.cardValidThru;
-    }
-
-    public String getCardCvcValue() {
-        return this.cardCvc;
-    }
-
-    public PaymentType getPaymentTypeValue() {
-        return this.paymentType;
+        this.paymentType = paymentType;
     }
 }

@@ -1,27 +1,24 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.Guest;
-import at.fhv.hotelmanagement.domain.model.PaymentInformation;
-import at.fhv.hotelmanagement.domain.model.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Map;
 import java.util.Objects;
 
-public class BookingDTO {
+public final class BookingDTO {
     private BookingDetailsDTO details;
 
     private String bookingNo;
-    private BookingStatus bookingStatus;
+    private String bookingState;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private LocalTime arrivalTime;
     private Integer numberOfPersons;
+    private Integer numberOfBookedRooms;
 
     public static Builder builder() {
-        return new Builder();
+        return new BookingDTO.Builder();
     }
 
     public BookingDetailsDTO details() {
@@ -32,8 +29,8 @@ public class BookingDTO {
         return this.bookingNo;
     }
 
-    public BookingStatus bookingStatus() {
-        return this.bookingStatus;
+    public String bookingState() {
+        return this.bookingState;
     }
 
     public LocalDate arrivalDate() {
@@ -52,6 +49,10 @@ public class BookingDTO {
         return this.numberOfPersons;
     }
 
+    public Integer numberOfBookedRooms() {
+        return this.numberOfBookedRooms;
+    }
+
     private BookingDTO() {
     }
 
@@ -63,12 +64,13 @@ public class BookingDTO {
         }
 
         public Builder withBookingEntity(Booking booking) {
-            this.instance.bookingNo = booking.getBookingNo();
-            this.instance.bookingStatus = booking.getBookingStatus();
+            this.instance.bookingNo = booking.getBookingNo().getNo();
+            this.instance.bookingState = String.valueOf(booking.getBookingState());
             this.instance.arrivalDate = booking.getArrivalDate();
             this.instance.departureDate = booking.getDepartureDate();
             this.instance.arrivalTime = booking.getArrivalTime();
             this.instance.numberOfPersons = booking.getNumberOfPersons();
+            this.instance.numberOfBookedRooms = booking.getNumberOfBookedRooms();
             return this;
         }
 

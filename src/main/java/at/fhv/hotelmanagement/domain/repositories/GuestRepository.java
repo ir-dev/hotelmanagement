@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
 import at.fhv.hotelmanagement.domain.model.Guest;
+import at.fhv.hotelmanagement.domain.model.GuestId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,9 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface GuestRepository {
+    GuestId nextIdentity();
+
     List<Guest> findAll();
 
-    Optional<Guest> findById(String guestId);
+    Optional<Guest> findById(GuestId guestId);
 
     void store(Guest guest);
 }

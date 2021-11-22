@@ -3,19 +3,42 @@ package at.fhv.hotelmanagement.domain.model;
 import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
 
 public class PaymentInformation {
-    // Credit Card Details (used for advance payment)
+    // credit card details (used for advance payment)
     private String cardHolderName;
     private String cardNumber;
     private String cardValidThru;
     private String cardCvc;
-    // Payment Type (used for billing)
+    // payment type (used for billing)
     private PaymentType paymentType;
 
-    public PaymentInformation(String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, PaymentType paymentType) {
+    // required for hibernate
+    private PaymentInformation() {}
+
+    public PaymentInformation(String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, String paymentType) {
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;
         this.cardValidThru = cardValidThru;
         this.cardCvc = cardCvc;
-        this.paymentType = paymentType;
+        this.paymentType = PaymentType.valueOf(paymentType);
+    }
+
+    public String getCardHolderName() {
+        return this.cardHolderName;
+    }
+
+    public String getCardNumber() {
+        return this.cardNumber;
+    }
+
+    public String getCardValidThru() {
+        return this.cardValidThru;
+    }
+
+    public String getCardCvc() {
+        return this.cardCvc;
+    }
+
+    public PaymentType getPaymentType() {
+        return this.paymentType;
     }
 }

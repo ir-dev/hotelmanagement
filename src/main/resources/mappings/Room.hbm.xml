@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.Room" table="room" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <component name="number" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
+            <property name="number" column="number" type="java.lang.String" />
+        </component>
+
+<!--        <one-to-one name="number" class="at.fhv.hotelmanagement.domain.model.RoomOccupancy"/>-->
+
+        <property name="roomState">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.RoomState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+</class>
+</hibernate-mapping>

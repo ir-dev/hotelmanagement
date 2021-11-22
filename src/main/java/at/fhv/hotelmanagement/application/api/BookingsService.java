@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.application.api;
 
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
+import at.fhv.hotelmanagement.application.impl.CreateBookingException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.stereotype.Component;
 
@@ -16,5 +17,5 @@ public interface BookingsService {
 
     Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo);
 
-    void createBooking(BookingForm bookingForm);
+    void createBooking(BookingForm bookingForm) throws CreateBookingException;
 }

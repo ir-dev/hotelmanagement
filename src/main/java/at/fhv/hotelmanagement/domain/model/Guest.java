@@ -1,17 +1,16 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.Country;
 import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 public class Guest {
-    private String id;
-    // * Organization Details
-    private Optional<Organization> organization;
-    // * Billing Address
+    // generated hibernate id
+    private Long id;
+    private GuestId guestId;
+    // organization may be null
+    private Organization organization;
     private Salutation salutation;
     private String firstName;
     private String lastName;
@@ -19,13 +18,14 @@ public class Guest {
     private Address address;
     private String specialNotes;
 
-//    private Country nationality;
-//    private String email;
+    // required for hibernate
+    private Guest() {
+    }
 
-    public Guest(String id, Optional<Organization> organization, Salutation salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
-        this.id = id;
+    public Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+        this.guestId = guestId;
         this.organization = organization;
-        this.salutation = salutation;
+        this.salutation = Salutation.valueOf(salutation);
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthday = birthday;
@@ -33,12 +33,12 @@ public class Guest {
         this.specialNotes = specialNotes;
     }
 
-    public String getId() {
-        return this.id;
+    public GuestId getGuestId() {
+        return this.guestId;
     }
 
     public Optional<Organization> getOrganization() {
-        return this.organization;
+        return Optional.ofNullable(this.organization);
     }
 
     public Salutation getSalutation() {
