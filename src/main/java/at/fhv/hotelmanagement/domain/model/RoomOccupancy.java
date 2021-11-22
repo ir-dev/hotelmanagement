@@ -3,35 +3,24 @@ package at.fhv.hotelmanagement.domain.model;
 import java.time.LocalDate;
 
 public class RoomOccupancy {
+    // generated hibernate id
     private Long id;
-    private OccupancyId occupancyId;
-    private LocalDate start;
-    private LocalDate end;
-    private RoomNumber room;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     // required for hibernate
-    private RoomOccupancy(){}
+    private RoomOccupancy() {}
 
-    public RoomOccupancy(OccupancyId occupancyId, RoomNumber room, LocalDate start, LocalDate end) {
-        this.occupancyId = occupancyId;
-        this.room = room;
-        this.start = start;
-        this.end = end;
+    public RoomOccupancy(LocalDate startDate, LocalDate endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public OccupancyId getOccupancyId() {
-        return this.occupancyId;
+    public LocalDate getStartDate() {
+        return this.startDate;
     }
 
-    public LocalDate getStart() {
-        return this.start;
-    }
-
-    public LocalDate getEnd() {
-        return this.end;
-    }
-
-    public RoomNumber getRoom() {
-        return this.room;
+    public LocalDate getEndDate() {
+        return this.endDate;
     }
 }

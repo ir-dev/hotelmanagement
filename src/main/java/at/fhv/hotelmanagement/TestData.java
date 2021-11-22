@@ -33,30 +33,24 @@ public class TestData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Set<Room> roomRange1 = new HashSet<>();
-        Room r1 = new Room(new RoomNumber("121"));
-        Room r2 = new Room(new RoomNumber("120"));
-        roomRange1.add(r1);
-        roomRange1.add(r2);
-        roomRange1.add(new Room(new RoomNumber("122")));
-        roomRange1.add(new Room(new RoomNumber("123")));
-        roomRange1.add(new Room(new RoomNumber("124")));
-
-        r1.setRoomState(RoomState.OCCUPIED);
-        r2.setRoomState(RoomState.OCCUPIED);
-
-        RoomOccupancy ro = new RoomOccupancy(this.categoryRepository.nextIdentity(), new RoomNumber("120"),LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
-        RoomOccupancy ro2 = new RoomOccupancy(this.categoryRepository.nextIdentity(), new RoomNumber("121"),LocalDate.of(2021,11,18), LocalDate.of(2021,11,24));
-        this.categoryRepository.store(ro);
-        this.categoryRepository.store(ro2);
-
-        Set<Room> roomRange2 = new HashSet<>();
-        roomRange2.add(new Room(new RoomNumber("150")));
-        roomRange2.add(new Room(new RoomNumber("151")));
-        Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, roomRange1);
-        Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", 1, roomRange2);
+        Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
+        Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", 1);
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
+        c1.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("121"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
+        c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
+
+        c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("222"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
+        Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
+        c2.createRoom(room224);
+        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
+        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");

@@ -84,7 +84,7 @@ public class BookingViewController {
     public ModelAndView createBooking(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
-            Model model) throws CreateBookingException {
+            Model model) {
 
         if (!wizardSteps.contains(step)) {
             return redirectError("Invalid step in create booking wizard.");
@@ -99,7 +99,11 @@ public class BookingViewController {
         }
 
         if (step.equals(CREATE_BOOKING_STORE_STEP)) {
-            this.bookingsService.createBooking(form);
+            try {
+                this.bookingsService.createBooking(form);
+            } catch (CreateBookingException e) {
+                return redirectError(e.getMessage());
+            }
 
             return redirect(ALL_BOOKINGS_URL, "Booking successfully created");
         }

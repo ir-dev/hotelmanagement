@@ -82,8 +82,4 @@ public class Booking {
     public PaymentInformation getPaymentInformation() {
         return this.paymentInformation;
     }
-
-    public void changeState (BookingState bookingState) {
-        this.bookingState = bookingState;
-    }
 }

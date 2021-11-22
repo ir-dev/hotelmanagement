@@ -16,27 +16,17 @@ public class Category {
     // required for hibernate
     private Category() {}
 
-    public Category(String name, String description, Integer maxPersons, Set<Room> rooms) {
+    public Category(String name, String description, Integer maxPersons) {
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
-        this.rooms = rooms;
+        this.rooms = new HashSet<>();
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Integer getMaxPersons() {
-        return this.maxPersons;
-    }
-
-    public Set<Room> getRooms() {
-        return Collections.unmodifiableSet(this.rooms);
+    public void createRoom(Room room) throws AlreadyExistsException {
+        if (!this.rooms.add(room)) {
+            throw new AlreadyExistsException(Room.class);
+        }
     }
 
     public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
@@ -53,6 +43,22 @@ public class Category {
 
     public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).size();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Integer getMaxPersons() {
+        return this.maxPersons;
+    }
+
+    public Set<Room> getRooms() {
+        return Collections.unmodifiableSet(this.rooms);
     }
 }
 

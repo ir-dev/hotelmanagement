@@ -12,8 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HotelmanagementApplication.class)
 class HibernateCategoryRepositoryTest {
@@ -22,21 +20,12 @@ class HibernateCategoryRepositoryTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    void findAllRoomsByState() {
-        List<Room> rooms = this.categoryRepository.findAllRoomsByState(RoomState.AVAILABLE);
-        System.out.println("Free rooms: ");
-        for(Room room: rooms){
-            System.out.println(room.getNumber().getNumber());
-        }
-    }
-
-    @Test
     void findCategoryRoomsByState() {
         String categoryName = "Honeymoon Suite DZ";
         List<Room> categoryRooms = this.categoryRepository.findCategoryRoomsByState(categoryName, RoomState.OCCUPIED);
         System.out.println("Occupied rooms in " + categoryName + ":");
         for(Room room: categoryRooms){
-            System.out.println(room.getNumber().getNumber());
+            System.out.println(room.getRoomNumber().getNumber());
         }
     }
 }
