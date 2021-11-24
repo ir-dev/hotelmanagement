@@ -23,7 +23,7 @@ public class Booking {
     // required for hibernate
     private Booking() {}
 
-    public Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
+    Booking(BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
         this.bookingNo = bookingNo;
         this.bookingState = BookingState.PENDING;
         this.arrivalDate = arrivalDate;

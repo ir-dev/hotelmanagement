@@ -16,7 +16,7 @@ public class Category {
     // required for hibernate
     private Category() {}
 
-    public Category(String name, String description, Integer maxPersons) {
+    Category(String name, String description, Integer maxPersons) {
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;

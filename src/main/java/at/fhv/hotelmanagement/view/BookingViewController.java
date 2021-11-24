@@ -5,7 +5,8 @@ import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.impl.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.CreateGuestException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -101,7 +102,7 @@ public class BookingViewController {
         if (step.equals(CREATE_BOOKING_STORE_STEP)) {
             try {
                 this.bookingsService.createBooking(form);
-            } catch (CreateBookingException e) {
+            } catch (CreateBookingException | CreateGuestException e) {
                 return redirectError(e.getMessage());
             }
 

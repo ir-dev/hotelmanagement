@@ -29,7 +29,7 @@ public class Stay {
     // required for hibernate
     private Stay() {}
 
-    public Stay(StayId stayId, BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
+    Stay(StayId stayId, BookingNo bookingNo, LocalDate arrivalDate, LocalDate departureDate, LocalTime arrivalTime, Integer numberOfPersons, Map<String, Integer> selectedCategoriesRoomCount, GuestId guestId, PaymentInformation paymentInformation) {
         this.stayId = stayId;
         this.bookingNo = bookingNo;
         this.stayStatus = StayStatus.CHECKED_IN;
