@@ -11,6 +11,7 @@ import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.*;
 
 @Component
 @Transactional
+@Profile("!test")
 public class TestData implements ApplicationRunner {
 
     @Autowired
