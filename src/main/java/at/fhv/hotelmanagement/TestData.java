@@ -35,8 +35,8 @@ public class TestData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Category c1 = CategoryFactory.createCategory("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
-        Category c2 = CategoryFactory.createCategory("Business Casual EZ", "A casual accommodation for business guests.", 1);
+        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
+        Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1);
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
         c1.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));

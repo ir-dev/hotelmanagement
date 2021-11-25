@@ -9,6 +9,10 @@
             <generator class="native"/>
         </id>
 
+        <component name="categoryId" class="at.fhv.hotelmanagement.domain.model.CategoryId">
+            <property name="id" column="category_id" type="java.lang.String" />
+        </component>
+
         <property name="name" column="name" type="java.lang.String" />
         <property name="description" column="description" type="java.lang.String" />
         <property name="maxPersons" column="maxPersons" type="java.lang.Integer" />

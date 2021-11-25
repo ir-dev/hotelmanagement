@@ -8,6 +8,7 @@ import java.util.Set;
 public class Category {
     // generated hibernate id
     private Long id;
+    private CategoryId categoryId;
     private String name;
     private String description;
     private Integer maxPersons;
@@ -16,7 +17,8 @@ public class Category {
     // required for hibernate
     private Category() {}
 
-    Category(String name, String description, Integer maxPersons) {
+    Category(CategoryId categoryId, String name, String description, Integer maxPersons) {
+        this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
@@ -43,6 +45,10 @@ public class Category {
 
     public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).size();
+    }
+
+    public CategoryId getCategoryId() {
+        return this.categoryId;
     }
 
     public String getName() {

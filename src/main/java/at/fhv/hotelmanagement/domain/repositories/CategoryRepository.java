@@ -4,12 +4,13 @@ import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CategoryRepository {
+    CategoryId nextIdentity();
+
     List<Category> findAll();
 
     // find by name is possible because name is unique

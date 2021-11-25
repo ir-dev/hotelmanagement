@@ -17,6 +17,11 @@ public class HibernateCategoryRepository implements CategoryRepository {
     private EntityManager em;
 
     @Override
+    public CategoryId nextIdentity() {
+        return new CategoryId(java.util.UUID.randomUUID().toString().toUpperCase());
+    }
+
+    @Override
     public List<Category> findAll() {
         TypedQuery<Category> query = this.em.createQuery("FROM Category c", Category.class);
         return query.getResultList();
