@@ -56,4 +56,21 @@ public final class AvailableCategoryDTO {
             return this.instance;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AvailableCategoryDTO that = (AvailableCategoryDTO) o;
+        return Objects.equals(this.name, that.name) && Objects.equals(this.description, that.description) && Objects.equals(this.availableRoomsCount, that.availableRoomsCount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.name, this.description, this.availableRoomsCount);
+    }
 }

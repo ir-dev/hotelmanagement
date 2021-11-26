@@ -98,4 +98,21 @@ public final class GuestDTO {
             return this.instance;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GuestDTO guestDTO = (GuestDTO) o;
+        return Objects.equals(this.id, guestDTO.id) && Objects.equals(this.isOrganization, guestDTO.isOrganization) && Objects.equals(this.organizationName, guestDTO.organizationName) && Objects.equals(this.organizationAgreementCode, guestDTO.organizationAgreementCode) && Objects.equals(this.salutation, guestDTO.salutation) && Objects.equals(this.firstName, guestDTO.firstName) && Objects.equals(this.lastName, guestDTO.lastName) && Objects.equals(this.birthday, guestDTO.birthday) && Objects.equals(this.addressStreet, guestDTO.addressStreet) && Objects.equals(this.addressZipcode, guestDTO.addressZipcode) && Objects.equals(this.addressCity, guestDTO.addressCity) && Objects.equals(this.addressCountry, guestDTO.addressCountry) && Objects.equals(this.specialNotes, guestDTO.specialNotes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.isOrganization, this.organizationName, this.organizationAgreementCode, this.salutation, this.firstName, this.lastName, this.birthday, this.addressStreet, this.addressZipcode, this.addressCity, this.addressCountry, this.specialNotes);
+    }
 }
