@@ -22,7 +22,7 @@ public class Guest {
     private Guest() {
     }
 
-    public Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+    Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
         this.guestId = guestId;
         this.organization = organization;
         this.salutation = Salutation.valueOf(salutation);
