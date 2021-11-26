@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.application.api;
 
+import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import at.fhv.hotelmanagement.application.impl.InsufficientRoomsException;
@@ -18,4 +19,6 @@ public interface StayService {
     Optional<StayDTO> stayByStayId(String stayId);
 
     void createStayForBooking(String bookingNo, StayForm form) throws CreateStayException, InsufficientRoomsException;
+
+    Optional<InvoiceDTO> chargeStay(String stayId);
 }

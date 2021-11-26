@@ -5,6 +5,7 @@ import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
+import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.application.impl.CreateStayException;
 import at.fhv.hotelmanagement.application.impl.InsufficientRoomsException;
@@ -31,12 +32,14 @@ public class StayViewController {
     // stays urls
     private static final String ALL_STAYS_URL = "/stays";
     private static final String CREATE_STAY_URL = "/checkin";
+    private static final String TERMINATE_STAY_URL = "/checkout";
     private static final String STAY_URL = "/stay";
 
     // stays views
     private static final String ALL_STAYS_VIEW = "allStays";
     private static final String CREATE_STAY_VIEW = "createStay";
     private static final String STAY_VIEW = "stay";
+    private static final String INVOICE_VIEW = "invoice";
 
     // create stay steps
     private static final String CREATE_STAY_STAY_DETAILS_STEP = "enterStayDetails";
@@ -163,4 +166,24 @@ public class StayViewController {
 
         return new ModelAndView(STAY_VIEW);
     }
+
+    @GetMapping(TERMINATE_STAY_URL)
+    public ModelAndView terminateStay(
+            @RequestParam("stayId") String stayId,
+            Model model) {
+
+        final Optional<StayDTO> stay = this.stayService.stayByStayId(stayId);
+
+        if (stay.isEmpty()) {
+            return redirectError("Stay with id.: " + stayId + " not found");
+        }
+
+        final Optional<InvoiceDTO> invoice = this.stayService.chargeStay(stayId);
+
+        model.addAttribute("invoice", invoice.get());
+
+        return new ModelAndView(INVOICE_VIEW);
+    }
+
+
 }

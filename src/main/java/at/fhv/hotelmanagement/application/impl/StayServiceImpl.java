@@ -1,10 +1,12 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
+import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.BookingState;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -31,6 +33,9 @@ public class StayServiceImpl implements StayService {
 
     @Autowired
     GuestRepository guestRepository;
+
+    @Autowired
+    InvoiceService invoiceService;
 
     @Transactional(readOnly = true)
     @Override
@@ -166,13 +171,14 @@ public class StayServiceImpl implements StayService {
         assignRooms(
                 booking.getSelectedCategoriesRoomCount(),
                 arrivalDate,
-                departureDate
+                departureDate,
+                stay.getStayId()
         );
 
         booking.close();
     }
 
-    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
+    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate, StayId stayId) throws InsufficientRoomsException {
 
         for (Map.Entry<String, Integer> selectedCategory : selectedCategories.entrySet()) {
             String selectedCategoryName = selectedCategory.getKey();
@@ -190,9 +196,23 @@ public class StayServiceImpl implements StayService {
                 Room room = iterator.next();
 
                 // change state of room to occupied for given timespan
-                room.occupied(fromDate, toDate);
+                room.occupied(fromDate, toDate, stayId);
             }
         }
     }
+
+
+    @Override
+    public Optional<InvoiceDTO> chargeStay(String stayId) {
+        Optional<Stay> stay = this.stayRepository.findById(new StayId(stayId));
+        if (stay.isEmpty()) {
+            return Optional.empty();
+        }
+        this.invoiceService.calculateInvoice(stay.get());
+
+
+        return Optional.empty();
+    }
+
 
 }
