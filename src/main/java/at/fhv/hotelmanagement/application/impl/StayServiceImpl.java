@@ -1,6 +1,8 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
+import at.fhv.hotelmanagement.application.dto.ChargedCategoryDTO;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.*;
@@ -162,16 +164,50 @@ public class StayServiceImpl implements StayService {
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<InvoiceDTO> chargeStay(String stayId) {
-        Optional<Stay> stay = this.stayRepository.findById(new StayId(stayId));
-        if (stay.isEmpty()) {
+        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
+        if (stayOpt.isEmpty()) {
             return Optional.empty();
         }
-        this.invoiceService.calculateInvoice(stay.get());
+        Stay stay = stayOpt.get();
 
+        Map<String, Integer> selectedCategoryNamesRoomCount = stay.getSelectedCategoriesRoomCount();
 
-        return Optional.empty();
+        Invoice invoice = stay.getInvoice();
+        invoice.calculate(selectedCategoryNamesRoomCount);
+
+        Optional<Guest> guestOpt = this.guestRepository.findById(stay.getGuestId());
+        if (guestOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Guest guest = guestOpt.get();
+
+        return Optional.of(buildInvoiceDto(invoice, guest));
+    }
+
+    private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest) {
+        return InvoiceDTO.builder()
+                .withInvoiceId(invoice.getInvoiceId())
+                .withContractDate(invoice.getContractDate())
+                .withSelectedCategoriesRoomCount(buildMapChargedCategoryDto(invoice.getSelectedCategoriesRoomCount()))
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                .build();
+    }
+
+    private Map<ChargedCategoryDTO, Integer> buildMapChargedCategoryDto(Map<String, Integer> selectedCategoryNamesRoomCount) {
+        Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(buildChargedCategoryDto(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow()), selectedCategoryNameRoomCount.getValue());
+        }
+        return selectedCategoriesRoomCount;
+    }
+
+    private ChargedCategoryDTO buildChargedCategoryDto(Category category) {
+        return ChargedCategoryDTO.builder()
+                .withCategory(category)
+                .build();
     }
 
 

@@ -52,5 +52,12 @@
             <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />
             <property name="cardCvc" column="card_cvc" type="java.lang.String" />
         </component>
+
+        <component name="invoice" class="at.fhv.hotelmanagement.domain.model.Invoice">
+            <component name="invoiceId" class="at.fhv.hotelmanagement.domain.model.InvoiceId">
+                <property name="id" column="invoice_id" type="java.lang.String" />
+            </component>
+            <property name="contractDate" column="contract_date" type="java.time.LocalDate" />
+        </component>
     </class>
 </hibernate-mapping>

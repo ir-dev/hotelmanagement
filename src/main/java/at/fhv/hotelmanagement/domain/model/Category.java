@@ -12,6 +12,7 @@ public class Category {
     private String description;
     private Integer maxPersons;
     private Set<Room> rooms;
+    private Price price;
 
     // required for hibernate
     private Category() {}
@@ -45,6 +46,14 @@ public class Category {
         return getAvailableRooms(fromDate, toDate).size();
     }
 
+    public void determinePrice(Price price) {
+        if(price != null) {
+            this.price = price;
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
     public String getName() {
         return this.name;
     }
@@ -59,6 +68,10 @@ public class Category {
 
     public Set<Room> getRooms() {
         return Collections.unmodifiableSet(this.rooms);
+    }
+
+    public Price getPrice() {
+        return this.price;
     }
 }
 

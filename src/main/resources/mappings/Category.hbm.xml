@@ -20,5 +20,10 @@
             <one-to-many class="at.fhv.hotelmanagement.domain.model.Room" />
         </set>
 
+        <component name="price" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="singleOccupancy" column="singleOccupancy" type="java.lang.Integer" />
+            <property name="multipleOccupancy" column="multipleOccupancy" type="java.lang.Integer" />
+        </component>
+
     </class>
 </hibernate-mapping>

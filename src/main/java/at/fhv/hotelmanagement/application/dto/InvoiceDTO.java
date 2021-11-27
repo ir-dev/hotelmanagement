@@ -3,29 +3,35 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Map;
 import java.util.Objects;
 
 public class InvoiceDTO {
     private String invoiceId;
-    private LocalDate currentDate;
-    private LocalTime currentTime;
+    private Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount;
+    private LocalDate contractDate;
+    private GuestDTO guest;
 
     public static InvoiceDTO.Builder builder() {
         return new InvoiceDTO.Builder();
     }
 
-    public String getInvoiceId() {
+    public String invoiceId() {
         return this.invoiceId;
     }
 
-    public LocalDate getCurrentDate() {
-        return this.currentDate;
+    public Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
     }
 
-    public LocalTime getCurrentTime() {
-        return this.currentTime;
+    public LocalDate contractDate() {
+        return this.contractDate;
     }
+
+    public GuestDTO guest() {
+        return this.guest;
+    }
+
 
     public static class Builder {
         private InvoiceDTO instance;
@@ -34,15 +40,29 @@ public class InvoiceDTO {
             this.instance = new InvoiceDTO();
         }
 
-        public Builder withInvoiceEntity(Invoice invoice) {
-            this.instance.invoiceId = invoice.getInvoiceId().getId();
-            this.instance.currentDate = invoice.getCurrentDate();
-            this.instance.currentTime = invoice.getCurrentTime();
+        public Builder withInvoiceId(InvoiceId invoiceId) {
+            this.instance.invoiceId = invoiceId.getId();
+            return this;
+        }
+
+        public Builder withSelectedCategoriesRoomCount(Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount) {
+            this.instance.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
+            return this;
+        }
+
+        public Builder withContractDate(LocalDate contractDate) {
+            this.instance.contractDate = contractDate;
+            return this;
+        }
+
+        public Builder withGuestDTO(GuestDTO guest) {
+            this.instance.guest = guest;
             return this;
         }
 
         public InvoiceDTO build() {
             Objects.requireNonNull(this.instance.invoiceId, "id must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.guest, "guest must be set in InvoiceDTO");
             return this.instance;
         }
     }

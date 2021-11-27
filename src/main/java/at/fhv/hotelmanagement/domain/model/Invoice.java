@@ -2,42 +2,45 @@ package at.fhv.hotelmanagement.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 
 public class Invoice {
     // generated hibernate id
     private Long id;
     private InvoiceId invoiceId;
-    private StayId stayId;
-    private LocalDate currentDate;
-    private LocalTime currentTime;
+    private Map<String, Integer> selectedCategoriesRoomCount;
+    private LocalDate contractDate;
 
-    public static Invoice create(InvoiceId invoiceId, StayId stayId) {
-        return new Invoice(invoiceId, stayId);
-    }
-
-    // required for hibernate
-    private Invoice() {}
-
-    private Invoice(InvoiceId invoiceId, StayId stayId) {
-        this.invoiceId = invoiceId;
-        this.stayId = stayId;
-        this.currentDate = LocalDate.now();
-        this.currentTime = LocalTime.now();
+    public Invoice() {
+        this.invoiceId = new InvoiceId(java.util.UUID.randomUUID().toString().toUpperCase());
     }
 
     public InvoiceId getInvoiceId() {
         return this.invoiceId;
     }
 
-    public StayId getStayId() {
-        return this.stayId;
+    public LocalDate getContractDate() {
+        return this.contractDate;
     }
 
-    public LocalDate getCurrentDate() {
-        return this.currentDate;
+    public Map<String, Integer> getSelectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
     }
 
-    public LocalTime getCurrentTime() {
-        return this.currentTime;
+    public void calculate(Map<String, Integer> selectedCategoriesRoomCount) {
+        this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
+        this.contractDate = LocalDate.now();
+    }
+
+    public double subtotal() {
+        return 0;
+    }
+
+    public double total() {
+        return 0;
+    }
+
+    public double vat() {
+        return 0;
     }
 }

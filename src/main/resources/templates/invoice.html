@@ -9,7 +9,7 @@
 
 <body>
 
-    <div class="dashboard-main-wrapper">
+    <div class="dashboard-main-wrapper" th:object="${invoice}">
         <th:block th:replace="/fragments/layout/navbar :: content"/>
         <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
 
@@ -23,7 +23,6 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="page-header">
                                 <h2 class="pageheader-title">View Intermediary Bill </h2>
-                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
                                 <div class="page-breadcrumb">
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
@@ -43,27 +42,24 @@
                             <div class="card">
                                 <div class="card-header p-4">
                                    
-                                    <div class="float-right"> <h3 class="mb-0">Invoice #1</h3>
-                                    Date: 3 Dec, 2020</div>
+                                    <div class="float-right"> <h3 class="mb-0">Invoice #<span th:text="${invoice.invoiceId()}"></span></h3>
+                                    Date: <span th:text="${invoice.contractDate()}"></span></div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-4">
                                         <div class="col-sm-6">
                                             <h5 class="mb-3">From:</h5>                                            
-                                            <h3 class="text-dark mb-1">Gerald A. Garcia</h3>
-                                         
-                                            <div>2546 Penn Street</div>
-                                            <div>Sikeston, MO 63801</div>
-                                            <div>Email: info@gerald.com.pl</div>
-                                            <div>Phone: +573-282-9117</div>
+                                            <h3 class="text-dark mb-1">Hotelmanagement</h3>
+                                            <div>Hochschulstraße 1</div>
+                                            <div>AT</div>
+                                            <div>6850, Dornbirn</div>
                                         </div>
                                         <div class="col-sm-6">
                                             <h5 class="mb-3">To:</h5>
-                                            <h3 class="text-dark mb-1">Anthony K. Friel</h3>                                            
-                                            <div>478 Collins Avenue</div>
-                                            <div>Canal Winchester, OH 43110</div>
-                                            <div>Email: info@anthonyk.com</div>
-                                            <div>Phone: +614-837-8483</div>
+                                            <h3 class="text-dark mb-1"><span th:text="${invoice.guest().firstName()} + ' ' + ${invoice.guest().lastName()}"></span></h3>
+                                            <div><span th:text="${invoice.guest().addressStreet()}"></span></div>
+                                            <div><span th:text="${invoice.guest().addressCountry()}"></span></div>
+                                            <div><span th:text="${invoice.guest().addressZipcode()} + ', ' + ${invoice.guest().addressCity()}"></span></div>
                                         </div>
                                     </div>
                                     <div class="table-responsive-sm">
@@ -79,37 +75,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="center">1</td>
-                                                    <td class="left strong">Origin License</td>
-                                                    <td class="left">Extended License</td>
-                                                    <td class="right">$1500,00</td>
-                                                    <td class="center">1</td>
-                                                    <td class="right">$1500,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center">2</td>
-                                                    <td class="left">Custom Services</td>
-                                                    <td class="left">Instalation and Customization (cost per hour)</td>
-                                                    <td class="right">$110,00</td>
-                                                    <td class="center">20</td>
-                                                    <td class="right">$22.000,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center">3</td>
-                                                    <td class="left">Hosting</td>
-                                                    <td class="left">1 year subcription</td>
-                                                    <td class="right">$309,00</td>
-                                                    <td class="center">1</td>
-                                                    <td class="right">$309,00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center">4</td>
-                                                    <td class="left">Platinum Support</td>
-                                                    <td class="left">1 year subcription 24/7</td>
-                                                    <td class="right">$5.000,00</td>
-                                                    <td class="center">1</td>
-                                                    <td class="right">$5.000,00</td>
+                                                <tr th:each="category, state: *{selectedCategoriesRoomCount}" th:if="${category.getValue() > 0}">
+                                                    <td class="center" th:text="${state.index + 1}"></td>
+                                                    <td class="left strong" th:text="${category.getKey().name()}"></td>
+                                                    <td class="left" th:text="${category.getKey().description()}"></td>
+                                                    <div th:with="qty=${category.getValue()}, unit=${category.getKey().singleOccupancy()}">
+                                                        <td class="right" th:text="${unit} + '€'"></td>
+                                                        <td class="center" th:text="${qty}"></td>
+                                                        <td class="right" th:text="${qty} * ${unit} + '€'"></td>
+                                                    </div>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -125,12 +99,6 @@
                                                             <strong class="text-dark">Subtotal</strong>
                                                         </td>
                                                         <td class="right">$28,809,00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="left">
-                                                            <strong class="text-dark">Discount (20%)</strong>
-                                                        </td>
-                                                        <td class="right">$5,761,00</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="left">
@@ -158,7 +126,7 @@
                             <div class="form-group">
                                 <p class="text-right">
                                     <a th:href="@{/stays}" class="btn btn-space btn-secondary">Cancel</a>
-                                    <button type="submit" class="btn btn-space btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-space btn-primary">Confirm</button>
                                 </p>
                             </div>
                         </div>

@@ -25,6 +25,7 @@ public class Stay {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private GuestId guestId;
     private PaymentInformation paymentInformation;
+    private Invoice invoice;
 
     // required for hibernate
     private Stay() {}
@@ -42,6 +43,7 @@ public class Stay {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
         this.guestId = guestId;
         this.paymentInformation = paymentInformation;
+        this.invoice = new Invoice();
     }
 
     public StayId getStayId() {
@@ -94,5 +96,9 @@ public class Stay {
 
     public PaymentInformation getPaymentInformation() {
         return this.paymentInformation;
+    }
+
+    public Invoice getInvoice() {
+        return this.invoice;
     }
 }
