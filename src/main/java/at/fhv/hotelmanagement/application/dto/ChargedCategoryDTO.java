@@ -7,6 +7,7 @@ import java.util.Objects;
 public class ChargedCategoryDTO {
     private String name;
     private String description;
+    //Price
     private Integer singleOccupancy;
     private Integer multipleOccupancy;
 

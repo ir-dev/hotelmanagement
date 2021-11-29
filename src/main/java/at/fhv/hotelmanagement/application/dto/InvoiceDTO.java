@@ -32,6 +32,22 @@ public class InvoiceDTO {
         return this.guest;
     }
 
+    public Double subtotal() {
+        double subtotal = 0;
+        for(Map.Entry<ChargedCategoryDTO, Integer> selectedCategory : this.selectedCategoriesRoomCount.entrySet()) {
+            subtotal += selectedCategory.getKey().singleOccupancy() * selectedCategory.getValue();
+        }
+        return subtotal;
+    }
+
+    public double vat() {
+        return subtotal() * 0.1;
+    }
+
+    public double total() {
+        return subtotal() + vat();
+    }
+
 
     public static class Builder {
         private InvoiceDTO instance;
@@ -62,6 +78,8 @@ public class InvoiceDTO {
 
         public InvoiceDTO build() {
             Objects.requireNonNull(this.instance.invoiceId, "id must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.selectedCategoriesRoomCount, "selectedCategoriesRoomCount must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.contractDate, "contractDate must be set in InvoiceDTO");
             Objects.requireNonNull(this.instance.guest, "guest must be set in InvoiceDTO");
             return this.instance;
         }

@@ -42,7 +42,7 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
-    public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
+    public Integer getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).size();
     }
 

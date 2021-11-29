@@ -75,14 +75,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="category, state: *{selectedCategoriesRoomCount}" th:if="${category.getValue() > 0}">
-                                                    <td class="center" th:text="${state.index + 1}"></td>
-                                                    <td class="left strong" th:text="${category.getKey().name()}"></td>
-                                                    <td class="left" th:text="${category.getKey().description()}"></td>
-                                                    <div th:with="qty=${category.getValue()}, unit=${category.getKey().singleOccupancy()}">
-                                                        <td class="right" th:text="${unit} + '€'"></td>
-                                                        <td class="center" th:text="${qty}"></td>
-                                                        <td class="right" th:text="${qty} * ${unit} + '€'"></td>
+                                                <tr th:each="category, state: *{selectedCategoriesRoomCount}">
+                                                    <div th:if="${category.getValue() > 0}">
+                                                        <td class="center" th:text="${state.count}"></td>
+                                                        <td class="left strong" th:text="${category.getKey().name()}"></td>
+                                                        <td class="left" th:text="${category.getKey().description()}"></td>
+                                                        <div th:with="qty=${category.getValue()}, unit=${category.getKey().singleOccupancy()}">
+                                                            <td class="right" th:text="${unit} + '€'"></td>
+                                                            <td class="center" th:text="${qty}"></td>
+                                                            <td class="right" th:text="${qty} * ${unit} + '€'"></td>
+                                                        </div>
                                                     </div>
                                                 </tr>
                                             </tbody>
@@ -98,20 +100,20 @@
                                                         <td class="left">
                                                             <strong class="text-dark">Subtotal</strong>
                                                         </td>
-                                                        <td class="right">$28,809,00</td>
+                                                        <td class="right"><span th:text="${invoice.subtotal()} + '€'"></span></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="left">
                                                             <strong class="text-dark">VAT (10%)</strong>
                                                         </td>
-                                                        <td class="right">$2,304,00</td>
+                                                        <td class="right"><span th:text="${invoice.vat()} + '€'"></span></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="left">
                                                             <strong class="text-dark">Total</strong>
                                                         </td>
                                                         <td class="right">
-                                                            <strong class="text-dark">$20,744,00</strong>
+                                                            <strong class="text-dark"><span th:text="${invoice.total()} + '€'"></span></strong>
                                                         </td>
                                                     </tr>
                                                 </tbody>

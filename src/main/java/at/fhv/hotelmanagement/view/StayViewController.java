@@ -172,14 +172,14 @@ public class StayViewController {
     public ModelAndView terminateStay(
             @RequestParam("stayId") String stayId,
             Model model) {
-        final Optional<StayDTO> stay = this.stayService.stayByStayId(stayId);
-        if (stay.isEmpty()) {
+        final Optional<StayDTO> stayOpt = this.stayService.stayByStayId(stayId);
+        if (stayOpt.isEmpty()) {
             return redirectError("Stay with id.: " + stayId + " not found");
         }
 
-       final Optional<InvoiceDTO> invoice = this.stayService.chargeStay(stayId);
+       final Optional<InvoiceDTO> invoiceOpt = this.stayService.chargeStay(stayId);
 
-        model.addAttribute("invoice", invoice.get());
+        model.addAttribute("invoice", invoiceOpt.get());
         return new ModelAndView(INVOICE_VIEW);
     }
 

@@ -1,7 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Map;
 
 public class Invoice {
@@ -27,20 +26,8 @@ public class Invoice {
         return this.selectedCategoriesRoomCount;
     }
 
-    public void calculate(Map<String, Integer> selectedCategoriesRoomCount) {
+    public void list(Map<String, Integer> selectedCategoriesRoomCount) {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
         this.contractDate = LocalDate.now();
-    }
-
-    public double subtotal() {
-        return 0;
-    }
-
-    public double total() {
-        return 0;
-    }
-
-    public double vat() {
-        return 0;
     }
 }

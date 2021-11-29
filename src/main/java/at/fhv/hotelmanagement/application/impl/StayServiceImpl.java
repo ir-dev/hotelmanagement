@@ -168,15 +168,12 @@ public class StayServiceImpl implements StayService {
     @Override
     public Optional<InvoiceDTO> chargeStay(String stayId) {
         Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
-        if (stayOpt.isEmpty()) {
-            return Optional.empty();
-        }
         Stay stay = stayOpt.get();
 
         Map<String, Integer> selectedCategoryNamesRoomCount = stay.getSelectedCategoriesRoomCount();
 
         Invoice invoice = stay.getInvoice();
-        invoice.calculate(selectedCategoryNamesRoomCount);
+        invoice.list(selectedCategoryNamesRoomCount);
 
         Optional<Guest> guestOpt = this.guestRepository.findById(stay.getGuestId());
         if (guestOpt.isEmpty()) {
