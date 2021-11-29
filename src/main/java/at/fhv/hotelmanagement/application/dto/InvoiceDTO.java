@@ -35,7 +35,7 @@ public class InvoiceDTO {
     public Double subtotal() {
         double subtotal = 0;
         for(Map.Entry<ChargedCategoryDTO, Integer> selectedCategory : this.selectedCategoriesRoomCount.entrySet()) {
-            subtotal += selectedCategory.getKey().singleOccupancy() * selectedCategory.getValue();
+            subtotal += selectedCategory.getKey().halfBoard() * selectedCategory.getValue();
         }
         return subtotal;
     }

@@ -42,7 +42,8 @@
                             <div class="card">
                                 <div class="card-header p-4">
                                    
-                                    <div class="float-right"> <h3 class="mb-0">Invoice #<span th:text="${invoice.invoiceId()}"></span></h3>
+<!--                                    <div class="float-right"> <h3 class="mb-0">Invoice #<span th:text="${invoice.invoiceId()}"></span></h3>-->
+                                        <div class="float-right"> <h3 class="mb-0">Intermediary Bill</span></h3>
                                     Date: <span th:text="${invoice.contractDate()}"></span></div>
                                 </div>
                                 <div class="card-body">
@@ -80,7 +81,7 @@
                                                         <td class="center" th:text="${state.count}"></td>
                                                         <td class="left strong" th:text="${category.getKey().name()}"></td>
                                                         <td class="left" th:text="${category.getKey().description()}"></td>
-                                                        <div th:with="qty=${category.getValue()}, unit=${category.getKey().singleOccupancy()}">
+                                                        <div th:with="qty=${category.getValue()}, unit=${category.getKey().halfBoard()}">
                                                             <td class="right" th:text="${unit} + '€'"></td>
                                                             <td class="center" th:text="${qty}"></td>
                                                             <td class="right" th:text="${qty} * ${unit} + '€'"></td>
@@ -121,9 +122,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white">
-                                    <p class="mb-0">2983 Glenview Drive Corpus Christi, TX 78476</p>
-                                </div>
+<!--                                <div class="card-footer bg-white">-->
+<!--                                    <p class="mb-0">2983 Glenview Drive Corpus Christi, TX 78476</p>-->
+<!--                                </div>-->
                             </div>
                             <div class="form-group">
                                 <p class="text-right">

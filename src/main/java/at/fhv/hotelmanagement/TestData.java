@@ -46,7 +46,7 @@ public class TestData implements ApplicationRunner {
         c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
         c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
-        c1.determinePrice(new Price(120,136));
+        c1.determinePrice(new Price(120, 150));
 
         c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
         c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
@@ -56,7 +56,7 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(room224);
         room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22), null);
         room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25), null);
-        c2.determinePrice(new Price(90));
+        c2.determinePrice(new Price(90, 120));
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");

@@ -8,8 +8,8 @@ public class ChargedCategoryDTO {
     private String name;
     private String description;
     //Price
-    private Integer singleOccupancy;
-    private Integer multipleOccupancy;
+    private Integer halfBoard;
+    private Integer fullBoard;
 
     public static ChargedCategoryDTO.Builder builder() {
         return new ChargedCategoryDTO.Builder();
@@ -23,12 +23,12 @@ public class ChargedCategoryDTO {
         return this.description;
     }
 
-    public Integer singleOccupancy() {
-        return this.singleOccupancy;
+    public Integer halfBoard() {
+        return this.halfBoard;
     }
 
-    public Integer multipleOccupancy() {
-        return this.multipleOccupancy;
+    public Integer fullBoard() {
+        return this.fullBoard;
     }
 
     public static class Builder {
@@ -41,10 +41,8 @@ public class ChargedCategoryDTO {
         public ChargedCategoryDTO.Builder withCategory(Category category) {
             this.instance.name = category.getName();
             this.instance.description = category.getDescription();
-            this.instance.singleOccupancy = category.getPrice().getSingleOccupancy();
-            if (category.getPrice().getMultipleOccupancy().isPresent()) {
-                this.instance.multipleOccupancy = category.getPrice().getMultipleOccupancy().get();
-            }
+            this.instance.halfBoard = category.getPrice().getHalfBoard();
+            this.instance.fullBoard = category.getPrice().getFullBoard();
             return this;
         }
 

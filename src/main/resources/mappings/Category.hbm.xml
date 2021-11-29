@@ -21,8 +21,8 @@
         </set>
 
         <component name="price" class="at.fhv.hotelmanagement.domain.model.Price">
-            <property name="singleOccupancy" column="singleOccupancy" type="java.lang.Integer" />
-            <property name="multipleOccupancy" column="multipleOccupancy" type="java.lang.Integer" />
+            <property name="halfBoard" column="half_board" type="java.lang.Integer" />
+            <property name="fullBoard" column="full_board" type="java.lang.Integer" />
         </component>
 
     </class>
