@@ -170,27 +170,25 @@ public class StayServiceImpl implements StayService {
         Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
         Stay stay = stayOpt.get();
 
-        Map<String, Integer> selectedCategoryNamesRoomCount = stay.getSelectedCategoriesRoomCount();
+        return Optional.of(buildInvoiceDto(stay));
+    }
 
+    private InvoiceDTO buildInvoiceDto(Stay stay) {
         Invoice invoice = stay.getInvoice();
-        invoice.list(selectedCategoryNamesRoomCount);
+        return InvoiceDTO.builder()
+                .withInvoiceId(invoice.getInvoiceId())
+                .withContractDate(invoice.getContractDate())
+                .withSelectedCategoriesRoomCount(buildMapChargedCategoryDto(stay.getSelectedCategoriesRoomCount()))
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestByStay(stay).get()).build())
+                .build();
+    }
 
+    private Optional<Guest> guestByStay(Stay stay) {
         Optional<Guest> guestOpt = this.guestRepository.findById(stay.getGuestId());
         if (guestOpt.isEmpty()) {
             return Optional.empty();
         }
-        Guest guest = guestOpt.get();
-
-        return Optional.of(buildInvoiceDto(invoice, guest));
-    }
-
-    private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest) {
-        return InvoiceDTO.builder()
-                .withInvoiceId(invoice.getInvoiceId())
-                .withContractDate(invoice.getContractDate())
-                .withSelectedCategoriesRoomCount(buildMapChargedCategoryDto(invoice.getSelectedCategoriesRoomCount()))
-                .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
-                .build();
+        return guestOpt;
     }
 
     private Map<ChargedCategoryDTO, Integer> buildMapChargedCategoryDto(Map<String, Integer> selectedCategoryNamesRoomCount) {
@@ -206,6 +204,4 @@ public class StayServiceImpl implements StayService {
                 .withCategory(category)
                 .build();
     }
-
-
 }

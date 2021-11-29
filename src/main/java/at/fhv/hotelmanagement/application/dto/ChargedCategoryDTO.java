@@ -46,7 +46,6 @@ public class ChargedCategoryDTO {
             return this;
         }
 
-
         public ChargedCategoryDTO build() {
             Objects.requireNonNull(this.instance.name, "name must be set in CategoryDTO");
             Objects.requireNonNull(this.instance.description, "description must be set in CategoryDTO");

@@ -2,28 +2,20 @@ package at.fhv.hotelmanagement.domain.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InvoiceTest {
 
     @Test
-    void given_invoicedetails_when_createinvoice_then_detailsequals() {
-//        // given
-//        InvoiceId invoiceId = new InvoiceId("XA21");
-//        StayId stayId = new StayId("1");
-//
-//        // when
-//        Invoice invoice = Invoice.create(invoiceId, stayId);
-//
-//        // then
-//        assertEquals(invoiceId, invoice.getInvoiceId());
-//        assertEquals(stayId, invoice.getStayId());
+    void given_currentdate_when_createinvoice_then_contractdateequals() {
+        // given
+        LocalDate currentDate = LocalDate.now();
+        // when
+        Invoice invoice = new Invoice();
+        // then
+        assertEquals(currentDate, invoice.getContractDate());
     }
-
-
-
-
-
-
 
 }
