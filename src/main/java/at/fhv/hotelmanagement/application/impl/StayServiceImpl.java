@@ -132,15 +132,14 @@ public class StayServiceImpl implements StayService {
         assignRooms(
                 selectedCategoryNamesRoomCount,
                 arrivalDate,
-                departureDate,
-                stay.getStayId()
+                departureDate
         );
 
         // change booking state to closed
         booking.close();
     }
 
-    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate, StayId stayId) throws InsufficientRoomsException {
+    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
 
         for (Map.Entry<String, Integer> selectedCategory : selectedCategories.entrySet()) {
             String selectedCategoryName = selectedCategory.getKey();
@@ -156,9 +155,8 @@ public class StayServiceImpl implements StayService {
 
             for (int i = 0; i < selectedCategoryCount; i++) {
                 Room room = iterator.next();
-
                 // change state of room to occupied for given timespan
-                room.occupied(fromDate, toDate, stayId);
+                room.occupied(fromDate, toDate);
             }
         }
     }

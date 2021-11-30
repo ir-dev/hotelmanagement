@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.domain.model;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.UUID;
 
 public class Invoice {
     // generated hibernate id
@@ -9,8 +10,8 @@ public class Invoice {
     private InvoiceId invoiceId;
     private LocalDate contractDate;
 
-    public Invoice() {
-        this.invoiceId = new InvoiceId(java.util.UUID.randomUUID().toString().toUpperCase());
+    protected Invoice(InvoiceId invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public InvoiceId getInvoiceId() {

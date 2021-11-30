@@ -51,6 +51,7 @@ public class StayServiceImplTest {
     private HibernateCategoryRepository categoryRepository;
 
 
+
     @Test
     void given_stay_when_chargeStay_then_returninvoice() throws AlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
         //given

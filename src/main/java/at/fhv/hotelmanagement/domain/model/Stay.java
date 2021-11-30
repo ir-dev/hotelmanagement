@@ -43,7 +43,7 @@ public class Stay {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
         this.guestId = guestId;
         this.paymentInformation = paymentInformation;
-        this.invoice = new Invoice();
+        this.invoice = new Invoice(new InvoiceId(java.util.UUID.randomUUID().toString().toUpperCase()));
     }
 
     public StayId getStayId() {

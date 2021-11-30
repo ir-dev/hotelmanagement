@@ -54,8 +54,8 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
         Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
         c2.createRoom(room224);
-        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22), null);
-        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25), null);
+        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
+        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
         c2.determinePrice(new Price(90, 120));
 
         Organization orgaEmpty = null;
