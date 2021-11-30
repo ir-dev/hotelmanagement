@@ -1,13 +1,10 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.Country;
 import at.fhv.hotelmanagement.domain.model.enums.Salutation;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,47 +21,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class HibernateGuestRepositoryTest {
-
-    private static final Instant FIXED_CLOCK_INSTANT = Instant.parse("2020-01-01T00:00:00Z");
-    private static final ZoneId FIXED_CLOCK_ZONE_ID = ZoneId.of("UTC").normalized();
+class HibernateGuestRepositoryTest extends AbstractTest {
 
     @Autowired
     HibernateGuestRepository guestRepository;
 
     @PersistenceContext
     private EntityManager em;
-
-    private MockedStatic<Clock> mockedStaticClock;
-
-    @BeforeEach
-    void tearUp() {
-        // setup time context
-        // return a fixed clock for systemDefaultZone() which is used by classes like LocalDateTime, LocalDate and LocalTime
-        Clock fixedClock = Clock.fixed(FIXED_CLOCK_INSTANT, FIXED_CLOCK_ZONE_ID);
-        this.mockedStaticClock = Mockito.mockStatic(Clock.class);
-        this.mockedStaticClock
-                .when(Clock::systemDefaultZone)
-                .thenReturn(fixedClock);
-    }
-
-    @AfterEach
-    void tearDown() {
-        // reset time context
-        this.mockedStaticClock.close();
-    }
-
-    private LocalDateTime getTestLocalDateTime() {
-        return LocalDateTime.ofInstant(FIXED_CLOCK_INSTANT, FIXED_CLOCK_ZONE_ID);
-    }
-
-    private LocalDate getTestLocalDate() {
-        return LocalDate.ofInstant(FIXED_CLOCK_INSTANT, FIXED_CLOCK_ZONE_ID);
-    }
-
-    private LocalTime getTestLocalTime() {
-        return LocalTime.ofInstant(FIXED_CLOCK_INSTANT, FIXED_CLOCK_ZONE_ID);
-    }
 
     @Test
     void given_3guestsinrepository_when_findallguests_then_returnequalsguests() throws CreateGuestException, AlreadyExistsException {
@@ -126,7 +88,7 @@ class HibernateGuestRepositoryTest {
                 Salutation.MISTER.toString(),
                 "Max",
                 "Mustermann",
-                getTestLocalDate().minusYears(18L),
+                getContextLocalDate().minusYears(18L),
                 address,
                 ""
         );

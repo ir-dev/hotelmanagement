@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-class HibernateCategoryRepositoryTest {
+class HibernateCategoryRepositoryTest extends AbstractTest {
 
     @Autowired
     private HibernateCategoryRepository categoryRepository;
