@@ -8,6 +8,7 @@ import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
+import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -33,6 +34,12 @@ public class TestData implements ApplicationRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private StayRepository stayRepository;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
@@ -51,8 +58,6 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
         Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
         c2.createRoom(room224);
-        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
-        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
@@ -77,5 +82,31 @@ public class TestData implements ApplicationRunner {
                 LocalDate.now().plusDays(5), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
+
+        Map<String, Integer> selectedCategoryNamesRoomCount = bk1.getSelectedCategoriesRoomCount();
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        }
+        Stay stay = StayFactory.createStayForBooking(
+                this.stayRepository.nextIdentity(),
+                bk2,
+                bk2.getBookingNo(),
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate(),
+                bk2.getNumberOfPersons(),
+                selectedCategoriesRoomCount,
+                bk2.getGuestId(),
+                bk2.getPaymentInformation()
+        );
+        this.stayRepository.store(stay);
+
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate()
+        );
+
+        bk2.close();
     }
 }

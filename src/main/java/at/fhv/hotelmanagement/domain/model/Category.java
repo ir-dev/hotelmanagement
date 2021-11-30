@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.domain.model;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class Category {
@@ -31,6 +32,22 @@ public class Category {
         }
     }
 
+    public void assignAvailableRooms(Integer roomCount, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
+        Set<Room> availableRooms = getAvailableRooms(fromDate, toDate);
+        if (availableRooms.size() < roomCount) {
+            throw new InsufficientRoomsException();
+        }
+
+        Iterator<Room> iterator = availableRooms.iterator();
+        for (int i = 0; i < roomCount; i++) {
+            Room room = iterator.next();
+
+            // change state of room to occupied for given timespan
+            room.occupied(fromDate, toDate);
+        }
+    }
+
+    // TODO: this should not be allowed at all costs because otherwise internal room of category aggregate is accessible outside of aggregate (why not just make only available room numbers available?)
     public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
         final Set<Room> availableRooms = new HashSet<>();
 

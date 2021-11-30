@@ -31,6 +31,9 @@ public class StayServiceImpl implements StayService {
     @Autowired
     GuestRepository guestRepository;
 
+    @Autowired
+    CategoryService categoryService;
+
     @Transactional(readOnly = true)
     @Override
     public List<StayDTO> allStays() {
@@ -64,7 +67,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, InsufficientRoomsException {
+    public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
         BookingNo bookingNo = new BookingNo(bookingNoStr);
         Booking booking = this.bookingRepository.findByNo(bookingNo).orElseThrow();
 
@@ -121,9 +124,9 @@ public class StayServiceImpl implements StayService {
         this.guestRepository.store(guest);
         this.stayRepository.store(stay);
 
-        // assign rooms to selected categories
-        assignRooms(
-                selectedCategoryNamesRoomCount,
+        // auto assign rooms to selected categories
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
                 arrivalDate,
                 departureDate
         );
@@ -131,28 +134,4 @@ public class StayServiceImpl implements StayService {
         // change booking state to closed
         booking.close();
     }
-
-    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
-
-        for (Map.Entry<String, Integer> selectedCategory : selectedCategories.entrySet()) {
-            String selectedCategoryName = selectedCategory.getKey();
-            Integer selectedCategoryCount = selectedCategory.getValue();
-
-            List<Room> availableCategoryRooms = this.categoryRepository.findCategoryRoomsByState(selectedCategoryName, RoomState.AVAILABLE);
-
-            if (availableCategoryRooms.size() < selectedCategoryCount) {
-                throw new InsufficientRoomsException(selectedCategoryName);
-            }
-
-            Iterator<Room> iterator = availableCategoryRooms.iterator();
-
-            for (int i = 0; i < selectedCategoryCount; i++) {
-                Room room = iterator.next();
-
-                // change state of room to occupied for given timespan
-                room.occupied(fromDate, toDate);
-            }
-        }
-    }
-
 }
