@@ -8,7 +8,7 @@ import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.CreateStayException;
-import at.fhv.hotelmanagement.application.impl.InsufficientRoomsException;
+import at.fhv.hotelmanagement.domain.model.InsufficientRoomsException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
