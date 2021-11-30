@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Category {
     // generated hibernate id
@@ -47,8 +48,18 @@ public class Category {
         }
     }
 
-    // TODO: this should not be allowed at all costs because otherwise internal room of category aggregate is accessible outside of aggregate (why not just make only available room numbers available?)
-    public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
+
+    public Set<RoomNumber> getAvailableRoomNumbers(LocalDate fromDate, LocalDate toDate) {
+        return getAvailableRooms(fromDate, toDate).stream()
+                .map(Room::getRoomNumber)
+                .collect(Collectors.toSet());
+    }
+
+    public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
+        return getAvailableRooms(fromDate, toDate).size();
+    }
+
+    private Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
         final Set<Room> availableRooms = new HashSet<>();
 
         for (Room room : this.rooms) {
@@ -58,10 +69,6 @@ public class Category {
         }
 
         return Collections.unmodifiableSet(availableRooms);
-    }
-
-    public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
-        return getAvailableRooms(fromDate, toDate).size();
     }
 
     public CategoryId getCategoryId() {
@@ -78,10 +85,6 @@ public class Category {
 
     public Integer getMaxPersons() {
         return this.maxPersons;
-    }
-
-    public Set<Room> getRooms() {
-        return Collections.unmodifiableSet(this.rooms);
     }
 }
 
