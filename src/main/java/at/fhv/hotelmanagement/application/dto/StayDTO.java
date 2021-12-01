@@ -30,6 +30,19 @@ public class StayDTO {
 
     public LocalDateTime checkedOutAt() { return this.checkedOutAt;}
 
+    public String getStayStateTextColorClass() {
+        Objects.requireNonNull(this.stayStatus);
+
+        switch (this.stayStatus) {
+            case "CHECKED_IN":
+                return "text-success";
+            case "CHECKED_OUT":
+                return "text-muted";
+            default:
+                return "";
+        }
+    }
+
     private StayDTO() {
     }
 
@@ -41,7 +54,9 @@ public class StayDTO {
         public Builder withStayEntity(Stay stay) {
             this.instance.stayId = stay.getStayId().getId();
             this.instance.stayStatus = String.valueOf(stay.getStayStatus());
-            this.instance.bookingNo = stay.getBookingNo().getNo();
+            if (stay.getBookingNo().isPresent()) {
+                this.instance.bookingNo = stay.getBookingNo().get().getNo();
+            }
             this.instance.checkedInAt = stay.getCheckedInAt();
             if (stay.getCheckedOutAt().isPresent()) {
                 this.instance.checkedOutAt = stay.getCheckedOutAt().get();
@@ -52,7 +67,6 @@ public class StayDTO {
         public StayDTO build() {
             Objects.requireNonNull(this.instance.stayId, "stayId must be set in StayDTO");
             Objects.requireNonNull(this.instance.stayStatus, "stayStatus must be set in StayDTO");
-            Objects.requireNonNull(this.instance.bookingNo, "bookingNo must be set in StayDTO");
             Objects.requireNonNull(this.instance.checkedInAt, "checkedInAt must be set in StayDTO");
 
             return this.instance;

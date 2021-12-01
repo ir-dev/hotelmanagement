@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.domain.model.BookingNo;
 import at.fhv.hotelmanagement.domain.model.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.RoomAssignmentException;
@@ -79,10 +80,16 @@ public class StayViewController {
         return ALL_STAYS_VIEW;
     }
 
-    @GetMapping(CREATE_STAY_URL)
-    public ModelAndView createStayForBookingForm(
-            @RequestParam("bookingNo") String bookingNo,
-            Model model) {
+    private ModelAndView createStayForWalkInForm(Model model) {
+
+        model.addAttribute("step", "enterStayDetails");
+        model.addAttribute("form", new StayForm());
+        model.addAttribute("arrivalDate", LocalDate.now());
+
+        return new ModelAndView(CREATE_STAY_VIEW);
+    }
+
+    private ModelAndView createStayForBookingForm(String bookingNo, Model model) {
 
         final Optional<BookingDTO> optBooking = this.bookingsService.bookingByBookingNo(bookingNo);
 
@@ -101,23 +108,40 @@ public class StayViewController {
         return new ModelAndView(CREATE_STAY_VIEW);
     }
 
+    @GetMapping(CREATE_STAY_URL)
+    public ModelAndView createStayForm(
+            @RequestParam("bookingNo") Optional<String> optBookingNo,
+            Model model) {
+
+        return optBookingNo.isPresent()
+                ? createStayForBookingForm(optBookingNo.get(), model)
+                : createStayForWalkInForm(model);
+    }
+
     @PostMapping(CREATE_STAY_URL)
-    public ModelAndView createStayForBooking(
+    public ModelAndView createStay(
             @RequestParam("step") String step,
-            @RequestParam("bookingNo") String bookingNo,
+            @RequestParam("bookingNo") Optional<String> optBookingNo,
             @ModelAttribute StayForm form,
             Model model) {
 
-        final Optional<BookingDTO> optBooking = this.bookingsService.bookingByBookingNo(bookingNo);
-
-        if (optBooking.isEmpty()) {
-            return redirectError("Booking with no.: " + bookingNo + " not found");
-        }
-
-        form.addBooking(optBooking.get());
-
+        // check if form step is a valid step of wizard
         if (!wizardSteps.contains(step)) {
             return redirectError("Invalid step in create stay wizard.");
+        }
+
+        String bookingNo = null;
+        if (optBookingNo.isPresent()) {
+            bookingNo = optBookingNo.get();
+
+            Optional<BookingDTO> optBooking = this.bookingsService.bookingByBookingNo(bookingNo);
+
+            if (optBooking.isEmpty()) {
+                return redirectError("Booking with no.: " + bookingNo + " not found");
+            }
+
+            form.addBooking(optBooking.get());
+            model.addAttribute("bookingNo", bookingNo);
         }
 
         switch (step) {
@@ -135,7 +159,12 @@ public class StayViewController {
 
             case CREATE_STAY_STORE_STEP:
                 try {
-                    this.stayService.createStayForBooking(bookingNo, form);
+                    if (bookingNo != null) {
+                        this.stayService.createStayForBooking(bookingNo, form);
+                    } else {
+                        this.stayService.createStayForWalkIn(form);
+                    }
+
                 } catch (CreateStayException | CreateGuestException | RoomAssignmentException e) {
                     return redirectError(e.getMessage());
                 }
@@ -143,7 +172,6 @@ public class StayViewController {
         }
 
         model.addAttribute("step", step);
-        model.addAttribute("bookingNo", bookingNo);
         model.addAttribute("form", form);
 
         return new ModelAndView(CREATE_STAY_VIEW);

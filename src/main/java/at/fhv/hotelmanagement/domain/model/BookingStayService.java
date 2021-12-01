@@ -1,7 +1,5 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.BookingState;
-
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +20,7 @@ public class BookingStayService {
         }
     }
 
-    public static void validateStay(BookingState bookingState, LocalDate arrivalDate, LocalDate departureDate, Integer numberOfPersons, Map<Category, Integer> selectedCategoriesRoomCount) throws CreateStayException {
-        // booking must have PENDING state
-        if (bookingState != BookingState.PENDING) {
-            throw new CreateStayException("The status of the booking to check-in must be PENDING.");
-        }
-
+    public static void validateStay(LocalDate arrivalDate, LocalDate departureDate, Integer numberOfPersons, Map<Category, Integer> selectedCategoriesRoomCount) throws CreateStayException {
         // ArrivalDate is today
         if (!arrivalDate.equals(LocalDate.now())) {
             throw new CreateStayException("ArrivalDate must be today.");

@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="page-header">
-                        <h2 class="pageheader-title">View Stays</h2>
+                        <h2 class="pageheader-title">Stays</h2>
                         <div class="page-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -46,6 +46,10 @@
                 <div class="col-xl-10">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="row ml-0 mr-0">
+                                <a th:href="@{/checkin}" class="btn btn-primary ml-auto mr-0 mb-3">Create Stay (Check-In of Walk-In Guest)</a>
+                            </div>
+
                             <div class="card">
                                 <table class="table" style="text-align: center">
                                     <thead>
@@ -61,19 +65,9 @@
                                     </tr>
                                     <tr th:each="stay: ${stays}">
                                         <td><span th:text="${stay.stayId()}"/></td>
-                                        <td><span th:text="${stay.stayStatus()}"/></td>
-                                        <td th:width="100">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false">
-                                                    Actions
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" th:href="@{/checkout(stayId=${stay.stayId()})}">Check-Out</a>
-                                                    <a class="dropdown-item" th:href="@{/stay(id=${stay.stayId()})}">View</a>
-                                                </div>
-                                            </div>
+                                        <td><span th:text="${stay.stayStatus()}" th:classappend="${stay.getStayStateTextColorClass()}"/></td>
+                                        <td style="width: 200px;">
+                                            <a class="btn btn-space btn-danger" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
                                         </td>
                                     </tr>
                                     </tbody>
