@@ -8,9 +8,11 @@ import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
+import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.util.*;
 
 @Component
 @Transactional
+@Profile("!test")
 public class TestData implements ApplicationRunner {
 
     @Autowired
@@ -31,54 +34,79 @@ public class TestData implements ApplicationRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private StayRepository stayRepository;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Set<Room> roomRange1 = new HashSet<>();
-        Room r1 = new Room(new RoomNumber("121"));
-        Room r2 = new Room(new RoomNumber("120"));
-        roomRange1.add(r1);
-        roomRange1.add(r2);
-        roomRange1.add(new Room(new RoomNumber("122")));
-        roomRange1.add(new Room(new RoomNumber("123")));
-        roomRange1.add(new Room(new RoomNumber("124")));
-
-        r1.setRoomState(RoomState.OCCUPIED);
-        r2.setRoomState(RoomState.OCCUPIED);
-
-        RoomOccupancy ro = new RoomOccupancy(this.categoryRepository.nextIdentity(), new RoomNumber("120"),LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
-        RoomOccupancy ro2 = new RoomOccupancy(this.categoryRepository.nextIdentity(), new RoomNumber("121"),LocalDate.of(2021,11,18), LocalDate.of(2021,11,24));
-        this.categoryRepository.store(ro);
-        this.categoryRepository.store(ro2);
-
-        Set<Room> roomRange2 = new HashSet<>();
-        roomRange2.add(new Room(new RoomNumber("150")));
-        roomRange2.add(new Room(new RoomNumber("151")));
-        Category c1 = new Category("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, roomRange1);
-        Category c2 = new Category("Business Casual EZ", "A casual accommodation for business guests.", 1, roomRange2);
+        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
+        Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1);
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
+        c1.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("121"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
+        c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
+
+        c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("222"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
+        Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
+        c2.createRoom(room224);
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
         Address ad1 = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         Address ad2 = new Address("Musterstr. 123", "12345", "München", String.valueOf(Country.DE));
-        Guest g1 = new Guest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Hüseyin", "Arziman", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
-        Guest g2 = new Guest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MISTER),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
+        Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Hüseyin", "Arziman", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
+        Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MISTER),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
         this.guestRepository.store(g1);
         this.guestRepository.store(g2);
 
-        Map<String, Integer> categoryRooms1 = new HashMap<>();
-        categoryRooms1.put(c1.getName(), 1);
-        categoryRooms1.put(c2.getName(), 2);
-        Map<String, Integer> categoryRooms2 = new HashMap<>();
-        categoryRooms2.put(c2.getName(), 1);
+        Map<Category, Integer> categoryRooms1 = new HashMap<>();
+        categoryRooms1.put(c1, 1);
+        categoryRooms1.put(c2, 2);
+        Map<Category, Integer> categoryRooms2 = new HashMap<>();
+        categoryRooms2.put(c2, 1);
         PaymentInformation paymentInformation1 = new PaymentInformation("Hüseyin Arziman", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
-        Booking bk1 = new Booking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
+        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
                 LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
-        Booking bk2 = new Booking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+
+        Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
+                LocalDate.now().plusDays(5), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
+
+        Map<String, Integer> selectedCategoryNamesRoomCount = bk1.getSelectedCategoriesRoomCount();
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        }
+        Stay stay = StayFactory.createStayForBooking(
+                this.stayRepository.nextIdentity(),
+                bk2,
+                bk2.getBookingNo(),
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate(),
+                bk2.getNumberOfPersons(),
+                selectedCategoriesRoomCount,
+                bk2.getGuestId(),
+                bk2.getPaymentInformation()
+        );
+        this.stayRepository.store(stay);
+
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate()
+        );
+
+        bk2.close();
     }
 }

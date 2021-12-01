@@ -3,42 +3,63 @@ package at.fhv.hotelmanagement.domain.model;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 
 import java.time.LocalDate;
-
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Room {
     // generated hibernate id
     private Long id;
-    private RoomNumber number;
+    private RoomNumber roomNumber;
     private RoomState roomState;
+    private Set<RoomOccupancy> roomOccupancies;
 
     // required for hibernate
     private Room() {
     }
 
-    public Room(RoomNumber number) {
-        this.number = number;
-        //When Creating a Room, RoomState is on Available
-        this.roomState = RoomState.AVAILABLE;
+    public Room(RoomNumber roomNumber, RoomState roomState) {
+        // disallow (resp. explicitly allow) some initial room states (this must be always conform with all room state changes!!)
+        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.MAINTENANCE || roomState == RoomState.CLEANING)) {
+            throw new IllegalArgumentException("Forbidden initial room state: " + roomState);
+        }
+
+        this.roomNumber = roomNumber;
+        this.roomState = roomState;
+        this.roomOccupancies = new HashSet<>();
     }
 
-    //TODO: Cover all cases
     public boolean isAvailable(LocalDate fromDate, LocalDate toDate) {
+        // check for intersection from at least one roomOccupancy with given period
+        for (RoomOccupancy roomOccupancy : this.roomOccupancies) {
+            // find overlaps because (StartA <= EndB) and (EndA >= StartB) (see also https://stackoverflow.com/a/325964/12511726)
+            if (fromDate.compareTo(roomOccupancy.getEndDate()) <= 0 && toDate.compareTo(roomOccupancy.getStartDate()) >= 0) {
+                return false;
+            }
+        }
+
         return true;
     }
 
-    public void setRoomState(RoomState roomState) {
-        this.roomState = roomState;
+    public void occupied(LocalDate fromDate, LocalDate toDate) throws IllegalStateException {
+        createRoomOccupancy(fromDate, toDate);
+        this.roomState = RoomState.OCCUPIED;
     }
 
-    public RoomNumber getNumber() {
-        return this.number;
+    private void createRoomOccupancy(LocalDate fromDate, LocalDate toDate) throws IllegalStateException {
+        if (!isAvailable(fromDate, toDate)) {
+            throw new IllegalStateException("Only room with AVAILABLE status can be occupied.");
+        }
+
+        RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate);
+        this.roomOccupancies.add(roomOccupancy);
     }
 
-    public RoomState getState() {
-        return this.roomState;
+    public RoomNumber getRoomNumber() {
+        return this.roomNumber;
     }
 
-    public void changeState(RoomState roomState) {
-        this.roomState = roomState;
+    public Set<RoomOccupancy> getRoomOccupancies() {
+        return Collections.unmodifiableSet(this.roomOccupancies);
     }
 }

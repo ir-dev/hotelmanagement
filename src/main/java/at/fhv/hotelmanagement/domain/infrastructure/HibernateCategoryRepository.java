@@ -17,8 +17,13 @@ public class HibernateCategoryRepository implements CategoryRepository {
     private EntityManager em;
 
     @Override
+    public CategoryId nextIdentity() {
+        return new CategoryId(java.util.UUID.randomUUID().toString().toUpperCase());
+    }
+
+    @Override
     public List<Category> findAll() {
-        TypedQuery<Category> query = this.em.createQuery("SELECT c FROM Category c", Category.class);
+        TypedQuery<Category> query = this.em.createQuery("FROM Category c", Category.class);
         return query.getResultList();
     }
 
@@ -30,33 +35,15 @@ public class HibernateCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public List<Room> findAllRoomsByState(RoomState state) {
-        TypedQuery<Room> query = this.em.createQuery("SELECT r FROM Room r WHERE room_state = :state", Room.class);
-        query.setParameter("state", state.toString());
-        return query.getResultList();
-    }
-
-    @Override
     public List<Room> findCategoryRoomsByState(String categoryName, RoomState state) {
-        TypedQuery<Room> query = this.em.createQuery("SELECT r FROM Room r inner join Category c on category_id = c.id where c.name = :categoryName and room_state = :state", Room.class);
+        TypedQuery<Room> query = this.em.createQuery("SELECT cr FROM Category c JOIN c.rooms cr WHERE c.name = :categoryName AND cr.roomState = :state", Room.class);
         query.setParameter("categoryName", categoryName);
-        query.setParameter("state", state.toString());
+        query.setParameter("state", state);
         return query.getResultList();
     }
-
-    @Override
-    public OccupancyId nextIdentity() {
-        return new OccupancyId(java.util.UUID.randomUUID().toString().toUpperCase());
-    }
-
 
     @Override
     public void store(Category category) {
         this.em.persist(category);
-    }
-
-    @Override
-    public void store(RoomOccupancy roomOccupancy) {
-        this.em.persist(roomOccupancy);
     }
 }

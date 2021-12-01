@@ -13,11 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class BookingServiceImpl implements BookingsService {
@@ -25,10 +21,10 @@ public class BookingServiceImpl implements BookingsService {
     BookingRepository bookingRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    GuestRepository guestRepository;
 
     @Autowired
-    GuestRepository guestRepository;
+    CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -46,7 +42,7 @@ public class BookingServiceImpl implements BookingsService {
     @Transactional(readOnly = true)
     @Override
     public Optional<BookingDTO> bookingByBookingNo(String bookingNo) {
-        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+        Optional<Booking> booking = this.bookingRepository.findByNo(new BookingNo(bookingNo));
 
         if (booking.isEmpty()) {
             return Optional.empty();
@@ -58,7 +54,7 @@ public class BookingServiceImpl implements BookingsService {
     @Transactional(readOnly = true)
     @Override
     public Optional<BookingDetailsDTO> bookingDetailsByBookingNo(String bookingNo) {
-        Optional<Booking> booking = bookingRepository.findByNo(new BookingNo(bookingNo));
+        Optional<Booking> booking = this.bookingRepository.findByNo(new BookingNo(bookingNo));
 
         if (booking.isEmpty()) {
             return Optional.empty();
@@ -82,7 +78,7 @@ public class BookingServiceImpl implements BookingsService {
     }
 
     public Optional<GuestDTO> guestByBooking(Booking booking) {
-        Optional<Guest> guest = guestRepository.findById(booking.getGuestId());
+        Optional<Guest> guest = this.guestRepository.findById(booking.getGuestId());
         if (guest.isEmpty()) {
             return Optional.empty();
         }
@@ -98,53 +94,8 @@ public class BookingServiceImpl implements BookingsService {
 
     @Transactional
     @Override
-    public void createBooking(BookingForm bookingForm) throws CreateBookingException {
-        LocalDate arrivalDate = bookingForm.getArrivalDate();
-        LocalDate departureDate = bookingForm.getDepartureDate();
-        Integer numberOfPersons = bookingForm.getNumberOfPersons();
-        Map<String, Integer> selectedCategoriesRoomCount = bookingForm.getSelectedCategoriesRoomCount();
-        LocalDate birthday = bookingForm.getBirthday();
-
-        // ArrivalDate is today or in the future
-        if (!arrivalDate.isAfter(LocalDate.now().minusDays(1))) {
-            throw new CreateBookingException("ArrivalDate must be today or in the future.");
-        }
-
-        // DepartureDate must be after ArrivalDate (at least one day)
-        if (!departureDate.isAfter(arrivalDate)) {
-            throw new CreateBookingException("DepartureDate must be after ArrivalDate.");
-        }
-
-        // NumberOfPersons must be greater or equal to 1
-        if (!(numberOfPersons >= 1)) {
-            throw new CreateBookingException("NumberOfPersons must be greater or equal to 1");
-        }
-
-        // Age (Birthday) must be equal or greater than 18 years
-        if (!(birthday.isBefore(LocalDate.now().minusYears(18).plusDays(1)))) {
-            throw new CreateBookingException("Age (Birthday) must be equal or greater than 18 years");
-        }
-
-        int totalMaxPersons = 0;
-        for (Map.Entry<String, Integer> selectedCategoryRoomCount: selectedCategoriesRoomCount.entrySet()) {
-            Category selectedCategory = categoryRepository.findByName(selectedCategoryRoomCount.getKey()).get();
-
-            // SelectedCategories for each category: - min. zero and max. count of available rooms for category
-            int roomCount = selectedCategoryRoomCount.getValue();
-            int availableRoomCount = selectedCategory.getAvailableRoomsCount(arrivalDate, departureDate);
-            int maxPersons = selectedCategory.getMaxPersons();
-            if (!(roomCount >= 0 && roomCount <= availableRoomCount)) {
-                throw new CreateBookingException("SelectedCategoryRoomCount: min. zero, max. count of available rooms for category.");
-            }
-
-            totalMaxPersons += (roomCount * maxPersons);
-        }
-
-        // SelectedCategories total: - min. sum of all max. persons for each category multiplied by count
-        if (!(numberOfPersons <= totalMaxPersons)) {
-            throw new CreateBookingException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
-        }
-
+    public void createBooking(BookingForm bookingForm) throws CreateBookingException, CreateGuestException {
+        // create booking value objects
         Organization organization = null;
         if (bookingForm.getIsOrganization()) {
             organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
@@ -153,35 +104,43 @@ public class BookingServiceImpl implements BookingsService {
                 bookingForm.getStreet(),
                 bookingForm.getZipcode(),
                 bookingForm.getCity(),
-                bookingForm.getCountry());
-        Guest guest = new Guest(
-                guestRepository.nextIdentity(),
+                bookingForm.getCountry()
+        );
+        PaymentInformation paymentInformation = new PaymentInformation(
+                bookingForm.getCardHolderName(),
+                bookingForm.getCardNumber(),
+                bookingForm.getCardValidThru(),
+                bookingForm.getCardCvc(),
+                bookingForm.getPaymentType()
+        );
+
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : bookingForm.getSelectedCategoriesRoomCount().entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        }
+        // create guest and booking entity
+        Guest guest = GuestFactory.createGuest(
+                this.guestRepository.nextIdentity(),
                 organization,
                 bookingForm.getSalutation(),
                 bookingForm.getFirstName(),
                 bookingForm.getLastName(),
                 bookingForm.getBirthday(),
                 address,
-                bookingForm.getSpecialNotes());
-
-        guestRepository.store(guest);
-
-        PaymentInformation paymentInformation = new PaymentInformation(
-                bookingForm.getCardHolderName(),
-                bookingForm.getCardNumber(),
-                bookingForm.getCardValidThru(),
-                bookingForm.getCardCvc(),
-                bookingForm.getPaymentType());
-        Booking booking = new Booking(
-                bookingRepository.nextIdentity(),
+                bookingForm.getSpecialNotes()
+        );
+        Booking booking = BookingFactory.createBooking(
+                this.bookingRepository.nextIdentity(),
                 bookingForm.getArrivalDate(),
                 bookingForm.getDepartureDate(),
                 bookingForm.getArrivalTime(),
                 bookingForm.getNumberOfPersons(),
-                bookingForm.getSelectedCategoriesRoomCount(),
+                selectedCategoriesRoomCount,
                 guest.getGuestId(),
-                paymentInformation);
+                paymentInformation
+        );
 
-        bookingRepository.store(booking);
+        this.guestRepository.store(guest);
+        this.bookingRepository.store(booking);
     }
 }

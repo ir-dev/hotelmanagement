@@ -1,13 +1,14 @@
 package at.fhv.hotelmanagement.domain.model;
 
-public class OccupancyId {
+public class CategoryId {
     private String id;
 
     // required for hibernate
-    private OccupancyId() {}
+    private CategoryId() {
+    }
 
-    public OccupancyId(String occupancyId) {
-        this.id = occupancyId;
+    public CategoryId(String categoryId) {
+        this.id = categoryId;
     }
 
     public String getId() {

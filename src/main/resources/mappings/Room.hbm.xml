@@ -9,11 +9,9 @@
             <generator class="native"/>
         </id>
 
-        <component name="number" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
-            <property name="number" column="number" type="java.lang.String" />
+        <component name="roomNumber" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
+            <property name="number" column="room_number" type="java.lang.String" unique="true" />
         </component>
-
-<!--        <one-to-one name="number" class="at.fhv.hotelmanagement.domain.model.RoomOccupancy"/>-->
 
         <property name="roomState">
             <type name="org.hibernate.type.EnumType">
@@ -22,5 +20,10 @@
             </type>
         </property>
 
-</class>
+        <set name="roomOccupancies" table="roomOccupancies" cascade="all" >
+            <key column="room_id"></key>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.RoomOccupancy"/>
+        </set>
+
+    </class>
 </hibernate-mapping>

@@ -6,7 +6,9 @@ import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
-import at.fhv.hotelmanagement.application.impl.CreateStayException;
+import at.fhv.hotelmanagement.domain.model.CreateGuestException;
+import at.fhv.hotelmanagement.domain.model.CreateStayException;
+import at.fhv.hotelmanagement.domain.model.RoomAssignmentException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -104,7 +106,7 @@ public class StayViewController {
             @RequestParam("step") String step,
             @RequestParam("bookingNo") String bookingNo,
             @ModelAttribute StayForm form,
-            Model model) throws CreateStayException {
+            Model model) {
 
         final Optional<BookingDTO> optBooking = this.bookingsService.bookingByBookingNo(bookingNo);
 
@@ -134,7 +136,7 @@ public class StayViewController {
             case CREATE_STAY_STORE_STEP:
                 try {
                     this.stayService.createStayForBooking(bookingNo, form);
-                } catch (CreateStayException e) {
+                } catch (CreateStayException | CreateGuestException | RoomAssignmentException e) {
                     return redirectError(e.getMessage());
                 }
                 return redirect(ALL_STAYS_URL, "Check-In successful");
