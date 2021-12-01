@@ -30,6 +30,19 @@ public class StayDTO {
 
     public LocalDateTime checkedOutAt() { return this.checkedOutAt;}
 
+    public String getStayStateTextColorClass() {
+        Objects.requireNonNull(this.stayStatus);
+
+        switch (this.stayStatus) {
+            case "CHECKED_IN":
+                return "text-success";
+            case "CHECKED_OUT":
+                return "text-muted";
+            default:
+                return "";
+        }
+    }
+
     private StayDTO() {
     }
 
