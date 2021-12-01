@@ -1,5 +1,7 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.domain.model.enums.BookingState;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
@@ -15,8 +17,13 @@ public class StayFactory {
                                             GuestId guestId,
                                             PaymentInformation paymentInformation) throws CreateStayException {
 
+        // booking must have PENDING state
+        if (booking.getBookingState() != BookingState.PENDING) {
+            throw new CreateStayException("The status of the booking to check-in must be PENDING.");
+        }
+
         // stay constraints validation
-        BookingStayService.validateStay(booking.getBookingState(), arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
+        BookingStayService.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
 
         // convert to map with aggregate identity reference as key
         Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayService.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
@@ -24,6 +31,33 @@ public class StayFactory {
         return new Stay(
                 stayId,
                 bookingNo,
+                arrivalDate,
+                departureDate,
+                LocalTime.now(),
+                numberOfPersons,
+                selectedCategoryNamesRoomCount,
+                guestId,
+                paymentInformation
+        );
+    }
+
+    public static Stay createStayForWalkIn(StayId stayId,
+                                            LocalDate arrivalDate,
+                                            LocalDate departureDate,
+                                            Integer numberOfPersons,
+                                            Map<Category, Integer> selectedCategoriesRoomCount,
+                                            GuestId guestId,
+                                            PaymentInformation paymentInformation) throws CreateStayException {
+
+        // stay constraints validation
+        BookingStayService.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
+
+        // convert to map with aggregate identity reference as key
+        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayService.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
+
+        return new Stay(
+                stayId,
+                null,
                 arrivalDate,
                 departureDate,
                 LocalTime.now(),

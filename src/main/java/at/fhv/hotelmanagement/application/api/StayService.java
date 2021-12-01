@@ -18,4 +18,6 @@ public interface StayService {
     Optional<StayDTO> stayByStayId(String stayId);
 
     void createStayForBooking(String bookingNo, StayForm form) throws CreateStayException, CreateGuestException, RoomAssignmentException;
+
+    void createStayForWalkIn(StayForm form) throws CreateStayException, CreateGuestException, RoomAssignmentException;
 }

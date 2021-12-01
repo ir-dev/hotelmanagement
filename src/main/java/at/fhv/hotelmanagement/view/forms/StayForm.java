@@ -94,8 +94,8 @@ public class StayForm {
         return this.isOrganization;
     }
 
-    public void setOrganization(Boolean organization) {
-        this.isOrganization = organization;
+    public void setIsOrganization(Boolean isOrganization) {
+        this.isOrganization = isOrganization;
     }
 
     public String getOrganizationName() {

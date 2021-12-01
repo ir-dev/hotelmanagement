@@ -48,8 +48,8 @@ public class Stay {
         return this.stayId;
     }
 
-    public BookingNo getBookingNo() {
-        return this.bookingNo;
+    public Optional<BookingNo> getBookingNo() {
+        return Optional.ofNullable(this.bookingNo);
     }
 
     public StayStatus getStayStatus() {
