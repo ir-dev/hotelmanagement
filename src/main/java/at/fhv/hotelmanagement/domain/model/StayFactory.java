@@ -23,10 +23,10 @@ public class StayFactory {
         }
 
         // stay constraints validation
-        BookingStayService.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
+        BookingStayValidator.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
 
         // convert to map with aggregate identity reference as key
-        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayService.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
+        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
 
         return new Stay(
                 stayId,
@@ -50,10 +50,10 @@ public class StayFactory {
                                             PaymentInformation paymentInformation) throws CreateStayException {
 
         // stay constraints validation
-        BookingStayService.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
+        BookingStayValidator.validateStay(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
 
         // convert to map with aggregate identity reference as key
-        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayService.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
+        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
 
         return new Stay(
                 stayId,
