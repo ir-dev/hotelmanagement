@@ -30,16 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HibernateStayRepositoryTest extends AbstractTest {
 
     @Autowired
-    HibernateStayRepository stayRepository;
-
-    @Autowired
-    private HibernateBookingRepository bookingRepository;
-
-    @Autowired
-    private HibernateGuestRepository guestRepository;
-
-    @Autowired
-    private HibernateCategoryRepository categoryRepository;
+    private HibernateStayRepository stayRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -87,6 +78,22 @@ class HibernateStayRepositoryTest extends AbstractTest {
         assertEquals(stayExcepted.getStayId(), stayActual.getStayId());
     }
 
+    private static Integer nextDummyCategoryIdentity = 1;
+    private static Integer nextDummyGuestIdentity = 1;
+    private static Integer nextDummyBookingIdentity = 1;
+
+    private CategoryId nextDummyCategoryIdentity() {
+        return new CategoryId((nextDummyCategoryIdentity++).toString());
+    }
+
+    private GuestId nextDummyGuestIdentity() {
+        return new GuestId((nextDummyGuestIdentity++).toString());
+    }
+
+    private BookingNo nextDummyBookingIdentity() {
+        return new BookingNo((nextDummyBookingIdentity++).toString());
+    }
+
     private Stay createStayDummy() throws CreateGuestException, CreateBookingException, CreateStayException, AlreadyExistsException {
         // create value objects for entities
         Address address = new Address(
@@ -103,18 +110,18 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 PaymentType.INVOICE.toString()
         );
 
-        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(), "Test EZ", "", 1);
+        Category c1 = CategoryFactory.createCategory(nextDummyCategoryIdentity(), "Test EZ", "", 1);
         c1.createRoom(new Room(new RoomNumber("101"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("102"), RoomState.AVAILABLE));
         Map<Category, Integer> selectedCategoriesRoomCount = Stream.of(new Object[][] {
                 { c1, 2 },
-                { CategoryFactory.createCategory(this.categoryRepository.nextIdentity(), "Test DZ", "", 2), 0 },
-                { CategoryFactory.createCategory(this.categoryRepository.nextIdentity(), "Test MZ", "", 3), 0 },
+                { CategoryFactory.createCategory(nextDummyCategoryIdentity(), "Test DZ", "", 2), 0 },
+                { CategoryFactory.createCategory(nextDummyCategoryIdentity(), "Test MZ", "", 3), 0 },
         }).collect(Collectors.toMap(data -> (Category) data[0], data -> (Integer) data[1]));
 
         // create entity/entities
         Guest guest = GuestFactory.createGuest(
-                this.guestRepository.nextIdentity(),
+                nextDummyGuestIdentity(),
                 null,
                 Salutation.MISTER.toString(),
                 "Max",
@@ -125,7 +132,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         );
 
         Booking booking = BookingFactory.createBooking(
-                this.bookingRepository.nextIdentity(),
+                nextDummyBookingIdentity(),
                 getContextLocalDate(),
                 getContextLocalDate().plusDays(1L),
                 null,
