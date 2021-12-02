@@ -1,9 +1,13 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.category.room.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.guest.Country;
+import at.fhv.hotelmanagement.domain.model.guest.Salutation;
+import at.fhv.hotelmanagement.domain.model.guest.Address;
+import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
+import at.fhv.hotelmanagement.domain.model.guest.Guest;
+import at.fhv.hotelmanagement.domain.model.guest.GuestFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

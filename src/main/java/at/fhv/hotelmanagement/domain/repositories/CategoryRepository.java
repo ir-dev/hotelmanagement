@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.category.CategoryId;
+import at.fhv.hotelmanagement.domain.model.category.room.Room;
+import at.fhv.hotelmanagement.domain.model.category.room.RoomState;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

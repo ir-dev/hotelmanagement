@@ -2,8 +2,8 @@ package at.fhv.hotelmanagement.application.api;
 
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
-import at.fhv.hotelmanagement.domain.model.CreateBookingException;
-import at.fhv.hotelmanagement.domain.model.CreateGuestException;
+import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.stereotype.Component;
 

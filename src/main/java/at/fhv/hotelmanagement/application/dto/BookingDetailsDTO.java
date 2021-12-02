@@ -1,8 +1,8 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -75,5 +75,22 @@ public final class BookingDetailsDTO {
 
             return this.instance;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BookingDetailsDTO that = (BookingDetailsDTO) o;
+        return Objects.equals(this.selectedCategoriesRoomCount, that.selectedCategoriesRoomCount) && Objects.equals(this.guest, that.guest) && Objects.equals(this.cardHolderName, that.cardHolderName) && Objects.equals(this.cardNumber, that.cardNumber) && Objects.equals(this.cardValidThru, that.cardValidThru) && Objects.equals(this.cardCvc, that.cardCvc) && Objects.equals(this.paymentType, that.paymentType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.selectedCategoriesRoomCount, this.guest, this.cardHolderName, this.cardNumber, this.cardValidThru, this.cardCvc, this.paymentType);
     }
 }

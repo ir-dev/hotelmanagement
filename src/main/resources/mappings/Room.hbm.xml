@@ -2,27 +2,27 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.Room" table="room" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.category.room.Room" table="room" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="roomNumber" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
+        <component name="roomNumber" class="at.fhv.hotelmanagement.domain.model.category.room.RoomNumber">
             <property name="number" column="room_number" type="java.lang.String" unique="true" />
         </component>
 
         <property name="roomState">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.RoomState</param>
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.category.room.RoomState</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
 
         <set name="roomOccupancies" table="roomOccupancies" cascade="all" >
             <key column="room_id"></key>
-            <one-to-many class="at.fhv.hotelmanagement.domain.model.RoomOccupancy"/>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.category.room.RoomOccupancy"/>
         </set>
 
     </class>

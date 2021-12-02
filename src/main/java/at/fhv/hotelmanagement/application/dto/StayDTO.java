@@ -1,13 +1,9 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.BookingNo;
-import at.fhv.hotelmanagement.domain.model.Stay;
-import at.fhv.hotelmanagement.domain.model.StayId;
-import at.fhv.hotelmanagement.domain.model.enums.StayStatus;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 public class StayDTO {
     private String stayId;
@@ -73,5 +69,20 @@ public class StayDTO {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        StayDTO stayDTO = (StayDTO) o;
+        return Objects.equals(this.stayId, stayDTO.stayId) && Objects.equals(this.stayStatus, stayDTO.stayStatus) && Objects.equals(this.bookingNo, stayDTO.bookingNo) && Objects.equals(this.checkedInAt, stayDTO.checkedInAt) && Objects.equals(this.checkedOutAt, stayDTO.checkedOutAt);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.stayId, this.stayStatus, this.bookingNo, this.checkedInAt, this.checkedOutAt);
+    }
 }
