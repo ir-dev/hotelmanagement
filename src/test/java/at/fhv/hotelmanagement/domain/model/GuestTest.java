@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.enums.Country;
 import at.fhv.hotelmanagement.domain.model.enums.Salutation;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public class GuestTest {
+public class GuestTest extends AbstractTest {
     @Test
     void given_guestdetails_when_createguest_then_detailsequals() {
         //given
@@ -17,7 +18,7 @@ public class GuestTest {
         Organization organization = new Organization("FHV", "123144dsl");
         String firstName = ("Anna");
         String lastName = ("Bauer");
-        LocalDate birthday = LocalDate.of(1983, 3, 15);
+        LocalDate birthday = getContextLocalDate().minusYears(18L);
         Address address = new Address("Musterstraße 5", "6900", "Bregenz", String.valueOf(Country.AT));
         String specialNotes = ("Frühstück aufs Zimmer");
 

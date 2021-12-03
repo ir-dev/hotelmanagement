@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +12,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BookingFactoryTest {
+public class BookingFactoryTest extends AbstractTest {
     @Test
     void given_bookingdetails_when_createbookingfromfactory_then_detailsequals() throws CreateBookingException, AlreadyExistsException {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = LocalDate.now();
-        LocalDate departureDate = LocalDate.now().plusDays(1);
-        LocalTime arrivalTime = LocalTime.now();
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(1);
+        LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 4;
 
         Category category = new Category(new CategoryId("1"), "Honeymoon Suite DZ", "", 2);
@@ -31,12 +32,12 @@ public class BookingFactoryTest {
         GuestId guestId = new GuestId("1");
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", "CASH");
 
-        LocalDate arrivalDate1 = arrivalDate.minusDays(1);
+        LocalDate arrivalDate1 = arrivalDate.minusDays(1L);
         LocalDate arrivalDate2 = arrivalDate;
-        LocalDate arrivalDate3 = arrivalDate.plusDays(1);
+        LocalDate arrivalDate3 = arrivalDate.plusDays(1L);
         LocalDate departureDate1 = arrivalDate;
-        LocalDate departureDate2 = arrivalDate.plusDays(1);
-        LocalDate departureDate3 = arrivalDate.plusDays(2);
+        LocalDate departureDate2 = arrivalDate.plusDays(1L);
+        LocalDate departureDate3 = arrivalDate.plusDays(2L);
 
         Integer numberOfPersons1 = 0;
         Integer numberOfPersons2 = 1;

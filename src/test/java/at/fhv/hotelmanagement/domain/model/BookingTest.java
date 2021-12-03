@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.enums.BookingState;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class BookingTest {
+public class BookingTest extends AbstractTest {
     @Test
     void given_bookingdetails_when_createbooking_then_detailsequals() {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = LocalDate.now();
-        LocalDate departureDate = LocalDate.now().plusDays(1);
-        LocalTime arrivalTime = LocalTime.now();
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(1);
+        LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 5;
         Map<String, Integer> selectedCategoriesRoomCount = new HashMap<>();
         selectedCategoriesRoomCount.put("Honeymoon Suite DZ", 2);
@@ -40,11 +41,8 @@ public class BookingTest {
         assertEquals(booking.getGuestId(), guestId);
         assertEquals(booking.getPaymentInformation(), paymentInformation);
 
-//        booking.changeState(BookingState.CONFIRMED);
-//        assertEquals(booking.getBookingState(), BookingState.CONFIRMED);
-//        assertThrows(IllegalStateException.class, booking::close);
-//        booking.changeState(BookingState.PENDING);
         booking.close();
         assertEquals(booking.getBookingState(), BookingState.CLOSED);
+        assertThrows(IllegalStateException.class, booking::close);
     }
 }

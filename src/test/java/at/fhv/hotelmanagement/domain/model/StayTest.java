@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.enums.StayStatus;
 import org.junit.jupiter.api.Test;
 
@@ -12,17 +13,16 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StayTest {
+class StayTest extends AbstractTest {
     @Test
-    void given_staydetails_when_createstay_then_detailsequals() {
+    void given_staydetails_when_createstaywithbooking_then_detailsequals() {
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
         StayStatus stayStatus = StayStatus.CHECKED_IN;
-//        LocalDateTime checkedInAt = LocalDateTime.now();
-        LocalDateTime checkedOutAt = null;
-        LocalDate arrivalDate = LocalDate.now();
-        LocalDate departureDate = LocalDate.now().plusDays(1);
-        LocalTime arrivalTime = LocalTime.now();
+        LocalDateTime checkedInAt = getContextLocalDateTime();
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(1L);
+        LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 5;
         Map<String, Integer> selectedCategoriesRoomCount = new HashMap<>();
         selectedCategoriesRoomCount.put("Honeymoon Suite DZ", 2);
@@ -36,7 +36,7 @@ class StayTest {
         assertEquals(stay.getStayId(), stayId);
         assertEquals(stay.getBookingNo(), Optional.of(bookingNo));
         assertEquals(stay.getStayStatus(), stayStatus);
-//        assertEquals(stay.getCheckedInAt(), checkedInAt);
+        assertEquals(stay.getCheckedInAt(), checkedInAt);
         assertEquals(stay.getCheckedOutAt(), Optional.empty());
         assertEquals(stay.getArrivalDate(), arrivalDate);
         assertEquals(stay.getDepartureDate(), departureDate);

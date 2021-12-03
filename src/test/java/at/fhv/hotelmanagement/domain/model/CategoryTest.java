@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CategoryTest {
+public class CategoryTest extends AbstractTest {
     @Test
     void given_categorydetails_when_createcategory_then_detailsequals() {
         //given
@@ -18,8 +19,14 @@ public class CategoryTest {
         String description = ("description");
         Integer maxPersons = 2;
         Set<Room> rooms = new HashSet<>();
-        Room room = new Room(new RoomNumber("100"), RoomState.AVAILABLE);
+        RoomNumber roomNumber = new RoomNumber("1ßß");
+        Room room = new Room(roomNumber, RoomState.AVAILABLE);
         rooms.add(room);
+        Set<RoomNumber> roomNumbers = new HashSet<>();
+
+        LocalDate fromdate = getContextLocalDate();
+        LocalDate todate1 = getContextLocalDate().plusDays(1L);
+        LocalDate todate2 = getContextLocalDate().plusDays(2L);
 
         //when
         Category category = new Category(categoryId, name, description, maxPersons);
@@ -34,11 +41,13 @@ public class CategoryTest {
 
         assertThrows(AlreadyExistsException.class, () -> category.createRoom(room));
 
-        assertEquals(category.getAvailableRoomsCount(LocalDate.of(2021, 11, 11), LocalDate.of(2021, 11, 14)), 1);
+        assertEquals(category.getAvailableRoomsCount(fromdate, todate2), 1);
 
-        room.occupied(LocalDate.of(2021, 11, 11), LocalDate.of(2021, 11, 12));
-        assertEquals(category.getAvailableRoomsCount(LocalDate.of(2021, 11, 11), LocalDate.of(2021, 11, 14)), 0);
+        room.occupied(fromdate, todate1);
+        assertEquals(category.getAvailableRoomsCount(fromdate, todate2), 0);
 
-//        assertTrue(category.getRooms().containsAll(rooms));
+        assertEquals(category.getAvailableRoomNumbers(fromdate, todate1), roomNumbers);
+        roomNumbers.add(roomNumber);
+        assertEquals(category.getAvailableRoomNumbers(todate1.plusDays(1L), todate2), roomNumbers);
     }
 }
