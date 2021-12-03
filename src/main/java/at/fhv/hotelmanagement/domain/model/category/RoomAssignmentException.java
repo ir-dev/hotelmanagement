@@ -1,4 +1,4 @@
-package at.fhv.hotelmanagement.domain.model.category.room;
+package at.fhv.hotelmanagement.domain.model.category;
 
 public class RoomAssignmentException extends Exception {
     public RoomAssignmentException (String categoryName, String message) {

@@ -1,10 +1,5 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
-import at.fhv.hotelmanagement.domain.model.category.room.AlreadyExistsException;
-import at.fhv.hotelmanagement.domain.model.category.room.InsufficientRoomsException;
-import at.fhv.hotelmanagement.domain.model.category.room.Room;
-import at.fhv.hotelmanagement.domain.model.category.room.RoomNumber;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;

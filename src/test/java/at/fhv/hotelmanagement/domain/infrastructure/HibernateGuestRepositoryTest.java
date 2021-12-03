@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.category.room.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.category.AlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.guest.Country;
 import at.fhv.hotelmanagement.domain.model.guest.Salutation;
 import at.fhv.hotelmanagement.domain.model.guest.Address;

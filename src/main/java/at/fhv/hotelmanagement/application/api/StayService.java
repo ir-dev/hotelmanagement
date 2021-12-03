@@ -3,7 +3,7 @@ package at.fhv.hotelmanagement.application.api;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
-import at.fhv.hotelmanagement.domain.model.category.room.RoomAssignmentException;
+import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,5 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
-import at.fhv.hotelmanagement.domain.model.category.room.InsufficientRoomsException;
-import at.fhv.hotelmanagement.domain.model.category.room.RoomAssignmentException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

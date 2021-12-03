@@ -21,7 +21,7 @@
             <key>
                 <column name="category_id" />
             </key>
-            <one-to-many class="at.fhv.hotelmanagement.domain.model.category.room.Room" />
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.category.Room" />
         </set>
 
     </class>

@@ -1,4 +1,4 @@
-package at.fhv.hotelmanagement.domain.model.category.room;
+package at.fhv.hotelmanagement.domain.model.category;
 
 public class AlreadyExistsException extends Exception {
     public AlreadyExistsException (Class<?> clazz) {

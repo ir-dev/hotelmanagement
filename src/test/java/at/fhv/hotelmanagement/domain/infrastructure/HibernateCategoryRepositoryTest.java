@@ -1,12 +1,12 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.category.room.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.category.AlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
-import at.fhv.hotelmanagement.domain.model.category.room.Room;
-import at.fhv.hotelmanagement.domain.model.category.room.RoomNumber;
-import at.fhv.hotelmanagement.domain.model.category.room.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.Room;
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
