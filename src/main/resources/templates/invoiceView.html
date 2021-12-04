@@ -93,7 +93,6 @@
                                                 </tr>
                                             </tbody>
 
-
                                         </table>
                                     </div>
                                     <div class="row">
@@ -127,15 +126,11 @@
                                         </div>
                                     </div>
                                 </div>
-<!--                                <div class="card-footer bg-white">-->
-<!--                                    <p class="mb-0">2983 Glenview Drive Corpus Christi, TX 78476</p>-->
-<!--                                </div>-->
                             </div>
                             <div class="form-group">
                                 <p class="text-right">
                                     <a th:href="@{/stays}" class="btn btn-space btn-secondary">Cancel</a>
-<!--                                    th:href="@{/checkout(invoiceId=${invoice.})}"-->
-                                    <a type="submit" class="btn btn-space btn-primary">Confirm</a>
+                                    <a href="javascript:window.location.href=window.location.href.toString() + '&confirmed=true'" type="submit" class="btn btn-space btn-primary">Confirm</a>
                                 </p>
                             </div>
                         </div>

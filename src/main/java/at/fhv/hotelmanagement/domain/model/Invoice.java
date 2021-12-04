@@ -1,9 +1,9 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import java.math.BigInteger;
+import at.fhv.hotelmanagement.domain.model.enums.InvoiceState;
+
 import java.time.LocalDate;
 import java.util.Set;
-
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Invoice {
@@ -11,15 +11,16 @@ public class Invoice {
     private Long id;
     private InvoiceId invoiceId;
     private Integer invoiceNo;
+    private InvoiceState invoiceState;
     private LocalDate createdDate;
     private LocalDate dueDate;
-    private LocalDate paidDate;
     private Integer nights;
     private Integer subTotal;
     private Double grandTotal;
     private Double tax;
     private Set<InvoiceLine> lineItems;
 
+    private static Integer counter = 10000;
 
     // required for hibernate
     protected Invoice() {}
@@ -29,6 +30,7 @@ public class Invoice {
         this.createdDate = arrivalDate;
         this.dueDate = departureDate;
         this.nights = (int) DAYS.between(this.createdDate, this.dueDate);
+        this.invoiceState = InvoiceState.PENDING;
     }
 
     //According to Mr. Thaler this method is still like a 'setter' -> needs to be adjusted
@@ -36,6 +38,16 @@ public class Invoice {
         this.lineItems.add(invoiceLine);
         calculateSum();
     }
+
+    public void close() {
+        if (this.invoiceState == InvoiceState.PENDING) {
+            this.invoiceState = InvoiceState.CONFIRMED;
+            this.invoiceNo = counter++;
+        } else {
+            throw new IllegalStateException("Only invoice with PENDING status can be closed.");
+        }
+    }
+
 
     private void calculateSum() {
         int sum = 0;
@@ -56,16 +68,16 @@ public class Invoice {
         return this.invoiceNo;
     }
 
+    public InvoiceState getInvoiceState() {
+        return this.invoiceState;
+    }
+
     public LocalDate getCreatedDate() {
         return this.createdDate;
     }
 
     public LocalDate getDueDate() {
         return this.dueDate;
-    }
-
-    public LocalDate getPaidDate() {
-        return this.paidDate;
     }
 
     public Integer getNights() {

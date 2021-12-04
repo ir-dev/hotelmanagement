@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.enums.InvoiceState;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
@@ -161,10 +162,24 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
+    public Optional<InvoiceDTO> viewChargeStay(String stayId) {
+        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
+        Stay stay = stayOpt.orElseThrow();
+        Invoice invoice = stay.getInvoice();
+
+        if(invoice.getInvoiceState().equals(InvoiceState.PENDING)){
+            this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), false);
+        }
+
+        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
+    }
+
+    @Transactional
+    @Override
     public Optional<InvoiceDTO> chargeStay(String stayId) {
         Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
         Stay stay = stayOpt.orElseThrow();
-        this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll());
+        this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), true);
 
         return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
     }

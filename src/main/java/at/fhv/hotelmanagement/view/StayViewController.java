@@ -12,7 +12,6 @@ import at.fhv.hotelmanagement.domain.model.CreateStayException;
 import at.fhv.hotelmanagement.application.impl.InsufficientRoomsException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -173,16 +172,30 @@ public class StayViewController {
     @GetMapping(TERMINATE_STAY_URL)
     public ModelAndView terminateStay(
             @RequestParam("stayId") String stayId,
+            @RequestParam(value="confirmed", required = false) boolean viewFinal,
             Model model) {
+
         final Optional<StayDTO> stayOpt = this.stayService.stayByStayId(stayId);
         if (stayOpt.isEmpty()) {
             return redirectError("Stay with id.: " + stayId + " not found");
         }
 
-       final Optional<InvoiceDTO> invoiceOpt = this.stayService.chargeStay(stayId);
+        Optional<InvoiceDTO> invoiceDtoOpt;
 
-        model.addAttribute("invoice", invoiceOpt.get());
-        return new ModelAndView(INVOICE_VIEW);
+        if(viewFinal) {
+            invoiceDtoOpt = this.stayService.chargeStay(stayId);
+            model.addAttribute("invoice", invoiceDtoOpt.get());
+            return new ModelAndView(INVOICE_VIEW_FINAL);
+        }else {
+            invoiceDtoOpt = this.stayService.viewChargeStay(stayId);
+            model.addAttribute("invoice", invoiceDtoOpt.get());
+
+            if(invoiceDtoOpt.get().invoiceState().equals("CONFIRMED")) {
+                return new ModelAndView(INVOICE_VIEW_FINAL);
+            }else {
+                return new ModelAndView(INVOICE_VIEW);
+            }
+        }
     }
 
 }

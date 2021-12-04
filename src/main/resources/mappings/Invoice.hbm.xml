@@ -19,9 +19,14 @@
 
         <property name="nights" column="nights" type="java.lang.Integer" />
 
-        <property name="invoiceNo" column="invoiceNo" type="java.lang.Integer" />
+        <property name="invoiceState">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.InvoiceState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
 
-        <property name="paidDate" column="paid_date" type="java.time.LocalDate" />
+        <property name="invoiceNo" column="invoiceNo" type="java.lang.Integer" />
 
         <property name="subTotal" column="subTotal" type="java.lang.Integer" />
 
@@ -30,7 +35,7 @@
         <property name="grandTotal" column="grandTotal" type="java.lang.Double" />
 
         <set name="lineItems" table="lineItems" cascade="all" >
-            <key column="invoice"></key>
+            <key column="invoice_id"></key>
             <one-to-many class="at.fhv.hotelmanagement.domain.model.InvoiceLine"/>
         </set>
 

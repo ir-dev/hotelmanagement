@@ -8,9 +8,9 @@ import java.util.Set;
 
 public class InvoiceDTO {
     private Integer invoiceNo;
+    private String invoiceState;
     private LocalDate createdDate;
     private LocalDate dueDate;
-    private LocalDate paidDate;
     private Integer nights;
     private Integer subTotal;
     private Double grandTotal;
@@ -18,11 +18,13 @@ public class InvoiceDTO {
     private Set<InvoiceLineDTO> lineItems;
     private GuestDTO guest;
 
-    //private Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount;
-
 
     public Integer invoiceNo() {
         return this.invoiceNo;
+    }
+
+    public String invoiceState() {
+        return this.invoiceState;
     }
 
     public LocalDate createdDate() {
@@ -35,10 +37,6 @@ public class InvoiceDTO {
 
     public LocalDate dueDate() {
         return this.dueDate;
-    }
-
-    public LocalDate paidDate() {
-        return this.paidDate;
     }
 
     public Integer nights() {
@@ -78,6 +76,7 @@ public class InvoiceDTO {
 
         public Builder withInvoiceEntity(Invoice invoice) {
             this.instance.invoiceNo = invoice.getInvoiceNo();
+            this.instance.invoiceState = String.valueOf(invoice.getInvoiceState());
             this.instance.createdDate = invoice.getCreatedDate();
             this.instance.dueDate = invoice.getDueDate();
             this.instance.nights = invoice.getNights();

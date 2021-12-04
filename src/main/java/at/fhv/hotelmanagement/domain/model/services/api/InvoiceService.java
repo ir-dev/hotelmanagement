@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface InvoiceService {
 
-    void composeInvoice(Stay stay, List<Category> categories);
+    void composeInvoice(Stay stay, List<Category> categories, boolean transactional);
 }

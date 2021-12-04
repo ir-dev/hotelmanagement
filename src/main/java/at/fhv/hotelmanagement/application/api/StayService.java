@@ -18,5 +18,7 @@ public interface StayService {
 
     void createStayForBooking(String bookingNo, StayForm form) throws InsufficientRoomsException, CreateStayException, CreateGuestException;
 
+    Optional<InvoiceDTO> viewChargeStay(String stayId);
+
     Optional<InvoiceDTO> chargeStay(String stayId);
 }
