@@ -62,7 +62,7 @@ public class TestData implements ApplicationRunner {
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
         Address ad1 = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         Address ad2 = new Address("Musterstr. 123", "12345", "München", String.valueOf(Country.DE));
-        Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Hüseyin", "Arziman", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
+        Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Franz", "Beckenbauer", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
         Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MISTER),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
         this.guestRepository.store(g1);
         this.guestRepository.store(g2);
@@ -72,12 +72,12 @@ public class TestData implements ApplicationRunner {
         categoryRooms1.put(c2, 2);
         Map<Category, Integer> categoryRooms2 = new HashMap<>();
         categoryRooms2.put(c2, 1);
-        PaymentInformation paymentInformation1 = new PaymentInformation("Hüseyin Arziman", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
+        PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
-        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
-        Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,4),
+                LocalDate.of(2021,12,5), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
+        Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,4),
+                LocalDate.of(2021,12,7), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
     }

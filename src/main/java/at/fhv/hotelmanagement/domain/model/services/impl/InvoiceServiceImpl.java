@@ -11,13 +11,39 @@ import java.util.Map;
 @Component
 public class InvoiceServiceImpl implements InvoiceService {
 
+    private List<Category> categories;
+
     @Override
     public void composeInvoice(Stay stay, List<Category> categories) {
-        Map<String, Integer> selectedCategoriesRoomCount = stay.getSelectedCategoriesRoomCount();
         Invoice invoice = stay.getInvoice();
+        this.categories = categories;
 
+        //Add every claimed product to the invoice
+        Map<String, Integer> selectedCategoriesRoomCount = stay.getSelectedCategoriesRoomCount();
+        for(Map.Entry<String, Integer> scrc : selectedCategoriesRoomCount.entrySet()) {
+            if(scrc.getValue() > 0) {
+                invoice.addLineItem(new InvoiceLine(scrc.getKey(), fetchCategoryDesc(scrc.getKey()),scrc.getValue(), fetchCategoryPrice(scrc.getKey())));
+            }
+        }
 
+    }
 
+    private Integer fetchCategoryPrice(String product) {
+        for(Category c: this.categories) {
+            if(c.getName().equals(product)) {
+                return c.getPrice().getHalfBoard();
+            }
+        }
+        return null;
+    }
+
+    private String fetchCategoryDesc(String product) {
+        for(Category c: this.categories) {
+            if(c.getName().equals(product)) {
+                return c.getDescription();
+            }
+        }
+        return null;
     }
 
 }

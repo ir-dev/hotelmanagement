@@ -12,6 +12,7 @@ import at.fhv.hotelmanagement.domain.model.CreateStayException;
 import at.fhv.hotelmanagement.application.impl.InsufficientRoomsException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,8 @@ public class StayViewController {
     private static final String ALL_STAYS_VIEW = "allStays";
     private static final String CREATE_STAY_VIEW = "createStay";
     private static final String STAY_VIEW = "stay";
-    private static final String INVOICE_VIEW = "invoice";
+    private static final String INVOICE_VIEW = "invoiceView";
+    private static final String INVOICE_VIEW_FINAL = "invoiceFinal";
 
     // create stay steps
     private static final String CREATE_STAY_STAY_DETAILS_STEP = "enterStayDetails";
@@ -182,6 +184,5 @@ public class StayViewController {
         model.addAttribute("invoice", invoiceOpt.get());
         return new ModelAndView(INVOICE_VIEW);
     }
-
 
 }

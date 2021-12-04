@@ -1,10 +1,7 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.ChargedCategoryDTO;
-import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
-import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.domain.model.*;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
 import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
@@ -166,40 +163,35 @@ public class StayServiceImpl implements StayService {
     @Override
     public Optional<InvoiceDTO> chargeStay(String stayId) {
         Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
-        Stay stay = stayOpt.get();
+        Stay stay = stayOpt.orElseThrow();
+        this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll());
 
-        return Optional.of(buildInvoiceDto(stay));
+        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
     }
 
-    private InvoiceDTO buildInvoiceDto(Stay stay) {
-        Invoice invoice = stay.getInvoice();
+
+    private InvoiceDTO buildInvoiceDto(Invoice invoice, GuestId guestId) {
         return InvoiceDTO.builder()
-                .withInvoiceId(invoice.getInvoiceId())
-                .withContractDate(invoice.getContractDate())
-                .withSelectedCategoriesRoomCount(buildMapChargedCategoryDto(stay.getSelectedCategoriesRoomCount()))
-                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestByStay(stay).get()).build())
+                .withInvoiceEntity(invoice)
+                .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestById(guestId).get()).build())
                 .build();
     }
 
-    private Optional<Guest> guestByStay(Stay stay) {
-        Optional<Guest> guestOpt = this.guestRepository.findById(stay.getGuestId());
+    private Set<InvoiceLineDTO> buildLineItemsDto(Set<InvoiceLine> lineItems) {
+        Set<InvoiceLineDTO> lineItemsDto = new HashSet<>();
+        for(InvoiceLine line : lineItems) {
+           lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(line).build());
+        }
+        return lineItemsDto;
+    }
+
+    private Optional<Guest> guestById(GuestId guestId) {
+        Optional<Guest> guestOpt = this.guestRepository.findById(guestId);
         if (guestOpt.isEmpty()) {
             return Optional.empty();
         }
         return guestOpt;
     }
 
-    private Map<ChargedCategoryDTO, Integer> buildMapChargedCategoryDto(Map<String, Integer> selectedCategoryNamesRoomCount) {
-        Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
-            selectedCategoriesRoomCount.put(buildChargedCategoryDto(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow()), selectedCategoryNameRoomCount.getValue());
-        }
-        return selectedCategoriesRoomCount;
-    }
-
-    private ChargedCategoryDTO buildChargedCategoryDto(Category category) {
-        return ChargedCategoryDTO.builder()
-                .withCategory(category)
-                .build();
-    }
 }

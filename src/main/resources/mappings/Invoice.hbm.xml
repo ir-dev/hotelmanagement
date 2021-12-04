@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.Invoice" table="invoice" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <component name="invoiceId" class="at.fhv.hotelmanagement.domain.model.InvoiceId">
+            <property name="id" column="invoice_id" type="java.lang.String" unique="true" />
+        </component>
+
+        <property name="createdDate" column="created_date" type="java.time.LocalDate" />
+
+        <property name="dueDate" column="due_date" type="java.time.LocalDate" />
+
+        <property name="nights" column="nights" type="java.lang.Integer" />
+
+        <property name="invoiceNo" column="invoiceNo" type="java.lang.Integer" />
+
+        <property name="paidDate" column="paid_date" type="java.time.LocalDate" />
+
+        <property name="subTotal" column="subTotal" type="java.lang.Integer" />
+
+        <property name="tax" column="tax" type="java.lang.Double" />
+
+        <property name="grandTotal" column="grandTotal" type="java.lang.Double" />
+
+        <set name="lineItems" table="lineItems" cascade="all" >
+            <key column="invoice"></key>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.InvoiceLine"/>
+        </set>
+
+    </class>
+</hibernate-mapping>

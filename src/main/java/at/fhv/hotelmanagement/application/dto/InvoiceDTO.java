@@ -3,51 +3,71 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.*;
 
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 public class InvoiceDTO {
-    private String invoiceId;
-    private Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount;
-    private LocalDate contractDate;
+    private Integer invoiceNo;
+    private LocalDate createdDate;
+    private LocalDate dueDate;
+    private LocalDate paidDate;
+    private Integer nights;
+    private Integer subTotal;
+    private Double grandTotal;
+    private Double tax;
+    private Set<InvoiceLineDTO> lineItems;
     private GuestDTO guest;
 
-    public static InvoiceDTO.Builder builder() {
-        return new InvoiceDTO.Builder();
+    //private Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount;
+
+
+    public Integer invoiceNo() {
+        return this.invoiceNo;
     }
 
-    public String invoiceId() {
-        return this.invoiceId;
+    public LocalDate createdDate() {
+        return this.createdDate;
     }
 
-    public Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount() {
-        return this.selectedCategoriesRoomCount;
+    public LocalDate currentDate() {
+        return LocalDate.now();
     }
 
-    public LocalDate contractDate() {
-        return this.contractDate;
+    public LocalDate dueDate() {
+        return this.dueDate;
+    }
+
+    public LocalDate paidDate() {
+        return this.paidDate;
+    }
+
+    public Integer nights() {
+        return this.nights;
+    }
+
+    public Integer subTotal() {
+        return this.subTotal;
+    }
+
+    public Double grandTotal() {
+        return this.grandTotal;
+    }
+
+    public Double tax() {
+        return this.tax;
+    }
+
+    public Set<InvoiceLineDTO> lineItems() {
+        return this.lineItems;
     }
 
     public GuestDTO guest() {
         return this.guest;
     }
 
-    public Double subtotal() {
-        double subtotal = 0;
-        for(Map.Entry<ChargedCategoryDTO, Integer> selectedCategory : this.selectedCategoriesRoomCount.entrySet()) {
-            subtotal += selectedCategory.getKey().halfBoard() * selectedCategory.getValue();
-        }
-        return subtotal;
+    public static InvoiceDTO.Builder builder() {
+        return new InvoiceDTO.Builder();
     }
-
-    public double vat() {
-        return subtotal() * 0.1;
-    }
-
-    public double total() {
-        return subtotal() + vat();
-    }
-
 
     public static class Builder {
         private InvoiceDTO instance;
@@ -56,20 +76,22 @@ public class InvoiceDTO {
             this.instance = new InvoiceDTO();
         }
 
-        public Builder withInvoiceId(InvoiceId invoiceId) {
-            this.instance.invoiceId = invoiceId.getId();
+        public Builder withInvoiceEntity(Invoice invoice) {
+            this.instance.invoiceNo = invoice.getInvoiceNo();
+            this.instance.createdDate = invoice.getCreatedDate();
+            this.instance.dueDate = invoice.getDueDate();
+            this.instance.nights = invoice.getNights();
+            this.instance.subTotal = invoice.getSubTotal();
+            this.instance.grandTotal = invoice.getGrandTotal();
+            this.instance.tax = invoice.getTax();
             return this;
         }
 
-        public Builder withSelectedCategoriesRoomCount(Map<ChargedCategoryDTO, Integer> selectedCategoriesRoomCount) {
-            this.instance.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
+        public Builder withLineItemsDTO(Set<InvoiceLineDTO> lineItems) {
+            this.instance.lineItems = lineItems;
             return this;
         }
 
-        public Builder withContractDate(LocalDate contractDate) {
-            this.instance.contractDate = contractDate;
-            return this;
-        }
 
         public Builder withGuestDTO(GuestDTO guest) {
             this.instance.guest = guest;
@@ -77,28 +99,15 @@ public class InvoiceDTO {
         }
 
         public InvoiceDTO build() {
-            Objects.requireNonNull(this.instance.invoiceId, "id must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.selectedCategoriesRoomCount, "selectedCategoriesRoomCount must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.contractDate, "contractDate must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.createdDate, "createdDate must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.subTotal, "subTotal must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.grandTotal, "grandTotal must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.tax, "tax must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.lineItems, "lineItems must be set in InvoiceDTO");
             Objects.requireNonNull(this.instance.guest, "guest must be set in InvoiceDTO");
             return this.instance;
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        InvoiceDTO that = (InvoiceDTO) o;
-        return Objects.equals(this.invoiceId, that.invoiceId) && Objects.equals(this.selectedCategoriesRoomCount, that.selectedCategoriesRoomCount) && Objects.equals(this.contractDate, that.contractDate) && Objects.equals(this.guest, that.guest);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.invoiceId, this.selectedCategoriesRoomCount, this.contractDate, this.guest);
-    }
 }
