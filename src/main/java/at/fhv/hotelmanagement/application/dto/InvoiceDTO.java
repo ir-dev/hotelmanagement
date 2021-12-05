@@ -109,5 +109,20 @@ public class InvoiceDTO {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        InvoiceDTO that = (InvoiceDTO) o;
+        return Objects.equals(this.invoiceNo, that.invoiceNo) && Objects.equals(this.invoiceState, that.invoiceState) && Objects.equals(this.createdDate, that.createdDate) && Objects.equals(this.dueDate, that.dueDate) && Objects.equals(this.nights, that.nights) && Objects.equals(this.subTotal, that.subTotal) && Objects.equals(this.grandTotal, that.grandTotal) && Objects.equals(this.tax, that.tax) && Objects.equals(this.lineItems, that.lineItems) && Objects.equals(this.guest, that.guest);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.invoiceNo, this.invoiceState, this.createdDate, this.dueDate, this.nights, this.subTotal, this.grandTotal, this.tax, this.lineItems, this.guest);
+    }
 }

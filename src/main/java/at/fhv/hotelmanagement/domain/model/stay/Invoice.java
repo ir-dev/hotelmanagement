@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model.stay;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -23,12 +24,13 @@ public class Invoice {
     // required for hibernate
     protected Invoice() {}
 
-    protected Invoice(InvoiceId invoiceId, LocalDate arrivalDate,LocalDate departureDate) {
+    public Invoice(InvoiceId invoiceId, LocalDate arrivalDate,LocalDate departureDate) {
         this.invoiceId = invoiceId;
         this.createdDate = arrivalDate;
         this.dueDate = departureDate;
         this.nights = (int) DAYS.between(this.createdDate, this.dueDate);
         this.invoiceState = InvoiceState.PENDING;
+        this.lineItems = new HashSet<>();
     }
 
     //According to Mr. Thaler this method is still like a 'setter' -> needs to be adjusted
@@ -100,6 +102,6 @@ public class Invoice {
     }
 
     public boolean isPending() {
-      return (invoiceState.equals(InvoiceState.PENDING));
+      return (this.invoiceState.equals(InvoiceState.PENDING));
     }
 }
