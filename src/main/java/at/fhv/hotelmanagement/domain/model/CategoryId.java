@@ -2,18 +2,19 @@ package at.fhv.hotelmanagement.domain.model;
 
 import java.util.Objects;
 
-public class RoomNumber {
-    private String number;
+public class CategoryId {
+    private String id;
 
     // required for hibernate
-    private RoomNumber() {}
-
-    public RoomNumber(String number) {
-        this.number = number;
+    private CategoryId() {
     }
 
-    public String getNumber() {
-        return this.number;
+    public CategoryId(String categoryId) {
+        this.id = categoryId;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     @Override
@@ -24,12 +25,12 @@ public class RoomNumber {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RoomNumber that = (RoomNumber) o;
-        return Objects.equals(this.number, that.number);
+        CategoryId that = (CategoryId) o;
+        return Objects.equals(this.id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.number);
+        return Objects.hash(this.id);
     }
 }

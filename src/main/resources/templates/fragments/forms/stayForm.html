@@ -1,5 +1,5 @@
 <!--suppress ALL -->
-<form th:fragment="enterStayDetails" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterRoomCategories')}" th:object="${form}"
+<form th:fragment="enterStayDetails" th:action="@{'/checkin'(__('step=\'enterRoomCategories\'')__,__(${bookingNo}!=null ? ',bookingNo='+${bookingNo} : '')__)}" th:object="${form}"
       method="post">
 
     <!-- required for nights calculation -->
@@ -27,7 +27,7 @@
     </div>
 </form>
 
-<form th:fragment="enterRoomCategories" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterGuestDetails')}" th:object="${form}"
+<form th:fragment="enterRoomCategories" th:action="@{'/checkin'(__('step=\'enterGuestDetails\'')__,__(${bookingNo}!=null ? ',bookingNo='+${bookingNo} : '')__)}" th:object="${form}"
       method="post">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{numberOfPersons}">
@@ -90,7 +90,7 @@
     </div>
 </form>
 
-<form th:fragment="enterGuestDetails" th:action="@{/checkin(bookingNo=${bookingNo}, step='enterPayment')}" th:object="${form}"
+<form th:fragment="enterGuestDetails" th:action="@{'/checkin'(__('step=\'enterPayment\'')__,__(${bookingNo}!=null ? ',bookingNo='+${bookingNo} : '')__)}" th:object="${form}"
       method="post">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{numberOfPersons}">
@@ -160,7 +160,7 @@
     </div>
 </form>
 
-<form th:fragment="enterPayment" th:action="@{/checkin(bookingNo=${bookingNo}, step='confirmSummary')}" th:object="${form}"
+<form th:fragment="enterPayment" th:action="@{'/checkin'(__('step=\'confirmSummary\'')__,__(${bookingNo}!=null ? ',bookingNo='+${bookingNo} : '')__)}" th:object="${form}"
       method="post">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{numberOfPersons}">
@@ -213,7 +213,7 @@
     </div>
 </form>
 
-<form th:fragment="confirmSummary" th:action="@{/checkin(bookingNo=${bookingNo}, step='store')}" th:object="${form}"
+<form th:fragment="confirmSummary" th:action="@{'/checkin'(__('step=\'store\'')__,__(${bookingNo}!=null ? ',bookingNo='+${bookingNo} : '')__)}" th:object="${form}"
       method="post">
     <input type="hidden" th:field="*{departureDate}">
     <input type="hidden" th:field="*{numberOfPersons}">

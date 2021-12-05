@@ -17,6 +17,11 @@ public class HibernateCategoryRepository implements CategoryRepository {
     private EntityManager em;
 
     @Override
+    public CategoryId nextIdentity() {
+        return new CategoryId(java.util.UUID.randomUUID().toString().toUpperCase());
+    }
+
+    @Override
     public List<Category> findAll() {
         TypedQuery<Category> query = this.em.createQuery("FROM Category c", Category.class);
         return query.getResultList();
@@ -31,9 +36,9 @@ public class HibernateCategoryRepository implements CategoryRepository {
 
     @Override
     public List<Room> findCategoryRoomsByState(String categoryName, RoomState state) {
-        TypedQuery<Room> query = this.em.createQuery("SELECT r FROM Room r INNER JOIN Category c ON category_id = c.id WHERE c.name = :categoryName AND room_state = :state", Room.class);
+        TypedQuery<Room> query = this.em.createQuery("SELECT cr FROM Category c JOIN c.rooms cr WHERE c.name = :categoryName AND cr.roomState = :state", Room.class);
         query.setParameter("categoryName", categoryName);
-        query.setParameter("state", String.valueOf(state));
+        query.setParameter("state", state);
         return query.getResultList();
     }
 

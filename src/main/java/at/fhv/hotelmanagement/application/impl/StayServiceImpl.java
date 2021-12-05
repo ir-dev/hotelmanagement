@@ -1,11 +1,9 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.*;
+import at.fhv.hotelmanagement.application.dto.StayDTO;
 import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.InvoiceState;
 import at.fhv.hotelmanagement.domain.model.enums.RoomState;
-import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -34,7 +32,7 @@ public class StayServiceImpl implements StayService {
     GuestRepository guestRepository;
 
     @Autowired
-    InvoiceService invoiceService;
+    CategoryService categoryService;
 
     @Transactional(readOnly = true)
     @Override
@@ -67,13 +65,7 @@ public class StayServiceImpl implements StayService {
                 .build();
     }
 
-    @Transactional
-    @Override
-    public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, InsufficientRoomsException {
-        BookingNo bookingNo = new BookingNo(bookingNoStr);
-        Booking booking = this.bookingRepository.findByNo(bookingNo).orElseThrow();
-
-        // create booking value objects
+    private Guest createGuestFromStayForm(StayForm stayForm) throws CreateGuestException {
         Organization organization = null;
         if (stayForm.getIsOrganization()) {
             organization = new Organization(stayForm.getOrganizationName(), stayForm.getOrganizationAgreementCode());
@@ -84,23 +76,7 @@ public class StayServiceImpl implements StayService {
                 stayForm.getCity(),
                 stayForm.getCountry()
         );
-        PaymentInformation paymentInformation = new PaymentInformation(
-                stayForm.getCardHolderName(),
-                stayForm.getCardNumber(),
-                stayForm.getCardValidThru(),
-                stayForm.getCardCvc(),
-                stayForm.getPaymentType()
-        );
 
-        Map<String, Integer> selectedCategoryNamesRoomCount = stayForm.getSelectedCategoriesRoomCount();
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
-        }
-        LocalDate arrivalDate = LocalDate.now();
-        LocalTime arrivalTime = LocalTime.now();
-        LocalDate departureDate = stayForm.getDepartureDate();
-        // create guest and booking entity
         Guest guest = GuestFactory.createGuest(
                 this.guestRepository.nextIdentity(),
                 organization,
@@ -111,6 +87,26 @@ public class StayServiceImpl implements StayService {
                 address,
                 stayForm.getSpecialNotes()
         );
+
+        this.guestRepository.store(guest);
+
+        return guest;
+    }
+
+    @Transactional
+    @Override
+    public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
+        BookingNo bookingNo = new BookingNo(bookingNoStr);
+        Booking booking = this.bookingRepository.findByNo(bookingNo).orElseThrow();
+
+        Map<String, Integer> selectedCategoryNamesRoomCount = stayForm.getSelectedCategoriesRoomCount();
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        }
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = stayForm.getDepartureDate();
+
         Stay stay = StayFactory.createStayForBooking(
                 this.stayRepository.nextIdentity(),
                 booking,
@@ -119,16 +115,21 @@ public class StayServiceImpl implements StayService {
                 departureDate,
                 stayForm.getNumberOfPersons(),
                 selectedCategoriesRoomCount,
-                guest.getGuestId(),
-                paymentInformation
+                createGuestFromStayForm(stayForm).getGuestId(),
+                new PaymentInformation(
+                        stayForm.getCardHolderName(),
+                        stayForm.getCardNumber(),
+                        stayForm.getCardValidThru(),
+                        stayForm.getCardCvc(),
+                        stayForm.getPaymentType()
+                )
         );
 
-        this.guestRepository.store(guest);
         this.stayRepository.store(stay);
 
-        // assign rooms to selected categories
-        assignRooms(
-                selectedCategoryNamesRoomCount,
+        // auto assign rooms to selected categories
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
                 arrivalDate,
                 departureDate
         );
@@ -137,30 +138,45 @@ public class StayServiceImpl implements StayService {
         booking.close();
     }
 
-    private void assignRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
-
-        for (Map.Entry<String, Integer> selectedCategory : selectedCategories.entrySet()) {
-            String selectedCategoryName = selectedCategory.getKey();
-            Integer selectedCategoryCount = selectedCategory.getValue();
-
-            List<Room> availableCategoryRooms = this.categoryRepository.findCategoryRoomsByState(selectedCategoryName, RoomState.AVAILABLE);
-
-            if (availableCategoryRooms.size() < selectedCategoryCount) {
-                throw new InsufficientRoomsException(selectedCategoryName);
-            }
-
-            Iterator<Room> iterator = availableCategoryRooms.iterator();
-
-            for (int i = 0; i < selectedCategoryCount; i++) {
-                Room room = iterator.next();
-                // change state of room to occupied for given timespan
-                room.occupied(fromDate, toDate);
-            }
+    @Transactional
+    @Override
+    public void createStayForWalkIn(StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
+        Map<String, Integer> selectedCategoryNamesRoomCount = stayForm.getSelectedCategoriesRoomCount();
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
         }
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = stayForm.getDepartureDate();
+
+        Stay stay = StayFactory.createStayForWalkIn(
+                this.stayRepository.nextIdentity(),
+                arrivalDate,
+                departureDate,
+                stayForm.getNumberOfPersons(),
+                selectedCategoriesRoomCount,
+                createGuestFromStayForm(stayForm).getGuestId(),
+                new PaymentInformation(
+                        stayForm.getCardHolderName(),
+                        stayForm.getCardNumber(),
+                        stayForm.getCardValidThru(),
+                        stayForm.getCardCvc(),
+                        stayForm.getPaymentType()
+                )
+        );
+
+        this.stayRepository.store(stay);
+
+        // auto assign rooms to selected categories
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
+                arrivalDate,
+                departureDate
+        );
     }
-
-
-    @Transactional(readOnly = true)
+  
+  
+     @Transactional(readOnly = true)
     @Override
     public Optional<InvoiceDTO> viewChargeStay(String stayId) {
         Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
@@ -208,5 +224,6 @@ public class StayServiceImpl implements StayService {
         }
         return guestOpt;
     }
-
+  
+ 
 }

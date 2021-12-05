@@ -9,7 +9,6 @@ import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -35,10 +34,16 @@ public class TestData implements ApplicationRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private StayRepository stayRepository;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Category c1 = CategoryFactory.createCategory("Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel aimed at couples and newlyweds.", 2);
-        Category c2 = CategoryFactory.createCategory("Business Casual EZ", "A casual accommodation for business guests.", 1);
+        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
+        Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1);
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
         c1.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));
@@ -54,9 +59,11 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
         Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
         c2.createRoom(room224);
+      
         room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
         room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
         c2.determinePrice(new Price(90, 120));
+
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
@@ -74,11 +81,40 @@ public class TestData implements ApplicationRunner {
         categoryRooms2.put(c2, 1);
         PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
-        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,4),
-                LocalDate.of(2021,12,5), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
-        Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,4),
-                LocalDate.of(2021,12,7), LocalTime.of(11,30), 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+      
+        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,12),
+                LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
+
+        Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
+                LocalDate.now().plusDays(5), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
+
+        Map<String, Integer> selectedCategoryNamesRoomCount = bk1.getSelectedCategoriesRoomCount();
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
+            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        }
+        Stay stay = StayFactory.createStayForBooking(
+                this.stayRepository.nextIdentity(),
+                bk2,
+                bk2.getBookingNo(),
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate(),
+                bk2.getNumberOfPersons(),
+                selectedCategoriesRoomCount,
+                bk2.getGuestId(),
+                bk2.getPaymentInformation()
+        );
+        this.stayRepository.store(stay);
+
+        this.categoryService.autoAssignRooms(
+                selectedCategoriesRoomCount,
+                bk2.getArrivalDate(),
+                bk2.getDepartureDate()
+        );
+
+        bk2.close();
     }
 }

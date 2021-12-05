@@ -3,11 +3,14 @@ package at.fhv.hotelmanagement.domain.model;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Category {
     // generated hibernate id
     private Long id;
+    private CategoryId categoryId;
     private String name;
     private String description;
     private Integer maxPersons;
@@ -17,7 +20,8 @@ public class Category {
     // required for hibernate
     private Category() {}
 
-    Category(String name, String description, Integer maxPersons) {
+    Category(CategoryId categoryId, String name, String description, Integer maxPersons) {
+        this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
@@ -30,7 +34,33 @@ public class Category {
         }
     }
 
-    public Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
+    public void assignAvailableRooms(Integer roomCount, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
+        Set<Room> availableRooms = getAvailableRooms(fromDate, toDate);
+        if (availableRooms.size() < roomCount) {
+            throw new InsufficientRoomsException();
+        }
+
+        Iterator<Room> iterator = availableRooms.iterator();
+        for (int i = 0; i < roomCount; i++) {
+            Room room = iterator.next();
+
+            // change state of room to occupied for given timespan
+            room.occupied(fromDate, toDate);
+        }
+    }
+
+
+    public Set<RoomNumber> getAvailableRoomNumbers(LocalDate fromDate, LocalDate toDate) {
+        return getAvailableRooms(fromDate, toDate).stream()
+                .map(Room::getRoomNumber)
+                .collect(Collectors.toSet());
+    }
+
+    public int getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
+        return getAvailableRooms(fromDate, toDate).size();
+    }
+
+    private Set<Room> getAvailableRooms(LocalDate fromDate, LocalDate toDate) {
         final Set<Room> availableRooms = new HashSet<>();
 
         for (Room room : this.rooms) {
@@ -42,8 +72,15 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
+  
     public Integer getAvailableRoomsCount(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).size();
+    }
+
+  
+    public CategoryId getCategoryId() {
+        return this.categoryId;
+
     }
 
     public void determinePrice(Price price) {
@@ -73,5 +110,6 @@ public class Category {
     public Price getPrice() {
         return this.price;
     }
+
 }
 

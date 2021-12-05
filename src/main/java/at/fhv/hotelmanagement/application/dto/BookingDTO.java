@@ -53,6 +53,25 @@ public final class BookingDTO {
         return this.numberOfBookedRooms;
     }
 
+    public String getBookingStateTextColorClass() {
+        Objects.requireNonNull(this.bookingState);
+
+        switch (this.bookingState) {
+            case "PENDING":
+                return "text-info";
+            case "CONFIRMED":
+                return "text-success";
+            case "EXPIRED":
+                return "text-warning";
+            case "CLOSED":
+                return "text-muted";
+            case "CANCELLED":
+                return "text-danger";
+            default:
+                return "";
+        }
+    }
+
     private BookingDTO() {
     }
 
