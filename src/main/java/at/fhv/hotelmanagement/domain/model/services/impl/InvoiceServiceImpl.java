@@ -1,6 +1,9 @@
 package at.fhv.hotelmanagement.domain.model.services.impl;
-import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
+import at.fhv.hotelmanagement.domain.model.stay.Invoice;
+import at.fhv.hotelmanagement.domain.model.stay.InvoiceLine;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;

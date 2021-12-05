@@ -1,11 +1,21 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
+import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
+import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.guest.GuestId;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
+import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
+import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +32,7 @@ public class StayFactoryTest extends AbstractTest {
         LocalDate departureDate = getContextLocalDate().plusDays(1L);
         Integer numberOfPersons = 4;
 
-        Category category = new Category(new CategoryId("1"), "Honeymoon Suite DZ", "", 2);
+        Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2);
         category.createRoom(new Room(new RoomNumber("1"), RoomState.AVAILABLE));
         category.createRoom(new Room(new RoomNumber("2"), RoomState.AVAILABLE));
 

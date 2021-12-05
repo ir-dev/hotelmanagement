@@ -87,8 +87,8 @@
                                                     <td class="center" th:text="${state.count}"></td>
                                                     <td class="left strong" th:text="${lineItem.product()}"></td>
                                                     <td class="left" th:text="${lineItem.description()}"></td>
-                                                    <td class="right" th:text="${lineItem.price()} + '€'"></td>
-                                                    <td class="center" th:text="${lineItem.quantity()}"></td>
+                                                    <td class="right" th:text="${lineItem.price().intValue()} + '€'"></td>
+                                                    <td class="center" th:text="${lineItem.quantity().intValue()}"></td>
                                                     <td class="right" th:text="${lineItem.quantity()} * ${lineItem.price()} + '€'"></td>
                                                 </tr>
                                             </tbody>

@@ -1,13 +1,14 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
 public class InvoiceDTO {
-    private Integer invoiceNo;
+    private String invoiceNo;
     private String invoiceState;
     private LocalDate createdDate;
     private LocalDate dueDate;
@@ -19,7 +20,7 @@ public class InvoiceDTO {
     private GuestDTO guest;
 
 
-    public Integer invoiceNo() {
+    public String invoiceNo() {
         return this.invoiceNo;
     }
 

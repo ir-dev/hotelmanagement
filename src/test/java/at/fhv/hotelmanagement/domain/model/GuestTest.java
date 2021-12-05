@@ -1,8 +1,7 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +11,7 @@ import java.util.Optional;
 
 public class GuestTest extends AbstractTest {
     @Test
-    void given_guestdetails_when_createguest_then_detailsequals() {
+    void given_guestdetails_when_createguest_then_detailsequals() throws CreateGuestException {
         //given
         GuestId guestId = new GuestId("1");
         Organization organization = new Organization("FHV", "123144dsl");
@@ -23,7 +22,7 @@ public class GuestTest extends AbstractTest {
         String specialNotes = ("Frühstück aufs Zimmer");
 
         //when
-        Guest guest = new Guest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday, address, specialNotes);
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday, address, specialNotes);
 
         //then
         assertEquals(guest.getGuestId(), guestId);

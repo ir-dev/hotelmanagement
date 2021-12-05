@@ -1,15 +1,10 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
+import at.fhv.hotelmanagement.domain.model.category.CategoryId;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CategoryFactoryTest {

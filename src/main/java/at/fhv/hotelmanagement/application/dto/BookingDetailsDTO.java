@@ -1,8 +1,8 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.*;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

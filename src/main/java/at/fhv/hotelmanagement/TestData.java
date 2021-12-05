@@ -1,10 +1,14 @@
 package at.fhv.hotelmanagement;
 
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.services.impl.CategoryService;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
+import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;

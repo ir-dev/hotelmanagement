@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

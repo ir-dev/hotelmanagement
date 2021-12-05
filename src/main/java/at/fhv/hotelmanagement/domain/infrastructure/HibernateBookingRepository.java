@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.domain.infrastructure;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.BookingNo;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;

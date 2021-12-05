@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
+import at.fhv.hotelmanagement.domain.model.category.RoomOccupancy;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

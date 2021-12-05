@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model;
 
-import at.fhv.hotelmanagement.domain.model.enums.Country;
+import at.fhv.hotelmanagement.domain.model.guest.Address;
+import at.fhv.hotelmanagement.domain.model.guest.Country;
 import org.junit.jupiter.api.Test;
 
 

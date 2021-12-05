@@ -1,7 +1,14 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
+import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
+import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.guest.GuestId;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -22,7 +29,7 @@ public class BookingFactoryTest extends AbstractTest {
         LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 4;
 
-        Category category = new Category(new CategoryId("1"), "Honeymoon Suite DZ", "", 2);
+        Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2);
         category.createRoom(new Room(new RoomNumber("1"), RoomState.AVAILABLE));
         category.createRoom(new Room(new RoomNumber("2"), RoomState.AVAILABLE));
 

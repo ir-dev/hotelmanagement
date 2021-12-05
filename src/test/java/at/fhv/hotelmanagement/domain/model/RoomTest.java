@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.Room;
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

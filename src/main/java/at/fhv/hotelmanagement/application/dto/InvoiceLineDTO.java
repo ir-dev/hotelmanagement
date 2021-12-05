@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Invoice;
-import at.fhv.hotelmanagement.domain.model.InvoiceLine;
+import at.fhv.hotelmanagement.domain.model.stay.InvoiceLine;
+
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class InvoiceLineDTO {
         return this.description;
     }
 
-    public Integer price() {
+    public Integer  price() {
         return this.price;
     }
 

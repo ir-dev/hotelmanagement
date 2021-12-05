@@ -2,9 +2,7 @@ package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.domain.model.Category;
-import at.fhv.hotelmanagement.domain.model.Room;
-import at.fhv.hotelmanagement.domain.model.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

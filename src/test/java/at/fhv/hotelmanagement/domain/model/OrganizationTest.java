@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model;
 
+import at.fhv.hotelmanagement.domain.model.guest.Organization;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

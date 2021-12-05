@@ -1,9 +1,18 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
+import at.fhv.hotelmanagement.application.dto.InvoiceLineDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
+import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.services.impl.CategoryService;
+import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
+import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.domain.model.services.api.InvoiceService;
+import at.fhv.hotelmanagement.domain.model.stay.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -12,9 +21,7 @@ import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 
 @Component
@@ -33,6 +40,9 @@ public class StayServiceImpl implements StayService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    InvoiceService invoiceService;
 
     @Transactional(readOnly = true)
     @Override
@@ -183,7 +193,7 @@ public class StayServiceImpl implements StayService {
         Stay stay = stayOpt.orElseThrow();
         Invoice invoice = stay.getInvoice();
 
-        if(invoice.getInvoiceState().equals(InvoiceState.PENDING)){
+        if(invoice.isPending()){
             this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), false);
         }
 
@@ -205,7 +215,7 @@ public class StayServiceImpl implements StayService {
         return InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
-                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestById(guestId).get()).build())
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(this.guestRepository.findById(guestId).orElseThrow()).build())
                 .build();
     }
 
@@ -216,14 +226,4 @@ public class StayServiceImpl implements StayService {
         }
         return lineItemsDto;
     }
-
-    private Optional<Guest> guestById(GuestId guestId) {
-        Optional<Guest> guestOpt = this.guestRepository.findById(guestId);
-        if (guestOpt.isEmpty()) {
-            return Optional.empty();
-        }
-        return guestOpt;
-    }
-  
- 
 }

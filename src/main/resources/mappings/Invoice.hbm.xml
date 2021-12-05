@@ -2,14 +2,14 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.Invoice" table="invoice" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.stay.Invoice" table="invoice" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="invoiceId" class="at.fhv.hotelmanagement.domain.model.InvoiceId">
+        <component name="invoiceId" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceId">
             <property name="id" column="invoice_id" type="java.lang.String" unique="true" />
         </component>
 
@@ -21,12 +21,12 @@
 
         <property name="invoiceState">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.InvoiceState</param>
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.stay.InvoiceState</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
 
-        <property name="invoiceNo" column="invoiceNo" type="java.lang.Integer" />
+        <property name="invoiceNo" column="invoiceNo" type="java.lang.String" />
 
         <property name="subTotal" column="subTotal" type="java.lang.Integer" />
 
@@ -36,7 +36,7 @@
 
         <set name="lineItems" table="lineItems" cascade="all" >
             <key column="invoice_id"></key>
-            <one-to-many class="at.fhv.hotelmanagement.domain.model.InvoiceLine"/>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.InvoiceLine"/>
         </set>
 
     </class>

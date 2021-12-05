@@ -1,7 +1,8 @@
 package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +30,7 @@ public class CategoryTest extends AbstractTest {
         LocalDate todate2 = getContextLocalDate().plusDays(2L);
 
         //when
-        Category category = new Category(categoryId, name, description, maxPersons);
+        Category category = CategoryFactory.createCategory(categoryId, name, description, maxPersons);
 
         //then
         assertEquals(category.getCategoryId(), categoryId);

@@ -2,20 +2,20 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.Booking" table="booking" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.booking.Booking" table="booking" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.BookingNo">
+        <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.booking.BookingNo">
             <property name="no" column="booking_no" type="java.lang.String" />
         </component>
 
         <property name="bookingState">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.BookingState</param>
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.booking.BookingState</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
@@ -34,11 +34,11 @@
             <element column="number" type="java.lang.Integer"></element>
         </map>
 
-        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.GuestId">
+        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.guest.GuestId">
             <property name="id" column="guest_id" type="java.lang.String" />
         </component>
 
-        <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.PaymentInformation">
+        <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.guest.PaymentInformation">
             <property name="cardHolderName" column="card_holder_name" type="java.lang.String" />
             <property name="cardNumber" column="card_number" type="java.lang.String" />
             <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />

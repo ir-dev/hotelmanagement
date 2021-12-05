@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
