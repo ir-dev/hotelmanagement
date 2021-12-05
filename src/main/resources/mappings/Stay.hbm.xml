@@ -52,5 +52,9 @@
             <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />
             <property name="cardCvc" column="card_cvc" type="java.lang.String" />
         </component>
+
+        <one-to-one name="invoice" class="at.fhv.hotelmanagement.domain.model.Invoice" cascade="all" constrained="true"></one-to-one>
+
+
     </class>
 </hibernate-mapping>

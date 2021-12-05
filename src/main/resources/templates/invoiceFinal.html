@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:display="http://www.w3.org/1999/xhtml">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
+    <title>Invoice | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+
+    <!-- jquery min js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- function min js -->
+    <script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script>
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function($)
+        {
+            $(document).on('click', '.btn_print', function(event)
+            {
+                event.preventDefault();
+                var element = document.getElementById('container_content');
+
+                //easy
+                //html2pdf().from(element).save();
+
+                //custom file name
+                //html2pdf().set({filename: 'code_with_mark_'+js.AutoCode()+'.pdf'}).from(element).save();
+
+                //more custom settings
+                var opt =
+                    {
+                        margin:       1,
+                        filename:     'invoice_'+js.AutoCode()+'.pdf',
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2 },
+                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                // New Promise-based usage:
+                html2pdf().set(opt).from(element).save();
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+<div class="dashboard-main-wrapper" th:object="${invoice}">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content ">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">View Invoice </h2>
+                            <div class="page-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a th:href="@{/stays}" class="breadcrumb-link">Stays</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Invoice</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card" id="container_content">
+                            <div class="card-header p-4">
+                                <div class="float-left" style="display: inline">
+                                    <h3 class="mb-0" th:text="${invoice.createdDate() + ' - ' + invoice.dueDate()}"></h3>
+                                    Nights: <span th:text="${invoice.nights()}"></span>
+                                </div>
+
+                                <div class="float-right">
+                                    <h3 class="mb-0">Invoice No. <span th:text="${invoice.invoiceNo()}"></span></h3>
+                                    Date: <span th:text="${invoice.currentDate()}"></span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-sm-6">
+                                        <h5 class="mb-3">From:</h5>
+                                        <h3 class="text-dark mb-1">Hotelmanagement</h3>
+                                        <div>Hochschulstraße 1</div>
+                                        <div>AT</div>
+                                        <div>6850, Dornbirn</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="mb-3">To:</h5>
+                                        <h3 class="text-dark mb-1"><span th:text="${invoice.guest().firstName()} + ' ' + ${invoice.guest().lastName()}"></span></h3>
+                                        <div><span th:text="${invoice.guest().addressStreet()}"></span></div>
+                                        <div><span th:text="${invoice.guest().addressCountry()}"></span></div>
+                                        <div><span th:text="${invoice.guest().addressZipcode()} + ', ' + ${invoice.guest().addressCity()}"></span></div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive-sm">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class="center">#</th>
+                                            <th>Item</th>
+                                            <th>Description</th>
+                                            <th class="right">Unit Cost</th>
+                                            <th class="center">Qty</th>
+                                            <th class="right">Total</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <tr th:each="lineItem, state: *{lineItems()}">
+                                            <td class="center" th:text="${state.count}"></td>
+                                            <td class="left strong" th:text="${lineItem.product()}"></td>
+                                            <td class="left" th:text="${lineItem.description()}"></td>
+                                            <td class="right" th:text="${lineItem.price()} + '€'"></td>
+                                            <td class="center" th:text="${lineItem.quantity()}"></td>
+                                            <td class="right" th:text="${lineItem.quantity()} * ${lineItem.price()} + '€'"></td>
+                                        </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-sm-5">
+                                    </div>
+                                    <div class="col-lg-4 col-sm-5 ml-auto">
+                                        <table class="table table-clear">
+                                            <tbody>
+                                            <tr>
+                                                <td class="left">
+                                                    <strong class="text-dark">Subtotal</strong>
+                                                </td>
+                                                <td class="right"><span th:text="${invoice.subTotal()} + '€'"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left">
+                                                    <strong class="text-dark">VAT (10%)</strong>
+                                                </td>
+                                                <td class="right"><span th:text="${invoice.tax()} + '€'"></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="left">
+                                                    <strong class="text-dark">Total</strong>
+                                                </td>
+                                                <td class="right">
+                                                    <strong class="text-dark"><span th:text="${invoice.grandTotal()} + '€'"></span></strong>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <p class="mb-0">Thanks for Choosing Hotelmanagement</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-right" style="display:inline;float:right">
+                                <a th:href="@{/stays}" class="btn btn-space btn-secondary">Cancel</a>
+                            </p>
+                            <p class="text-center">
+                                <input type="button" id="rep" value="Print" class="btn btn-info btn_print">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- end main wrapper  -->
+<!-- ============================================================== -->
+<!-- Optional JavaScript -->
+<!-- jquery 3.3.1 -->
+<script src="../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+<!-- bootstap bundle js -->
+<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+<!-- slimscroll js -->
+<script src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+<!-- main js -->
+<script src="../assets/libs/js/main-js.js"></script>
+</body>
+</html>

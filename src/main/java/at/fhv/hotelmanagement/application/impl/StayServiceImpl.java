@@ -174,4 +174,56 @@ public class StayServiceImpl implements StayService {
                 departureDate
         );
     }
+  
+  
+     @Transactional(readOnly = true)
+    @Override
+    public Optional<InvoiceDTO> viewChargeStay(String stayId) {
+        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
+        Stay stay = stayOpt.orElseThrow();
+        Invoice invoice = stay.getInvoice();
+
+        if(invoice.getInvoiceState().equals(InvoiceState.PENDING)){
+            this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), false);
+        }
+
+        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
+    }
+
+    @Transactional
+    @Override
+    public Optional<InvoiceDTO> chargeStay(String stayId) {
+        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
+        Stay stay = stayOpt.orElseThrow();
+        this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), true);
+
+        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
+    }
+
+
+    private InvoiceDTO buildInvoiceDto(Invoice invoice, GuestId guestId) {
+        return InvoiceDTO.builder()
+                .withInvoiceEntity(invoice)
+                .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestById(guestId).get()).build())
+                .build();
+    }
+
+    private Set<InvoiceLineDTO> buildLineItemsDto(Set<InvoiceLine> lineItems) {
+        Set<InvoiceLineDTO> lineItemsDto = new HashSet<>();
+        for(InvoiceLine line : lineItems) {
+           lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(line).build());
+        }
+        return lineItemsDto;
+    }
+
+    private Optional<Guest> guestById(GuestId guestId) {
+        Optional<Guest> guestOpt = this.guestRepository.findById(guestId);
+        if (guestOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        return guestOpt;
+    }
+  
+ 
 }
