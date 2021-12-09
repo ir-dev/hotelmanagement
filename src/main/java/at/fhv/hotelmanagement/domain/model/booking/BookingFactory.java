@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.booking;
 
-import at.fhv.hotelmanagement.domain.model.services.impl.BookingStayValidator;
+import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;

@@ -12,7 +12,6 @@ public class Booking {
     private Long id;
     private BookingNo bookingNo;
     private BookingState bookingState;
-    // TODO: copy to stay at check-in (maybe we shall use a value object for this purpose)
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private LocalTime arrivalTime;

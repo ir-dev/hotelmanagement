@@ -37,9 +37,9 @@
         <property name="numberOfPersons" column="number_persons" type="java.lang.Integer" />
 
         <map name="selectedCategoriesRoomCount" table="staySelectedCategoriesRoomCounts" cascade="all">
-            <key column="stay_id"></key>
-            <index column="category" type="java.lang.String"></index>
-            <element column="number" type="java.lang.Integer"></element>
+            <key column="stay_id"/>
+            <index column="category" type="java.lang.String"/>
+            <element column="number" type="java.lang.Integer"/>
         </map>
 
         <component name="guestId" class="at.fhv.hotelmanagement.domain.model.guest.GuestId">
@@ -53,8 +53,10 @@
             <property name="cardCvc" column="card_cvc" type="java.lang.String" />
         </component>
 
-        <one-to-one name="invoice" class="at.fhv.hotelmanagement.domain.model.stay.Invoice" cascade="all" constrained="true"></one-to-one>
-
+        <set name="invoices" table="stayInvoices" cascade="all">
+            <key column="stay_id"/>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.Invoice"/>
+        </set>
 
     </class>
 </hibernate-mapping>

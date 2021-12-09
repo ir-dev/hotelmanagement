@@ -1,12 +1,14 @@
 package at.fhv.hotelmanagement.application.impl;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateCategoryRepository;
+import at.fhv.hotelmanagement.infrastructure.HibernateCategoryRepository;
+import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
 import at.fhv.hotelmanagement.domain.model.category.CategoryId;
-import at.fhv.hotelmanagement.domain.model.category.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
@@ -16,16 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CategoryServiceImplTest {
+public class CategoryServiceImplTest extends AbstractTest {
 
     @Autowired
     private CategoryService categoryService;
@@ -44,10 +46,11 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void given_2availablecategories_when_fetchallavailablecategories_then_returnequalcategories() throws AlreadyExistsException {
+    void given_2availablecategories_when_fetchallavailablecategories_then_returnequalcategories() throws RoomAlreadyExistsException {
         //given
-        Category category1 = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accomodation for business guests", 1);
-        Category category2 = CategoryFactory.createCategory(new CategoryId("2"),"Business Casual DZ", "A casual accomodation for business guests", 2);
+        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category1 = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accomodation for business guests", 1, p, p);
+        Category category2 = CategoryFactory.createCategory(new CategoryId("2"),"Business Casual DZ", "A casual accomodation for business guests", 2, p, p);
         category1.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
         category2.createRoom(new Room(new RoomNumber("200"), RoomState.AVAILABLE));
 

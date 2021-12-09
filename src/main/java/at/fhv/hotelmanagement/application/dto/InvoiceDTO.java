@@ -1,31 +1,35 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class InvoiceDTO {
+    private GuestDTO guest;
+    private String stayId;
+
     private String invoiceNo;
-    private String invoiceState;
     private LocalDate createdDate;
     private LocalDate dueDate;
     private Integer nights;
-    private Integer subTotal;
-    private Double grandTotal;
-    private Double tax;
+    private String subTotalPerNight;
+    private String subTotal;
+    private String grandTotal;
+    private String tax;
     private Set<InvoiceLineDTO> lineItems;
-    private GuestDTO guest;
 
+    public GuestDTO guest() {
+        return this.guest;
+    }
+
+    public String stayId() { return this.stayId; }
 
     public String invoiceNo() {
         return this.invoiceNo;
-    }
-
-    public String invoiceState() {
-        return this.invoiceState;
     }
 
     public LocalDate createdDate() {
@@ -44,24 +48,24 @@ public class InvoiceDTO {
         return this.nights;
     }
 
-    public Integer subTotal() {
+    public String subTotalPerNight() {
+        return this.subTotalPerNight;
+    }
+
+    public String subTotal() {
         return this.subTotal;
     }
 
-    public Double grandTotal() {
+    public String grandTotal() {
         return this.grandTotal;
     }
 
-    public Double tax() {
+    public String tax() {
         return this.tax;
     }
 
     public Set<InvoiceLineDTO> lineItems() {
         return this.lineItems;
-    }
-
-    public GuestDTO guest() {
-        return this.guest;
     }
 
     public static InvoiceDTO.Builder builder() {
@@ -75,15 +79,25 @@ public class InvoiceDTO {
             this.instance = new InvoiceDTO();
         }
 
+        public Builder withStayId(StayId stayId) {
+            this.instance.stayId = String.valueOf(stayId.getId());
+            return this;
+        }
+
+        public Builder withGuestDTO(GuestDTO guest) {
+            this.instance.guest = guest;
+            return this;
+        }
+
         public Builder withInvoiceEntity(Invoice invoice) {
-            this.instance.invoiceNo = invoice.getInvoiceNo();
-            this.instance.invoiceState = String.valueOf(invoice.getInvoiceState());
+            this.instance.invoiceNo = String.valueOf(invoice.getInvoiceNo().getNo());
             this.instance.createdDate = invoice.getCreatedDate();
             this.instance.dueDate = invoice.getDueDate();
             this.instance.nights = invoice.getNights();
-            this.instance.subTotal = invoice.getSubTotal();
-            this.instance.grandTotal = invoice.getGrandTotal();
-            this.instance.tax = invoice.getTax();
+            this.instance.subTotalPerNight = String.valueOf(invoice.getSubTotalPerNight());
+            this.instance.subTotal = String.valueOf(invoice.getSubTotal());
+            this.instance.grandTotal = String.valueOf(invoice.getGrandTotal());
+            this.instance.tax = String.valueOf(invoice.getTax());
             return this;
         }
 
@@ -92,19 +106,20 @@ public class InvoiceDTO {
             return this;
         }
 
-
-        public Builder withGuestDTO(GuestDTO guest) {
-            this.instance.guest = guest;
-            return this;
-        }
-
         public InvoiceDTO build() {
-            Objects.requireNonNull(this.instance.createdDate, "createdDate must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.subTotal, "subTotal must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.grandTotal, "grandTotal must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.tax, "tax must be set in InvoiceDTO");
-            Objects.requireNonNull(this.instance.lineItems, "lineItems must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.stayId, "stayId must be set in InvoiceDTO");
             Objects.requireNonNull(this.instance.guest, "guest must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.invoiceNo, "invoiceNo must be set in InvoiceDTO");
+            Objects.requireNonNull(this.instance.lineItems, "lineItems must be set in InvoiceDTO");
+
+            if (this.instance.lineItems.size() > 0) {
+                Objects.requireNonNull(this.instance.createdDate, "createdDate must be set in InvoiceDTO");
+                Objects.requireNonNull(this.instance.dueDate, "dueDate must be set in InvoiceDTO");
+                Objects.requireNonNull(this.instance.subTotalPerNight, "subTotalPerNight must be set in InvoiceDTO");
+                Objects.requireNonNull(this.instance.subTotal, "subTotal must be set in InvoiceDTO");
+                Objects.requireNonNull(this.instance.grandTotal, "grandTotal must be set in InvoiceDTO");
+                Objects.requireNonNull(this.instance.tax, "tax must be set in InvoiceDTO");
+            }
             return this.instance;
         }
     }
@@ -118,11 +133,11 @@ public class InvoiceDTO {
             return false;
         }
         InvoiceDTO that = (InvoiceDTO) o;
-        return Objects.equals(this.invoiceNo, that.invoiceNo) && Objects.equals(this.invoiceState, that.invoiceState) && Objects.equals(this.createdDate, that.createdDate) && Objects.equals(this.dueDate, that.dueDate) && Objects.equals(this.nights, that.nights) && Objects.equals(this.subTotal, that.subTotal) && Objects.equals(this.grandTotal, that.grandTotal) && Objects.equals(this.tax, that.tax) && Objects.equals(this.lineItems, that.lineItems) && Objects.equals(this.guest, that.guest);
+        return this.guest.equals(that.guest) && this.stayId.equals(that.stayId) && this.invoiceNo.equals(that.invoiceNo) && this.createdDate.equals(that.createdDate) && this.dueDate.equals(that.dueDate) && this.nights.equals(that.nights) && this.subTotalPerNight.equals(that.subTotalPerNight) && this.subTotal.equals(that.subTotal) && this.grandTotal.equals(that.grandTotal) && this.tax.equals(that.tax) && this.lineItems.equals(that.lineItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.invoiceNo, this.invoiceState, this.createdDate, this.dueDate, this.nights, this.subTotal, this.grandTotal, this.tax, this.lineItems, this.guest);
+        return Objects.hash(this.guest, this.stayId, this.invoiceNo, this.createdDate, this.dueDate, this.nights, this.subTotalPerNight, this.subTotal, this.grandTotal, this.tax, this.lineItems);
     }
 }

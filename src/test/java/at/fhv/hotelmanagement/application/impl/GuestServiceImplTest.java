@@ -1,8 +1,9 @@
 package at.fhv.hotelmanagement.application.impl;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateGuestRepository;
+import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class GuestServiceImplTest {
+public class GuestServiceImplTest extends AbstractTest {
 
     @Autowired
     private GuestService guestService;

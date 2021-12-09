@@ -1,17 +1,19 @@
 package at.fhv.hotelmanagement.application.impl;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateBookingRepository;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateGuestRepository;
+import at.fhv.hotelmanagement.infrastructure.HibernateBookingRepository;
+import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
+import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.domain.model.category.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.guest.Country;
@@ -25,14 +27,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class BookingServiceImplTest {
+public class BookingServiceImplTest extends AbstractTest {
 
     @Autowired
     private BookingsService bookingsService;
@@ -57,15 +62,16 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void given_2bookingsinrepository_when_fetchallbookings_then_returnequalbookings() throws CreateGuestException, AlreadyExistsException, CreateBookingException {
+    void given_2bookingsinrepository_when_fetchallbookings_then_returnequalbookings() throws CreateGuestException, RoomAlreadyExistsException, CreateBookingException {
         //given
         List<Booking> bookings = Arrays.asList(
                 createBookingDummy(),
                 createBookingDummy()
         );
+        Guest guest = createGuestDummy();
 
         Mockito.when(this.bookingRepository.findAll()).thenReturn(bookings);
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(createGuestDummy()));
+        Mockito.when(this.guestRepository.findById(any())).thenReturn(Optional.of(guest));
 
         List<BookingDTO> bookingsDtoExpected = new ArrayList<>();
         for (Booking booking : bookings) {
@@ -85,11 +91,11 @@ public class BookingServiceImplTest {
 
 
     @Test
-    void given_bookinginrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, AlreadyExistsException {
+    void given_bookinginrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
         //given
         Booking booking = createBookingDummy();
-
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(createGuestDummy()));
+        Guest guest = createGuestDummy();
+        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(guest));
 
         BookingDTO expectedBookingDTO = BookingDTO.builder()
                 .withBookingEntity(booking)
@@ -110,17 +116,17 @@ public class BookingServiceImplTest {
 
 
     @Test
-    void given_bookingdetailsinrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, AlreadyExistsException {
+    void given_bookingdetailsinrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
         //given
         Booking booking = createBookingDummy();
+        Guest guest = createGuestDummy();
 
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(createGuestDummy()));
+        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(guest));
 
         BookingDetailsDTO expectedBookingDetailsDTO = BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
                 .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
                 .build();
-
 
         Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
 
@@ -146,8 +152,9 @@ public class BookingServiceImplTest {
     }
 
 
-    private Booking createBookingDummy() throws CreateBookingException, AlreadyExistsException {
-        Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1);
+    private Booking createBookingDummy() throws CreateBookingException, RoomAlreadyExistsException {
+        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1, p, p);
         category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
 
         LocalDate arrivalDate = LocalDate.now();

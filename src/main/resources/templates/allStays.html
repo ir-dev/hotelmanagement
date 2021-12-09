@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
-    <title>View Stays | Hotel Management</title>
+    <title>Stays | Hotel Management</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -67,7 +67,8 @@
                                         <td><span th:text="${stay.stayId()}"/></td>
                                         <td><span th:text="${stay.stayStatus()}" th:classappend="${stay.getStayStateTextColorClass()}"/></td>
                                         <td style="width: 200px;">
-                                            <a class="btn btn-space btn-danger" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                            <a class="btn btn-space btn-light" th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i class="fas fa-file-invoice"></i></a>
+                                            <a class="btn btn-space btn-danger" th:if="${stay.checkedOutAt() == null}" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
                                         </td>
                                     </tr>
                                     </tbody>

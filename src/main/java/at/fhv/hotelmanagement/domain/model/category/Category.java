@@ -1,10 +1,9 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
+import at.fhv.hotelmanagement.domain.model.Price;
+
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Category {
@@ -15,22 +14,25 @@ public class Category {
     private String description;
     private Integer maxPersons;
     private Set<Room> rooms;
-    private Price price;
+    private Price halfBoardPrice;
+    private Price fullBoardPrice;
 
     // required for hibernate
     private Category() {}
 
-    Category(CategoryId categoryId, String name, String description, Integer maxPersons) {
+    Category(CategoryId categoryId, String name, String description, Integer maxPersons, Price halfBoardPrice, Price fullBoardPrice) {
         this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.maxPersons = maxPersons;
         this.rooms = new HashSet<>();
+        this.halfBoardPrice = halfBoardPrice;
+        this.fullBoardPrice = fullBoardPrice;
     }
 
-    public void createRoom(Room room) throws AlreadyExistsException {
+    public void createRoom(Room room) throws RoomAlreadyExistsException {
         if (!this.rooms.add(room)) {
-            throw new AlreadyExistsException(Room.class);
+            throw new RoomAlreadyExistsException(Room.class);
         }
     }
 
@@ -71,18 +73,11 @@ public class Category {
 
         return Collections.unmodifiableSet(availableRooms);
     }
-  
+
+
     public CategoryId getCategoryId() {
         return this.categoryId;
 
-    }
-
-    public void determinePrice(Price price) {
-        if(price != null) {
-            this.price = price;
-        } else {
-            throw new NullPointerException();
-        }
     }
 
     public String getName() {
@@ -97,13 +92,12 @@ public class Category {
         return this.maxPersons;
     }
 
-    public Set<Room> getRooms() {
-        return Collections.unmodifiableSet(this.rooms);
+    public Price getHalfBoardPrice() {
+        return this.halfBoardPrice;
     }
 
-    public Price getPrice() {
-        return this.price;
+    public Price getFullBoardPrice() {
+        return this.fullBoardPrice;
     }
-
 }
 

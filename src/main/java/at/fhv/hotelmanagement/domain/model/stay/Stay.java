@@ -1,24 +1,27 @@
 package at.fhv.hotelmanagement.domain.model.stay;
 
+import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
+import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Stay {
+    private static final double INVOICE_TAX_RATE = 0.1;
+    private static final long INVOICE_DUE_DATE_DAYS = 14L;
+
     // generated hibernate id
     private Long id;
     private StayId stayId;
     private BookingNo bookingNo;
     private StayState stayState;
-    // TODO: checkedInAt <=> arrivalDate + arrivalTime (remove duplicate?!)
     private LocalDateTime checkedInAt;
-    // may be null
     private LocalDateTime checkedOutAt;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
@@ -27,7 +30,7 @@ public class Stay {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private GuestId guestId;
     private PaymentInformation paymentInformation;
-    private Invoice invoice;
+    private Set<Invoice> invoices;
 
     // required for hibernate
     private Stay() {}
@@ -45,8 +48,87 @@ public class Stay {
         this.selectedCategoriesRoomCount = selectedCategoriesRoomCount;
         this.guestId = guestId;
         this.paymentInformation = paymentInformation;
-        this.invoice = new Invoice(new InvoiceId(java.util.UUID.randomUUID().toString().toUpperCase()), arrivalDate, departureDate);
+        this.invoices = new HashSet<>();
     }
+
+    public boolean isCheckedIn() {
+        return (this.stayState == StayState.CHECKED_IN);
+    }
+
+    public boolean isBilled() {
+        Set<InvoiceLine> billedCategoryLineItems = this.invoices.stream()
+                .flatMap(invoice -> invoice.getLineItems().stream())
+                .filter(lineItem -> (lineItem.getType() == ProductType.CATEGORY))
+                .collect(Collectors.toSet());
+
+        for (Map.Entry<String, Integer> selectedCategoryRoomCount : this.selectedCategoriesRoomCount.entrySet()) {
+            if (billedCategoryLineItems.stream()
+                    .noneMatch(bcli ->
+                            bcli.getProduct().equals(selectedCategoryRoomCount.getKey()) &&
+                            bcli.getQuantity().equals(selectedCategoryRoomCount.getValue()))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void checkout() throws BillingOpenException, IllegalStateException {
+        if (!isCheckedIn()) {
+            throw new IllegalStateException("Only checked-in stays can be checked-out.");
+        }
+
+        if (!isBilled()) {
+            throw new BillingOpenException();
+        }
+
+        this.checkedOutAt = LocalDateTime.now();
+        this.stayState = StayState.CHECKED_OUT;
+    }
+
+    private InvoiceNo nextInvoiceNo() {
+        return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size()+1));
+    }
+
+    public Invoice composeInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException, IllegalStateException {
+        if (isBilled()) {
+            throw new IllegalStateException("Stay have been already billed.");
+        }
+
+        Invoice invoice = generateInvoice(billableCategories);
+        this.invoices.add(invoice);
+
+        return invoice;
+    }
+
+    public Invoice generateInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException {
+        Set<InvoiceLine> billedCategoryLineItems = this.invoices.stream()
+                .flatMap(invoice -> invoice.getLineItems().stream())
+                .filter(lineItem -> (lineItem.getType() == ProductType.CATEGORY))
+                .collect(Collectors.toSet());
+
+        Set<InvoiceLine> lineItems = new HashSet<>();
+
+        for (Category billableCategory : billableCategories) {
+            if (this.selectedCategoriesRoomCount.containsKey(billableCategory.getName()) &&
+                    billedCategoryLineItems.stream()
+                            .noneMatch(bcli -> bcli.getProduct().equals(billableCategory.getName()))) {
+                lineItems.add(new InvoiceLine(
+                        ProductType.CATEGORY,
+                        billableCategory.getName(),
+                        billableCategory.getDescription(),
+                        this.selectedCategoriesRoomCount.get(billableCategory.getName()),
+                        billableCategory.getFullBoardPrice()));
+            }
+        }
+
+        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+    }
+
+    public Integer getNumberOfBookedRooms() {
+        return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
+    }
+
 
     public StayId getStayId() {
         return this.stayId;
@@ -88,10 +170,6 @@ public class Stay {
         return this.selectedCategoriesRoomCount;
     }
 
-    public Integer getNumberOfBookedRooms() {
-        return selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
-    }
-
     public GuestId getGuestId() {
         return this.guestId;
     }
@@ -100,7 +178,7 @@ public class Stay {
         return this.paymentInformation;
     }
 
-    public Invoice getInvoice() {
-        return this.invoice;
+    public Set<Invoice> getInvoices() {
+        return Collections.unmodifiableSet(this.invoices);
     }
 }

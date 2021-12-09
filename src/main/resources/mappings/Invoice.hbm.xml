@@ -9,8 +9,8 @@
             <generator class="native"/>
         </id>
 
-        <component name="invoiceId" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceId">
-            <property name="id" column="invoice_id" type="java.lang.String" unique="true" />
+        <component name="invoiceNo" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceNo">
+            <property name="no" column="invoice_no" type="java.lang.String" unique="true" />
         </component>
 
         <property name="createdDate" column="created_date" type="java.time.LocalDate" />
@@ -19,23 +19,28 @@
 
         <property name="nights" column="nights" type="java.lang.Integer" />
 
-        <property name="invoiceState">
-            <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.stay.InvoiceState</param>
-                <param name="useNamed">true</param>
-            </type>
-        </property>
+        <component name="subTotalPerNight" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="subTotalPerNight_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="subTotalPerNight_currency" type="java.util.Currency" />
+        </component>
 
-        <property name="invoiceNo" column="invoiceNo" type="java.lang.String" />
+        <component name="subTotal" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="subTotal_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="subTotal_currency" type="java.util.Currency" />
+        </component>
 
-        <property name="subTotal" column="subTotal" type="java.lang.Integer" />
+        <component name="tax" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="tax_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="tax_currency" type="java.util.Currency" />
+        </component>
 
-        <property name="tax" column="tax" type="java.lang.Double" />
-
-        <property name="grandTotal" column="grandTotal" type="java.lang.Double" />
+        <component name="grandTotal" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="grandTotal_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="grandTotal_currency" type="java.util.Currency" />
+        </component>
 
         <set name="lineItems" table="lineItems" cascade="all" >
-            <key column="invoice_id"></key>
+            <key column="invoice_no"/>
             <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.InvoiceLine"/>
         </set>
 

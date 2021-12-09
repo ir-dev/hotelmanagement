@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View your intermediary invoice for your stay at the hotel.')"/>
+    <title>Intermediary Invoice | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper" th:object="${invoice}">
+        <div class="container-fluid dashboard-content">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">Intermediary Invoice</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/stays}" class="breadcrumb-link">Stays</a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{/stay(id=*{stayId})}" class="breadcrumb-link">Stay ID.: <span th:text="*{stayId}"/></a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Intermediary Invoice</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <th:block th:replace="/fragments/parts/invoice :: invoicePreview" />
+        </div>
+        <th:block th:replace="/fragments/layout/footer :: content"/>
+    </div>
+</div>
+<th:block th:replace="/fragments/layout/page :: js"/>
+<th:block th:replace="/fragments/parts/invoice :: js"/>
+</body>
+
+</html>

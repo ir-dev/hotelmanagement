@@ -1,8 +1,10 @@
 package at.fhv.hotelmanagement.application.impl;
 
+import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
-import at.fhv.hotelmanagement.domain.infrastructure.HibernateStayRepository;
+import at.fhv.hotelmanagement.infrastructure.HibernateStayRepository;
+import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
@@ -10,7 +12,7 @@ import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
 import at.fhv.hotelmanagement.domain.model.category.CategoryId;
-import at.fhv.hotelmanagement.domain.model.category.AlreadyExistsException;
+import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
@@ -30,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -38,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class StayServiceImplTest {
+public class StayServiceImplTest extends AbstractTest {
 
     @Autowired
     private StayService stayService;
@@ -63,7 +66,7 @@ public class StayServiceImplTest {
     }
 
     @Test
-    void given_2staysinrepository_when_fetchallstays_then_returnequalStays() throws AlreadyExistsException, CreateBookingException, CreateStayException {
+    void given_2staysinrepository_when_fetchallstays_then_returnequalStays() throws RoomAlreadyExistsException, CreateBookingException, CreateStayException {
         //given
         List<Stay> stays = Arrays.asList(createStayDummy(), createStayDummy());
 
@@ -87,7 +90,7 @@ public class StayServiceImplTest {
     }
 
     @Test
-    void given_stayinrepository_when_bystayId_then_return() throws AlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
+    void given_stayinrepository_when_bystayId_then_return() throws RoomAlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         StayDTO expectedStayDTO = StayDTO.builder()
@@ -104,9 +107,10 @@ public class StayServiceImplTest {
     }
 
 
-    private Stay createStayDummy() throws CreateBookingException, AlreadyExistsException, CreateStayException {
+    private Stay createStayDummy() throws CreateBookingException, RoomAlreadyExistsException, CreateStayException {
         //Category
-        Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1);
+        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1, p, p);
         category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
 
         //Booking
