@@ -2,26 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.RoomOccupancy" table="roomoccupancy" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.category.RoomOccupancy" table="roomOccupancy" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="occupancyId" class="at.fhv.hotelmanagement.domain.model.OccupancyId" unique="true">
-            <property name="id" column="occupancy_Id" type="java.lang.String" />
-        </component>
+        <property name="startDate" column="start_date" type="java.time.LocalDate" />
 
-        <component name="room" class="at.fhv.hotelmanagement.domain.model.RoomNumber">
-            <property name="number" column="number" type="java.lang.String" />
-        </component>
-
-<!--        <one-to-one name="room" foreign-key="number" class="at.fhv.hotelmanagement.domain.model.Room" constrained="true"/>-->
-<!--        <many-to-one name="room" column="room_Id" class="at.fhv.hotelmanagement.domain.model.Room" not-null="true"  unique="true" cascade="all"/>-->
-
-        <property name="start" column="start_date" type="java.time.LocalDate" />
-
-        <property name="end" column="end_date" type="java.time.LocalDate" />
+        <property name="endDate" column="end_date" type="java.time.LocalDate" />
     </class>
 </hibernate-mapping>

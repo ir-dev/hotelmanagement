@@ -5,7 +5,8 @@ import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.impl.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
+import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -84,7 +85,7 @@ public class BookingViewController {
     public ModelAndView createBooking(
             @RequestParam("step") String step,
             @ModelAttribute BookingForm form,
-            Model model) throws CreateBookingException {
+            Model model) {
 
         if (!wizardSteps.contains(step)) {
             return redirectError("Invalid step in create booking wizard.");
@@ -99,7 +100,11 @@ public class BookingViewController {
         }
 
         if (step.equals(CREATE_BOOKING_STORE_STEP)) {
-            this.bookingsService.createBooking(form);
+            try {
+                this.bookingsService.createBooking(form);
+            } catch (CreateBookingException | CreateGuestException e) {
+                return redirectError(e.getMessage());
+            }
 
             return redirect(ALL_BOOKINGS_URL, "Booking successfully created");
         }

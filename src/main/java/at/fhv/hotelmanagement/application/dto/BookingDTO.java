@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -53,6 +53,25 @@ public final class BookingDTO {
         return this.numberOfBookedRooms;
     }
 
+    public String getBookingStateTextColorClass() {
+        Objects.requireNonNull(this.bookingState);
+
+        switch (this.bookingState) {
+            case "PENDING":
+                return "text-info";
+            case "CONFIRMED":
+                return "text-success";
+            case "EXPIRED":
+                return "text-warning";
+            case "CLOSED":
+                return "text-muted";
+            case "CANCELLED":
+                return "text-danger";
+            default:
+                return "";
+        }
+    }
+
     private BookingDTO() {
     }
 
@@ -85,5 +104,22 @@ public final class BookingDTO {
 
             return this.instance;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BookingDTO that = (BookingDTO) o;
+        return Objects.equals(this.details, that.details) && Objects.equals(this.bookingNo, that.bookingNo) && Objects.equals(this.bookingState, that.bookingState) && Objects.equals(this.arrivalDate, that.arrivalDate) && Objects.equals(this.departureDate, that.departureDate) && Objects.equals(this.arrivalTime, that.arrivalTime) && Objects.equals(this.numberOfPersons, that.numberOfPersons) && Objects.equals(this.numberOfBookedRooms, that.numberOfBookedRooms);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.details, this.bookingNo, this.bookingState, this.arrivalDate, this.departureDate, this.arrivalTime, this.numberOfPersons, this.numberOfBookedRooms);
     }
 }

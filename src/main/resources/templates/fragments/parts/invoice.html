@@ -1,0 +1,191 @@
+<div class="card-header p-4" th:fragment="invoiceCardHeader">
+    <div class="float-left" style="display: inline">
+        <h3 class="mb-0" th:text="*{createdDate + ' - ' + dueDate}"></h3>
+        Nights: <span th:text="*{nights}"></span>
+    </div>
+
+    <div class="float-right">
+        <h3 class="mb-0">Invoice No. <span th:text="*{invoiceNo}"></span></h3>
+        Date: <span th:text="*{currentDate}"></span>
+    </div>
+</div>
+
+<div class="card-header p-4" th:fragment="invoicePreviewCardHeader">
+    <div class="float-left" style="display: inline">
+        <h3 class="mb-0" th:text="*{createdDate + ' - ' + dueDate}"></h3>
+        Nights: <span th:text="*{nights}"></span>
+    </div>
+
+    <div class="float-right">
+        <h3 class="mb-0">Intermediary Invoice</h3>
+        Date: <span th:text="*{currentDate}"></span>
+    </div>
+</div>
+
+<div class="table-responsive-sm" th:fragment="invoiceLineItems">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="center">#</th>
+                <th>Type</th>
+                <th>Item</th>
+                <th>Description</th>
+                <th class="right">Unit Cost</th>
+                <th class="center">Qty</th>
+                <th class="right">Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="lineItem, state: *{lineItems}">
+                <td class="center" th:text="${state.count}"></td>
+                <td class="left" th:text="${lineItem.type}"></td>
+                <td class="left strong" th:text="${lineItem.product}"></td>
+                <td class="left" th:text="${lineItem.description}"></td>
+                <td class="right" th:text="${lineItem.price}"></td>
+                <td class="center" th:text="${lineItem.quantity}"></td>
+                <td class="right" th:text="${lineItem.totalPrice}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card-body" th:fragment="invoiceCardBody">
+    <div class="row mb-4">
+        <div class="col-sm-6">
+            <h5 class="mb-3">From:</h5>
+            <h3 class="text-dark mb-1">Hotelmanagement</h3>
+            <div>Hochschulstraße 1</div>
+            <div>AT</div>
+            <div>6850, Dornbirn</div>
+        </div>
+        <div class="col-sm-6">
+            <h5 class="mb-3">To:</h5>
+            <h3 class="text-dark mb-1"><span th:text="*{guest.firstName + ' ' + guest.lastName}"></span>
+            </h3>
+            <div><span th:text="*{guest.addressStreet}"></span></div>
+            <div><span th:text="*{guest.addressCountry}"></span></div>
+            <div><span th:text="*{guest.addressZipcode + ', ' + guest.addressCity}"></span></div>
+        </div>
+    </div>
+    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems" />
+    <div class="row">
+        <div class="col-lg-4 col-sm-5">
+        </div>
+        <div class="col-lg-4 col-sm-5 ml-auto">
+            <table class="table table-clear">
+                <tbody>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Subtotal per night</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotalPerNight}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Subtotal (<span th:text="*{nights}"></span> Nights)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotal}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">VAT (10%)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{tax}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Total</strong>
+                    </td>
+                    <td class="right">
+                        <strong class="text-dark"><span th:text="*{grandTotal}"></span></strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card-footer bg-white" th:fragment="invoiceCardFooter">
+    <p class="mb-0">Thanks for choosing Hotelmanagement</p>
+</div>
+
+<div class="row" th:fragment="invoice">
+    <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+            <p class="text-right">
+                <input type="button" id="rep" value="Print" class="btn btn-info btn-sm btn_print">
+            </p>
+        </div>
+
+        <div class="card" id="container_content">
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardHeader" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter" />
+        </div>
+
+        <div class="form-group">
+            <p class="text-right">
+                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-light">Back to Invoices</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row" th:fragment="invoicePreview">
+    <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+            <p class="text-right">
+                <input type="button" id="rep" value="Print" class="btn btn-info btn-sm btn_print">
+            </p>
+        </div>
+
+        <div class="card" id="container_content">
+            <th:block th:replace="/fragments/parts/invoice :: invoicePreviewCardHeader" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter" />
+        </div>
+
+        <div class="form-group">
+            <div class="text-right">
+                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Cancel</a>
+                <form th:action="@{/stays/invoices/create(stayId=*{stayId})}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-space btn-primary">Confirm and Create Invoice</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="js">
+    <script th:src="@{/assets/vendor/html2pdf/html2pdf.bundle.min.js}"></script>
+    <script type="text/javascript">
+        // inspired by "awesome-functions"
+        var js = function() {};
+        js.AutoCode = function(e) {
+            e = e || 8;
+            for (var t = "", r = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" + (new Date).getTime(), n = 0; n < e; n++)
+                t += r.charAt(Math.floor(Math.random() * r.length));
+            return t
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let printButton = document.querySelector('.btn_print');
+
+            printButton.addEventListener('click', function(e) {
+                let printableRegionContainer = document.getElementById('container_content');
+                let html2pdfOptions =
+                    {
+                        margin:       1,
+                        filename:     'invoice_'+js.AutoCode()+'.pdf',
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2 },
+                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                html2pdf().set(html2pdfOptions).from(printableRegionContainer).save();
+            });
+        });
+    </script>
+</th:block>

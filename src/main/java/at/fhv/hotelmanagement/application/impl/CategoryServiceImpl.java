@@ -2,9 +2,7 @@ package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.domain.model.Category;
-import at.fhv.hotelmanagement.domain.model.Room;
-import at.fhv.hotelmanagement.domain.model.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,29 +35,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         return availableCategoriesDto;
     }
-
-//    @Override
-//    public Map<String, Set<RoomNumber>> getAvailableRooms(Map<String, Integer> selectedCategories, LocalDate fromDate, LocalDate toDate) {
-//
-//        // get available roomNumbers for each category
-//        HashMap<String, Set<RoomNumber>> result = new HashMap<>();
-//        for (Map.Entry<String, Integer> categoryName : selectedCategories.entrySet()) {
-//
-//            Category category = this.categoryRepository.findByName(categoryName.getKey()).get();
-//            Set<Room> availableRooms = category.getAvailableRooms(fromDate, toDate);
-//
-//            // get next available roomNumber
-//            Set<RoomNumber> roomNumbers = new HashSet<>();
-//            Iterator<Room> iterator = availableRooms.iterator();
-//            while (roomNumbers.size() < categoryName.getValue()) {
-//                roomNumbers.add(iterator.next().getNumber());
-//            }
-//
-//            result.put(categoryName.getKey(), roomNumbers);
-//        }
-//
-//        return Collections.unmodifiableMap(result);
-//    }
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
         return AvailableCategoryDTO.builder()

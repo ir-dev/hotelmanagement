@@ -30,13 +30,37 @@
 
             <div class="row">
                 <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="section-block">
+                                <h3 class="section-title">Check-In</h3>
+                                <p>Check-In of Walk-In Guests or Guests with a Booking.</p>
 
+                                <a th:href="@{/checkin}" class="btn btn-lg btn-primary mr-3">Walk-In</a>
+                                <a th:href="@{/bookings}" class="btn btn-lg btn-primary mr-3">Booking</a>
+                            </div>
+                            <div class="section-block">
+                                <h3 class="section-title">Check-Out</h3>
+                                <p>Check-Out and Billing of Guests and their Stays.</p>
+
+                                <a th:href="@{/stays}" class="btn btn-lg btn-primary mr-3">Stay</a>
+                            </div>
+
+                            <!--
+                            <div class="section-block">
+                                <h3 class="section-title">Upcoming Check-In's</h3>
+                                <table>
+
+                                </table>
+                            </div>
+                            -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <th:block th:replace="/fragments/layout/footer :: content"/>
     </div>
-    <th:block th:replace="/fragments/layout/footer :: content"/>
-</div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
 </body>

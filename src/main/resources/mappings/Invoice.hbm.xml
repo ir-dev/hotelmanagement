@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.stay.Invoice" table="invoice" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <component name="invoiceNo" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceNo">
+            <property name="no" column="invoice_no" type="java.lang.String" unique="true" />
+        </component>
+
+        <property name="createdDate" column="created_date" type="java.time.LocalDate" />
+
+        <property name="dueDate" column="due_date" type="java.time.LocalDate" />
+
+        <property name="nights" column="nights" type="java.lang.Integer" />
+
+        <component name="subTotalPerNight" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="subTotalPerNight_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="subTotalPerNight_currency" type="java.util.Currency" />
+        </component>
+
+        <component name="subTotal" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="subTotal_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="subTotal_currency" type="java.util.Currency" />
+        </component>
+
+        <component name="tax" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="tax_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="tax_currency" type="java.util.Currency" />
+        </component>
+
+        <component name="grandTotal" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="grandTotal_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="grandTotal_currency" type="java.util.Currency" />
+        </component>
+
+        <set name="lineItems" table="lineItems" cascade="all" >
+            <key column="invoice_no"/>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.InvoiceLine"/>
+        </set>
+
+    </class>
+</hibernate-mapping>
