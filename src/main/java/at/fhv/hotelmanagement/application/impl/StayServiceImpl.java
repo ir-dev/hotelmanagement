@@ -1,9 +1,18 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
+import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
+import at.fhv.hotelmanagement.application.dto.InvoiceLineDTO;
 import at.fhv.hotelmanagement.application.dto.StayDTO;
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
+import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
+import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.category.CategoryService;
+import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
+import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.domain.model.stay.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -12,10 +21,10 @@ import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class StayServiceImpl implements StayService {
@@ -174,56 +183,83 @@ public class StayServiceImpl implements StayService {
                 departureDate
         );
     }
-  
-  
-     @Transactional(readOnly = true)
-    @Override
-    public Optional<InvoiceDTO> viewChargeStay(String stayId) {
-        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
-        Stay stay = stayOpt.orElseThrow();
-        Invoice invoice = stay.getInvoice();
 
-        if(invoice.getInvoiceState().equals(InvoiceState.PENDING)){
-            this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), false);
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<InvoiceDTO> invoiceByInvoiceNo(String invoiceNo) {
+        Optional<Stay> stayOpt = this.stayRepository.findByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (stayOpt.isEmpty()) {
+            return Optional.empty();
         }
 
-        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
+        Optional<Guest> guestOpt = this.guestRepository.findById(stayOpt.get().getGuestId());
+        Optional<Invoice> invoiceOpt = this.stayRepository.findInvoiceByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (guestOpt.isEmpty() || invoiceOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(buildInvoiceDto(invoiceOpt.get(), guestOpt.get(), stayOpt.get().getStayId()));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<InvoiceDTO> allStayInvoices(String stayId) throws EntityNotFoundException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+
+        if (stay.getInvoices().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return stay.getInvoices().stream()
+                .map(i -> buildInvoiceDto(i, guest, stay.getStayId()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+
+        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll()), guest, stay.getStayId());
     }
 
     @Transactional
     @Override
-    public Optional<InvoiceDTO> chargeStay(String stayId) {
-        Optional<Stay> stayOpt = this.stayRepository.findById(new StayId(stayId));
-        Stay stay = stayOpt.orElseThrow();
-        this.invoiceService.composeInvoice(stay, this.categoryRepository.findAll(), true);
+    public String chargeStay(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
-        return Optional.of(buildInvoiceDto(stay.getInvoice(), stay.getGuestId()));
+        return stay.composeInvoice(this.categoryRepository.findAll()).getInvoiceNo().getNo();
     }
 
+    @Transactional
+    @Override
+    public void checkoutStay(String stayId) throws EntityNotFoundException, BillingOpenException, IllegalStateException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
 
-    private InvoiceDTO buildInvoiceDto(Invoice invoice, GuestId guestId) {
+        stay.checkout();
+    }
+
+    private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest, StayId stayId) {
         return InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
-                .withGuestDTO(GuestDTO.builder().withGuestEntity(guestById(guestId).get()).build())
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                .withStayId(stayId)
                 .build();
     }
 
     private Set<InvoiceLineDTO> buildLineItemsDto(Set<InvoiceLine> lineItems) {
         Set<InvoiceLineDTO> lineItemsDto = new HashSet<>();
-        for(InvoiceLine line : lineItems) {
-           lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(line).build());
+
+        for (InvoiceLine lineItem : lineItems) {
+           lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(lineItem).build());
         }
+
         return lineItemsDto;
     }
-
-    private Optional<Guest> guestById(GuestId guestId) {
-        Optional<Guest> guestOpt = this.guestRepository.findById(guestId);
-        if (guestOpt.isEmpty()) {
-            return Optional.empty();
-        }
-        return guestOpt;
-    }
-  
- 
 }

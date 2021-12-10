@@ -2,24 +2,24 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.Stay" table="stay" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.stay.Stay" table="stay" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="stayId" class="at.fhv.hotelmanagement.domain.model.StayId">
+        <component name="stayId" class="at.fhv.hotelmanagement.domain.model.stay.StayId">
             <property name="id" column="stay_id" type="java.lang.String" />
         </component>
 
-        <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.BookingNo">
+        <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.booking.BookingNo">
             <property name="no" column="booking_no" type="java.lang.String" />
         </component>
 
-        <property name="stayStatus">
+        <property name="stayState">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">at.fhv.hotelmanagement.domain.model.enums.StayStatus</param>
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.stay.StayState</param>
                 <param name="useNamed">true</param>
             </type>
         </property>
@@ -37,24 +37,26 @@
         <property name="numberOfPersons" column="number_persons" type="java.lang.Integer" />
 
         <map name="selectedCategoriesRoomCount" table="staySelectedCategoriesRoomCounts" cascade="all">
-            <key column="stay_id"></key>
-            <index column="category" type="java.lang.String"></index>
-            <element column="number" type="java.lang.Integer"></element>
+            <key column="stay_id"/>
+            <index column="category" type="java.lang.String"/>
+            <element column="number" type="java.lang.Integer"/>
         </map>
 
-        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.GuestId">
+        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.guest.GuestId">
             <property name="id" column="guest_id" type="java.lang.String" />
         </component>
 
-        <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.PaymentInformation">
+        <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.guest.PaymentInformation">
             <property name="cardHolderName" column="card_holder_name" type="java.lang.String" />
             <property name="cardNumber" column="card_number" type="java.lang.String" />
             <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />
             <property name="cardCvc" column="card_cvc" type="java.lang.String" />
         </component>
 
-        <one-to-one name="invoice" class="at.fhv.hotelmanagement.domain.model.Invoice" cascade="all" constrained="true"></one-to-one>
-
+        <set name="invoices" table="stayInvoices" cascade="all">
+            <key column="stay_id"/>
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.Invoice"/>
+        </set>
 
     </class>
 </hibernate-mapping>

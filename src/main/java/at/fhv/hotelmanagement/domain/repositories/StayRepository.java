@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
-import at.fhv.hotelmanagement.domain.model.Stay;
-import at.fhv.hotelmanagement.domain.model.StayId;
+import at.fhv.hotelmanagement.domain.model.stay.Invoice;
+import at.fhv.hotelmanagement.domain.model.stay.InvoiceNo;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +16,10 @@ public interface StayRepository {
     List<Stay> findAll();
 
     Optional<Stay> findById(StayId stayId);
+
+    Optional<Stay> findByInvoiceNo(InvoiceNo invoiceNo);
+
+    Optional<Invoice> findInvoiceByInvoiceNo(InvoiceNo invoiceNo);
 
     void store(Stay stay);
 }

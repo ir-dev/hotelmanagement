@@ -2,14 +2,14 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="field" default-cascade="all">
-    <class name="at.fhv.hotelmanagement.domain.model.Category" table="category" lazy="true">
+    <class name="at.fhv.hotelmanagement.domain.model.category.Category" table="category" lazy="true">
         <cache usage="read-write"/>
 
         <id name="id" type="long" column="id" unsaved-value="-1">
             <generator class="native"/>
         </id>
 
-        <component name="categoryId" class="at.fhv.hotelmanagement.domain.model.CategoryId">
+        <component name="categoryId" class="at.fhv.hotelmanagement.domain.model.category.CategoryId">
             <property name="id" column="category_id" type="java.lang.String" />
         </component>
 
@@ -21,13 +21,16 @@
             <key>
                 <column name="category_id" />
             </key>
-            <one-to-many class="at.fhv.hotelmanagement.domain.model.Room" />
+            <one-to-many class="at.fhv.hotelmanagement.domain.model.category.Room" />
         </set>
 
-        <component name="price" class="at.fhv.hotelmanagement.domain.model.Price">
-            <property name="halfBoard" column="half_board" type="java.lang.Integer" />
-            <property name="fullBoard" column="full_board" type="java.lang.Integer" />
+        <component name="halfBoardPrice" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="price_halfBoard_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="price_halfBoard_currency" type="java.util.Currency" />
         </component>
-
+        <component name="fullBoardPrice" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="price_fullBoard_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="price_fullBoard_currency" type="java.util.Currency" />
+        </component>
     </class>
 </hibernate-mapping>

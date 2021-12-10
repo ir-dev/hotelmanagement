@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Stay;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class StayDTO {
 
         public Builder withStayEntity(Stay stay) {
             this.instance.stayId = stay.getStayId().getId();
-            this.instance.stayStatus = String.valueOf(stay.getStayStatus());
+            this.instance.stayStatus = String.valueOf(stay.getStayState());
             if (stay.getBookingNo().isPresent()) {
                 this.instance.bookingNo = stay.getBookingNo().get().getNo();
             }

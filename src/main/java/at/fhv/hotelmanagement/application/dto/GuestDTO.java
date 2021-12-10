@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Guest;
-import at.fhv.hotelmanagement.domain.model.Organization;
+import at.fhv.hotelmanagement.domain.model.guest.Guest;
+import at.fhv.hotelmanagement.domain.model.guest.Organization;
 
 import java.time.LocalDate;
 import java.util.Objects;

@@ -1,11 +1,9 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.GuestService;
-import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.domain.model.Booking;
-import at.fhv.hotelmanagement.domain.model.Guest;
-import at.fhv.hotelmanagement.domain.model.GuestId;
+import at.fhv.hotelmanagement.domain.model.guest.Guest;
+import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all Invoices for your stay.')"/>
+    <title>Invoices | Hotel Management</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content">
+            <div class="row" th:object="${openPositionsInvoicePreview}">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">Invoices</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a th:href="@{/stays}" class="breadcrumb-link">Stays</a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{/stay(id=*{stayId})}" class="breadcrumb-link">Stay ID.: <span th:text="*{stayId}"/></a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Invoices</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="row ml-0 mr-0" th:object="${openPositionsInvoicePreview}">
+                                <th:block th:switch="${#sets.isEmpty(lineItems)}" th:with="lineItems=*{lineItems}">
+                                    <form th:case="false" th:action="@{/stays/invoices/create(stayId=*{stayId}, preview=true)}" method="POST" class="ml-auto mr-0 mb-3">
+                                        <button class="btn btn-primary">Create Invoice for Open Positions</button>
+                                    </form>
+                                    <div th:case="true" class="ml-auto mr-0 mb-3">
+                                        <a th:if="${isCheckedOutAt == null}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>
+                                    </div>
+                                </th:block>
+                            </div>
+
+                            <div class="card">
+                                <h5 class="card-header">Open Positions of Stay</h5>
+                                <div class="card-body" th:object="${openPositionsInvoicePreview}">
+                                    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems"/>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <h5 class="card-header">Invoices</h5>
+                                <div class="card-body">
+                                    <table class="table" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th>No. #</th>
+                                            <th>Created Date</th>
+                                            <th>Due Date</th>
+                                            <th>Grand Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${invoices.isEmpty()}">
+                                            <td colspan="5"> no invoices created yet</td>
+                                        </tr>
+                                        <tr th:each="invoice: ${invoices}">
+                                            <td><span th:text="${invoice.invoiceNo}"/></td>
+                                            <td><span th:text="${invoice.createdDate}"/></td>
+                                            <td><span th:text="${invoice.dueDate}"/></td>
+                                            <td><span th:text="${invoice.grandTotal}"/></td>
+                                            <td style="width: 200px;">
+                                                <a class="btn btn-space btn-light" th:href="@{/stays/invoice(no=${invoice.invoiceNo})}"><i class="fas fa-eye"></i></a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/fragments/layout/page :: js"/>
+
+</body>
+
+</html>

@@ -1,10 +1,15 @@
 package at.fhv.hotelmanagement;
 
-import at.fhv.hotelmanagement.domain.model.*;
-import at.fhv.hotelmanagement.domain.model.enums.Country;
-import at.fhv.hotelmanagement.domain.model.enums.PaymentType;
-import at.fhv.hotelmanagement.domain.model.enums.RoomState;
-import at.fhv.hotelmanagement.domain.model.enums.Salutation;
+import at.fhv.hotelmanagement.domain.model.Price;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.CategoryService;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
+import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -16,6 +21,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -42,8 +48,10 @@ public class TestData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2);
-        Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1);
+        Currency curr = Currency.getInstance("EUR");
+
+        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, Price.of(BigDecimal.valueOf(120L), curr), Price.of(BigDecimal.valueOf(150L), curr));
+        Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1, Price.of(BigDecimal.valueOf(90L), curr), Price.of(BigDecimal.valueOf(120L), curr));
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
         c1.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));
@@ -51,7 +59,6 @@ public class TestData implements ApplicationRunner {
         c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
         c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
-        c1.determinePrice(new Price(120, 150));
 
         c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
         c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
@@ -62,7 +69,6 @@ public class TestData implements ApplicationRunner {
       
         room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
         room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
-        c2.determinePrice(new Price(90, 120));
 
 
         Organization orgaEmpty = null;
