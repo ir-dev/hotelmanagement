@@ -249,7 +249,11 @@ public class StayViewController {
     public ModelAndView createInvoice(
             @RequestParam("stayId") String stayId,
             @RequestParam(value="preview", required = false) boolean isPreview,
+            @RequestParam(value="selectedLineItem", required = false) List<String> selectedLineItems,
+            @RequestParam(value="quantity", required = false) List<Integer> quantities,
             Model model) {
+
+        //TODO: Create Invoice with selectedLineItems (Splitted Invoice)
 
         InvoiceDTO invoiceDto = null;
         try {

@@ -22,6 +22,41 @@
     </div>
 </div>
 
+<div class="table-responsive-sm" th:fragment="selectablInvoiceLineItems">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Select</th>
+            <th class="center">#</th>
+            <th>Type</th>
+            <th>Item</th>
+            <th>Description</th>
+            <th class="right">Unit Cost</th>
+            <th class="center">Qty</th>
+            <th class="right">Total</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            <th:block th:each="lineItem, state: *{lineItems}">
+                <tr>
+                    <td th:with="index=${state.count}">
+                        <input th:id="'checkbox' + ${index}" th:value="${lineItem.product}" name="selectedLineItem" type="checkbox" onclick="toggle(this.id)"/>
+                    </td>
+                    <td class="center" th:text="${state.count}"></td>
+                    <td class="left" th:text="${lineItem.type}"></td>
+                    <td class="left strong" th:text="${lineItem.product}"></td>
+                    <td class="left" th:text="${lineItem.description}"></td>
+                    <td class="right" th:text="${lineItem.price}"></td>
+                    <td>
+                        <input style="width:50px;" type="number" name="quantity" disabled="disabled" min="1" th:max="${lineItem.quantity}" th:id="'quantity' + ${state.count}" th:value="${lineItem.quantity}">
+                    </td>
+                    <td class="right" th:text="${lineItem.totalPrice}"></td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+</div>
 
 
 <div class="table-responsive-sm" th:fragment="invoiceLineItems">
@@ -202,6 +237,22 @@
             });
         });
     </script>
+</th:block>
 
+<th:block th:fragment="js2">
+    <script type="text/javascript">
+        function toggle(id){
+            var idStr = id.toString();
+            var quantityId = idStr.substr(idStr.length - 1);
+            var quantity = 'quantity' + quantityId;
 
+            $('#'+idStr).change(function(){
+                if($(this).is(':checked')){
+                    $('#'+quantity).attr('disabled', false);
+                } else {
+                    $('#'+quantity).attr('disabled', true);
+                }
+            });
+        };
+    </script>
 </th:block>

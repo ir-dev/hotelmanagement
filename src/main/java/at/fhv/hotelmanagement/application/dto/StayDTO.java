@@ -43,7 +43,6 @@ public class StayDTO {
     public LocalDateTime checkedOutAt() { return this.checkedOutAt;}
 
 
-
     public String getStayStateTextColorClass() {
         Objects.requireNonNull(this.stayStatus);
 
