@@ -1,5 +1,7 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,17 +41,17 @@ public class Room {
         return true;
     }
 
-    public void occupied(LocalDate fromDate, LocalDate toDate) throws IllegalStateException {
-        createRoomOccupancy(fromDate, toDate);
+    public void occupied(LocalDate fromDate, LocalDate toDate, StayId stayId) throws IllegalStateException {
+        createRoomOccupancy(fromDate, toDate, stayId);
         this.roomState = RoomState.OCCUPIED;
     }
 
-    private void createRoomOccupancy(LocalDate fromDate, LocalDate toDate) throws IllegalStateException {
+    private void createRoomOccupancy(LocalDate fromDate, LocalDate toDate, StayId stayId) throws IllegalStateException {
         if (!isAvailable(fromDate, toDate)) {
             throw new IllegalStateException("Only room with AVAILABLE status can be occupied.");
         }
 
-        RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate);
+        RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate, stayId);
         this.roomOccupancies.add(roomOccupancy);
     }
 

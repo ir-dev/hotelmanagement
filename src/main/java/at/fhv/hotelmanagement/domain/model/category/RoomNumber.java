@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.domain.model.category;
 import java.util.Objects;
 
 public class RoomNumber {
+    private Long id;
     private String number;
 
     // required for hibernate

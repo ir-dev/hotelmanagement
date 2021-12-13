@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.domain.model.Price;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -36,7 +37,7 @@ public class Category {
         }
     }
 
-    public void assignAvailableRooms(Integer roomCount, LocalDate fromDate, LocalDate toDate) throws InsufficientRoomsException {
+    public void assignAvailableRooms(Integer roomCount, LocalDate fromDate, LocalDate toDate, StayId stayId) throws InsufficientRoomsException {
         Set<Room> availableRooms = getAvailableRooms(fromDate, toDate);
         if (availableRooms.size() < roomCount) {
             throw new InsufficientRoomsException();
@@ -47,7 +48,7 @@ public class Category {
             Room room = iterator.next();
 
             // change state of room to occupied for given timespan
-            room.occupied(fromDate, toDate);
+            room.occupied(fromDate, toDate, stayId);
         }
     }
 

@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StayFactoryTest extends AbstractTest {
+
     @Test
     void given_staydetails_when_createstayfromfactory_then_detailsequals() throws CreateStayException, RoomAlreadyExistsException, CreateBookingException {
         // given

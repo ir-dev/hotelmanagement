@@ -4,6 +4,7 @@ import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryId;
 import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface CategoryRepository {
     Optional<Category> findByName(String categoryName);
 
     List<Room> findCategoryRoomsByState(String categoryName, RoomState state);
+
+    List<Room> findRoomsByStayId(StayId stayId);
 
     void store(Category category);
 }

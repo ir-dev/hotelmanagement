@@ -12,5 +12,10 @@
         <property name="startDate" column="start_date" type="java.time.LocalDate" />
 
         <property name="endDate" column="end_date" type="java.time.LocalDate" />
+
+        <component name="stayId" class="at.fhv.hotelmanagement.domain.model.stay.StayId">
+            <property name="id" column="stay_id" type="java.lang.String" />
+        </component>
+
     </class>
 </hibernate-mapping>

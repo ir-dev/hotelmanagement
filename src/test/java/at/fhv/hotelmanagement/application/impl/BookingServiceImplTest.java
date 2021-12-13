@@ -5,6 +5,8 @@ import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
+import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.infrastructure.HibernateBookingRepository;
 import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
@@ -43,10 +45,10 @@ public class BookingServiceImplTest extends AbstractTest {
     private BookingsService bookingsService;
 
     @MockBean
-    private HibernateBookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     @MockBean
-    private HibernateGuestRepository guestRepository;
+    private GuestRepository guestRepository;
 
 
     private static Integer nextDummyBookingIdentity = 1;
@@ -108,7 +110,7 @@ public class BookingServiceImplTest extends AbstractTest {
         Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
 
         //when
-        BookingDTO actualBookingDTO = this.bookingsService.bookingByBookingNo(booking.getBookingNo().getNo()).get();
+        BookingDTO actualBookingDTO = this.bookingsService.bookingByBookingNo(booking.getBookingNo().getNo()).orElseThrow();
 
         //then
         assertEquals(expectedBookingDTO, actualBookingDTO);
@@ -131,7 +133,7 @@ public class BookingServiceImplTest extends AbstractTest {
         Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
 
         //when
-        BookingDetailsDTO actualBookingDetailsDTO = this.bookingsService.bookingDetailsByBookingNo(booking.getBookingNo().getNo()).get();
+        BookingDetailsDTO actualBookingDetailsDTO = this.bookingsService.bookingDetailsByBookingNo(booking.getBookingNo().getNo()).orElseThrow();
 
         //then
         assertEquals(expectedBookingDetailsDTO, actualBookingDetailsDTO);
@@ -145,7 +147,7 @@ public class BookingServiceImplTest extends AbstractTest {
                 null, String.valueOf(Salutation.MISTER),
                 "Fritz",
                 "Mayer",
-                LocalDate.of(1979, 12, 24),
+                getContextLocalDate().minusYears(18L),
                 address,
                 ""
         );
@@ -157,9 +159,9 @@ public class BookingServiceImplTest extends AbstractTest {
         Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1, p, p);
         category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
 
-        LocalDate arrivalDate = LocalDate.now();
-        LocalDate departureDate = LocalDate.now().plusDays(2);
-        LocalTime arrivalTime = LocalTime.of(11, 30);
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(2L);
+        LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 1;
         Map<Category, Integer> selectCategoriesRoomCount = new HashMap<>();
         selectCategoriesRoomCount.put(category, 1);

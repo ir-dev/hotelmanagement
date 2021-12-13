@@ -198,7 +198,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().toList());
+        stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().collect(Collectors.toList()));
 
         return stay;
     }

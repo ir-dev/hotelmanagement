@@ -5,6 +5,7 @@ import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -149,6 +151,43 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
 
         // then
         assertTrue(roomsActual.isEmpty());
+    }
+
+    @Test
+    void given_3categoryrooms_when_findroomsbystayid_then_returnequalscategoryrooms() throws RoomAlreadyExistsException {
+        //given
+        RoomState roomState = RoomState.AVAILABLE;
+        List<Room> roomsExpected = Arrays.asList(
+                new Room(new RoomNumber("101"), roomState),
+                new Room(new RoomNumber("102"), roomState),
+                new Room(new RoomNumber("103"), roomState)
+        );
+
+        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(
+                this.categoryRepository.nextIdentity(),
+                "Honeymoon Suite DZ",
+                "A honeymoon..",
+                2,
+                p,
+                p
+        );
+
+        for (Room r : roomsExpected) {
+            r.occupied(getContextLocalDate(), getContextLocalDate().plusDays(2), new StayId("1"));
+            category.createRoom(r);
+        }
+
+        this.categoryRepository.store(category);
+        this.em.flush();
+
+        //when
+        List<Room> roomsActual = this.categoryRepository.findRoomsByStayId(new StayId("1"));
+
+        //then
+        for (Room r : roomsActual) {
+            assertTrue(roomsExpected.contains(r));
+        }
     }
 }
 
