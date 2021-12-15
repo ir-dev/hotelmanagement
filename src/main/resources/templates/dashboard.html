@@ -59,7 +59,14 @@
                                 <h3 class="section-title">Upcoming Check-In's</h3>
                             </div>
                             <br>
-                            <input class="form-control" id="myInput" type="text" placeholder="Search..."><br>
+                            <input class="form-control" list="mostSearched" id="myInput" type="text" autocomplete=”on”
+                                   placeholder="Search..."><br>
+
+                            <datalist id="mostSearched">
+                                <option value="PENDING">
+                                <option value="CONFIRMED">
+                            </datalist>
+
                             <div class="card">
                                 <table class="table" style="text-align: center">
                                     <thead>
@@ -79,7 +86,7 @@
                                     </tr>
 
                                     <tr th:each="booking : ${bookings}">
-                                        <div th:if="(${booking.arrivalDate().equals(localDate) && !booking.bookingState().equalsIgnoreCase('CLOSED')})">
+                                        <div th:if="(${booking.arrivalDate().equals(localDate) && booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING')})">
                                             <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
                                                     th:text="${booking.bookingNo()}"/></a>
                                             </td>
@@ -101,6 +108,7 @@
                                                            th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
                                                                 class="fas fa-check"></i> Check-In</a>
                                                     </p>
+
                                                     <p th:case="'CLOSED'">
                                                         <a class="btn btn-space btn-light"
                                                            th:href="@{/booking(no=${booking.bookingNo()})}"><i
@@ -109,13 +117,30 @@
                                                                 class="fas fa-check"></i> Check-In</a>
                                                     </p>
 
-                                                    <p th:case="*">
+                                                    <p th:case="'CANCELLED'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space, text-white"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+
+                                                    <p th:case="'EXPIRED'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space, text-white"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+
+                                                    <p th:case="'CONFIRMED'">
                                                         <a class="btn btn-space btn-light"
                                                            th:href="@{/booking(no=${booking.bookingNo()})}"><i
                                                                 class="fas fa-eye"></i></a>
                                                         <a class="btn btn-space btn-success"
                                                            th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
                                                                 class="fas fa-check"></i> Check-In</a>
+                                                    </p>
 
                                                 </div>
                                             </td>
