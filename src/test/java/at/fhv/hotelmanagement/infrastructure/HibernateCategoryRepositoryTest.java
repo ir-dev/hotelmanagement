@@ -87,80 +87,16 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
         assertEquals(categoryExcepted.getCategoryId(), categoryActual.getCategoryId());
     }
 
-    @Test
-    void given_3categoryroomsandroomstate_when_findcategoryroomsbyroomstate_then_returnequalscategoryrooms() throws RoomAlreadyExistsException {
-        // given
-        RoomState roomState = RoomState.AVAILABLE;
-        List<Room> roomsExpected = Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
-        );
-        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
-        Category category = CategoryFactory.createCategory(
-                this.categoryRepository.nextIdentity(),
-                "Family Suite MZ",
-                "A family suite ...",
-                3,
-                p,
-                p
-        );
-        for (Room r : roomsExpected) {
-            category.createRoom(r);
-        }
-        this.categoryRepository.store(category);
-        this.em.flush();
 
-        // when
-        List<Room> roomsActual = this.categoryRepository.findCategoryRoomsByState(category.getName(), roomState);
-
-        // then
-        assertEquals(roomsExpected.size(), roomsActual.size());
-        for (Room r : roomsActual) {
-            assertTrue(roomsExpected.contains(r));
-        }
-    }
-
-    @Test
-    void given_3categoryroomsanddifferentroomstate_when_findcategoryroomsbyroomstate_then_returnemptycategoryrooms() throws RoomAlreadyExistsException {
-        // given
-        RoomState roomState = RoomState.AVAILABLE;
-        RoomState differentRoomState = RoomState.MAINTENANCE;
-        List<Room> roomsExpected = Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
-        );
-        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
-        Category category = CategoryFactory.createCategory(
-                this.categoryRepository.nextIdentity(),
-                "Family Suite MZ",
-                "A family suite ...",
-                3,
-                p,
-                p
-        );
-        for (Room r : roomsExpected) {
-            category.createRoom(r);
-        }
-        this.categoryRepository.store(category);
-        this.em.flush();
-
-        // when
-        List<Room> roomsActual = this.categoryRepository.findCategoryRoomsByState(category.getName(), differentRoomState);
-
-        // then
-        assertTrue(roomsActual.isEmpty());
-    }
 
     @Test
     void given_3categoryrooms_when_findroomsbystayid_then_returnequalscategoryrooms() throws RoomAlreadyExistsException {
         //given
         RoomState roomState = RoomState.AVAILABLE;
-        List<Room> roomsExpected = Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
+        List<RoomNumber> roomNumbersExpected = Arrays.asList(
+                new RoomNumber("101"),
+                new RoomNumber("102"),
+                new RoomNumber("103")
         );
 
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
@@ -173,20 +109,21 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
                 p
         );
 
-        for (Room r : roomsExpected) {
-            r.occupied(getContextLocalDate(), getContextLocalDate().plusDays(2), new StayId("1"));
-            category.createRoom(r);
+        for (RoomNumber rn : roomNumbersExpected) {
+            Room room = new Room(rn, roomState);
+            category.createRoom(room);
+            room.occupied(getContextLocalDate(), getContextLocalDate().plusDays(2), new StayId("1"));
         }
 
         this.categoryRepository.store(category);
         this.em.flush();
 
         //when
-        List<Room> roomsActual = this.categoryRepository.findRoomsByStayId(new StayId("1"));
+        List<RoomNumber> roomsNumbersActual = this.categoryRepository.findRoomNumbersByStayId(new StayId("1"));
 
         //then
-        for (Room r : roomsActual) {
-            assertTrue(roomsExpected.contains(r));
+        for (RoomNumber rn : roomsNumbersActual) {
+            assertTrue(roomNumbersExpected.contains(rn.getNumber()));
         }
     }
 }

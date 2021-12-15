@@ -75,7 +75,7 @@ public class StayServiceImpl implements StayService {
         return StayDetailsDTO.builder()
                 .withStayEntity(stay)
                 .withGuestDTO(buildGuestDto(this.guestRepository.findById(stay.getGuestId()).orElseThrow()))
-                .withRoomNumbers(this.categoryRepository.findRoomsByStayId(stay.getStayId()))
+                .withRoomNumbers(this.categoryRepository.findRoomNumbersByStayId(stay.getStayId()))
                 .build();
     }
 

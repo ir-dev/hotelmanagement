@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.category.Room;
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 import at.fhv.hotelmanagement.domain.model.stay.Stay;
 import java.util.*;
@@ -69,10 +70,10 @@ public class StayDetailsDTO {
             return this;
         }
 
-        public Builder withRoomNumbers(List<Room> rooms) {
+        public Builder withRoomNumbers(List<RoomNumber> rooms) {
             this.instance.roomNumbers =  new HashSet<>();
-            for(Room room : rooms) {
-                this.instance.roomNumbers.add(room.getRoomNumber().getNumber());
+            for(RoomNumber rn : rooms) {
+                this.instance.roomNumbers.add(rn.getNumber());
             }
             return this;
         }
