@@ -4,7 +4,6 @@ import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
