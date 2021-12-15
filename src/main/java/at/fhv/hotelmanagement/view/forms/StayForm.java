@@ -6,7 +6,6 @@ import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class StayForm {
     private String firstName;
     private String lastName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
     private String street;
     private String zipcode;
     private String city;
@@ -47,7 +46,7 @@ public class StayForm {
         this.salutation                     = this.salutation != null ? this.salutation : String.valueOf(guestDTO.salutation());
         this.firstName                      = this.firstName != null ? this.firstName : guestDTO.firstName();
         this.lastName                       = this.lastName != null ? this.lastName : guestDTO.lastName();
-        this.birthday                       = this.birthday != null ? this.birthday : guestDTO.birthday();
+        this.dateOfBirth                    = this.dateOfBirth != null ? this.dateOfBirth : guestDTO.dateOfBirth();
         this.street                         = this.street != null ? this.street : guestDTO.addressStreet();
         this.zipcode                        = this.zipcode != null ? this.zipcode : guestDTO.addressZipcode();
         this.city                           = this.city != null ? this.city : guestDTO.addressCity();
@@ -138,12 +137,12 @@ public class StayForm {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getStreet() {

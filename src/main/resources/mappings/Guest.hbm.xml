@@ -29,7 +29,7 @@
 
         <property name="lastName" column="last_name" type="java.lang.String" />
 
-        <property name="birthday" column="birthday" type="java.time.LocalDate" />
+        <property name="dateOfBirth" column="dateOfBirth" type="java.time.LocalDate" />
 
         <component name="address" class="at.fhv.hotelmanagement.domain.model.guest.Address">
             <property name="street" column="address_street" type="java.lang.String" />

@@ -84,7 +84,7 @@ class HibernateGuestRepositoryTest extends AbstractTest {
         return GuestFactory.createGuest(
                 this.guestRepository.nextIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
                 getContextLocalDate().minusYears(18L),
