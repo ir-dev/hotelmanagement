@@ -1,10 +1,7 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.GuestDTO;
-import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
-import at.fhv.hotelmanagement.application.dto.InvoiceLineDTO;
-import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
@@ -24,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class StayServiceImpl implements StayService {
@@ -71,6 +67,21 @@ public class StayServiceImpl implements StayService {
     private StayDTO buildStayDto(Stay stay) {
         return StayDTO.builder()
                 .withStayEntity(stay)
+                .withDetails(buildStayDetailsDto(stay))
+                .build();
+    }
+
+    private StayDetailsDTO buildStayDetailsDto(Stay stay) {
+        return StayDetailsDTO.builder()
+                .withStayEntity(stay)
+                .withGuestDTO(buildGuestDto(this.guestRepository.findById(stay.getGuestId()).orElseThrow()))
+                .withRoomNumbers(this.categoryRepository.findRoomNumbersByStayId(stay.getStayId()))
+                .build();
+    }
+
+    private GuestDTO buildGuestDto(Guest guest) {
+        return GuestDTO.builder()
+                .withGuestEntity(guest)
                 .build();
     }
 
@@ -140,7 +151,8 @@ public class StayServiceImpl implements StayService {
         this.categoryService.autoAssignRooms(
                 selectedCategoriesRoomCount,
                 arrivalDate,
-                departureDate
+                departureDate,
+                stay.getStayId()
         );
 
         // change booking state to closed
@@ -180,7 +192,8 @@ public class StayServiceImpl implements StayService {
         this.categoryService.autoAssignRooms(
                 selectedCategoriesRoomCount,
                 arrivalDate,
-                departureDate
+                departureDate,
+                stay.getStayId()
         );
     }
 
@@ -257,7 +270,7 @@ public class StayServiceImpl implements StayService {
         Set<InvoiceLineDTO> lineItemsDto = new HashSet<>();
 
         for (InvoiceLine lineItem : lineItems) {
-           lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(lineItem).build());
+            lineItemsDto.add(InvoiceLineDTO.builder().withInvoiceLineEntity(lineItem).build());
         }
 
         return lineItemsDto;

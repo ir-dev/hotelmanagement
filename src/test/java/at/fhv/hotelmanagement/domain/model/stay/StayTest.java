@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,7 +106,7 @@ class StayTest extends AbstractTest {
         Stay stay = StayFactory.createStayForBooking(stayId, booking, bookingNo, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
 
         // when
-        Invoice invoice = stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().toList());
+        Invoice invoice = stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().collect(Collectors.toList()));
         stay.checkout();
 
         // then

@@ -6,7 +6,7 @@
 
     <div class="float-right">
         <h3 class="mb-0">Invoice No. <span th:text="*{invoiceNo}"></span></h3>
-        Date: <span th:text="*{currentDate}"></span>
+        Date: <span th:text="*{currentDate + ''}"></span> <!--Uniform Formatting-->
     </div>
 </div>
 
@@ -18,37 +18,42 @@
 
     <div class="float-right">
         <h3 class="mb-0">Intermediary Invoice</h3>
-        Date: <span th:text="*{currentDate}"></span>
+        Date: <span th:text="*{currentDate + ''}"></span> <!--Uniform Formatting-->
     </div>
 </div>
+
+
 
 <div class="table-responsive-sm" th:fragment="invoiceLineItems">
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th class="center">#</th>
-                <th>Type</th>
-                <th>Item</th>
-                <th>Description</th>
-                <th class="right">Unit Cost</th>
-                <th class="center">Qty</th>
-                <th class="right">Total</th>
-            </tr>
+        <tr>
+            <th class="center">#</th>
+            <th>Type</th>
+            <th>Item</th>
+            <th>Description</th>
+            <th class="right">Unit Cost</th>
+            <th class="center">Qty</th>
+            <th class="right">Total</th>
+        </tr>
         </thead>
 
         <tbody>
-            <tr th:each="lineItem, state: *{lineItems}">
-                <td class="center" th:text="${state.count}"></td>
-                <td class="left" th:text="${lineItem.type}"></td>
-                <td class="left strong" th:text="${lineItem.product}"></td>
-                <td class="left" th:text="${lineItem.description}"></td>
-                <td class="right" th:text="${lineItem.price}"></td>
-                <td class="center" th:text="${lineItem.quantity}"></td>
-                <td class="right" th:text="${lineItem.totalPrice}"></td>
-            </tr>
+        <tr th:each="lineItem, state: *{lineItems}">
+            <td class="center" th:text="${state.count}"></td>
+            <td class="left" th:text="${lineItem.type}"></td>
+            <td class="left strong" th:text="${lineItem.product}"></td>
+            <td class="left" th:text="${lineItem.description}"></td>
+            <td class="right" th:text="${lineItem.price}"></td>
+            <td class="center" th:text="${lineItem.quantity}"></td>
+            <td class="right" th:text="${lineItem.totalPrice}"></td>
+        </tr>
         </tbody>
     </table>
 </div>
+
+
+
 
 <div class="card-body" th:fragment="invoiceCardBody">
     <div class="row mb-4">
@@ -111,6 +116,15 @@
     <p class="mb-0">Thanks for choosing Hotelmanagement</p>
 </div>
 
+<div class="card-footer bg-white" th:fragment="invoiceCardBankCredentials">
+    <div style="float: right; margin-right: auto">
+        <p class="mb-0">Volksbank</p>
+        <p class="mb-0">IBAN: AT 2178 9800 000 2387 6707</p>
+        <p class="mb-0">BIC/SWIFT: GENODE 26ZER</p>
+    </div>
+    <p class="mb-0" style="float: left">Thanks for Choosing Hotelmanagement</p>
+</div>
+
 <div class="row" th:fragment="invoice">
     <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="form-group">
@@ -122,12 +136,12 @@
         <div class="card" id="container_content">
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardHeader" />
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody" />
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBankCredentials" />
         </div>
 
         <div class="form-group">
             <p class="text-right">
-                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-light">Back to Invoices</a>
+                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Back to Invoices</a>
             </p>
         </div>
     </div>
@@ -188,4 +202,6 @@
             });
         });
     </script>
+
+
 </th:block>

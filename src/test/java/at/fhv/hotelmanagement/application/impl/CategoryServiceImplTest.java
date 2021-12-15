@@ -3,7 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.infrastructure.HibernateCategoryRepository;
+import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
@@ -33,7 +33,7 @@ public class CategoryServiceImplTest extends AbstractTest {
     private CategoryService categoryService;
 
     @MockBean
-    private HibernateCategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Test
     void given_emptyrepository_when_fetchingallbookings_then_empty() {

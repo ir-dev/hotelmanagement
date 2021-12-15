@@ -3,10 +3,7 @@ package at.fhv.hotelmanagement.view;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.dto.BookingDTO;
-import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
-import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.application.impl.EntityNotFoundException;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
@@ -192,6 +189,7 @@ public class StayViewController {
 
         Optional<StayDTO> stay = this.stayService.stayByStayId(stayId);
 
+
         if (stay.isEmpty()) {
             return redirectError("Stay with id.: " + stayId + " not found");
         }
@@ -239,7 +237,7 @@ public class StayViewController {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
         }
 
-        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).get().checkedOutAt());
+        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).orElseThrow().isCheckedOut());
         model.addAttribute("openPositionsInvoicePreview", openPositionsInvoicePreview);
         model.addAttribute("invoices", invoices);
 

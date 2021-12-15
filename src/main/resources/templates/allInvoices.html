@@ -40,7 +40,7 @@
                                         <button class="btn btn-primary">Create Invoice for Open Positions</button>
                                     </form>
                                     <div th:case="true" class="ml-auto mr-0 mb-3">
-                                        <a th:if="${isCheckedOutAt == null}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>
+                                        <a th:if="${isCheckedOut == null}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>
                                     </div>
                                 </th:block>
                             </div>
@@ -81,6 +81,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                            <div class="text-right">
+                                <a th:href="@{/stays}" class="btn btn-space btn-secondary">Back</a>
                             </div>
                         </div>
                     </div>

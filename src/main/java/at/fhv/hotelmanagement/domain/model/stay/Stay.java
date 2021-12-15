@@ -87,14 +87,13 @@ public class Stay {
     }
 
     private InvoiceNo nextInvoiceNo() {
-        return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size()+1));
+        return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
     public Invoice composeInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
-            throw new IllegalStateException("Stay have been already billed.");
+            throw new IllegalStateException("Stay has already been billed.");
         }
-
         Invoice invoice = generateInvoice(billableCategories);
         this.invoices.add(invoice);
 

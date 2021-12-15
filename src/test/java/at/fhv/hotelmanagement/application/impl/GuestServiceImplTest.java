@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
+import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class GuestServiceImplTest extends AbstractTest {
     private GuestService guestService;
 
     @MockBean
-    private HibernateGuestRepository guestRepository;
+    private GuestRepository guestRepository;
 
     private static Integer nextDummyGuestIdentity = 1;
 
@@ -90,7 +91,7 @@ public class GuestServiceImplTest extends AbstractTest {
                 null, String.valueOf(Salutation.MISTER),
                 "Fritz",
                 "Mayer",
-                LocalDate.of(1979, 12, 24),
+                getContextLocalDate().minusYears(18L),
                 address,
                 ""
         );
