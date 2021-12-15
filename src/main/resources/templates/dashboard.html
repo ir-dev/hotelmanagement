@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="/fragments/layout/page :: meta(description='Create a booking for your stay at the hotel.')"/>
-    <title>Create Booking | Hotel Management</title>
+    <title>Dashboard | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -45,22 +45,94 @@
 
                                 <a th:href="@{/stays}" class="btn btn-lg btn-primary mr-3">Stay</a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            <!--
+
+            <div class="row">
+                <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="section-block">
                                 <h3 class="section-title">Upcoming Check-In's</h3>
-                                <table>
+                            </div>
+                            <br>
+                            <input class="form-control" id="myInput" type="text" placeholder="Search..."><br>
+                            <div class="card">
+                                <table class="table" style="text-align: center">
+                                    <thead>
+                                    <tr>
+                                        <th>Booking #</th>
+                                        <th>Guest</th>
+                                        <th>Arrival</th>
+                                        <th>Departure</th>
+                                        <th>Status</th>
+                                        <th># of Rooms</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="myTable">
+                                    <tr th:if="${bookings.isEmpty()}">
+                                        <td colspan="6"> no bookings available</td>
+                                    </tr>
 
+                                    <tr th:each="booking : ${bookings}">
+                                        <div th:if="(${booking.arrivalDate().equals(localDate) && !booking.bookingState().equalsIgnoreCase('CLOSED')})">
+                                            <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
+                                                    th:text="${booking.bookingNo()}"/></a>
+                                            </td>
+                                            <td><span
+                                                    th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/>
+                                            </td>
+                                            <td><span th:text="${booking.arrivalDate}"/></td>
+                                            <td><span th:text="${booking.departureDate}"/></td>
+                                            <td><span th:text="${booking.bookingState}"
+                                                      th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
+                                            <td><span th:text="${booking.numberOfBookedRooms}"/></td>
+                                            <td style="width: 200px;">
+                                                <div th:switch="${booking.bookingState()}">
+                                                    <p th:case="'PENDING'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space btn-success"
+                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+                                                    <p th:case="'CLOSED'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space, text-white"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+
+                                                    <p th:case="*">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space btn-success"
+                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+
+                                                </div>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
-                            -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <th:block th:replace="/fragments/layout/footer :: content"/>
     </div>
+
+    <th:block th:replace="/fragments/layout/footer :: content"/>
+</div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
 </body>

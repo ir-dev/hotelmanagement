@@ -15,7 +15,8 @@
         <div class="container-fluid dashboard-content">
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-success alert-dismissible fade show" th:if="${msg != null && msg.isPresent()}" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show"
+                         th:if="${msg != null && msg.isPresent()}" role="alert">
                         <th:block th:text="${msg.get()}"></th:block>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -42,46 +43,79 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-xl-10">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="row ml-0 mr-0">
-                                <a th:href="@{/bookings/create}" class="btn btn-primary ml-auto mr-0 mb-3">Create Booking</a>
-                            </div>
 
-                            <div class="card">
-                                <table class="table" style="text-align: center">
-                                    <thead>
-                                    <tr>
-                                        <th>Booking No.</th>
-                                        <th>Guest</th>
-                                        <th>Arrival</th>
-                                        <th>Departure</th>
-                                        <th>Status</th>
-                                        <th>Number of Rooms</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:if="${bookings.isEmpty()}">
-                                        <td colspan="6"> no bookings available</td>
-                                    </tr>
-                                    <tr th:each="booking : ${bookings}">
-                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span th:text="${booking.bookingNo()}"/></a>
-                                        </td>
-                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
-                                        <td><span th:text="${booking.arrivalDate}"/></td>
-                                        <td><span th:text="${booking.departureDate}"/></td>
-                                        <td><span th:text="${booking.bookingState}" th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
-                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
-                                        <td style="width: 200px;">
-                                            <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
-                                            <a class="btn btn-space btn-success" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i class="fas fa-check"></i> Check-In</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="row ml-0 mr-0">
+                                    <a th:href="@{/bookings/create}" class="btn btn-primary ml-auto mr-0 mb-3">Create
+                                        Booking</a>
+                                </div>
+                                <br>
+                                <input class="form-control" id="myInput" type="text" placeholder="Search..."><br>
+                                <div class="card">
+                                    <table class="table" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th>Booking No.</th>
+                                            <th>Guest</th>
+                                            <th>Arrival</th>
+                                            <th>Departure</th>
+                                            <th>Status</th>
+                                            <th>Number of Rooms</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                        <tr th:if="${bookings.isEmpty()}">
+                                            <td colspan="6"> no bookings available</td>
+                                        </tr>
+                                        <tr th:each="booking : ${bookings}">
+                                            <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
+                                                    th:text="${booking.bookingNo()}"/></a>
+                                            </td>
+                                            <td><span
+                                                    th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/>
+                                            </td>
+                                            <td><span th:text="${booking.arrivalDate}"/></td>
+                                            <td><span th:text="${booking.departureDate}"/></td>
+                                            <td><span th:text="${booking.bookingState}"
+                                                      th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
+                                            <td><span th:text="${booking.numberOfBookedRooms}"/></td>
+                                            <td style="width: 200px;">
+                                                <div th:switch="${booking.bookingState()}">
+                                                    <p th:case="'PENDING'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space btn-success"
+                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+                                                    <p th:case="'CLOSED'">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space, text-white"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+                                                    </p>
+
+                                                    <p th:case="*">
+                                                        <a class="btn btn-space btn-light"
+                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a class="btn btn-space btn-success"
+                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
+                                                                class="fas fa-check"></i> Check-In</a>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +125,5 @@
     </div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
-
 </body>
-
 </html>

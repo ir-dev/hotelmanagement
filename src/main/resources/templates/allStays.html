@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
-    <title>Stays | Hotel Management</title>
+    <title>Stays | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -49,7 +49,9 @@
                             <div class="row ml-0 mr-0">
                                 <a th:href="@{/checkin}" class="btn btn-primary ml-auto mr-0 mb-3">Create Stay (Check-In of Walk-In Guest)</a>
                             </div>
-
+                            <br>
+                            <input class="form-control" id="myInput" type="text" placeholder="Search..."><br>
+                            <div class="card">
                             <div class="card">
                                 <table class="table" style="text-align: center">
                                     <thead>
@@ -93,6 +95,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
 
