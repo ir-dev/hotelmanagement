@@ -82,7 +82,7 @@ public class StayServiceImplTest extends AbstractTest {
         }
 
         Mockito.when(this.guestRepository.findById(any())).thenReturn(Optional.of(guest));
-        Mockito.when(this.categoryRepository.findRoomsByStayId(any())).thenReturn(createRoomsDummy());
+        Mockito.when(this.categoryRepository.findRoomNumbersByStayId(any())).thenReturn(createRoomNumbersDummy());
         Mockito.when(this.stayRepository.findAll()).thenReturn(stays);
 
         //when
@@ -105,7 +105,7 @@ public class StayServiceImplTest extends AbstractTest {
         StayDTO expectedStayDto = buildStayDto(stay);
 
         Mockito.when(this.guestRepository.findById(any())).thenReturn(Optional.of(guest));
-        Mockito.when(this.categoryRepository.findRoomsByStayId(any())).thenReturn(createRoomsDummy());
+        Mockito.when(this.categoryRepository.findRoomNumbersByStayId(any())).thenReturn(createRoomNumbersDummy());
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
 
         //when
@@ -252,7 +252,7 @@ public class StayServiceImplTest extends AbstractTest {
         return StayDetailsDTO.builder()
                 .withStayEntity(stay)
                 .withGuestDTO(buildGuestDto(createGuestDummy()))
-                .withRoomNumbers(createRoomsDummy())
+                .withRoomNumbers(createRoomNumbersDummy())
                 .build();
     }
 
@@ -272,12 +272,11 @@ public class StayServiceImplTest extends AbstractTest {
         return lineItemsDto;
     }
 
-    private List<Room> createRoomsDummy() {
-        RoomState roomState = RoomState.AVAILABLE;
+    private List<RoomNumber> createRoomNumbersDummy() {
         return Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
+                new RoomNumber("101"),
+                new RoomNumber("102"),
+                new RoomNumber("103")
         );
     }
 

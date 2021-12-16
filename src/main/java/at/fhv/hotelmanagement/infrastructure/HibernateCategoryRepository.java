@@ -1,13 +1,9 @@
 package at.fhv.hotelmanagement.infrastructure;
 
-import at.fhv.hotelmanagement.domain.model.category.Category;
-import at.fhv.hotelmanagement.domain.model.category.CategoryId;
-import at.fhv.hotelmanagement.domain.model.category.Room;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -38,16 +34,8 @@ public class HibernateCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public List<Room> findCategoryRoomsByState(String categoryName, RoomState state) {
-        TypedQuery<Room> query = this.em.createQuery("SELECT cr FROM Category c JOIN c.rooms cr WHERE c.name = :categoryName AND cr.roomState = :state", Room.class);
-        query.setParameter("categoryName", categoryName);
-        query.setParameter("state", state);
-        return query.getResultList();
-    }
-
-    @Override
-    public List<Room> findRoomsByStayId(StayId stayId) {
-        TypedQuery<Room> query = this.em.createQuery("SELECT r FROM Room r JOIN r.roomOccupancies ro WHERE ro.stayId = :stayId", Room.class);
+    public List<RoomNumber> findRoomNumbersByStayId(StayId stayId) {
+        TypedQuery<RoomNumber> query = this.em.createQuery("SELECT r.roomNumber FROM Room r JOIN r.roomOccupancies ro WHERE ro.stayId = :stayId", RoomNumber.class);
         query.setParameter("stayId", stayId);
         return query.getResultList();
     }

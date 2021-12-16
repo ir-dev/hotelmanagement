@@ -89,7 +89,8 @@ public class TestData implements ApplicationRunner {
         PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
       
-        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,15),
+
+        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
                 LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
 
         Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
