@@ -24,19 +24,19 @@ public class RoomTest extends AbstractTest {
 
         //when
         Room room = new Room(roomNumber, roomState);
-        room.occupied(fromdate, todate);
+        room.occupied(fromdate, todate,null);
 
         //then
         assertEquals(room.getRoomNumber(), roomNumber);
 
         // test overlap beginning
-        assertThrows(IllegalStateException.class, () -> room.occupied(before, middle));
+        assertThrows(IllegalStateException.class, () -> room.occupied(before, middle, null));
 
         // test overlap whole
-        assertThrows(IllegalStateException.class, () -> room.occupied(fromdate, todate));
+        assertThrows(IllegalStateException.class, () -> room.occupied(fromdate, todate, null));
 
         // test overlap ending
-        assertThrows(IllegalStateException.class, () -> room.occupied(middle, after));
+        assertThrows(IllegalStateException.class, () -> room.occupied(middle, after, null));
 
         assertThrows(IllegalArgumentException.class, () -> new Room(roomNumber, RoomState.OCCUPIED));
 

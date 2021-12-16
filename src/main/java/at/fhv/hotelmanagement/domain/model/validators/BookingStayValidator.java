@@ -74,7 +74,9 @@ public class BookingStayValidator {
         Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
 
         for (Map.Entry<Category, Integer> selectedCategoryRoomCount : selectedCategoriesRoomCount.entrySet()) {
-            selectedCategoryNamesRoomCount.put(selectedCategoryRoomCount.getKey().getName(), selectedCategoryRoomCount.getValue());
+            if(selectedCategoryRoomCount.getValue() > 0) {
+                selectedCategoryNamesRoomCount.put(selectedCategoryRoomCount.getKey().getName(), selectedCategoryRoomCount.getValue());
+            }
         }
 
         return selectedCategoryNamesRoomCount;

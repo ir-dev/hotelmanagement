@@ -10,6 +10,7 @@ import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.model.category.CategoryService;
 import at.fhv.hotelmanagement.domain.model.stay.Stay;
 import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
@@ -50,7 +51,7 @@ public class TestData implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         Currency curr = Currency.getInstance("EUR");
 
-        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite', in a hotel or other places of accommodation denotes a suite with special amenities primarily aimed at couples and newlyweds.", 2, Price.of(BigDecimal.valueOf(120L), curr), Price.of(BigDecimal.valueOf(150L), curr));
+        Category c1 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Honeymoon Suite DZ", "A honeymoon suite, or a 'romance suite' aimed at couples and newlyweds.", 2, Price.of(BigDecimal.valueOf(120L), curr), Price.of(BigDecimal.valueOf(150L), curr));
         Category c2 = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),"Business Casual EZ", "A casual accommodation for business guests.", 1, Price.of(BigDecimal.valueOf(90L), curr), Price.of(BigDecimal.valueOf(120L), curr));
         this.categoryRepository.store(c1);
         this.categoryRepository.store(c2);
@@ -69,9 +70,9 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(room224);
         c2.createRoom(new Room(new RoomNumber("225"), RoomState.AVAILABLE));
         c2.createRoom(new Room(new RoomNumber("226"), RoomState.AVAILABLE));
-      
-        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22));
-        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25));
+
+        room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22), new StayId("0"));
+        room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25), new StayId("0"));
 
         Organization orgaEmpty = null;
         Organization orga1 = new Organization("FHV", BigDecimal.valueOf(0.25));
@@ -97,7 +98,7 @@ public class TestData implements ApplicationRunner {
         PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
         PaymentInformation paymentInformation3 = new PaymentInformation("Lukas Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
-      
+
         Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,20),
                 LocalDate.of(2021,12,24), LocalTime.of(11,30), 3, categoryRooms1, g1.getGuestId(), paymentInformation1);
 
@@ -137,7 +138,8 @@ public class TestData implements ApplicationRunner {
         this.categoryService.autoAssignRooms(
                 selectedCategoriesRoomCount2,
                 bk2.getArrivalDate(),
-                bk2.getDepartureDate()
+                bk2.getDepartureDate(),
+                stay1.getStayId()
         );
 
         bk2.close();

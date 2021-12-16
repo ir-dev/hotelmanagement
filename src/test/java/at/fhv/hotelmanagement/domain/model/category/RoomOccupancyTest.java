@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.category.RoomOccupancy;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class RoomOccupancyTest extends AbstractTest {
         LocalDate endDate = getContextLocalDate().plusDays(3L);
 
         //when
-        RoomOccupancy roomOccupancy = new RoomOccupancy(startDate, endDate);
+        RoomOccupancy roomOccupancy = new RoomOccupancy(startDate, endDate, new StayId("1"));
 
         //then
         assertEquals(roomOccupancy.getStartDate(), startDate);

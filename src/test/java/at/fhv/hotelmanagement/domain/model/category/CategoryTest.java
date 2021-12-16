@@ -51,7 +51,7 @@ public class CategoryTest extends AbstractTest {
 
         assertEquals(category.getAvailableRoomsCount(fromdate, todate2), 1);
 
-        room.occupied(fromdate, todate1);
+        room.occupied(fromdate, todate1, null);
         assertEquals(category.getAvailableRoomsCount(fromdate, todate2), 0);
 
         assertEquals(category.getAvailableRoomNumbers(fromdate, todate1), roomNumbers);

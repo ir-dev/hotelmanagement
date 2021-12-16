@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.stay;
 
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
@@ -11,6 +12,7 @@ import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
+import java.util.Set;
 
 public class StayFactory {
     public static Stay createStayForBooking(StayId stayId,

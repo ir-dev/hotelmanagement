@@ -6,14 +6,12 @@ import at.fhv.hotelmanagement.domain.model.stay.StayId;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 public class InvoiceDTO {
     private GuestDTO guest;
     private String stayId;
-
     private String invoiceNo;
     private LocalDate createdDate;
     private LocalDate dueDate;
