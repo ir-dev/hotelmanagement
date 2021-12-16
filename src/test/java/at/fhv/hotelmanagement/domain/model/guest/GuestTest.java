@@ -1,7 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.guest;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,12 +17,12 @@ public class GuestTest extends AbstractTest {
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         String firstName = ("Anna");
         String lastName = ("Bauer");
-        LocalDate birthday = getContextLocalDate().minusYears(18L);
+        LocalDate dateOfBirth = getContextLocalDate().minusYears(18L);
         Address address = new Address("Musterstraße 5", "6900", "Bregenz", String.valueOf(Country.AT));
         String specialNotes = ("Frühstück aufs Zimmer");
 
         //when
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday, address, specialNotes);
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, dateOfBirth, address, specialNotes);
 
         //then
         assertEquals(guestId, guest.getGuestId());
@@ -32,7 +31,7 @@ public class GuestTest extends AbstractTest {
         assertEquals(firstName, guest.getFirstName());
         assertEquals(lastName, guest.getLastName());
         assertEquals(firstName, guest.getFirstName());
-        assertEquals(birthday, guest.getBirthday());
+        assertEquals(dateOfBirth, guest.getDateOfBirth());
         assertEquals(address, guest.getAddress());
         assertEquals(specialNotes, guest.getSpecialNotes());
     }

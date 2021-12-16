@@ -1,7 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.guest;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -18,8 +17,8 @@ public class GuestFactoryTest extends AbstractTest {
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         String firstName = ("Anna");
         String lastName = ("Bauer");
-        LocalDate birthday1 = getContextLocalDate().minusYears(18L);
-        LocalDate birthday2 = getContextLocalDate().minusYears(16L);
+        LocalDate dateOfBirth1 = getContextLocalDate().minusYears(18L);
+        LocalDate dateOfBirth2 = getContextLocalDate().minusYears(16L);
         Address address = new Address("Musterstraße 5", "6900", "Bregenz", String.valueOf(Country.AT));
         String specialNotes = ("Frühstück aufs Zimmer");
 
@@ -33,11 +32,11 @@ public class GuestFactoryTest extends AbstractTest {
         assertEquals(firstName, guest.getFirstName());
         assertEquals(lastName, guest.getLastName());
         assertEquals(firstName, guest.getFirstName());
-        assertEquals(birthday1, guest.getBirthday());
+        assertEquals(dateOfBirth1, guest.getDateOfBirth());
         assertEquals(address, guest.getAddress());
         assertEquals(specialNotes, guest.getSpecialNotes());
 
-        assertDoesNotThrow(() -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday1, address, specialNotes));
-        assertThrows(CreateGuestException.class, () -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday2, address, specialNotes));
+        assertDoesNotThrow(() -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MRS), firstName, lastName, dateOfBirth1, address, specialNotes));
+        assertThrows(CreateGuestException.class, () -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MRS), firstName, lastName, dateOfBirth2, address, specialNotes));
     }
 }

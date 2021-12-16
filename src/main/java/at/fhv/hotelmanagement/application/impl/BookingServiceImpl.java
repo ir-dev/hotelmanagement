@@ -135,7 +135,7 @@ public class BookingServiceImpl implements BookingsService {
                 bookingForm.getSalutation(),
                 bookingForm.getFirstName(),
                 bookingForm.getLastName(),
-                bookingForm.getBirthday(),
+                bookingForm.getDateOfBirth(),
                 address,
                 bookingForm.getSpecialNotes()
         );

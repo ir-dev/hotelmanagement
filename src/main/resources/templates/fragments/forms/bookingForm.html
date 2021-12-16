@@ -135,8 +135,8 @@
             <input type="text" th:field="*{lastName}" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="birthday" class="col-form-label">Birthday</label>
-            <input type="date" th:field="*{birthday}" class="form-control" required>
+            <label for="dateOfBirth" class="col-form-label">Date of Birth</label>
+            <input type="date" th:field="*{dateOfBirth}" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="street" class="col-form-label">Street</label>
@@ -183,7 +183,7 @@
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
-    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{dateOfBirth}">
     <input type="hidden" th:field="*{street}">
     <input type="hidden" th:field="*{zipcode}">
     <input type="hidden" th:field="*{city}">
@@ -238,7 +238,7 @@
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
-    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{dateOfBirth}">
     <input type="hidden" th:field="*{street}">
     <input type="hidden" th:field="*{zipcode}">
     <input type="hidden" th:field="*{city}">
@@ -270,16 +270,16 @@
                             <td><span th:text="*{salutation}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Firstname</th>
+                            <th scope="row">First Name</th>
                             <td><span th:text="*{firstName}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Lastname</th>
+                            <th scope="row">Last Name</th>
                             <td><span th:text="*{lastName}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Birthday</th>
-                            <td><span th:text="*{birthday}"/></td>
+                            <th scope="row">Date of Birth</th>
+                            <td><span th:text="*{dateOfBirth}"/></td>
                         </tr>
                         <tr>
                             <th scope="row">Street</th>
@@ -380,7 +380,7 @@
                             <td><span th:text="*{arrivalTime}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row"># of Persons</th>
+                            <th scope="row">Number of Persons</th>
                             <td><span th:text="*{numberOfPersons}"/></td>
                         </tr>
                         <tr th:each="count : *{getSelectedCategoriesRoomCount}">

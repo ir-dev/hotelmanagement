@@ -109,7 +109,7 @@ public class StayServiceImpl implements StayService {
                 stayForm.getSalutation(),
                 stayForm.getFirstName(),
                 stayForm.getLastName(),
-                stayForm.getBirthday(),
+                stayForm.getDateOfBirth(),
                 address,
                 stayForm.getSpecialNotes()
         );

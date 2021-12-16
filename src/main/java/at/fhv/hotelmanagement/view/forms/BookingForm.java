@@ -24,7 +24,7 @@ public class BookingForm {
     private String firstName;
     private String lastName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
     private String street;
     private String zipcode;
     private String city;
@@ -130,12 +130,12 @@ public class BookingForm {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getStreet() {

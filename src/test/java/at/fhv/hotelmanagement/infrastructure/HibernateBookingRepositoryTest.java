@@ -125,7 +125,7 @@ class HibernateBookingRepositoryTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(
                 nextDummyGuestIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
                 getContextLocalDate().minusYears(18L),
