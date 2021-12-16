@@ -95,7 +95,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISTER), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
 
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", PaymentType.CASH.toString());
         Booking booking = BookingFactory.createBooking(
@@ -111,7 +111,7 @@ class StayTest extends AbstractTest {
         Stay stay = StayFactory.createStayForBooking(stayId, booking, bookingNo, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
 
         // when
-        Invoice invoice = stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().collect(Collectors.toList()), guest.getDiscountRate());
+        Invoice invoice = stay.composeInvoice(new ArrayList<>(selectedCategoriesRoomCount.keySet()), guest.getDiscountRate());
         stay.checkout();
 
         // then

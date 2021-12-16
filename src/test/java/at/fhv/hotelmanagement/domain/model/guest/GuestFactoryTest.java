@@ -23,12 +23,12 @@ public class GuestFactoryTest extends AbstractTest {
         String specialNotes = ("Frühstück aufs Zimmer");
 
         //when
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday1, address, specialNotes);
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MRS), firstName, lastName, dateOfBirth1, address, specialNotes);
 
         //then
         assertEquals(guestId, guest.getGuestId());
         assertEquals(Optional.of(organization), guest.getOrganization());
-        assertEquals(Salutation.MISS, guest.getSalutation());
+        assertEquals(Salutation.MRS, guest.getSalutation());
         assertEquals(firstName, guest.getFirstName());
         assertEquals(lastName, guest.getLastName());
         assertEquals(firstName, guest.getFirstName());
