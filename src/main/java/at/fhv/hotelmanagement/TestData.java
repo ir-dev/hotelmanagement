@@ -160,7 +160,8 @@ public class TestData implements ApplicationRunner {
         this.categoryService.autoAssignRooms(
                 selectedCategoriesRoomCount3,
                 bk3.getArrivalDate(),
-                bk3.getDepartureDate()
+                bk3.getDepartureDate(),
+                stay2.getStayId()
         );
 
         bk3.close();
