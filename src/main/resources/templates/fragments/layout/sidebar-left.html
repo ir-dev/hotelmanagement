@@ -22,7 +22,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${#request.requestURI.startsWith('/stay')} or ${#request.requestURI.startsWith('/checkin')} or ${#request.requestURI.startsWith('/checkout')} ? active : ''" th:href="@{/stays}">
+                        <a class="nav-link" th:classappend="(${#request.requestURI.startsWith('/stay')} or ${#request.requestURI.startsWith('/checkin')} or ${#request.requestURI.startsWith('/checkout')} ? active : '')" th:href="@{/stays}">
                             <i class="fas fa-fw fa-hotel"></i>Stays
                         </a>
                     </li>
