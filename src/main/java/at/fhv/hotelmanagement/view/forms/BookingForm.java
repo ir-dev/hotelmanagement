@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.view.forms;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class BookingForm {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
     private String salutation;
     private String firstName;
     private String lastName;
@@ -97,12 +98,12 @@ public class BookingForm {
         this.organizationName = organizationName;
     }
 
-    public String getOrganizationAgreementCode() {
-        return this.organizationAgreementCode;
+    public BigDecimal getDiscountRate() {
+        return this.discountRate;
     }
 
-    public void setOrganizationAgreementCode(String organizationAgreementCode) {
-        this.organizationAgreementCode = organizationAgreementCode;
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
     }
 
     public String getSalutation() {

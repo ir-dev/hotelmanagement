@@ -4,6 +4,8 @@ import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.guest.Organization;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OrganizationTest extends AbstractTest {
@@ -11,13 +13,13 @@ public class OrganizationTest extends AbstractTest {
     void given_organizationdetails_when_createorganization_then_detailsequals() {
         //given
         String organizationName = "FHV";
-        String organizationAgreementCode = "21212";
+        BigDecimal discountRate = BigDecimal.valueOf(0.25);
 
         //when
-        Organization organization = new Organization(organizationName, organizationAgreementCode);
+        Organization organization = new Organization(organizationName, discountRate);
 
         //then
-        assertEquals(organization.getOrganizationName(), organizationName);
-        assertEquals(organization.getOrganizationAgreementCode(), organizationAgreementCode);
+        assertEquals(organizationName, organization.getOrganizationName());
+        assertEquals(discountRate, organization.getDiscountRate());
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class GuestTest extends AbstractTest {
     void given_guestdetails_when_createguest_then_detailsequals() throws CreateGuestException {
         //given
         GuestId guestId = new GuestId("1");
-        Organization organization = new Organization("FHV", "123144dsl");
+        Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         String firstName = ("Anna");
         String lastName = ("Bauer");
         LocalDate birthday = getContextLocalDate().minusYears(18L);
@@ -25,14 +26,14 @@ public class GuestTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday, address, specialNotes);
 
         //then
-        assertEquals(guest.getGuestId(), guestId);
-        assertEquals(guest.getOrganization(), Optional.of(organization));
-        assertEquals(guest.getSalutation(), Salutation.MISS);
-        assertEquals(guest.getFirstName(), firstName);
-        assertEquals(guest.getLastName(), lastName);
-        assertEquals(guest.getFirstName(), firstName);
-        assertEquals(guest.getBirthday(), birthday);
-        assertEquals(guest.getAddress(), address);
-        assertEquals(guest.getSpecialNotes(), specialNotes);
+        assertEquals(guestId, guest.getGuestId());
+        assertEquals(Optional.of(organization), guest.getOrganization());
+        assertEquals(Salutation.MISS, guest.getSalutation());
+        assertEquals(firstName, guest.getFirstName());
+        assertEquals(lastName, guest.getLastName());
+        assertEquals(firstName, guest.getFirstName());
+        assertEquals(birthday, guest.getBirthday());
+        assertEquals(address, guest.getAddress());
+        assertEquals(specialNotes, guest.getSpecialNotes());
     }
 }

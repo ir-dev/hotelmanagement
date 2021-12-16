@@ -4,6 +4,7 @@ import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class GuestFactoryTest extends AbstractTest {
     void given_guestdetails_when_createguestfromfactory_then_detailsequals() throws CreateGuestException {
         //given
         GuestId guestId = new GuestId("1");
-        Organization organization = new Organization("FHV", "123144dsl");
+        Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         String firstName = ("Anna");
         String lastName = ("Bauer");
         LocalDate birthday1 = getContextLocalDate().minusYears(18L);
@@ -26,15 +27,15 @@ public class GuestFactoryTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday1, address, specialNotes);
 
         //then
-        assertEquals(guest.getGuestId(), guestId);
-        assertEquals(guest.getOrganization(), Optional.of(organization));
-        assertEquals(guest.getSalutation(), Salutation.MISS);
-        assertEquals(guest.getFirstName(), firstName);
-        assertEquals(guest.getLastName(), lastName);
-        assertEquals(guest.getFirstName(), firstName);
-        assertEquals(guest.getBirthday(), birthday1);
-        assertEquals(guest.getAddress(), address);
-        assertEquals(guest.getSpecialNotes(), specialNotes);
+        assertEquals(guestId, guest.getGuestId());
+        assertEquals(Optional.of(organization), guest.getOrganization());
+        assertEquals(Salutation.MISS, guest.getSalutation());
+        assertEquals(firstName, guest.getFirstName());
+        assertEquals(lastName, guest.getLastName());
+        assertEquals(firstName, guest.getFirstName());
+        assertEquals(birthday1, guest.getBirthday());
+        assertEquals(address, guest.getAddress());
+        assertEquals(specialNotes, guest.getSpecialNotes());
 
         assertDoesNotThrow(() -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday1, address, specialNotes));
         assertThrows(CreateGuestException.class, () -> GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISS), firstName, lastName, birthday2, address, specialNotes));

@@ -8,9 +8,7 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.domain.model.guest.GuestId;
-import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
+import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +26,9 @@ class StayTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("2");
-        LocalDate arrivalDate = LocalDate.now();
+        LocalDate arrivalDate = getContextLocalDate();
         LocalDate departureDate = arrivalDate.plusDays(5);
-        LocalTime arrivalTime = LocalTime.now();
+        LocalTime arrivalTime = getContextLocalTime();
         Integer numberOfPersons = 5;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
@@ -38,7 +36,9 @@ class StayTest extends AbstractTest {
         Room room = new Room(new RoomNumber("123"), RoomState.AVAILABLE);
         category.createRoom(room);
         selectedCategoriesRoomCount.put(category, 1);
+
         GuestId guestId = new GuestId("3");
+
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", PaymentType.CASH.toString());
         Booking booking = BookingFactory.createBooking(
                 bookingNo,
@@ -76,7 +76,7 @@ class StayTest extends AbstractTest {
     }
 
     @Test
-    void given_checkedinstay_when_billedandcheckedout_then_returnequalsdetails() throws CreateBookingException, CreateStayException, PriceCurrencyMismatchException, BillingOpenException, RoomAlreadyExistsException {
+    void given_checkedinstay_when_billedandcheckedout_then_returnequalsdetails() throws CreateBookingException, CreateStayException, PriceCurrencyMismatchException, BillingOpenException, RoomAlreadyExistsException, CreateGuestException {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("2");
@@ -90,7 +90,12 @@ class StayTest extends AbstractTest {
         Room room = new Room(new RoomNumber("123"), RoomState.AVAILABLE);
         category.createRoom(room);
         selectedCategoriesRoomCount.put(category, 1);
+
         GuestId guestId = new GuestId("3");
+        Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
+        Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MISTER), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", PaymentType.CASH.toString());
         Booking booking = BookingFactory.createBooking(
                 bookingNo,
@@ -105,7 +110,7 @@ class StayTest extends AbstractTest {
         Stay stay = StayFactory.createStayForBooking(stayId, booking, bookingNo, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
 
         // when
-        Invoice invoice = stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().toList());
+        Invoice invoice = stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().toList(), guest.getDiscountRate());
         stay.checkout();
 
         // then
@@ -121,6 +126,7 @@ class StayTest extends AbstractTest {
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(1, stay.getInvoices().size());
+
         Invoice composedInvoice = stay.getInvoices().stream().findFirst().orElseThrow();
         assertEquals(invoice, composedInvoice);
 

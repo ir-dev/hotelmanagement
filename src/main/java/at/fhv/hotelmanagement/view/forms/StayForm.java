@@ -5,6 +5,7 @@ import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class StayForm {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
     private String salutation;
     private String firstName;
     private String lastName;
@@ -43,7 +44,7 @@ public class StayForm {
         this.selectedCategoriesRoomCount    = !this.selectedCategoriesRoomCount.isEmpty() ? this.selectedCategoriesRoomCount : bookingDetailsDTO.selectedCategoriesRoomCount();
         this.isOrganization                 = this.isOrganization != null ? this.isOrganization : guestDTO.isOrganization();
         this.organizationName               = this.organizationName != null ? this.organizationName : guestDTO.organizationName();
-        this.organizationAgreementCode      = this.organizationAgreementCode != null ? this.organizationAgreementCode : guestDTO.organizationAgreementCode();
+        this.discountRate                   = this.discountRate != null ? this.discountRate : guestDTO.discountRate();
         this.salutation                     = this.salutation != null ? this.salutation : String.valueOf(guestDTO.salutation());
         this.firstName                      = this.firstName != null ? this.firstName : guestDTO.firstName();
         this.lastName                       = this.lastName != null ? this.lastName : guestDTO.lastName();
@@ -106,12 +107,12 @@ public class StayForm {
         this.organizationName = organizationName;
     }
 
-    public String getOrganizationAgreementCode() {
-        return this.organizationAgreementCode;
+    public BigDecimal getDiscountRate() {
+        return this.discountRate;
     }
 
-    public void setOrganizationAgreementCode(String organizationAgreementCode) {
-        this.organizationAgreementCode = organizationAgreementCode;
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
     }
 
     public String getSalutation() {

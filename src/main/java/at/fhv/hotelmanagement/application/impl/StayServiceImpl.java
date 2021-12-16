@@ -21,10 +21,12 @@ import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class StayServiceImpl implements StayService {
@@ -77,7 +79,10 @@ public class StayServiceImpl implements StayService {
     private Guest createGuestFromStayForm(StayForm stayForm) throws CreateGuestException {
         Organization organization = null;
         if (stayForm.getIsOrganization()) {
-            organization = new Organization(stayForm.getOrganizationName(), stayForm.getOrganizationAgreementCode());
+            if (stayForm.getDiscountRate().compareTo(BigDecimal.valueOf(0)) < 0 || stayForm.getDiscountRate().compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new CreateGuestException("DiscountRate below 0 or above 100");
+            }
+            organization = new Organization(stayForm.getOrganizationName(), stayForm.getDiscountRate().divide(BigDecimal.valueOf(100)).round(new MathContext(2)));
         }
         Address address = new Address(
                 stayForm.getStreet(),
@@ -224,7 +229,7 @@ public class StayServiceImpl implements StayService {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
-        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional
@@ -233,7 +238,7 @@ public class StayServiceImpl implements StayService {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
-        return stay.composeInvoice(this.categoryRepository.findAll()).getInvoiceNo().getNo();
+        return stay.composeInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()).getInvoiceNo().getNo();
     }
 
     @Transactional
