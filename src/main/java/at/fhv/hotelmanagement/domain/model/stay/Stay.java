@@ -56,21 +56,7 @@ public class Stay {
     }
 
     public boolean isBilled() {
-        Set<InvoiceLine> billedCategoryLineItems = this.invoices.stream()
-                .flatMap(invoice -> invoice.getLineItems().stream())
-                .filter(lineItem -> (lineItem.getType() == ProductType.CATEGORY))
-                .collect(Collectors.toSet());
-
-        for (Map.Entry<String, Integer> selectedCategoryRoomCount : this.selectedCategoriesRoomCount.entrySet()) {
-            if (billedCategoryLineItems.stream()
-                    .noneMatch(bcli ->
-                            bcli.getProduct().equals(selectedCategoryRoomCount.getKey()) &&
-                            bcli.getQuantity().equals(selectedCategoryRoomCount.getValue()))) {
-                return false;
-            }
-        }
-
-        return true;
+        return billableLineItemCounts().size() == 0;
     }
 
     public void checkout() throws BillingOpenException, IllegalStateException {
@@ -90,38 +76,115 @@ public class Stay {
         return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
-    public Invoice composeInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException, IllegalStateException {
+    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
-        Invoice invoice = generateInvoice(billableCategories);
+
+        Invoice invoice = generateInvoice(selectedLineItemProductsCount);
         this.invoices.add(invoice);
 
         return invoice;
     }
 
-    public Invoice generateInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException {
-        Set<InvoiceLine> billedCategoryLineItems = this.invoices.stream()
-                .flatMap(invoice -> invoice.getLineItems().stream())
-                .filter(lineItem -> (lineItem.getType() == ProductType.CATEGORY))
-                .collect(Collectors.toSet());
-
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount) throws PriceCurrencyMismatchException {
+        Set<InvoiceLine> billedCategoryLineItems = billedLineItems();
         Set<InvoiceLine> lineItems = new HashSet<>();
 
-        for (Category billableCategory : billableCategories) {
-            if (this.selectedCategoriesRoomCount.containsKey(billableCategory.getName()) &&
-                    billedCategoryLineItems.stream()
-                            .noneMatch(bcli -> bcli.getProduct().equals(billableCategory.getName()))) {
-                lineItems.add(new InvoiceLine(
-                        ProductType.CATEGORY,
-                        billableCategory.getName(),
-                        billableCategory.getDescription(),
-                        this.selectedCategoriesRoomCount.get(billableCategory.getName()),
-                        billableCategory.getFullBoardPrice()));
+        for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
+            for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
+                if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
+                    if (selectedLineItemProductCount.getValue() <= 0 && billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
+                        throw new RuntimeException("Selected position not billable");
+                    }
+
+                    lineItems.add(new InvoiceLine(
+                            ProductType.CATEGORY,
+                            selectedLineItemProductCount.getKey().getName(),
+                            selectedLineItemProductCount.getKey().getDescription(),
+                            selectedLineItemProductCount.getValue(),
+                            selectedLineItemProductCount.getKey().getFullBoardPrice()));
+                }
             }
         }
 
         return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+    }
+
+    private Set<InvoiceLine> billedLineItems() {
+        Map<String, Integer> billedCategoryCounts = new HashMap<>();
+        List<InvoiceLine> lineCategoryItems = new ArrayList<>();
+
+        for (Invoice invoice : this.invoices) {
+            for (InvoiceLine lineItem : invoice.getLineItems()) {
+                if (lineItem.getType() == ProductType.CATEGORY) {
+                    lineCategoryItems.add(lineItem);
+
+                    String lineItemCategoryName = lineItem.getProduct();
+                    Integer lineItemQuantity = lineItem.getQuantity();
+
+                    if (billedCategoryCounts.containsKey(lineItemCategoryName)) {
+                        Integer quantityBefore = billedCategoryCounts.get(lineItemCategoryName);
+                        billedCategoryCounts.put(lineItemCategoryName, quantityBefore + lineItemQuantity);
+                    } else {
+                        billedCategoryCounts.put(lineItemCategoryName, lineItemQuantity);
+                    }
+                }
+            }
+        }
+
+        Set<InvoiceLine> billedLineItems = new HashSet<>();
+
+        for (Map.Entry<String, Integer> billedLineItem : billedCategoryCounts.entrySet()) {
+            for (InvoiceLine lineCategoryItem : lineCategoryItems) {
+                if (lineCategoryItem.getProduct().equals(billedLineItem.getKey())) {
+                    billedLineItems.add(new InvoiceLine(ProductType.CATEGORY,
+                            lineCategoryItem.getProduct(),
+                            lineCategoryItem.getDescription(),
+                            billedLineItem.getValue(),
+                            lineCategoryItem.getPrice()));
+                }
+            }
+        }
+
+        return billedLineItems;
+    }
+
+    // Line items that are not paid fully (selectedCategoryRoomsCount - billedLineItems)
+    public Map<String, Integer> billableLineItemCounts() {
+        /*
+            billableLineItems -> positionen, die noch offen sind
+            1. selectedCategoryRoomsCount iterieren -> jeweils prüfen, ob entsprechendes billedLineItem vorhanden
+            -> wenn ja: neues LineItem mit "subtrahierter Quantity"
+            -> wenn nein: neues LineItem mit voller Quantity von selectedCategoryRoomsCount
+         */
+        Map<String, Integer> billableLineItemCounts = new HashMap<>();
+        Set<InvoiceLine> billedLineItems = billedLineItems();
+
+        for (Map.Entry<String, Integer> selectedCategoryRoomCount : this.selectedCategoriesRoomCount.entrySet()) {
+            String categoryName = selectedCategoryRoomCount.getKey();
+            Integer roomCount = selectedCategoryRoomCount.getValue();
+
+            boolean lineItemFound = false;
+            for (InvoiceLine billedLineItem : billedLineItems) {
+
+                if (billedLineItem.getType() == ProductType.CATEGORY && billedLineItem.getProduct().equals(categoryName)) {
+                    int toBillCount = roomCount - billedLineItem.getQuantity();
+
+                    if (toBillCount > 0) {
+                        billableLineItemCounts.put(categoryName, toBillCount);
+                    }
+
+                    lineItemFound = true;
+                }
+            }
+
+            if (!lineItemFound) {
+                billableLineItemCounts.put(categoryName, roomCount);
+            }
+        }
+
+        return billableLineItemCounts;
     }
 
     public Integer getNumberOfBookedRooms() {

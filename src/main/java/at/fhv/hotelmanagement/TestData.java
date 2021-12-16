@@ -4,6 +4,7 @@ import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
@@ -89,22 +90,16 @@ public class TestData implements ApplicationRunner {
         PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
       
-        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.of(2021,12,14),
-                LocalDate.of(2021,12,24), LocalTime.of(11,30), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
+        Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
+                LocalDate.now().plusDays(5L), LocalTime.now(), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
 
         Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
-                LocalDate.now().plusDays(5), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+                LocalDate.now().plusDays(5L), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
 
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
 
-        Map<String, Integer> selectedCategoryNamesRoomCount = bk2.getSelectedCategoriesRoomCount();
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
-        }
-
-
+        Map<Category, Integer> selectedCategoriesRoomCount = CategoryConverter.convertToSelectedCategoriesRoomCount(bk2.getSelectedCategoriesRoomCount());
         Stay stay = StayFactory.createStayForBooking(
                 this.stayRepository.nextIdentity(),
                 bk2,

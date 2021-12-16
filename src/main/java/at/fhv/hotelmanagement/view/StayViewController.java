@@ -10,6 +10,7 @@ import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
+import at.fhv.hotelmanagement.view.forms.SelectedLineItemsForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -237,7 +238,7 @@ public class StayViewController {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
         }
 
-        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).get().checkedOutAt());
+        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).orElseThrow().checkedOutAt() != null);
         model.addAttribute("openPositionsInvoicePreview", openPositionsInvoicePreview);
         model.addAttribute("invoices", invoices);
 
@@ -249,22 +250,20 @@ public class StayViewController {
     public ModelAndView createInvoice(
             @RequestParam("stayId") String stayId,
             @RequestParam(value="preview", required = false) boolean isPreview,
-            @RequestParam(value="selectedLineItem", required = false) List<String> selectedLineItems,
-            @RequestParam(value="quantity", required = false) List<Integer> quantities,
+            @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) {
-
-        //TODO: Create Invoice with selectedLineItems (Splitted Invoice)
 
         InvoiceDTO invoiceDto = null;
         try {
             if (!isPreview) {
                 Map<String, String> redirectParams = new HashMap<>();
-                redirectParams.put("no", this.stayService.chargeStay(stayId));
+                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount()));
 
                 return redirect(STAY_INVOICE_URL, redirectParams);
             }
 
-            invoiceDto = this.stayService.chargeStayPreview(stayId);
+            model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
+            invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount());
 
         } catch (EntityNotFoundException e) {
             return redirectError(e.getMessage());

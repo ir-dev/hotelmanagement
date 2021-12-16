@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div class="table-responsive-sm" th:fragment="selectablInvoiceLineItems">
+<div class="table-responsive-sm" th:fragment="selectableInvoiceLineItems">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -41,7 +41,7 @@
             <th:block th:each="lineItem, state: *{lineItems}">
                 <tr>
                     <td th:with="index=${state.count}">
-                        <input th:id="'checkbox' + ${index}" th:value="${lineItem.product}" name="selectedLineItem" type="checkbox" onclick="toggle(this.id)"/>
+                        <input th:id="'checkbox' + ${index}" type="checkbox" onclick="toggle(this.id)" checked/>
                     </td>
                     <td class="center" th:text="${state.count}"></td>
                     <td class="left" th:text="${lineItem.type}"></td>
@@ -49,7 +49,12 @@
                     <td class="left" th:text="${lineItem.description}"></td>
                     <td class="right" th:text="${lineItem.price}"></td>
                     <td>
-                        <input style="width:50px;" type="number" name="quantity" disabled="disabled" min="1" th:max="${lineItem.quantity}" th:id="'quantity' + ${state.count}" th:value="${lineItem.quantity}">
+                        <input style="width:50px;" type="number"
+                               th:id="'quantity' + ${state.count}"
+                               th:name="${'selectedLineItemsCount[' + lineItem.product + ']'}"
+                               th:value="${lineItem.quantity}"
+                               min="0"
+                               th:max="${lineItem.quantity}" onchange="onQuantityChange(this.id)">
                     </td>
                     <td class="right" th:text="${lineItem.totalPrice}"></td>
                 </tr>
@@ -161,6 +166,7 @@
 </div>
 
 <div class="row" th:fragment="invoice">
+
     <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="form-group">
             <p class="text-right">
@@ -200,6 +206,12 @@
             <div class="text-right">
                 <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Cancel</a>
                 <form th:action="@{/stays/invoices/create(stayId=*{stayId})}" method="POST" class="d-inline">
+                    <th:block th:object="${selectedLineItemsForm}">
+                        <th:block th:each="selectedLineItemCount : *{selectedLineItemsCount}" >
+                            <input type="hidden" th:field="*{selectedLineItemsCount['__${selectedLineItemCount.key}__']}">
+                        </th:block>
+                    </th:block>
+
                     <button type="submit" class="btn btn-space btn-primary">Confirm and Create Invoice</button>
                 </form>
             </div>
@@ -219,40 +231,53 @@
             return t
         }
 
+        function toggle(id) {
+            let idStr = id.toString();
+            let quantityId = 'quantity' + idStr.substr(idStr.length - 1);
+            let checkbox = document.getElementById(idStr);
+            let quantity = document.getElementById(quantityId);
+
+            if (checkbox.checked) {
+                if (quantity.value === '0') {
+                    quantity.value = 1;
+                }
+
+                quantity.disabled = false;
+            } else {
+                quantity.disabled = true;
+            }
+        }
+
+        function onQuantityChange(id) {
+            let idStr = id.toString();
+            let checkboxId = 'checkbox' + idStr.substr(idStr.length - 1);
+            let checkbox = document.getElementById(checkboxId);
+            let quantity = document.getElementById(idStr);
+
+            if (quantity.value === '0') {
+                checkbox.checked = false;
+                quantity.disabled = true;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             let printButton = document.querySelector('.btn_print');
 
-            printButton.addEventListener('click', function(e) {
-                let printableRegionContainer = document.getElementById('container_content');
-                let html2pdfOptions =
-                    {
-                        margin:       1,
-                        filename:     'invoice_'+js.AutoCode()+'.pdf',
-                        image:        { type: 'jpeg', quality: 0.98 },
-                        html2canvas:  { scale: 2 },
-                        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                    };
+            if (printButton) {
+                printButton.addEventListener('click', function (e) {
+                    let printableRegionContainer = document.getElementById('container_content');
+                    let html2pdfOptions =
+                        {
+                            margin: 1,
+                            filename: 'invoice_' + js.AutoCode() + '.pdf',
+                            image: {type: 'jpeg', quality: 0.98},
+                            html2canvas: {scale: 2},
+                            jsPDF: {unit: 'in', format: 'letter', orientation: 'portrait'}
+                        };
 
-                html2pdf().set(html2pdfOptions).from(printableRegionContainer).save();
-            });
+                    html2pdf().set(html2pdfOptions).from(printableRegionContainer).save();
+                });
+            }
         });
-    </script>
-</th:block>
-
-<th:block th:fragment="js2">
-    <script type="text/javascript">
-        function toggle(id){
-            var idStr = id.toString();
-            var quantityId = idStr.substr(idStr.length - 1);
-            var quantity = 'quantity' + quantityId;
-
-            $('#'+idStr).change(function(){
-                if($(this).is(':checked')){
-                    $('#'+quantity).attr('disabled', false);
-                } else {
-                    $('#'+quantity).attr('disabled', true);
-                }
-            });
-        };
     </script>
 </th:block>

@@ -8,6 +8,7 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryService;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.stay.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
@@ -118,11 +119,11 @@ public class StayServiceImpl implements StayService {
     public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
         BookingNo bookingNo = new BookingNo(bookingNoStr);
         Booking booking = this.bookingRepository.findByNo(bookingNo).orElseThrow();
-
-        Map<String, Integer> selectedCategoryNamesRoomCount = stayForm.getSelectedCategoriesRoomCount();
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        Map<Category, Integer> selectedCategoriesRoomCount;
+        try {
+            selectedCategoriesRoomCount = CategoryConverter.convertToSelectedCategoriesRoomCount(stayForm.getSelectedCategoriesRoomCount());
+        } catch (EntityNotFoundException e) {
+            throw new NoSuchElementException(e.getMessage());
         }
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = stayForm.getDepartureDate();
@@ -162,11 +163,13 @@ public class StayServiceImpl implements StayService {
     @Transactional
     @Override
     public void createStayForWalkIn(StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
-        Map<String, Integer> selectedCategoryNamesRoomCount = stayForm.getSelectedCategoriesRoomCount();
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : selectedCategoryNamesRoomCount.entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        Map<Category, Integer> selectedCategoriesRoomCount;
+        try {
+            selectedCategoriesRoomCount = CategoryConverter.convertToSelectedCategoriesRoomCount(stayForm.getSelectedCategoriesRoomCount());
+        } catch (EntityNotFoundException e) {
+            throw new NoSuchElementException(e.getMessage());
         }
+
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = stayForm.getDepartureDate();
 
@@ -237,16 +240,31 @@ public class StayServiceImpl implements StayService {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
-        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll()), guest, stay.getStayId());
+        Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
+
+        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts), guest, stay.getStayId());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+
+        Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
+
+        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount), guest, stay.getStayId());
     }
 
     @Transactional
     @Override
-    public String chargeStay(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException {
+    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
-        return stay.composeInvoice(this.categoryRepository.findAll()).getInvoiceNo().getNo();
+        Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
+
+        return stay.composeInvoice(selectedLineItemProductsCount).getInvoiceNo().getNo();
     }
 
     @Transactional

@@ -12,6 +12,7 @@ import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -26,7 +27,9 @@ public interface StayService {
 
     InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException;
 
-    String chargeStay(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException;
+    InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException;
+
+    String chargeStay(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException;
 
     void checkoutStay(String stayId) throws EntityNotFoundException, BillingOpenException, IllegalStateException;
 

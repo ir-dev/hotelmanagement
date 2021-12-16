@@ -69,16 +69,4 @@ public class BookingStayValidator {
             throw new ValidationException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
         }
     }
-
-    public static Map<String, Integer> convertToSelectedCategoryNamesRoomCount(Map<Category, Integer> selectedCategoriesRoomCount) {
-        Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
-
-        for (Map.Entry<Category, Integer> selectedCategoryRoomCount : selectedCategoriesRoomCount.entrySet()) {
-            if(selectedCategoryRoomCount.getValue() > 0) {
-                selectedCategoryNamesRoomCount.put(selectedCategoryRoomCount.getKey().getName(), selectedCategoryRoomCount.getValue());
-            }
-        }
-
-        return selectedCategoryNamesRoomCount;
-    }
 }

@@ -8,10 +8,10 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
-import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -64,7 +64,7 @@ class StayTest extends AbstractTest {
         assertEquals(departureDate, stay.getDepartureDate());
         assertEquals(arrivalTime, stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
-        assertEquals(BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
+        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(Collections.emptySet(), stay.getInvoices());
@@ -118,7 +118,7 @@ class StayTest extends AbstractTest {
         assertEquals(departureDate, stay.getDepartureDate());
         assertEquals(arrivalTime, stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
-        assertEquals(BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
+        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(1, stay.getInvoices().size());

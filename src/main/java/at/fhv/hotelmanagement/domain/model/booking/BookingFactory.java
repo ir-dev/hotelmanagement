@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.booking;
 
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
@@ -24,7 +25,7 @@ public class BookingFactory {
         BookingStayValidator.validateBooking(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount);
 
         // convert to map with aggregate identity reference as key
-        Map<String, Integer> selectedCategoryNamesRoomCount = BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
+        Map<String, Integer> selectedCategoryNamesRoomCount = CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount);
 
         return new Booking(
                 bookingNo,

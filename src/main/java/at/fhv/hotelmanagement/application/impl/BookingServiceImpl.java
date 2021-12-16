@@ -9,6 +9,7 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
@@ -34,7 +35,7 @@ public class BookingServiceImpl implements BookingsService {
     @Transactional(readOnly = true)
     @Override
     public List<BookingDTO> allBookings() {
-        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> bookings = this.bookingRepository.findAll();
         List<BookingDTO> bookingsDto = new ArrayList<>();
 
         for (Booking booking : bookings) {
@@ -119,10 +120,13 @@ public class BookingServiceImpl implements BookingsService {
                 bookingForm.getPaymentType()
         );
 
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : bookingForm.getSelectedCategoriesRoomCount().entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        Map<Category, Integer> selectedCategoriesRoomCount = null;
+        try {
+            selectedCategoriesRoomCount = CategoryConverter.convertToSelectedCategoriesRoomCount(bookingForm.getSelectedCategoriesRoomCount());
+        } catch (EntityNotFoundException e) {
+            throw new NoSuchElementException(e.getMessage());
         }
+
         // create guest and booking entity
         Guest guest = GuestFactory.createGuest(
                 this.guestRepository.nextIdentity(),
