@@ -3,9 +3,11 @@ package at.fhv.hotelmanagement.domain.model.stay;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.guest.Guest;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -90,17 +92,18 @@ public class Stay {
         return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
-    public Invoice composeInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException, IllegalStateException {
+    public Invoice composeInvoice(List<Category> billableCategories, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
-        Invoice invoice = generateInvoice(billableCategories);
+
+        Invoice invoice = generateInvoice(billableCategories, discountRate);
         this.invoices.add(invoice);
 
         return invoice;
     }
 
-    public Invoice generateInvoice(List<Category> billableCategories) throws PriceCurrencyMismatchException {
+    public Invoice generateInvoice(List<Category> billableCategories, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException {
         Set<InvoiceLine> billedCategoryLineItems = this.invoices.stream()
                 .flatMap(invoice -> invoice.getLineItems().stream())
                 .filter(lineItem -> (lineItem.getType() == ProductType.CATEGORY))
@@ -121,7 +124,7 @@ public class Stay {
             }
         }
 
-        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
     }
 
     public Integer getNumberOfBookedRooms() {

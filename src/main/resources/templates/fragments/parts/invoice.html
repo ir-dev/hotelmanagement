@@ -92,6 +92,18 @@
                     </td>
                     <td class="right"><span th:text="*{subTotal}"></span></td>
                 </tr>
+                <tr th:if="*{hasDiscount}">
+                    <td class="left">
+                        <strong class="text-dark">Discount (<span th:text="*{discountRate}"></span>%)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{discountAmount}"></span></td>
+                </tr>
+                <tr th:if="*{hasDiscount}">
+                    <td class="left">
+                        <strong class="text-dark">Subtotal (Discounted)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotalDiscounted}"></span></td>
+                </tr>
                 <tr>
                     <td class="left">
                         <strong class="text-dark">VAT (10%)</strong>
@@ -187,7 +199,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             let printButton = document.querySelector('.btn_print');
 
-            printButton.addEventListener('click', function(e) {
+            printButton.addEventListener('click', function() {
                 let printableRegionContainer = document.getElementById('container_content');
                 let html2pdfOptions =
                     {

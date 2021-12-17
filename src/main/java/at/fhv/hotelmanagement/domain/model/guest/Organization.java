@@ -1,22 +1,24 @@
 package at.fhv.hotelmanagement.domain.model.guest;
 
+import java.math.BigDecimal;
+
 public class Organization {
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
 
     // required for hibernate
     private Organization() {}
 
-    public Organization(String organizationName, String organizationAgreementCode) {
+    public Organization(String organizationName, BigDecimal discountRate) {
         this.organizationName = organizationName;
-        this.organizationAgreementCode = organizationAgreementCode;
+        this.discountRate = discountRate;
     }
 
     public String getOrganizationName() {
         return this.organizationName;
     }
 
-    public String getOrganizationAgreementCode() {
-        return this.organizationAgreementCode;
+    public BigDecimal getDiscountRate() {
+        return this.discountRate;
     }
 }

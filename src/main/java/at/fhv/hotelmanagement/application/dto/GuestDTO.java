@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.guest.Guest;
 import at.fhv.hotelmanagement.domain.model.guest.Organization;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ public final class GuestDTO {
     private String id;
     private Boolean isOrganization;
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
     private String salutation;
     private String firstName;
     private String lastName;
@@ -33,7 +34,7 @@ public final class GuestDTO {
 
     public String organizationName() { return this.organizationName; }
 
-    public String organizationAgreementCode() { return this.organizationAgreementCode; }
+    public BigDecimal discountRate() { return this.discountRate; }
 
     public String salutation() {
         return this.salutation;
@@ -79,7 +80,7 @@ public final class GuestDTO {
             if (this.instance.isOrganization) {
                 Organization organization = guest.getOrganization().get();
                 this.instance.organizationName = organization.getOrganizationName();
-                this.instance.organizationAgreementCode = organization.getOrganizationAgreementCode();
+                this.instance.discountRate = organization.getDiscountRate();
             }
             this.instance.salutation = String.valueOf(guest.getSalutation());
             this.instance.firstName = guest.getFirstName();
@@ -108,11 +109,11 @@ public final class GuestDTO {
             return false;
         }
         GuestDTO guestDTO = (GuestDTO) o;
-        return Objects.equals(this.id, guestDTO.id) && Objects.equals(this.isOrganization, guestDTO.isOrganization) && Objects.equals(this.organizationName, guestDTO.organizationName) && Objects.equals(this.organizationAgreementCode, guestDTO.organizationAgreementCode) && Objects.equals(this.salutation, guestDTO.salutation) && Objects.equals(this.firstName, guestDTO.firstName) && Objects.equals(this.lastName, guestDTO.lastName) && Objects.equals(this.dateOfBirth, guestDTO.dateOfBirth) && Objects.equals(this.addressStreet, guestDTO.addressStreet) && Objects.equals(this.addressZipcode, guestDTO.addressZipcode) && Objects.equals(this.addressCity, guestDTO.addressCity) && Objects.equals(this.addressCountry, guestDTO.addressCountry) && Objects.equals(this.specialNotes, guestDTO.specialNotes);
+        return Objects.equals(this.id, guestDTO.id) && Objects.equals(this.isOrganization, guestDTO.isOrganization) && Objects.equals(this.organizationName, guestDTO.organizationName) && Objects.equals(this.discountRate, guestDTO.discountRate) && Objects.equals(this.salutation, guestDTO.salutation) && Objects.equals(this.firstName, guestDTO.firstName) && Objects.equals(this.lastName, guestDTO.lastName) && Objects.equals(this.dateOfBirth, guestDTO.dateOfBirth) && Objects.equals(this.addressStreet, guestDTO.addressStreet) && Objects.equals(this.addressZipcode, guestDTO.addressZipcode) && Objects.equals(this.addressCity, guestDTO.addressCity) && Objects.equals(this.addressCountry, guestDTO.addressCountry) && Objects.equals(this.specialNotes, guestDTO.specialNotes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.isOrganization, this.organizationName, this.organizationAgreementCode, this.salutation, this.firstName, this.lastName, this.dateOfBirth, this.addressStreet, this.addressZipcode, this.addressCity, this.addressCountry, this.specialNotes);
+        return Objects.hash(this.id, this.isOrganization, this.organizationName, this.discountRate, this.salutation, this.firstName, this.lastName, this.dateOfBirth, this.addressStreet, this.addressZipcode, this.addressCity, this.addressCountry, this.specialNotes);
     }
 }

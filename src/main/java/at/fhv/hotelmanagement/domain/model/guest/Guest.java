@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.guest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -61,5 +62,13 @@ public class Guest {
 
     public String getSpecialNotes() {
         return this.specialNotes;
+    }
+
+    public Optional<BigDecimal> getDiscountRate() {
+        if (this.organization != null) {
+            return Optional.of(this.organization.getDiscountRate());
+        } else {
+            return Optional.of(BigDecimal.valueOf(0));
+        }
     }
 }

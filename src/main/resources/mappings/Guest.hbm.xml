@@ -15,7 +15,7 @@
 
         <component name="organization" class="at.fhv.hotelmanagement.domain.model.guest.Organization">
             <property name="organizationName" column="organization_name" type="java.lang.String" />
-            <property name="organizationAgreementCode" column="organization_agreement_code" type="java.lang.String" />
+            <property name="discountRate" column="discount_rate" type="java.math.BigDecimal" />
         </component>
 
         <property name="salutation">

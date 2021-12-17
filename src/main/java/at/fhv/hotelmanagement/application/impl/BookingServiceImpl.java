@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 
 @Component
@@ -34,7 +36,7 @@ public class BookingServiceImpl implements BookingsService {
     @Transactional(readOnly = true)
     @Override
     public List<BookingDTO> allBookings() {
-        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> bookings = this.bookingRepository.findAll();
         List<BookingDTO> bookingsDto = new ArrayList<>();
 
         for (Booking booking : bookings) {
@@ -103,7 +105,10 @@ public class BookingServiceImpl implements BookingsService {
         // create booking value objects
         Organization organization = null;
         if (bookingForm.getIsOrganization()) {
-            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
+            if (bookingForm.getDiscountRate().compareTo(BigDecimal.valueOf(0)) < 0 || bookingForm.getDiscountRate().compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new CreateGuestException("DiscountRate below 0 or above 100");
+            }
+            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getDiscountRate().divide(BigDecimal.valueOf(100)).round(new MathContext(2)));
         }
         Address address = new Address(
                 bookingForm.getStreet(),
