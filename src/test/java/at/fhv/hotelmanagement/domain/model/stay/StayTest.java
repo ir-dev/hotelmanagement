@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.AbstractTest;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
@@ -9,7 +10,6 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
-import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,7 +63,7 @@ class StayTest extends AbstractTest {
         assertEquals(departureDate, stay.getDepartureDate());
         assertEquals(arrivalTime, stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
-        assertEquals(BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
+        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(Collections.emptySet(), stay.getInvoices());
@@ -110,8 +109,11 @@ class StayTest extends AbstractTest {
         );
         Stay stay = StayFactory.createStayForBooking(stayId, booking, bookingNo, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
 
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        selectedLineItemProductsCount.put(category, 1);
+
         // when
-        Invoice invoice = stay.composeInvoice(new ArrayList<>(selectedCategoriesRoomCount.keySet()), guest.getDiscountRate());
+        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate());
         stay.checkout();
 
         // then
@@ -123,11 +125,10 @@ class StayTest extends AbstractTest {
         assertEquals(departureDate, stay.getDepartureDate());
         assertEquals(arrivalTime, stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
-        assertEquals(BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
+        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), stay.getSelectedCategoriesRoomCount());
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(1, stay.getInvoices().size());
-
         Invoice composedInvoice = stay.getInvoices().stream().findFirst().orElseThrow();
         assertEquals(invoice, composedInvoice);
 

@@ -77,7 +77,7 @@ public class InvoiceLineDTO {
             return false;
         }
         InvoiceLineDTO that = (InvoiceLineDTO) o;
-        return this.type.equals(that.type) && this.product.equals(that.product) && Objects.equals(this.description, that.description) && this.quantity.equals(that.quantity) && this.price.equals(that.price) && this.totalPrice.equals(that.totalPrice);
+        return Objects.equals(this.type, that.type) && Objects.equals(this.product, that.product) && Objects.equals(this.description, that.description) && Objects.equals(this.quantity, that.quantity) && Objects.equals(this.price, that.price) && Objects.equals(this.totalPrice, that.totalPrice);
     }
 
     @Override

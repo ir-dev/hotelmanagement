@@ -2,11 +2,10 @@ package at.fhv.hotelmanagement.domain.model.booking;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.booking.*;
 import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-import at.fhv.hotelmanagement.domain.model.validators.BookingStayValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,6 @@ import java.time.LocalTime;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class BookingTest extends AbstractTest {
     @Test
@@ -52,7 +50,7 @@ public class BookingTest extends AbstractTest {
         assertEquals(departureDate, booking.getDepartureDate());
         assertEquals(arrivalTime, booking.getArrivalTime());
         assertEquals(numberOfPersons, booking.getNumberOfPersons());
-        assertEquals(BookingStayValidator.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), booking.getSelectedCategoriesRoomCount());
+        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), booking.getSelectedCategoriesRoomCount());
         assertEquals(guestId, booking.getGuestId());
         assertEquals(paymentInformation, booking.getPaymentInformation());
 

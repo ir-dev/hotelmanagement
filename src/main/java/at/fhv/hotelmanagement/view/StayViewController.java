@@ -10,6 +10,7 @@ import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
+import at.fhv.hotelmanagement.view.forms.SelectedLineItemsForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -248,19 +249,21 @@ public class StayViewController {
     @PostMapping(CREATE_STAY_INVOICE_URL)
     public ModelAndView createInvoice(
             @RequestParam("stayId") String stayId,
-            @RequestParam(value="preview", required = false) boolean isPreview,
+            @RequestParam(value = "preview", required = false) boolean isPreview,
+            @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) {
 
         InvoiceDTO invoiceDto = null;
         try {
             if (!isPreview) {
                 Map<String, String> redirectParams = new HashMap<>();
-                redirectParams.put("no", this.stayService.chargeStay(stayId));
+                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount()));
 
                 return redirect(STAY_INVOICE_URL, redirectParams);
             }
 
-            invoiceDto = this.stayService.chargeStayPreview(stayId);
+            model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
+            invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount());
 
         } catch (EntityNotFoundException e) {
             return redirectError(e.getMessage());
