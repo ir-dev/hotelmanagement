@@ -2,6 +2,8 @@ package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.domain.model.Price;
 
+import java.util.Objects;
+
 public class InvoiceLine {
     // generated hibernate id
     private Long id;
@@ -44,5 +46,22 @@ public class InvoiceLine {
 
     public Price getTotalPrice() {
         return this.price.multiply(this.quantity);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        InvoiceLine that = (InvoiceLine) o;
+        return this.type == that.type && this.product.equals(that.product);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.type, this.product);
     }
 }

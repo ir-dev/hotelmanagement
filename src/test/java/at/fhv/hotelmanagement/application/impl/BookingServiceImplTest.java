@@ -7,8 +7,6 @@ import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
-import at.fhv.hotelmanagement.infrastructure.HibernateBookingRepository;
-import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;

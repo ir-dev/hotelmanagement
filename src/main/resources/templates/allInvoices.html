@@ -36,11 +36,11 @@
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="row ml-0 mr-0" th:object="${openPositionsInvoicePreview}">
                                 <th:block th:switch="${#sets.isEmpty(lineItems)}" th:with="lineItems=*{lineItems}">
-                                    <form th:case="false" th:action="@{/stays/invoices/create(stayId=*{stayId}, preview=true)}" method="POST" class="ml-auto mr-0 mb-3">
-                                        <button class="btn btn-primary">Create Invoice for Open Positions</button>
-                                    </form>
+                                    <div th:case="false" class="ml-auto mr-0 mb-3">
+                                        <button class="btn btn-primary" form="selectedLineItems" type="submit" id="btnBillselectedPositions">Bill Selected Positions</button>
+                                    </div>
                                     <div th:case="true" class="ml-auto mr-0 mb-3">
-                                        <a th:if="${isCheckedOut == null}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>
+                                        <a th:if="${not isCheckedOut}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>
                                     </div>
                                 </th:block>
                             </div>
@@ -48,7 +48,9 @@
                             <div class="card">
                                 <h5 class="card-header">Open Positions of Stay</h5>
                                 <div class="card-body" th:object="${openPositionsInvoicePreview}">
-                                    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems"/>
+                                    <form id="selectedLineItems" th:action="@{/stays/invoices/create(stayId=*{stayId}, preview=true)}" method="POST">
+                                        <th:block th:replace="/fragments/parts/invoice :: selectableInvoiceLineItems"/>
+                                    </form>
                                 </div>
                             </div>
 
@@ -93,7 +95,7 @@
     </div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
-
+<th:block th:replace="/fragments/parts/invoice :: js"/>
 </body>
 
 </html>
