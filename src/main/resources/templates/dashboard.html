@@ -5,6 +5,24 @@
     <th:block th:replace="/fragments/layout/page :: meta(description='Create a booking for your stay at the hotel.')"/>
     <title>Dashboard | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
+    <style>
+
+        div.scroll {
+
+            width: 100%;
+            height: 480px;
+            overflow: auto;
+            text-align: justify;
+            border: #9e9fa7 2px solid;
+        }
+
+        th {
+            top: 0;
+            position: sticky;
+            background: white;
+
+        }
+    </style>
 </head>
 
 <body>
@@ -13,45 +31,31 @@
     <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
     <div class="dashboard-wrapper">
         <div class="container-fluid dashboard-content">
-            <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="page-header">
-                        <h2 class="pageheader-title">Dashboard</h2>
-                        <div class="page-breadcrumb">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                                </ol>
-                            </nav>
+
+            <div id="container">
+                <div class="row">
+                    <div class="col-xl-5" style="background: white; margin-right: 10px">
+                        <div class="section-block">
+                            <h3 class="section-title">Check-In</h3>
+                            <p>of Walk-In Guests or Guests with a Booking.</p>
+
+                            <a th:href="@{/checkin}" class="btn btn-lg btn-primary mr-3">Walk-In</a>
+                            <a th:href="@{/bookings}" class="btn btn-lg btn-primary mr-3">Booking</a>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <div class="col-xl-5" style="background: white">
+                        <div class="section-block">
+                            <h3 class="section-title">Check-Out</h3>
+                            <p>and Billing of Guests and their Stays.</p>
 
-            <div class="row">
-                <div class="col-xl-10">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="section-block">
-                                <h3 class="section-title">Check-In</h3>
-                                <p>Check-In of Walk-In Guests or Guests with a Booking.</p>
-
-                                <a th:href="@{/checkin}" class="btn btn-lg btn-primary mr-3">Walk-In</a>
-                                <a th:href="@{/bookings}" class="btn btn-lg btn-primary mr-3">Booking</a>
-                            </div>
-                            <div class="section-block">
-                                <h3 class="section-title">Check-Out</h3>
-                                <p>Check-Out and Billing of Guests and their Stays.</p>
-
-                                <a th:href="@{/stays}" class="btn btn-lg btn-primary mr-3">Stay</a>
-                            </div>
+                            <a th:href="@{/stays}" class="btn btn-lg btn-primary mr-3">Stay</a>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <div class="row">
+            <div class="row" style="padding-top: 2%">
                 <div class="col-xl-10">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -59,7 +63,8 @@
                                 <h3 class="section-title">Upcoming Check-In's</h3>
                             </div>
                             <br>
-                            <input class="form-control" list="mostSearched" id="myInput" type="text" autocomplete=”on”
+                            <input class="form-control" list="mostSearched" id="myInput" type="text"
+                                   autocomplete=”on”
                                    placeholder="Search..."><br>
 
                             <datalist id="mostSearched">
@@ -68,86 +73,52 @@
                             </datalist>
 
                             <div class="card">
-                                <table class="table" style="text-align: center">
-                                    <thead>
-                                    <tr>
-                                        <th>Booking #</th>
-                                        <th>Guest</th>
-                                        <th>Arrival</th>
-                                        <th>Departure</th>
-                                        <th>Status</th>
-                                        <th># of Rooms</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="myTable">
-                                    <tr th:if="${bookings.isEmpty()}">
-                                        <td colspan="6"> no bookings available</td>
-                                    </tr>
+                                <div class="scroll">
+                                    <table class="table" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th>Booking #</th>
+                                            <th>Guest</th>
+                                            <th>Arrival</th>
+                                            <th>Departure</th>
+                                            <th>Status</th>
+                                            <th># of Rooms</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+                                        <tr th:if="${bookings.isEmpty()}">
+                                            <td colspan="6"> no bookings available</td>
+                                        </tr>
 
-                                    <tr th:each="booking : ${bookings}">
-                                        <div th:if="(${booking.arrivalDate().equals(localDate) && booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING')})">
-                                            <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
-                                                    th:text="${booking.bookingNo()}"/></a>
-                                            </td>
-                                            <td><span
-                                                    th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/>
-                                            </td>
-                                            <td><span th:text="${booking.arrivalDate}"/></td>
-                                            <td><span th:text="${booking.departureDate}"/></td>
-                                            <td><span th:text="${booking.bookingState}"
-                                                      th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
-                                            <td><span th:text="${booking.numberOfBookedRooms}"/></td>
-                                            <td style="width: 200px;">
-                                                <div th:switch="${booking.bookingState()}">
-                                                    <p th:case="'PENDING'">
-                                                        <a class="btn btn-space btn-light"
-                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a class="btn btn-space btn-success"
-                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
-                                                                class="fas fa-check"></i> Check-In</a>
-                                                    </p>
+                                        <tr th:each="booking : ${bookings}">
+                                            <div th:if="(${booking.arrivalDate().equals(localDate) && booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING')})">
+                                                <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
+                                                        th:text="${booking.bookingNo()}"/></a>
+                                                </td>
+                                                <td><span
+                                                        th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/>
+                                                </td>
+                                                <td><span th:text="${booking.arrivalDate}"/></td>
+                                                <td><span th:text="${booking.departureDate}"/></td>
+                                                <td><span th:text="${booking.bookingState}"
+                                                          th:classappend="${booking.getBookingStateTextColorClass()}"/>
+                                                </td>
+                                                <td><span th:text="${booking.numberOfBookedRooms}"/></td>
+                                                <td style="width: 200px;">
 
-                                                    <p th:case="'CLOSED'">
-                                                        <a class="btn btn-space btn-light"
-                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a class="btn btn-space, text-white"><i
-                                                                class="fas fa-check"></i> Check-In</a>
-                                                    </p>
-
-                                                    <p th:case="'CANCELLED'">
-                                                        <a class="btn btn-space btn-light"
-                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a class="btn btn-space, text-white"><i
-                                                                class="fas fa-check"></i> Check-In</a>
-                                                    </p>
-
-                                                    <p th:case="'EXPIRED'">
-                                                        <a class="btn btn-space btn-light"
-                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a class="btn btn-space, text-white"><i
-                                                                class="fas fa-check"></i> Check-In</a>
-                                                    </p>
-
-                                                    <p th:case="'CONFIRMED'">
-                                                        <a class="btn btn-space btn-light"
-                                                           th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                                class="fas fa-eye"></i></a>
-                                                        <a class="btn btn-space btn-success"
-                                                           th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
-                                                                class="fas fa-check"></i> Check-In</a>
-                                                    </p>
-
-                                                </div>
-                                            </td>
-                                        </div>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                                    <a class="btn btn-space btn-light"
+                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
+                                                            class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space btn-success"
+                                                       th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
+                                                            class="fas fa-check"></i> Check-In</a>
+                                                </td>
+                                            </div>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -155,11 +126,12 @@
             </div>
         </div>
     </div>
+</div>
+<th:block th:replace="/fragments/layout/footer :: content"/>
 
-    <th:block th:replace="/fragments/layout/footer :: content"/>
-</div>
-</div>
+
 <th:block th:replace="/fragments/layout/page :: js"/>
 </body>
 
 </html>
+

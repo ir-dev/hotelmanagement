@@ -73,34 +73,62 @@
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="myTable">
 
 
-                                        <tr th:if="${stays.isEmpty()}">
-                                            <td colspan="6"> no stays available</td>
-                                        </tr>
-                                        <tr th:each="stay: ${stays}">
-                                            <td><span th:text="${stay.stayId()}"/></td>
-                                            <td><span th:text="${stay.guest.firstName() + ' ' + stay.guest.lastName()}"/></td>
+                                    <tr th:if="${stays.isEmpty()}">
+                                        <td colspan="6"> no stays available</td>
+                                    </tr>
+                                    <tr th:each="stay: ${stays}">
+                                        <td><span th:text="${stay.stayId()}"/></td>
+                                        <td><span th:text="${stay.guest.firstName() + ' ' + stay.guest.lastName()}"/>
+                                        </td>
 
-                                            <td>
-                                                <span th:if="${!stay.isCheckedOut()}" th:text="${stay.departureDate()}"/>
-                                                <span th:if="${stay.isCheckedOut()}" th:text="${stay.checkOutDate()}"/>
-                                            </td>
-                                            <td>
+                                        <td>
+                                            <div th:switch="${stay.stayStatus()}">
+                                                <p th:case="CHECKED_IN">
+                                                    <span th:text="${stay.departureDate()}"/>
+
+                                                </p>
+
+                                                <p th:case="CHECKED_OUT">
+                                                    <span th:text="${stay.checkOutDate()}"/>
+
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td>
 
                                                 <span th:each="roomNumber, state: *{stay.roomNumbers()}">
                                                     <span th:text="${roomNumber}"></span><span th:if="${!state.last}"
                                                                                                th:text="', '"></span>
                                                 </span>
 
-                                            </td>
-                                            <td><span th:text="${stay.stayStatus()}" th:classappend="${stay.getStayStateTextColorClass()}"/></td>
-                                            <td style="width: 200px;">
-                                                <a class="btn btn-space btn-light" th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i class="fas fa-file-invoice"></i></a>
-                                                <a class="btn btn-space btn-danger" th:if="${!stay.isCheckedOut()}" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
-                                            </td>
-                                        </tr>
+                                        </td>
+
+                                        <td><span th:text="${stay.stayStatus()}"
+                                                  th:classappend="${stay.getStayStateTextColorClass()}"/></td>
+                                        <td style="width: 200px;">
+                                            <div th:switch="${stay.stayStatus()}">
+                                                <p th:case="CHECKED_IN">
+                                                    <a class="btn btn-space btn-light"
+                                                       th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i
+                                                            class="fas fa-file-invoice"></i></a>
+                                                    <a class="btn btn-space btn-danger"
+                                                       th:href="@{/checkout(stayId=${stay.stayId()})}"><i
+                                                            class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                                </p>
+                                                <p th:case="CHECKED_OUT">
+                                                    <a class="btn btn-space btn-light"
+                                                       th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i
+                                                            class="fas fa-file-invoice"></i></a>
+                                                    <a class="btn btn-space, text-white" style="cursor: default"><i
+                                                            class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                                </p>
+                                            </div>
+
+                                        </td>
+                                    </tr>
 
                                     </tbody>
                                 </table>
