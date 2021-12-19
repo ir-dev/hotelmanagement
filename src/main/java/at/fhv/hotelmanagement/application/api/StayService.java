@@ -36,5 +36,4 @@ public interface StayService {
     void createStayForBooking(String bookingNo, StayForm form) throws CreateStayException, CreateGuestException, RoomAssignmentException;
 
     void createStayForWalkIn(StayForm form) throws CreateStayException, CreateGuestException, RoomAssignmentException;
-
 }

@@ -38,27 +38,28 @@
         </thead>
 
         <tbody>
-            <th:block th:each="lineItem, state: *{lineItems}">
-                <tr>
-                    <td th:with="index=${state.count}">
-                        <input th:id="'checkbox' + ${index}" type="checkbox" onclick="toggle(this.id)" checked/>
-                    </td>
-                    <td class="center" th:text="${state.count}"></td>
-                    <td class="left" th:text="${lineItem.type}"></td>
-                    <td class="left strong" th:text="${lineItem.product}"></td>
-                    <td class="left" th:text="${lineItem.description}"></td>
-                    <td class="right" th:text="${lineItem.price}"></td>
-                    <td>
-                        <input style="width:50px;" type="number"
-                               th:id="'quantity' + ${state.count}"
-                               th:name="${'selectedLineItemsCount[' + lineItem.product + ']'}"
-                               th:value="${lineItem.quantity}"
-                               min="0"
-                               th:max="${lineItem.quantity}" onchange="onQuantityChange(this.id)">
-                    </td>
-                    <td class="right" th:text="${lineItem.totalPrice}"></td>
-                </tr>
-            </th:block>
+        <th:block th:each="lineItem, state: *{lineItems}">
+            <tr>
+                <td th:with="index=${state.count}">
+                    <input th:id="'checkbox' + ${index}" name="checkbox" type="checkbox" onclick="toggle(this.id)"
+                           checked/>
+                </td>
+                <td class="center" th:text="${state.count}"></td>
+                <td class="left" th:text="${lineItem.type}"></td>
+                <td class="left strong" th:text="${lineItem.product}"></td>
+                <td class="left" th:text="${lineItem.description}"></td>
+                <td class="right" th:text="${lineItem.price}"></td>
+                <td>
+                    <input style="width:50px;" type="number"
+                           th:id="'quantity' + ${state.count}"
+                           th:name="${'selectedLineItemsCount[' + lineItem.product + ']'}"
+                           th:value="${lineItem.quantity}"
+                           min="0"
+                           th:max="${lineItem.quantity}" onchange="onQuantityChange(this.id)">
+                </td>
+                <td class="right" th:text="${lineItem.totalPrice}"></td>
+            </tr>
+        </th:block>
         </tbody>
     </table>
 </div>
@@ -93,8 +94,6 @@
 </div>
 
 
-
-
 <div class="card-body" th:fragment="invoiceCardBody">
     <div class="row mb-4">
         <div class="col-sm-6">
@@ -113,7 +112,7 @@
             <div><span th:text="*{guest.addressZipcode + ', ' + guest.addressCity}"></span></div>
         </div>
     </div>
-    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems" />
+    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems"/>
     <div class="row">
         <div class="col-lg-4 col-sm-5">
         </div>
@@ -186,14 +185,15 @@
         </div>
 
         <div class="card" id="container_content">
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardHeader" />
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody" />
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBankCredentials" />
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardHeader"/>
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody"/>
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBankCredentials"/>
         </div>
 
         <div class="form-group">
             <p class="text-right">
-                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Back to Invoices</a>
+                <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Back to
+                    Invoices</a>
             </p>
         </div>
     </div>
@@ -208,9 +208,9 @@
         </div>
 
         <div class="card" id="container_content">
-            <th:block th:replace="/fragments/parts/invoice :: invoicePreviewCardHeader" />
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody" />
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter" />
+            <th:block th:replace="/fragments/parts/invoice :: invoicePreviewCardHeader"/>
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody"/>
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter"/>
         </div>
 
         <div class="form-group">
@@ -218,8 +218,9 @@
                 <a th:href="@{/stays/invoices(stayId=*{stayId})}" class="btn btn-space btn-secondary">Cancel</a>
                 <form th:action="@{/stays/invoices/create(stayId=*{stayId})}" method="POST" class="d-inline">
                     <th:block th:object="${selectedLineItemsForm}">
-                        <th:block th:each="selectedLineItemCount : *{selectedLineItemsCount}" >
-                            <input type="hidden" th:field="*{selectedLineItemsCount['__${selectedLineItemCount.key}__']}">
+                        <th:block th:each="selectedLineItemCount : *{selectedLineItemsCount}">
+                            <input type="hidden"
+                                   th:field="*{selectedLineItemsCount['__${selectedLineItemCount.key}__']}">
                         </th:block>
                     </th:block>
 
@@ -234,13 +235,15 @@
     <script th:src="@{/assets/vendor/html2pdf/html2pdf.bundle.min.js}"></script>
     <script type="text/javascript">
         // inspired by "awesome-functions"
-        var js = function() {};
-        js.AutoCode = function(e) {
+        var js = function () {
+        };
+        js.AutoCode = function (e) {
             e = e || 8;
             for (var t = "", r = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" + (new Date).getTime(), n = 0; n < e; n++)
                 t += r.charAt(Math.floor(Math.random() * r.length));
             return t
         }
+
 
         function toggle(id) {
             let idStr = id.toString();
@@ -252,11 +255,11 @@
                 if (quantity.value === '0') {
                     quantity.value = 1;
                 }
-
                 quantity.disabled = false;
             } else {
                 quantity.disabled = true;
             }
+            isBillable();
         }
 
         function onQuantityChange(id) {
@@ -270,6 +273,17 @@
                 quantity.disabled = true;
             }
         }
+
+        function isBillable() {
+            checkboxes = document.getElementsByName('checkbox');
+            document.getElementById("btnBillselectedPositions").disabled = true;
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                if(checkboxes[i].checked) {
+                    document.getElementById("btnBillselectedPositions").disabled = false;
+                }
+            }
+        }
+
 
         document.addEventListener('DOMContentLoaded', function () {
             let printButton = document.querySelector('.btn_print');

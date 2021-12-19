@@ -249,7 +249,7 @@ public class StayViewController {
     @PostMapping(CREATE_STAY_INVOICE_URL)
     public ModelAndView createInvoice(
             @RequestParam("stayId") String stayId,
-            @RequestParam(value="preview", required = false) boolean isPreview,
+            @RequestParam(value = "preview", required = false) boolean isPreview,
             @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) {
 

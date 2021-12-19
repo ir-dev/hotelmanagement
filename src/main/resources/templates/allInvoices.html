@@ -37,7 +37,7 @@
                             <div class="row ml-0 mr-0" th:object="${openPositionsInvoicePreview}">
                                 <th:block th:switch="${#sets.isEmpty(lineItems)}" th:with="lineItems=*{lineItems}">
                                     <div th:case="false" class="ml-auto mr-0 mb-3">
-                                        <button class="btn btn-primary" form="selectedLineItems" type="submit">Bill Selected Positions</button>
+                                        <button class="btn btn-primary" form="selectedLineItems" type="submit" id="btnBillselectedPositions">Bill Selected Positions</button>
                                     </div>
                                     <div th:case="true" class="ml-auto mr-0 mb-3">
                                         <a th:if="${not isCheckedOut}" th:href="@{/checkout(stayId=*{stayId})}" type="submit" class="btn btn-space btn-danger">Proceed Check-Out</a>

@@ -64,7 +64,7 @@ public class StayDTO {
             this.instance.stayId = stay.getStayId().getId();
             this.instance.stayStatus = String.valueOf(stay.getStayState());
             this.instance.departureDate = stay.getDepartureDate();
-            this.instance.isCheckedOut = stay.getCheckedOutAt().isPresent();
+            this.instance.isCheckedOut = stay.isCheckedOut();
             return this;
         }
 

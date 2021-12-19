@@ -109,7 +109,7 @@ public class StayServiceImpl implements StayService {
                 stayForm.getSalutation(),
                 stayForm.getFirstName(),
                 stayForm.getLastName(),
-                stayForm.getBirthday(),
+                stayForm.getDateOfBirth(),
                 address,
                 stayForm.getSpecialNotes()
         );
@@ -246,7 +246,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
 
-        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional(readOnly = true)
@@ -257,8 +257,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount), guest, stay.getStayId());
-        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional
@@ -269,8 +268,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return stay.composeInvoice(selectedLineItemProductsCount).getInvoiceNo().getNo();
-        return stay.composeInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()).getInvoiceNo().getNo();
+        return stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate()).getInvoiceNo().getNo();
     }
 
     @Transactional

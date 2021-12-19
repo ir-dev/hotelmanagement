@@ -2,6 +2,7 @@ package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.StayService;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.guest.*;
@@ -95,7 +96,6 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
 
-
     @Test
     void given_stayinrepository_when_bystayId_then_return() throws RoomAlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
         //given
@@ -119,7 +119,11 @@ public class StayServiceImplTest extends AbstractTest {
     void given_composedinvoice_when_byinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException {
         //given
         Stay stay = createStayDummy();
-        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(10)));
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+
+        createCategoriesDummy().stream().map(i -> selectedLineItemProductsCount.put(i, 2));
+
+        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(10)));
         Guest guest = createGuestDummy();
 
         List<InvoiceDTO> invoiceDtosExpected = new ArrayList<>();
@@ -150,10 +154,12 @@ public class StayServiceImplTest extends AbstractTest {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
-        List<Category> categories = createCategoriesDummy();
+        Category category = createCategoryDummy();
 
-        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
-        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        selectedLineItemProductsCount.put(category, 1);
+
+        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
         InvoiceDTO invoiceDtoExpected = InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
@@ -162,6 +168,7 @@ public class StayServiceImplTest extends AbstractTest {
                 .build();
 
 
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
 
@@ -177,52 +184,56 @@ public class StayServiceImplTest extends AbstractTest {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
-        List<Category> categories = createCategoriesDummy();
+        Category category = createCategoryDummy();
 
-        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        selectedLineItemProductsCount.put(category, 1);
 
-        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
 
+        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
+
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
 
         //when
-        String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId());
+        String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount));
 
         //then
         assertEquals(invoice.getInvoiceNo().getNo(), actualInvoiceNo);
     }
-
 
     @Test
     void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
-        List<Category> categories = createCategoriesDummy();
+        Category category = createCategoryDummy();
 
-        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        selectedLineItemProductsCount.put(category, 1);
 
-        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
+        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
 
         //when..then
         assertThrows(IllegalStateException.class, () -> {
-            String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId());
+            String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount));
         }, "IllegalStateException was expected");
     }
-
 
     @Test
     void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException {
         //given
         Stay stay = createStayDummy();
-        List<Category> categories = createCategoriesDummy();
+        Category category = createCategoryDummy();
 
-        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
-        stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(10)));
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        selectedLineItemProductsCount.put(category, 1);
+        stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(10)));
 
         //when
         stay.checkout();
@@ -230,6 +241,10 @@ public class StayServiceImplTest extends AbstractTest {
         //then
         assertEquals(stay.getStayState(), StayState.CHECKED_OUT);
     }
+
+
+
+
 
     @Test
     void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
@@ -280,13 +295,22 @@ public class StayServiceImplTest extends AbstractTest {
         );
     }
 
+    private Category createCategoryDummy() throws RoomAlreadyExistsException {
+        Price p = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(new CategoryId("1"), "Business Casual EZ", "A casual accommodation for business guests.", 1, p, p);
+        category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
+        return category;
+    }
+
+
+
     private List<Category> createCategoriesDummy() throws RoomAlreadyExistsException {
         Price p1 = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));
         Category category1 = CategoryFactory.createCategory(new CategoryId("1"), "Business Casual EZ", "A casual accommodation for business guests.", 1, p1, p1);
         category1.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
 
         Price p2 = Price.of(BigDecimal.valueOf(200), Currency.getInstance("EUR"));
-        Category category2 = CategoryFactory.createCategory(new CategoryId("2"), "Business Casual DZ", "A casual accommodation for business guests.", 1, p2, p2);
+        Category category2 = CategoryFactory.createCategory(new CategoryId("2"), "Business Casual DZ", "A casual accommodation for business guests.", 2, p2, p2);
         category2.createRoom(new Room(new RoomNumber("200"), RoomState.AVAILABLE));
 
         return Arrays.asList(category1, category2);

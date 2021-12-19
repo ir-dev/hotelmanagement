@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Stay {
     private static final double INVOICE_TAX_RATE = 0.1;
@@ -77,19 +76,18 @@ public class Stay {
         return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
-    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount) throws PriceCurrencyMismatchException, IllegalStateException {
+    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
 
-        Invoice invoice = generateInvoice(selectedLineItemProductsCount);
+        Invoice invoice = generateInvoice(selectedLineItemProductsCount, discountRate);
         this.invoices.add(invoice);
 
         return invoice;
     }
 
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount) throws PriceCurrencyMismatchException {
-        Set<InvoiceLine> billedCategoryLineItems = billedLineItems();
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException {
         Set<InvoiceLine> lineItems = new HashSet<>();
 
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
@@ -211,6 +209,10 @@ public class Stay {
 
     public Optional<LocalDateTime> getCheckedOutAt() {
         return Optional.ofNullable(this.checkedOutAt);
+    }
+
+    public boolean isCheckedOut() {
+        return this.stayState == StayState.CHECKED_OUT;
     }
 
     public LocalDate getArrivalDate() {
