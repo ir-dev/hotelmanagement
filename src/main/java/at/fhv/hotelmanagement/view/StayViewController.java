@@ -238,7 +238,7 @@ public class StayViewController {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
         }
 
-        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).orElseThrow().checkedOutAt() != null);
+        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).orElseThrow().isCheckedOut());
         model.addAttribute("openPositionsInvoicePreview", openPositionsInvoicePreview);
         model.addAttribute("invoices", invoices);
 

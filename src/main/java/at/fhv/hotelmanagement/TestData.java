@@ -61,6 +61,7 @@ public class TestData implements ApplicationRunner {
         c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
         c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
+        c1.createRoom(new Room(new RoomNumber("125"), RoomState.AVAILABLE));
 
         c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
         c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
@@ -68,33 +69,39 @@ public class TestData implements ApplicationRunner {
         c2.createRoom(new Room(new RoomNumber("223"), RoomState.AVAILABLE));
         Room room224 = new Room(new RoomNumber("224"), RoomState.AVAILABLE);
         c2.createRoom(room224);
-      
+        c2.createRoom(new Room(new RoomNumber("225"), RoomState.AVAILABLE));
+        c2.createRoom(new Room(new RoomNumber("226"), RoomState.AVAILABLE));
+
         room224.occupied(LocalDate.of(2021,11,19), LocalDate.of(2021,11,22), new StayId("0"));
         room224.occupied(LocalDate.of(2021,11,23), LocalDate.of(2021,11,25), new StayId("0"));
 
 
         Organization orgaEmpty = null;
-        Organization orga1 = new Organization("FHV", "PROMOCODE-XMAS2021");
+        Organization orga1 = new Organization("FHV", BigDecimal.valueOf(0.25));
+        Organization orga2 = new Organization("FHV", BigDecimal.valueOf(0));
+
         Address ad1 = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         Address ad2 = new Address("Musterstr. 123", "12345", "München", String.valueOf(Country.DE));
         Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Franz", "Beckenbauer", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
-        Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MISTER),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
+        Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MR),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
         this.guestRepository.store(g1);
         this.guestRepository.store(g2);
+
 
         Map<Category, Integer> categoryRooms1 = new HashMap<>();
         categoryRooms1.put(c1, 1);
         categoryRooms1.put(c2, 2);
         Map<Category, Integer> categoryRooms2 = new HashMap<>();
         categoryRooms2.put(c2, 1);
+
         PaymentInformation paymentInformation1 = new PaymentInformation("Franz Beckenbauer", "1234 5678 9876 5432", "11/22", "123", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation2 = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
-      
+
         Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
-                LocalDate.now().plusDays(5L), LocalTime.now(), 4, categoryRooms1, g1.getGuestId(), paymentInformation1);
+                LocalDate.now().plusDays(5), LocalTime.now(), 3, categoryRooms1, g1.getGuestId(), paymentInformation1);
 
         Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
-                LocalDate.now().plusDays(5L), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
+                LocalDate.now().plusDays(5), null, 1, categoryRooms2, g2.getGuestId(), paymentInformation2);
 
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);

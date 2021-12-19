@@ -82,7 +82,7 @@ public class StayServiceImplTest extends AbstractTest {
         }
 
         Mockito.when(this.guestRepository.findById(any())).thenReturn(Optional.of(guest));
-        Mockito.when(this.categoryRepository.findRoomsByStayId(any())).thenReturn(createRoomsDummy());
+        Mockito.when(this.categoryRepository.findRoomNumbersByStayId(any())).thenReturn(createRoomNumbersDummy());
         Mockito.when(this.stayRepository.findAll()).thenReturn(stays);
 
         //when
@@ -105,7 +105,7 @@ public class StayServiceImplTest extends AbstractTest {
         StayDTO expectedStayDto = buildStayDto(stay);
 
         Mockito.when(this.guestRepository.findById(any())).thenReturn(Optional.of(guest));
-        Mockito.when(this.categoryRepository.findRoomsByStayId(any())).thenReturn(createRoomsDummy());
+        Mockito.when(this.categoryRepository.findRoomNumbersByStayId(any())).thenReturn(createRoomNumbersDummy());
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
 
         //when
@@ -119,7 +119,7 @@ public class StayServiceImplTest extends AbstractTest {
     void given_composedinvoice_when_byinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException {
         //given
         Stay stay = createStayDummy();
-        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll());
+        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(10)));
         Guest guest = createGuestDummy();
 
         List<InvoiceDTO> invoiceDtosExpected = new ArrayList<>();
@@ -153,7 +153,7 @@ public class StayServiceImplTest extends AbstractTest {
         List<Category> categories = createCategoriesDummy();
 
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
-        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll());
+        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
         InvoiceDTO invoiceDtoExpected = InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
@@ -181,7 +181,7 @@ public class StayServiceImplTest extends AbstractTest {
 
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
 
-        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll());
+        Invoice invoice = stay.generateInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
@@ -195,7 +195,7 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -203,7 +203,7 @@ public class StayServiceImplTest extends AbstractTest {
 
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
 
-        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll());
+        Invoice invoice = stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(0)));
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
@@ -222,7 +222,7 @@ public class StayServiceImplTest extends AbstractTest {
         List<Category> categories = createCategoriesDummy();
 
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
-        stay.composeInvoice(this.categoryRepository.findAll());
+        stay.composeInvoice(this.categoryRepository.findAll(), Optional.of(BigDecimal.valueOf(10)));
 
         //when
         stay.checkout();
@@ -252,7 +252,7 @@ public class StayServiceImplTest extends AbstractTest {
         return StayDetailsDTO.builder()
                 .withStayEntity(stay)
                 .withGuestDTO(buildGuestDto(createGuestDummy()))
-                .withRoomNumbers(createRoomsDummy())
+                .withRoomNumbers(createRoomNumbersDummy())
                 .build();
     }
 
@@ -272,12 +272,11 @@ public class StayServiceImplTest extends AbstractTest {
         return lineItemsDto;
     }
 
-    private List<Room> createRoomsDummy() {
-        RoomState roomState = RoomState.AVAILABLE;
+    private List<RoomNumber> createRoomNumbersDummy() {
         return Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
+                new RoomNumber("101"),
+                new RoomNumber("102"),
+                new RoomNumber("103")
         );
     }
 
@@ -338,7 +337,7 @@ public class StayServiceImplTest extends AbstractTest {
         Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         return GuestFactory.createGuest(
                 new GuestId("1"),
-                null, String.valueOf(Salutation.MISTER),
+                null, String.valueOf(Salutation.MR),
                 "Fritz",
                 "Mayer",
                 getContextLocalDate().minusYears(18L),

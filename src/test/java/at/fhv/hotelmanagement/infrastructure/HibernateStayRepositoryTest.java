@@ -55,9 +55,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 createStayDummy(),
                 createStayDummy()
         );
-        staysExpected.forEach(stay -> {
-            this.stayRepository.store(stay);
-        });
+        staysExpected.forEach(stay -> this.stayRepository.store(stay));
         this.em.flush();
 
         // when
@@ -167,7 +165,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(
                 nextDummyGuestIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
                 getContextLocalDate().minusYears(18L),
@@ -198,7 +196,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().collect(Collectors.toList()));
+        stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().collect(Collectors.toList()), guest.getDiscountRate());
 
         return stay;
     }

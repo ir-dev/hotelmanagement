@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.guest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ public class Guest {
     private Salutation salutation;
     private String firstName;
     private String lastName;
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
     private Address address;
     private String specialNotes;
 
@@ -20,13 +21,13 @@ public class Guest {
     private Guest() {
     }
 
-    Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate birthday, Address address, String specialNotes) {
+    Guest(GuestId guestId, Organization organization, String salutation, String firstName, String lastName, LocalDate dateOfBirth, Address address, String specialNotes) {
         this.guestId = guestId;
         this.organization = organization;
         this.salutation = Salutation.valueOf(salutation);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthday = birthday;
+        this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.specialNotes = specialNotes;
     }
@@ -51,8 +52,8 @@ public class Guest {
         return this.lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
     public Address getAddress() {
@@ -61,5 +62,13 @@ public class Guest {
 
     public String getSpecialNotes() {
         return this.specialNotes;
+    }
+
+    public Optional<BigDecimal> getDiscountRate() {
+        if (this.organization != null) {
+            return Optional.of(this.organization.getDiscountRate());
+        } else {
+            return Optional.of(BigDecimal.valueOf(0));
+        }
     }
 }

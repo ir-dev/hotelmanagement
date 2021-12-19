@@ -5,8 +5,8 @@ import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,12 +17,12 @@ public class StayForm {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
     private String salutation;
     private String firstName;
     private String lastName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate birthday;
+    private LocalDate dateOfBirth;
     private String street;
     private String zipcode;
     private String city;
@@ -43,11 +43,11 @@ public class StayForm {
         this.selectedCategoriesRoomCount    = !this.selectedCategoriesRoomCount.isEmpty() ? this.selectedCategoriesRoomCount : bookingDetailsDTO.selectedCategoriesRoomCount();
         this.isOrganization                 = this.isOrganization != null ? this.isOrganization : guestDTO.isOrganization();
         this.organizationName               = this.organizationName != null ? this.organizationName : guestDTO.organizationName();
-        this.organizationAgreementCode      = this.organizationAgreementCode != null ? this.organizationAgreementCode : guestDTO.organizationAgreementCode();
+        this.discountRate                   = this.discountRate != null ? this.discountRate : guestDTO.discountRate();
         this.salutation                     = this.salutation != null ? this.salutation : String.valueOf(guestDTO.salutation());
         this.firstName                      = this.firstName != null ? this.firstName : guestDTO.firstName();
         this.lastName                       = this.lastName != null ? this.lastName : guestDTO.lastName();
-        this.birthday                       = this.birthday != null ? this.birthday : guestDTO.birthday();
+        this.dateOfBirth                    = this.dateOfBirth != null ? this.dateOfBirth : guestDTO.dateOfBirth();
         this.street                         = this.street != null ? this.street : guestDTO.addressStreet();
         this.zipcode                        = this.zipcode != null ? this.zipcode : guestDTO.addressZipcode();
         this.city                           = this.city != null ? this.city : guestDTO.addressCity();
@@ -106,12 +106,12 @@ public class StayForm {
         this.organizationName = organizationName;
     }
 
-    public String getOrganizationAgreementCode() {
-        return this.organizationAgreementCode;
+    public BigDecimal getDiscountRate() {
+        return this.discountRate;
     }
 
-    public void setOrganizationAgreementCode(String organizationAgreementCode) {
-        this.organizationAgreementCode = organizationAgreementCode;
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
     }
 
     public String getSalutation() {
@@ -138,12 +138,12 @@ public class StayForm {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getStreet() {

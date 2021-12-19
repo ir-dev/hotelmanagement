@@ -19,6 +19,8 @@ import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,7 +78,7 @@ public class StayServiceImpl implements StayService {
         return StayDetailsDTO.builder()
                 .withStayEntity(stay)
                 .withGuestDTO(buildGuestDto(this.guestRepository.findById(stay.getGuestId()).orElseThrow()))
-                .withRoomNumbers(this.categoryRepository.findRoomsByStayId(stay.getStayId()))
+                .withRoomNumbers(this.categoryRepository.findRoomNumbersByStayId(stay.getStayId()))
                 .build();
     }
 
@@ -89,7 +91,10 @@ public class StayServiceImpl implements StayService {
     private Guest createGuestFromStayForm(StayForm stayForm) throws CreateGuestException {
         Organization organization = null;
         if (stayForm.getIsOrganization()) {
-            organization = new Organization(stayForm.getOrganizationName(), stayForm.getOrganizationAgreementCode());
+            if (stayForm.getDiscountRate().compareTo(BigDecimal.valueOf(0)) < 0 || stayForm.getDiscountRate().compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new CreateGuestException("DiscountRate below 0 or above 100");
+            }
+            organization = new Organization(stayForm.getOrganizationName(), stayForm.getDiscountRate().divide(BigDecimal.valueOf(100)).round(new MathContext(2)));
         }
         Address address = new Address(
                 stayForm.getStreet(),
@@ -169,7 +174,6 @@ public class StayServiceImpl implements StayService {
         } catch (EntityNotFoundException e) {
             throw new NoSuchElementException(e.getMessage());
         }
-
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = stayForm.getDepartureDate();
 
@@ -254,6 +258,7 @@ public class StayServiceImpl implements StayService {
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
         return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional
@@ -265,6 +270,7 @@ public class StayServiceImpl implements StayService {
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
         return stay.composeInvoice(selectedLineItemProductsCount).getInvoiceNo().getNo();
+        return stay.composeInvoice(this.categoryRepository.findAll(), guest.getDiscountRate()).getInvoiceNo().getNo();
     }
 
     @Transactional

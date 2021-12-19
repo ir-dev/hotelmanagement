@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -108,7 +109,7 @@ public class Stay {
             }
         }
 
-        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
     }
 
     private Set<InvoiceLine> billedLineItems() {
