@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.category.RoomOccupancy" table="roomOccupancy" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <property name="startDate" column="start_date" type="java.time.LocalDate" />
+
+        <property name="endDate" column="end_date" type="java.time.LocalDate" />
+
+        <component name="stayId" class="at.fhv.hotelmanagement.domain.model.stay.StayId">
+            <property name="id" column="stay_id" type="java.lang.String" />
+        </component>
+
+    </class>
+</hibernate-mapping>
