@@ -92,7 +92,7 @@
                                         </tr>
 
                                         <tr th:each="booking : ${bookings}">
-                                            <th:block th:if="(${booking.arrivalDate().equals(localDate) && ( booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING'))})">
+                                            <th:block th:if="(${booking.arrivalDate().equals(localDate) && (booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING'))})">
                                                 <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
                                                         th:text="${booking.bookingNo()}"/></a>
                                                 </td>
