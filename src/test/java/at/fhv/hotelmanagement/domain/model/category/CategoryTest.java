@@ -58,4 +58,13 @@ public class CategoryTest extends AbstractTest {
         roomNumbers.add(roomNumber);
         assertEquals(category.getAvailableRoomNumbers(todate1.plusDays(1L), todate2), roomNumbers);
     }
+
+    @Test
+    void given_categorywithoccupiedrooms_when_releaserooms_then_availableroomnumbersequalsrooms() {
+        // given
+
+        // when
+
+        // then
+    }
 }

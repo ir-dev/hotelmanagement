@@ -1,9 +1,7 @@
 package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.category.Room;
-import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -16,32 +14,61 @@ public class RoomTest extends AbstractTest {
         //given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromdate = getContextLocalDate();
-        LocalDate todate = getContextLocalDate().plusDays(5L);
-        LocalDate before = getContextLocalDate().minusDays(2L);
-        LocalDate middle = getContextLocalDate().plusDays(3L);
-        LocalDate after = getContextLocalDate().plusDays(10L);
 
         //when
         Room room = new Room(roomNumber, roomState);
-        room.occupied(fromdate, todate,null);
 
         //then
         assertEquals(room.getRoomNumber(), roomNumber);
 
-        // test overlap beginning
-        assertThrows(IllegalStateException.class, () -> room.occupied(before, middle, null));
-
-        // test overlap whole
-        assertThrows(IllegalStateException.class, () -> room.occupied(fromdate, todate, null));
-
-        // test overlap ending
-        assertThrows(IllegalStateException.class, () -> room.occupied(middle, after, null));
-
         assertThrows(IllegalArgumentException.class, () -> new Room(roomNumber, RoomState.OCCUPIED));
-
         assertDoesNotThrow(() -> {
             new Room(roomNumber, RoomState.AVAILABLE);
         });
+    }
+
+    @Test
+    void given_availableroom_when_occupied_then_isandisnotavailableforperiods() {
+        //given
+        RoomNumber roomNumber = new RoomNumber("100");
+        RoomState roomState = RoomState.AVAILABLE;
+        LocalDate fromDate = getContextLocalDate();
+        LocalDate toDate = fromDate.plusDays(5L);
+        LocalDate inBetweenPeriod = fromDate.plusDays(1L);
+        Room room = new Room(roomNumber, roomState);
+        StayId stayId = new StayId("1");
+
+        // when
+        room.occupied(fromDate, toDate, stayId);
+
+        // then
+        assertTrue(room.isAvailableForPeriod(toDate, toDate.plusDays(1L)));
+        assertTrue(room.isAvailableForPeriod(fromDate.minusDays(1L), fromDate));
+
+        assertFalse(room.isAvailableForPeriod(inBetweenPeriod, toDate));
+        assertFalse(room.isAvailableForPeriod(fromDate, inBetweenPeriod));
+    }
+
+    @Test
+    void given_occupiedroom_when_available_then_isavailableforperiods() {
+        //given
+        RoomNumber roomNumber = new RoomNumber("100");
+        RoomState roomState = RoomState.AVAILABLE;
+        LocalDate fromDate = getContextLocalDate();
+        LocalDate toDate = fromDate.plusDays(5L);
+        LocalDate inBetweenPeriod = fromDate.plusDays(1L);
+        Room room = new Room(roomNumber, roomState);
+        StayId stayId = new StayId("1");
+        room.occupied(fromDate, toDate, stayId);
+
+        // when
+        room.cleaning(stayId);
+
+        // then
+        assertTrue(room.isAvailableForPeriod(toDate, toDate.plusDays(1L)));
+        assertTrue(room.isAvailableForPeriod(fromDate.minusDays(1L), fromDate));
+
+        assertTrue(room.isAvailableForPeriod(inBetweenPeriod, toDate));
+        assertTrue(room.isAvailableForPeriod(fromDate, inBetweenPeriod));
     }
 }

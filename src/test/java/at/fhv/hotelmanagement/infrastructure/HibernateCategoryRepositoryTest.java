@@ -123,7 +123,7 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
 
         //then
         for (RoomNumber rn : roomsNumbersActual) {
-            assertTrue(roomNumbersExpected.contains(rn.getNumber()));
+            assertTrue(roomNumbersExpected.contains(rn));
         }
     }
 }
