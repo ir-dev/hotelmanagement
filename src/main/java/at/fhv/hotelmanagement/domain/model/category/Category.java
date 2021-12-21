@@ -52,6 +52,16 @@ public class Category {
         }
     }
 
+    public void releaseRooms(List<RoomNumber> roomNumbers, StayId stayId) throws IllegalArgumentException {
+        for (RoomNumber roomNumber : roomNumbers) {
+            this.rooms.stream()
+                    .filter(r -> r.getRoomNumber().equals(roomNumber))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Room number to release not found for given category."))
+                    .cleaning(stayId);
+        }
+    }
+
 
     public Set<RoomNumber> getAvailableRoomNumbers(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).stream()
@@ -67,7 +77,7 @@ public class Category {
         final Set<Room> availableRooms = new HashSet<>();
 
         for (Room room : this.rooms) {
-            if (room.isAvailable(fromDate, toDate)) {
+            if (room.isAvailableForPeriod(fromDate, toDate)) {
                 availableRooms.add(room);
             }
         }

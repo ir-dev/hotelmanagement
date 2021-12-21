@@ -4,7 +4,9 @@ import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -20,6 +22,12 @@ public class CategoryService {
             } catch (InsufficientRoomsException e) {
                 throw new RoomAssignmentException(category.getName(), e.getMessage());
             }
+        }
+    }
+
+    public void releaseRooms(List<RoomNumber> roomNumbers, Set<Category> categories, StayId stayId) throws IllegalArgumentException {
+        for (Category category : categories) {
+            category.releaseRooms(roomNumbers, stayId);
         }
     }
 }
