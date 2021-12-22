@@ -20,6 +20,11 @@ public class RoomOccupancy {
         this.stayId = stayId;
     }
 
+    public void modifyEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+
     public LocalDate getStartDate() {
         return this.startDate;
     }

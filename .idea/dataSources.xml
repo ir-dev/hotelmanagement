@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:h2:~/hotelmanagement;AUTO_SERVER=TRUE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="MariaDB" uuid="0cb89880-70f6-42ce-9f62-be5ed6747aa9">
+    <data-source source="LOCAL" name="MariaDB - project2021_hotelmanagement@94.130.178.35" uuid="d1c6708e-e952-426b-a938-c219807c129e">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>

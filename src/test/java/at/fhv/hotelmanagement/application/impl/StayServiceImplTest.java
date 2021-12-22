@@ -226,33 +226,41 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException {
+    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException, EntityNotFoundException {
+        //given
+        Stay stay = createStayDummy();
+        Guest guest = createGuestDummy();
+        Category category = createCategoryDummy();
+
+        Map<Category, Integer> cat = new HashMap<>();
+        cat.put(category, 1);
+        stay.composeInvoice(cat, guest.getDiscountRate());
+
+        Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
+        Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
+
+        RoomNumber[] rs = new RoomNumber[10];
+        //when
+        this.stayService.checkoutStay(stay.getStayId().getId());
+
+        //then
+        assertEquals(StayState.CHECKED_OUT, stay.getStayState());
+        assertEquals(getContextLocalDateTime(), stay.getCheckedOutAt().orElseThrow());
+
+    }
+
+    @Test
+    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         Category category = createCategoryDummy();
 
-        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
-        selectedLineItemProductsCount.put(category, 1);
-        stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(10)));
-
-        //when
-        stay.checkout();
-
-        //then
-        assertEquals(stay.getStayState(), StayState.CHECKED_OUT);
-    }
-
-
-
-
-
-    @Test
-    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
-        //given
-        Stay stay = createStayDummy();
+        Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
 
         //when..then
-        assertThrows(BillingOpenException.class, stay::checkout, "BillingOpenException was expected");
+        assertThrows(BillingOpenException.class, () -> this.stayService.checkoutStay(stay.getStayId().getId()), "BillingOpenException was expected");
     }
 
 

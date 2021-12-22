@@ -277,6 +277,18 @@ public class StayServiceImpl implements StayService {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
 
         stay.checkout();
+
+        Set<Category> stayCategories;
+        try {
+            stayCategories = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.getSelectedCategoriesRoomCount()).keySet();
+        } catch (EntityNotFoundException e) {
+            throw new NoSuchElementException(e.getMessage());
+        }
+        this.categoryService.releaseRooms(
+                this.categoryRepository.findRoomNumbersByStayId(stay.getStayId()),
+                stayCategories,
+                stay.getStayId()
+        );
     }
 
     private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest, StayId stayId) {
