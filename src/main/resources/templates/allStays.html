@@ -62,20 +62,18 @@
 
 
                             <div class="card">
-                                <table class="table" style="text-align: center">
+                                <table class="table" style="text-align: center" id="myTable2">
                                     <thead>
                                     <tr>
-                                        <th>Stay ID</th>
-                                        <th>Guest</th>
-                                        <th>Departure</th>
-                                        <th>Room Number(s)</th>
-                                        <th>Status</th>
+                                        <th onclick="sortTable(0)" style="cursor: pointer">Stay ID</th>
+                                        <th onclick="sortTable(1)" style="cursor: pointer">Guest</th>
+                                        <th onclick="sortTable(2)" style="cursor: pointer">Departure</th>
+                                        <th onclick="sortTable(3)" style="cursor: pointer">Room Number(s)</th>
+                                        <th onclick="sortTable(4)" style="cursor: pointer">Status</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody id="myTable">
-
-
                                     <tr th:if="${stays.isEmpty()}">
                                         <td colspan="6"> no stays available</td>
                                     </tr>
@@ -98,12 +96,10 @@
                                             </div>
                                         </td>
                                         <td>
-
                                                 <span th:each="roomNumber, state: *{stay.roomNumbers()}">
                                                     <span th:text="${roomNumber}"></span><span th:if="${!state.last}"
                                                                                                th:text="', '"></span>
                                                 </span>
-
                                         </td>
 
                                         <td><span th:text="${stay.stayStatus()}"
