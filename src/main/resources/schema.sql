@@ -1,16 +1,3 @@
-# drop table if exists booking CASCADE;
-# drop table if exists booking_selected_categories_room_counts CASCADE;
-# drop table if exists category CASCADE;
-# drop table if exists guest CASCADE;
-# drop table if exists invoice CASCADE;
-# drop table if exists invoice_line CASCADE;
-# drop table if exists room CASCADE;
-# drop table if exists room_occupancy CASCADE;
-# drop table if exists stay CASCADE;
-# drop table if exists stay_selected_categories_room_counts CASCADE;
-
-CREATE SEQUENCE seq_invoice START WITH 1 INCREMENT BY 1;
-
 create table booking
 (
     id               bigint       not null auto_increment,
@@ -197,3 +184,5 @@ alter table stay_selected_categories_room_counts
     add constraint FK3f3i5boa8fldw6l2wg9cevjpx
         foreign key (stay_id)
             references stay (id);
+
+CREATE SEQUENCE seq_invoice START WITH 1 INCREMENT BY 1;
