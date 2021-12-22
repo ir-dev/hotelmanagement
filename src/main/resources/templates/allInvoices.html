@@ -57,13 +57,13 @@
                             <div class="card">
                                 <h5 class="card-header">Invoices</h5>
                                 <div class="card-body">
-                                    <table class="table" style="text-align: center">
+                                    <table class="table" style="text-align: center" id="myTable2">
                                         <thead>
                                         <tr>
-                                            <th>No. #</th>
-                                            <th>Created Date</th>
-                                            <th>Due Date</th>
-                                            <th>Grand Total</th>
+                                            <th onclick="sortTable(0)" style="cursor: pointer">No. #</th>
+                                            <th onclick="sortTable(1)" style="cursor: pointer">Created Date</th>
+                                            <th onclick="sortTable(2)" style="cursor: pointer">Due Date</th>
+                                            <th onclick="sortTable(3)" style="cursor: pointer">Grand Total</th>
                                             <th>Actions</th>
                                         </tr>
                                         </thead>
