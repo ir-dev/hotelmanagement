@@ -9,6 +9,8 @@
 # drop table if exists stay CASCADE;
 # drop table if exists stay_selected_categories_room_counts CASCADE;
 
+CREATE SEQUENCE seq_invoice START WITH 1 INCREMENT BY 1;
+
 create table booking
 (
     id               bigint       not null auto_increment,
