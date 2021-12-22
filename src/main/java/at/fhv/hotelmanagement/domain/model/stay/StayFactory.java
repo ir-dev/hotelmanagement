@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.util.Map;
 
 public class StayFactory {
+    private StayFactory() {}
+
     public static Stay createStayForBooking(StayId stayId,
                                             Booking booking,
                                             BookingNo bookingNo,

@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.domain.model.guest;
 import java.time.LocalDate;
 
 public class GuestFactory {
+    private GuestFactory() {}
 
     public static Guest createGuest(GuestId guestId,
                                     Organization organization,

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BookingStayValidator {
+    private BookingStayValidator() {}
 
     public static void validateBooking(LocalDate arrivalDate, LocalDate departureDate, Integer numberOfPersons, Map<Category, Integer> selectedCategoriesRoomCount) throws CreateBookingException {
         // ArrivalDate is today or in the future

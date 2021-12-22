@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.Map;
 
 public class BookingFactory {
+    private BookingFactory() {}
 
     public static Booking createBooking(BookingNo bookingNo,
                                         LocalDate arrivalDate,
