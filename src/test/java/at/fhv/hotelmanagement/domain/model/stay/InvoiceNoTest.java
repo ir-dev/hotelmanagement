@@ -1,7 +1,6 @@
 package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
