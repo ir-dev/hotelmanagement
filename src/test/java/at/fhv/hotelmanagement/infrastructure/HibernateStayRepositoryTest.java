@@ -113,22 +113,6 @@ class HibernateStayRepositoryTest extends AbstractTest {
         assertEquals(invoiceExcepted.getInvoiceNo(), invoiceActual.getInvoiceNo());
     }
 
-
-    @Test
-    void given_() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
-        // given
-        //Stay stay = createStayDummy();
-        //Invoice invoiceExcepted = stay.getInvoices().stream().findFirst().orElseThrow();
-        String invoiceNo = this.stayRepository.nextInvoiceSeq().orElseThrow();
-
-        String invoiceNo2 = this.stayRepository.nextInvoiceSeq().orElseThrow();
-
-        System.out.println(invoiceNo);
-        System.out.println(invoiceNo2);
-    }
-
-
-
     private static Integer nextDummyCategoryIdentity = 1;
     private static Integer nextDummyGuestIdentity = 1;
     private static Integer nextDummyBookingIdentity = 1;
