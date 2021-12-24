@@ -12,10 +12,7 @@ import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
-import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
-import at.fhv.hotelmanagement.domain.model.stay.Invoice;
-import at.fhv.hotelmanagement.domain.model.stay.Stay;
-import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
+import at.fhv.hotelmanagement.domain.model.stay.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,10 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -119,6 +113,22 @@ class HibernateStayRepositoryTest extends AbstractTest {
         assertEquals(invoiceExcepted.getInvoiceNo(), invoiceActual.getInvoiceNo());
     }
 
+
+    @Test
+    void given_() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
+        // given
+        //Stay stay = createStayDummy();
+        //Invoice invoiceExcepted = stay.getInvoices().stream().findFirst().orElseThrow();
+        String invoiceNo = this.stayRepository.nextInvoiceSeq().orElseThrow();
+
+        String invoiceNo2 = this.stayRepository.nextInvoiceSeq().orElseThrow();
+
+        System.out.println(invoiceNo);
+        System.out.println(invoiceNo2);
+    }
+
+
+
     private static Integer nextDummyCategoryIdentity = 1;
     private static Integer nextDummyGuestIdentity = 1;
     private static Integer nextDummyBookingIdentity = 1;
@@ -196,7 +206,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount, guest.getDiscountRate());
+        stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq().orElseThrow(), selectedCategoriesRoomCount, guest.getDiscountRate());
 
         return stay;
     }

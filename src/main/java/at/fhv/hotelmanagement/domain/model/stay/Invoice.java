@@ -2,7 +2,6 @@ package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -28,21 +27,21 @@ public class Invoice {
     private Set<InvoiceLine> lineItems;
 
     private double taxRate;
-    private long dueDateDays;
 
     // required for hibernate
     private Invoice() {}
 
-    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, Optional<BigDecimal> discountRate, double taxRate, long dueDateDays) throws PriceCurrencyMismatchException {
-        this.invoiceNo = invoiceNo;
+
+    Invoice(Optional<InvoiceNo> invoiceNoOpt, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, Optional<BigDecimal> discountRate, double taxRate) throws PriceCurrencyMismatchException {
+        this.invoiceNo = new InvoiceNo("0");
+        invoiceNoOpt.ifPresent(invoiceNo1 -> this.invoiceNo = invoiceNo1);
         this.lineItems = lineItems;
         this.nights = (int) DAYS.between(arrivalDate, departureDate);
         this.createdDate = LocalDate.now();
+        this.dueDate = departureDate;
         this.discountRate = BigDecimal.valueOf(0);
         discountRate.ifPresent(bigDecimal -> this.discountRate = bigDecimal);
         this.taxRate = taxRate;
-        this.dueDateDays = dueDateDays;
-        this.dueDate = this.createdDate.plusDays(this.dueDateDays);
 
         if (lineItems.size() > 0) {
             determinePrices();

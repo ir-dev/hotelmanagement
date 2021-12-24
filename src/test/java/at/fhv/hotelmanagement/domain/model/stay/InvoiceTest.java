@@ -26,15 +26,13 @@ public class InvoiceTest extends AbstractTest {
         LocalDate departureDate = arrivalDate.plusDays(5L);
         Optional<BigDecimal> discountRate = Optional.of(BigDecimal.valueOf(0.25));
         double taxRate = 0.1;
-        long dueDateDays = 14L;
 
         // when
-        Invoice invoice1 = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate, dueDateDays);
+        Invoice invoice1 = new Invoice(Optional.of(invoiceNo), lineItems, arrivalDate, departureDate, discountRate, taxRate);
 
         // then
         assertEquals(invoiceNo, invoice1.getInvoiceNo());
         assertEquals(LocalDate.now(), invoice1.getCreatedDate());
-        assertEquals(LocalDate.now().plusDays(dueDateDays), invoice1.getDueDate());
         assertEquals(5, invoice1.getNights());
         assertEquals(discountRate, Optional.of(invoice1.getDiscountRate()));
         assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotalPerNight());
@@ -60,15 +58,13 @@ public class InvoiceTest extends AbstractTest {
         LocalDate departureDate = arrivalDate.plusDays(5L);
         Optional<BigDecimal> discountRate = Optional.of(BigDecimal.valueOf(0.25));
         double taxRate = 0.1;
-        long dueDateDays = 14L;
 
         // when
-        Invoice invoice = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate, dueDateDays);
+        Invoice invoice = new Invoice(Optional.of(invoiceNo), lineItems, arrivalDate, departureDate, discountRate, taxRate);
 
         // then
         assertEquals(invoiceNo, invoice.getInvoiceNo());
         assertEquals(LocalDate.now(), invoice.getCreatedDate());
-        LocalDate dueDateExpected = LocalDate.now().plusDays(dueDateDays);
         Integer nightsExpected = (int) DAYS.between(arrivalDate, departureDate);
 
         BigDecimal expectedSubTotalPerNight = BigDecimal.valueOf(12L);
@@ -78,7 +74,6 @@ public class InvoiceTest extends AbstractTest {
         BigDecimal expectedTax = expectedSubTotalDiscounted.multiply(BigDecimal.valueOf(taxRate));
         BigDecimal expectedGrandTotal = expectedSubTotalDiscounted.add(expectedTax);
 
-        assertEquals(dueDateExpected, invoice.getDueDate());
         assertEquals(nightsExpected, invoice.getNights());
         assertEquals(Price.of(expectedSubTotalPerNight, Currency.getInstance("EUR")), invoice.getSubTotalPerNight());
         assertEquals(Price.of(expectedSubTotal, Currency.getInstance("EUR")), invoice.getSubTotal());

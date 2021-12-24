@@ -6,7 +6,7 @@
 
     <div class="float-right">
         <h3 class="mb-0">Invoice No. <span th:text="*{invoiceNo}"></span></h3>
-        Date: <span th:text="*{currentDate + ''}"></span> <!--Uniform Formatting-->
+        Date: <span th:text="*{currentDate}"></span>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
 
     <div class="float-right">
         <h3 class="mb-0">Intermediary Invoice</h3>
-        Date: <span th:text="*{currentDate + ''}"></span> <!--Uniform Formatting-->
+        Date: <span th:text="*{currentDate}"></span>
     </div>
 </div>
 
@@ -168,8 +168,8 @@
 </div>
 
 <div class="card-footer bg-white" th:fragment="invoiceCardBankCredentials">
-    <div style="float: right; margin-right: auto">
-        <p class="mb-0">Please make your payment to:</p>
+    <div style="float: right; margin-right: auto; text-align:right">
+        <p class="mb-0">Please transfer the invoice amount to the given account within the payment deadline (4 weeks).</p>
         <p class="mb-0">Volksbank</p>
         <p class="mb-0">IBAN: AT 2178 9800 000 2387 6707</p>
         <p class="mb-0">BIC/SWIFT: GENODE 26ZER</p>

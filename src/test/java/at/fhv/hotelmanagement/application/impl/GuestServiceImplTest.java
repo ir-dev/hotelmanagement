@@ -4,7 +4,6 @@ import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.GuestService;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
-import at.fhv.hotelmanagement.infrastructure.HibernateGuestRepository;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,7 +63,7 @@ public class GuestServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_guestinrepository_when_byguestId_then_return() throws CreateGuestException {
+    void given_guestinrepository_when_guestbyguestId_then_return() throws CreateGuestException {
         //given
         Guest guest = createGuestDummy();
 
@@ -81,6 +78,19 @@ public class GuestServiceImplTest extends AbstractTest {
 
         //then
         assertEquals(expectedGuestDTO, actualGuestDTO);
+    }
+
+    @Test
+    void given_guestId_when_guestbyguestId_then_returnEmpty() {
+        //given
+        GuestId guestId = new GuestId("1");
+        Mockito.when(this.guestRepository.findById(guestId)).thenReturn(Optional.empty());
+
+        //when
+        Optional<GuestDTO> guestDto = this.guestService.guestByGuestId(guestId.getId());
+
+        //then
+        assertTrue(guestDto.isEmpty());
     }
 
 

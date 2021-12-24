@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Stay {
     private static final double INVOICE_TAX_RATE = 0.1;
-    private static final long INVOICE_DUE_DATE_DAYS = 14L;
 
     // generated hibernate id
     private Long id;
@@ -72,24 +72,28 @@ public class Stay {
         this.stayState = StayState.CHECKED_OUT;
     }
 
-    private InvoiceNo nextInvoiceNo() {
-        return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
+    private InvoiceNo buildInvoiceNo(String invoiceSeq) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM");
+        String currentDate = LocalDate.now().format(formatter).replace("/","");
+        return new InvoiceNo(currentDate + invoiceSeq);
     }
 
-    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
+    public InvoiceNo finalizeInvoice(String invoiceSeq, Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
-
-        Invoice invoice = generateInvoice(selectedLineItemProductsCount, discountRate);
+        Invoice invoice = new Invoice(Optional.of(buildInvoiceNo(invoiceSeq)), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
         this.invoices.add(invoice);
 
-        return invoice;
+        return invoice.getInvoiceNo();
     }
 
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException {
-        Set<InvoiceLine> lineItems = new HashSet<>();
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException{
+        return new Invoice(Optional.empty(), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
+    }
 
+    private Set<InvoiceLine> buildLineItems(Map<Category, Integer> selectedLineItemProductsCount) {
+        Set<InvoiceLine> lineItems = new HashSet<>();
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
             for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
                 if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
@@ -106,8 +110,7 @@ public class Stay {
                 }
             }
         }
-
-        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+        return lineItems;
     }
 
     private Set<InvoiceLine> billedLineItems() {

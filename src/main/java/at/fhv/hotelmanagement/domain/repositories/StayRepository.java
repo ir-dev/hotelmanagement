@@ -21,5 +21,7 @@ public interface StayRepository {
 
     Optional<Invoice> findInvoiceByInvoiceNo(InvoiceNo invoiceNo);
 
+    Optional<String> nextInvoiceSeq();
+
     void store(Stay stay);
 }

@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.dto;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class InvoiceDTO {
         return this.createdDate;
     }
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     public LocalDate currentDate() {
         return LocalDate.now();
     }

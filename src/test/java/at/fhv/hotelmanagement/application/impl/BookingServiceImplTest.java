@@ -75,8 +75,13 @@ public class BookingServiceImplTest extends AbstractTest {
 
         List<BookingDTO> bookingsDtoExpected = new ArrayList<>();
         for (Booking booking : bookings) {
-            GuestDTO guestDto = GuestDTO.builder().withGuestEntity(createGuestDummy()).build();
-            BookingDTO bookingDto = BookingDTO.builder().withBookingEntity(booking).withDetails(BookingDetailsDTO.builder().withBookingEntity(booking).withGuestDTO(guestDto).build()).build();
+            BookingDTO bookingDto = BookingDTO.builder()
+                                                .withBookingEntity(booking)
+                                                .withDetails(BookingDetailsDTO.builder()
+                                                        .withBookingEntity(booking)
+                                                        .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
+                                                        .build())
+                                    .build();
             bookingsDtoExpected.add(bookingDto);
         }
 
@@ -91,20 +96,20 @@ public class BookingServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_bookinginrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
+    void given_bookinginrepository_when_bookingbybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
         //given
         Booking booking = createBookingDummy();
         Guest guest = createGuestDummy();
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(guest));
 
         BookingDTO expectedBookingDTO = BookingDTO.builder()
                 .withBookingEntity(booking)
                 .withDetails(BookingDetailsDTO.builder()
                         .withBookingEntity(booking)
-                        .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
+                        .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
                         .build())
                 .build();
 
+        Mockito.when(this.guestRepository.findById(guest.getGuestId())).thenReturn(Optional.of(guest));
         Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
 
         //when
@@ -114,20 +119,32 @@ public class BookingServiceImplTest extends AbstractTest {
         assertEquals(expectedBookingDTO, actualBookingDTO);
     }
 
+    @Test
+    void given_bookingNo_when_bookingbybookingNo_then_returnEmpty() {
+        //given
+        BookingNo bookingNo = new BookingNo("1");
+        Mockito.when(this.bookingRepository.findByNo(bookingNo)).thenReturn(Optional.empty());
+
+        //when
+        Optional<BookingDTO> bookingDto = this.bookingsService.bookingByBookingNo(bookingNo.getNo());
+
+        //then
+        assertTrue(bookingDto.isEmpty());
+    }
+
 
     @Test
-    void given_bookingdetailsinrepository_when_bybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
+    void given_bookinginrepository_when_bookingdetailsbybookingNo_then_return() throws CreateGuestException, CreateBookingException, RoomAlreadyExistsException {
         //given
         Booking booking = createBookingDummy();
         Guest guest = createGuestDummy();
 
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.of(guest));
-
         BookingDetailsDTO expectedBookingDetailsDTO = BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
-                .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
+                .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
                 .build();
 
+        Mockito.when(this.guestRepository.findById(guest.getGuestId())).thenReturn(Optional.of(guest));
         Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
 
         //when
@@ -135,6 +152,33 @@ public class BookingServiceImplTest extends AbstractTest {
 
         //then
         assertEquals(expectedBookingDetailsDTO, actualBookingDetailsDTO);
+    }
+
+    @Test
+    void given_bookingNo_when_bookingdetailsbybookingNo_then_returnEmpty() {
+        //given
+        BookingNo bookingNo = new BookingNo("1");
+        Mockito.when(this.bookingRepository.findByNo(bookingNo)).thenReturn(Optional.empty());
+
+        //when
+        Optional<BookingDetailsDTO> bookingDetailsDto = this.bookingsService.bookingDetailsByBookingNo(bookingNo.getNo());
+
+        //then
+        assertTrue(bookingDetailsDto.isEmpty());
+    }
+
+    @Test
+    void given_bookinginrepository_with_empty_guestId_when_bookingbybookingNo_then_throw() throws CreateBookingException, RoomAlreadyExistsException {
+        //given
+        Booking booking = createBookingDummy();
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+        Mockito.when(this.guestRepository.findById(booking.getGuestId())).thenReturn(Optional.empty());
+
+        //when..then
+        assertThrows(NoSuchElementException.class, () -> {
+            BookingDTO bookingDto = this.bookingsService.bookingByBookingNo(booking.getBookingNo().getNo()).orElseThrow();
+        }, "NoSuchElementException was expected");
     }
 
 

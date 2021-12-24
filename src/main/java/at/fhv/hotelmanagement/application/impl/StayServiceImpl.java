@@ -268,7 +268,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate()).getInvoiceNo().getNo();
+        return stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq().orElseThrow(),selectedLineItemProductsCount, guest.getDiscountRate()).getNo();
     }
 
     @Transactional
