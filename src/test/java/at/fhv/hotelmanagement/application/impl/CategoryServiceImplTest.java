@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ public class CategoryServiceImplTest extends AbstractTest {
         //given
         Mockito.when(this.categoryRepository.findAll()).thenReturn(Collections.emptyList());
         //when
-        List<AvailableCategoryDTO> bookingsDto = this.categoryService.availableCategories(getContextLocalDate(), getContextLocalDate().plusDays(2));
+        List<AvailableCategoryDTO> bookingsDto = this.categoryService.availableCategories(LocalDate.now(), LocalDate.now().plusDays(2));
         //then
         assertTrue(bookingsDto.isEmpty());
     }
@@ -54,13 +55,13 @@ public class CategoryServiceImplTest extends AbstractTest {
             AvailableCategoryDTO availableCategoryDto = AvailableCategoryDTO.builder()
                     .withName(c.getName())
                     .withDescription(c.getDescription())
-                    .withAvailableRoomsCount(c.getAvailableRoomsCount(getContextLocalDate(), getContextLocalDate().plusDays(2)))
+                    .withAvailableRoomsCount(c.getAvailableRoomsCount(LocalDate.now(), LocalDate.now().plusDays(2)))
                     .build();
             availableCategoriesDtoExpected.add(availableCategoryDto);
         }
 
         //when
-        List<AvailableCategoryDTO> availableCategoriesDtoActual = this.categoryService.availableCategories(getContextLocalDate(), getContextLocalDate().plusDays(2));
+        List<AvailableCategoryDTO> availableCategoriesDtoActual = this.categoryService.availableCategories(LocalDate.now(), LocalDate.now().plusDays(2));
 
         //then
         for (AvailableCategoryDTO c : availableCategoriesDtoActual) {
@@ -78,7 +79,7 @@ public class CategoryServiceImplTest extends AbstractTest {
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
 
         //when
-        List<AvailableCategoryDTO> availableCategoriesDto = this.categoryService.availableCategories(getContextLocalDate(), getContextLocalDate().plusDays(2));
+        List<AvailableCategoryDTO> availableCategoriesDto = this.categoryService.availableCategories(LocalDate.now(), LocalDate.now().plusDays(2));
 
         //then
         assertTrue(availableCategoriesDto.isEmpty());

@@ -97,7 +97,7 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_stayinrepository_when_bystayId_then_return() throws RoomAlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
+    void given_stayinrepository_when_staybystayId_then_return() throws RoomAlreadyExistsException, CreateBookingException, CreateStayException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -116,7 +116,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_when_bystayId_then_returnEmpty() {
+    void given_nostayinrepository_when_staybystayId_then_returnEmpty() {
         //given
         StayId stayId = new StayId("1");
         Mockito.when(this.stayRepository.findById(stayId)).thenReturn(Optional.empty());
@@ -129,7 +129,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_invoiceNoinrepository_when_byinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException {
+    void given_invoiceNoinrepository_when_invoicebyinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException {
         //given
         Stay stay = createStayDummy();
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
@@ -177,13 +177,13 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_with_empty_guestId_when_invoicebyinvoisceNo_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_stayinrepository_and_noguestinrepository_when_invoicebyinvoiceNo_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         InvoiceNo invoiceNo = new InvoiceNo("1");
 
         Mockito.when(this.stayRepository.findByInvoiceNo(invoiceNo)).thenReturn(Optional.of(stay));
-        Mockito.when(this.guestRepository.findById(new GuestId("1"))).thenReturn(Optional.empty());
+        Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.empty());
 
         //when
         Optional<InvoiceDTO> invoiceDto = this.stayService.invoiceByInvoiceNo(invoiceNo.getNo());
@@ -192,7 +192,7 @@ public class StayServiceImplTest extends AbstractTest {
         assertTrue(invoiceDto.isEmpty());
     }
     @Test
-    void given_stay_with_empty_invoiceNo_when_invoicebyinvoisceNo_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
+    void given_stayinrepository_and_noinvoiceNoinrepository_when_invoicebyinvoisceNo_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -246,7 +246,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_without_invoices_when_allStayInvoices_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_stayinrepository_and_nostayinvoicesinrepository_when_allStayInvoices_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -262,7 +262,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_when_allStayInvoices_then_throws() {
+    void given_nostayinrepository_when_allStayInvoices_then_throws() {
         //given
         StayId stayId = new StayId("1");
 
@@ -274,7 +274,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_when_allStayInvoices_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_stayinrepository_and_noguestinrepository_when_allStayInvoices_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
 
@@ -321,7 +321,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_when_chargeStayPreview_then_throws() {
+    void given_nostayinrepository_when_chargeStayPreview_then_throws() {
         //given
         StayId stayId = new StayId("1");
 
@@ -332,7 +332,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_when_chargeStayPreview_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_stayinrepository_and_noguestinrepository_when_chargeStayPreview_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
 
@@ -375,7 +375,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_and_selectedLineItemProductsCount_when_chargeStayPreview_then_throws() throws RoomAlreadyExistsException {
+    void given_nostayinrepository_and_selectedLineItems_when_chargeStayPreview_then_throws() throws RoomAlreadyExistsException {
         //given
         StayId stayId = new StayId("1");
         Category category = createCategoriesDummy().get(0);
@@ -389,7 +389,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_and_selectedLineItemProductsCount_when_chargeStayPreview_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_stayinrepository_and_noguestinrepository_and_selectedLineItems_when_chargeStayPreview_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         Category category = createCategoriesDummy().get(0);
@@ -452,7 +452,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_when_chargeStay_then_throws() throws RoomAlreadyExistsException {
+    void given_nostayinrepository_when_chargeStay_then_throws() throws RoomAlreadyExistsException {
         //given
         StayId stayId = new StayId("1");
         Category category = createCategoriesDummy().get(0);
@@ -467,7 +467,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_when_chargeStay_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_stayinrepository_and_noguestinrepository_when_chargeStay_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         Category category = createCategoriesDummy().get(0);
@@ -506,7 +506,7 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_unbilledstay_when_checkout_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
 
@@ -519,7 +519,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_stayId_when_checkoutStay_then_throws() {
+    void given_nostayinrepository_when_checkoutStay_then_throws() {
         //given
         StayId stayId = new StayId("1");
 
@@ -586,9 +586,9 @@ public class StayServiceImplTest extends AbstractTest {
 
     private Stay createStayDummy() throws CreateBookingException, RoomAlreadyExistsException, CreateStayException {
         //Booking
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(2);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(2);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 1;
         Map<Category, Integer> selectCategoriesRoomCount = new HashMap<>();
 
@@ -628,7 +628,7 @@ public class StayServiceImplTest extends AbstractTest {
                 null, String.valueOf(Salutation.MR),
                 "Fritz",
                 "Mayer",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );

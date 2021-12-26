@@ -83,7 +83,7 @@ public class TestData implements ApplicationRunner {
         Address ad1 = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         Address ad2 = new Address("Musterstr. 123", "12345", "München", String.valueOf(Country.DE));
         Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.DIVERSE), "Franz", "Beckenbauer", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
-        Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1,String.valueOf(Salutation.MR),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
+        Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1, String.valueOf(Salutation.MR),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
         this.guestRepository.store(g1);
         this.guestRepository.store(g2);
 

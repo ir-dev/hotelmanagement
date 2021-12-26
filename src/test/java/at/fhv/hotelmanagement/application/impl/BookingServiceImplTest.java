@@ -27,9 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,12 +76,12 @@ public class BookingServiceImplTest extends AbstractTest {
         List<BookingDTO> bookingsDtoExpected = new ArrayList<>();
         for (Booking booking : bookings) {
             BookingDTO bookingDto = BookingDTO.builder()
-                                                .withBookingEntity(booking)
-                                                .withDetails(BookingDetailsDTO.builder()
-                                                        .withBookingEntity(booking)
-                                                        .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
-                                                        .build())
-                                    .build();
+                    .withBookingEntity(booking)
+                    .withDetails(BookingDetailsDTO.builder()
+                            .withBookingEntity(booking)
+                            .withGuestDTO(GuestDTO.builder().withGuestEntity(createGuestDummy()).build())
+                            .build())
+                    .build();
             bookingsDtoExpected.add(bookingDto);
         }
 
@@ -189,7 +189,7 @@ public class BookingServiceImplTest extends AbstractTest {
                 null, String.valueOf(Salutation.MRS),
                 "Fritz",
                 "Mayer",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );
@@ -201,9 +201,9 @@ public class BookingServiceImplTest extends AbstractTest {
         Category category = CategoryFactory.createCategory(new CategoryId("1"),"Business Casual EZ", "A casual accommodation for business guests.", 1, p, p);
         category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
 
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(2L);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(2L);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 1;
         Map<Category, Integer> selectCategoriesRoomCount = new HashMap<>();
         selectCategoriesRoomCount.put(category, 1);
