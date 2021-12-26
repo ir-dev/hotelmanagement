@@ -19,7 +19,7 @@ public class Room {
 
     public Room(RoomNumber roomNumber, RoomState roomState) {
         // disallow (resp. explicitly allow) some initial room states (this must be always conform with all room state changes!!)
-        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.MAINTENANCE || roomState == RoomState.CLEANING)) {
+        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.CLEANING)) {
             throw new IllegalArgumentException("Forbidden initial room state: " + roomState);
         }
 
@@ -58,7 +58,7 @@ public class Room {
 
     private void createRoomOccupancy(LocalDate fromDate, LocalDate toDate, StayId stayId) throws IllegalStateException {
         if (!isAvailableForPeriod(fromDate, toDate)) {
-            throw new IllegalStateException("Room is already occupied for given period.");
+            throw new IllegalStateException("Room is not available for given period.");
         }
 
         RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate, stayId);
