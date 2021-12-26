@@ -35,5 +35,6 @@ public class GuestTest extends AbstractTest {
         assertEquals(dateOfBirth, guest.getDateOfBirth());
         assertEquals(address, guest.getAddress());
         assertEquals(specialNotes, guest.getSpecialNotes());
+        assertEquals(BigDecimal.valueOf(0.25), guest.getDiscountRate().orElseThrow());
     }
 }
