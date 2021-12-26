@@ -29,22 +29,22 @@ public class InvoiceTest extends AbstractTest {
         long dueDateDays = 14L;
 
         // when
-        Invoice invoice1 = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate, dueDateDays);
+        Invoice invoice = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate, dueDateDays);
 
         // then
-        assertEquals(invoiceNo, invoice1.getInvoiceNo());
-        assertEquals(LocalDate.now(), invoice1.getCreatedDate());
-        assertEquals(LocalDate.now().plusDays(dueDateDays), invoice1.getDueDate());
-        assertEquals(5, invoice1.getNights());
-        assertEquals(discountRate, Optional.of(invoice1.getDiscountRate()));
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotalPerNight());
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotal());
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getDiscountAmount());
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotalDiscounted());
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getGrandTotal());
-        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getTax());
-        assertEquals(lineItems.size(), invoice1.getLineItems().size());
-        for (InvoiceLine il : invoice1.getLineItems()) {
+        assertEquals(invoiceNo, invoice.getInvoiceNo());
+        assertEquals(LocalDate.now(), invoice.getCreatedDate());
+        assertEquals(LocalDate.now().plusDays(dueDateDays), invoice.getDueDate());
+        assertEquals(5, invoice.getNights());
+        assertEquals(discountRate, Optional.of(invoice.getDiscountRate()));
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getSubTotalPerNight());
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getSubTotal());
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getDiscountAmount());
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getSubTotalDiscounted());
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getGrandTotal());
+        assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice.getTax());
+        assertEquals(lineItems.size(), invoice.getLineItems().size());
+        for (InvoiceLine il : invoice.getLineItems()) {
             assertTrue(lineItems.contains(il));
         }
     }

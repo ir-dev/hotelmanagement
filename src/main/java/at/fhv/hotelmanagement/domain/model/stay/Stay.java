@@ -59,6 +59,10 @@ public class Stay {
         return billableLineItemCounts().size() == 0;
     }
 
+    public boolean isCheckedOut() {
+        return (this.stayState == StayState.CHECKED_OUT);
+    }
+
     public void checkout() throws BillingOpenException, IllegalStateException {
         if (!isCheckedIn()) {
             throw new IllegalStateException("Only checked-in stays can be checked-out.");
@@ -87,6 +91,7 @@ public class Stay {
         return invoice;
     }
 
+    // NOTE: so far specified positions in selectedLineItemProductsCount which are already completely billed are ignored (no exception thrown) and as well it is also possible to generate an empty invoice without positions (line items)
     public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, GenerateInvoiceException {
         Set<InvoiceLine> lineItems = new HashSet<>();
 
@@ -94,7 +99,7 @@ public class Stay {
             for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
                 if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
                     if (billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
-                        throw new GenerateInvoiceException("Selected position not billable for the given amount");
+                        throw new GenerateInvoiceException("Selected position not billable for the given amount.");
                     }
 
                     lineItems.add(new InvoiceLine(
@@ -116,7 +121,7 @@ public class Stay {
 
         for (Invoice invoice : this.invoices) {
             for (InvoiceLine lineItem : invoice.getLineItems()) {
-                if (lineItem.getType() == ProductType.CATEGORY) {
+                // if (lineItem.getType() == ProductType.CATEGORY) {
                     lineCategoryItems.add(lineItem);
 
                     String lineItemCategoryName = lineItem.getProduct();
@@ -128,7 +133,7 @@ public class Stay {
                     } else {
                         billedCategoryCounts.put(lineItemCategoryName, lineItemQuantity);
                     }
-                }
+                // }
             }
         }
 
@@ -149,14 +154,8 @@ public class Stay {
         return billedLineItems;
     }
 
-    // Line items that are not paid fully (selectedCategoryRoomsCount - billedLineItems)
+    // line items that are not fully paid (selectedCategoryRoomsCount - billedLineItems)
     public Map<String, Integer> billableLineItemCounts() {
-        /*
-            billableLineItems -> positionen, die noch offen sind
-            1. selectedCategoryRoomsCount iterieren -> jeweils prüfen, ob entsprechendes billedLineItem vorhanden
-            -> wenn ja: neues LineItem mit "subtrahierter Quantity"
-            -> wenn nein: neues LineItem mit voller Quantity von selectedCategoryRoomsCount
-         */
         Map<String, Integer> billableLineItemCounts = new HashMap<>();
         Set<InvoiceLine> billedLineItems = billedLineItems();
 
@@ -167,7 +166,7 @@ public class Stay {
             boolean lineItemFound = false;
             for (InvoiceLine billedLineItem : billedLineItems) {
 
-                if (billedLineItem.getType() == ProductType.CATEGORY && billedLineItem.getProduct().equals(categoryName)) {
+                if (/* billedLineItem.getType() == ProductType.CATEGORY && */ billedLineItem.getProduct().equals(categoryName)) {
                     int toBillCount = roomCount - billedLineItem.getQuantity();
 
                     if (toBillCount > 0) {
@@ -209,10 +208,6 @@ public class Stay {
 
     public Optional<LocalDateTime> getCheckedOutAt() {
         return Optional.ofNullable(this.checkedOutAt);
-    }
-
-    public boolean isCheckedOut() {
-        return this.stayState == StayState.CHECKED_OUT;
     }
 
     public LocalDate getArrivalDate() {

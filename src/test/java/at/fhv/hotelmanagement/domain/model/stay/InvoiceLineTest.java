@@ -27,10 +27,10 @@ public class InvoiceLineTest extends AbstractTest {
         InvoiceLine invoiceLine = new InvoiceLine(type, product, description, quantity, price);
 
         //then
-        assertEquals(invoiceLine.getType(), type);
-        assertEquals(invoiceLine.getProduct(), product);
-        assertEquals(invoiceLine.getDescription(), description);
-        assertEquals(invoiceLine.getQuantity(), quantity);
-        assertEquals(invoiceLine.getPrice(), price);
+        assertEquals(type, invoiceLine.getType());
+        assertEquals(product, invoiceLine.getProduct());
+        assertEquals(description, invoiceLine.getDescription());
+        assertEquals(quantity, invoiceLine.getQuantity());
+        assertEquals(price, invoiceLine.getPrice());
     }
 }
