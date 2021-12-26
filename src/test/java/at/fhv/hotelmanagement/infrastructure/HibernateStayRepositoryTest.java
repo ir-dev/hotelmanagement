@@ -12,10 +12,7 @@ import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
-import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
-import at.fhv.hotelmanagement.domain.model.stay.Invoice;
-import at.fhv.hotelmanagement.domain.model.stay.Stay;
-import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
+import at.fhv.hotelmanagement.domain.model.stay.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,7 +45,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     private EntityManager em;
 
     @Test
-    void given_3staysinrepository_when_findallstays_then_returnequalsstays() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
+    void given_3staysinrepository_when_findallstays_then_returnequalsstays() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
         // given
         List<Stay> staysExpected = Arrays.asList(
                 createStayDummy(),
@@ -74,7 +71,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_when_addstaytorepository_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
+    void given_stay_when_addstaytorepository_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
         // given
         Stay stayExcepted = createStayDummy();
 
@@ -89,7 +86,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
+    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, GenerateInvoiceException, RoomAlreadyExistsException {
         // given
         Stay stayExpected = createStayDummy();
         this.stayRepository.store(stayExpected);
@@ -104,7 +101,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
+    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, GenerateInvoiceException, RoomAlreadyExistsException {
         // given
         Stay stay = createStayDummy();
         Invoice invoiceExcepted = stay.getInvoices().stream().findFirst().orElseThrow();
@@ -135,7 +132,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         return new BookingNo((nextDummyBookingIdentity++).toString());
     }
 
-    private Stay createStayDummy() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
+    private Stay createStayDummy() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
         // create value objects for entities
         Address address = new Address(
                 "Musterstr. 123",

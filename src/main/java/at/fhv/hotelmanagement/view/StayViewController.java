@@ -10,6 +10,7 @@ import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
+import at.fhv.hotelmanagement.domain.model.stay.GenerateInvoiceException;
 import at.fhv.hotelmanagement.view.forms.SelectedLineItemsForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,7 +233,7 @@ public class StayViewController {
             openPositionsInvoicePreview = this.stayService.chargeStayPreview(stayId);
             invoices = this.stayService.allStayInvoices(stayId);
 
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | GenerateInvoiceException e) {
             return redirectError(e.getMessage());
         } catch (PriceCurrencyMismatchException e) {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
@@ -265,7 +266,7 @@ public class StayViewController {
             model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
             invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount());
 
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException | GenerateInvoiceException e) {
             return redirectError(e.getMessage());
         } catch (PriceCurrencyMismatchException e) {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");

@@ -240,7 +240,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException {
+    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
@@ -251,7 +251,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException {
+    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
@@ -262,7 +262,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException {
+    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException, IllegalStateException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 

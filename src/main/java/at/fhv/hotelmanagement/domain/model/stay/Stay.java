@@ -76,7 +76,7 @@ public class Stay {
         return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
-    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
+    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, GenerateInvoiceException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
@@ -87,14 +87,14 @@ public class Stay {
         return invoice;
     }
 
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException {
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, GenerateInvoiceException {
         Set<InvoiceLine> lineItems = new HashSet<>();
 
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
             for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
                 if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
-                    if (selectedLineItemProductCount.getValue() <= 0 && billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
-                        throw new RuntimeException("Selected position not billable");
+                    if (billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
+                        throw new GenerateInvoiceException("Selected position not billable for the given amount");
                     }
 
                     lineItems.add(new InvoiceLine(
