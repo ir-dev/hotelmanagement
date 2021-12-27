@@ -19,29 +19,20 @@ import java.util.Map;
 
 public class BookingTest extends AbstractTest {
     @Test
-    void given_bookingdetails_when_createbooking_then_detailsequals() throws CreateBookingException, RoomAlreadyExistsException {
+    void given_bookingdetails_when_createbooking_then_detailsequals() {
         // given
-        CategoryId categoryId = new CategoryId("1");
-        String name = ("Honeymoon Suite DZ");
-        String description = ("description");
-        Integer maxPersons = 3;
-        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
-        Category category = CategoryFactory.createCategory(categoryId, name, description, maxPersons, p, p);
-        category.createRoom(new Room(new RoomNumber("111"), RoomState.AVAILABLE));
-        category.createRoom(new Room(new RoomNumber("112"), RoomState.AVAILABLE));
-
         BookingNo bookingNo = new BookingNo("1");
         LocalDate arrivalDate = getContextLocalDate();
         LocalDate departureDate = getContextLocalDate().plusDays(1);
         LocalTime arrivalTime = getContextLocalTime();
-        Integer numberOfPersons = 5;
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        selectedCategoriesRoomCount.put(category, 2);
+        Integer numberOfPersons = 4;
+        Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
+        selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
         GuestId guestId = new GuestId("1");
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", "CASH");
 
         // when
-        Booking booking = BookingFactory.createBooking(bookingNo, arrivalDate, departureDate, arrivalTime, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
+        Booking booking = new Booking(bookingNo, arrivalDate, departureDate, arrivalTime, numberOfPersons, selectedCategoryNamesRoomCount, guestId, paymentInformation);
 
         // then
         assertEquals(bookingNo, booking.getBookingNo());
@@ -50,12 +41,49 @@ public class BookingTest extends AbstractTest {
         assertEquals(departureDate, booking.getDepartureDate());
         assertEquals(arrivalTime, booking.getArrivalTime());
         assertEquals(numberOfPersons, booking.getNumberOfPersons());
-        assertEquals(CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedCategoriesRoomCount), booking.getSelectedCategoriesRoomCount());
+        assertEquals(selectedCategoryNamesRoomCount, booking.getSelectedCategoriesRoomCount());
+        assertEquals(2, booking.getNumberOfBookedRooms());
         assertEquals(guestId, booking.getGuestId());
         assertEquals(paymentInformation, booking.getPaymentInformation());
+    }
 
+    @Test
+    void given_booking_when_close_then_bookingstateclosed() {
+        // given
+        BookingNo bookingNo = new BookingNo("1");
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(1);
+        LocalTime arrivalTime = getContextLocalTime();
+        Integer numberOfPersons = 4;
+        Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
+        selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
+        GuestId guestId = new GuestId("1");
+        PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", "CASH");
+        Booking booking = new Booking(bookingNo, arrivalDate, departureDate, arrivalTime, numberOfPersons, selectedCategoryNamesRoomCount, guestId, paymentInformation);
+
+        // when
         booking.close();
-        assertEquals(booking.getBookingState(), BookingState.CLOSED);
+
+        // then
+        assertEquals(BookingState.CLOSED, booking.getBookingState());
+    }
+
+    @Test
+    void given_closedbooking_when_close_then_throwsillegalstateexception() {
+        // given
+        BookingNo bookingNo = new BookingNo("1");
+        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate departureDate = getContextLocalDate().plusDays(1);
+        LocalTime arrivalTime = getContextLocalTime();
+        Integer numberOfPersons = 4;
+        Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
+        selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
+        GuestId guestId = new GuestId("1");
+        PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", "CASH");
+        Booking booking = new Booking(bookingNo, arrivalDate, departureDate, arrivalTime, numberOfPersons, selectedCategoryNamesRoomCount, guestId, paymentInformation);
+        booking.close();
+
+        // when..then
         assertThrows(IllegalStateException.class, booking::close);
     }
 }

@@ -71,4 +71,30 @@ public class RoomTest extends AbstractTest {
         assertTrue(room.isAvailableForPeriod(inBetweenPeriod, toDate));
         assertTrue(room.isAvailableForPeriod(fromDate, inBetweenPeriod));
     }
+
+    @Test
+    void given_illegalroomstate_when_createroom_then_throwsillegalargumentexception() {
+        // given
+        RoomNumber roomNumber = new RoomNumber("100");
+        RoomState roomState = RoomState.MAINTENANCE;
+
+        // when..then
+        assertThrows(IllegalArgumentException.class, () -> new Room(roomNumber, roomState));
+    }
+
+    @Test
+    void given_roomwithoccupation_when_createroomoccupancyforoccupation_then_throwsillegalstateexception() {
+        // given
+        RoomNumber roomNumber = new RoomNumber("100");
+        RoomState roomState = RoomState.AVAILABLE;
+        LocalDate fromDate = getContextLocalDate();
+        LocalDate toDate = fromDate.plusDays(5L);
+        LocalDate inBetweenPeriod = fromDate.plusDays(1L);
+        Room room = new Room(roomNumber, roomState);
+        StayId stayId = new StayId("1");
+        room.occupied(fromDate, toDate, stayId);
+
+        // when..then
+        assertThrows(IllegalStateException.class, () -> room.occupied(fromDate, toDate, stayId));
+    }
 }

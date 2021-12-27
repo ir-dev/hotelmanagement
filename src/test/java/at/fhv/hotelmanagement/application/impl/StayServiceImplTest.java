@@ -116,7 +116,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_composedinvoice_when_byinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException {
+    void given_composedinvoice_when_byinvoiceNo_then_returnInvoice() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, PriceCurrencyMismatchException, GenerateInvoiceException {
         //given
         Stay stay = createStayDummy();
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
@@ -150,7 +150,7 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_invoice_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_invoice_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -180,7 +180,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_invoice_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_invoice_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -204,7 +204,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
+    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -226,7 +226,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException, EntityNotFoundException {
+    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException, GenerateInvoiceException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -251,7 +251,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException {
+    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         Category category = createCategoryDummy();

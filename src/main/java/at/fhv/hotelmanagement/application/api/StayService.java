@@ -9,6 +9,7 @@ import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
+import at.fhv.hotelmanagement.domain.model.stay.GenerateInvoiceException;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.stereotype.Component;
 import java.util.List;
@@ -25,11 +26,11 @@ public interface StayService {
 
     List<InvoiceDTO> allStayInvoices(String stayId) throws EntityNotFoundException;
 
-    InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException;
+    InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException;
 
-    InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException;
+    InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException;
 
-    String chargeStay(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException;
+    String chargeStay(String stayId, Map<String, Integer> selectedLineItemsCount) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException, IllegalStateException;
 
     void checkoutStay(String stayId) throws EntityNotFoundException, BillingOpenException, IllegalStateException;
 

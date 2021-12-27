@@ -11,10 +11,11 @@ import java.util.Optional;
 
 public class GuestTest extends AbstractTest {
     @Test
-    void given_guestdetails_when_createguest_then_detailsequals() throws CreateGuestException {
+    void given_guestdetails_when_createguest_then_detailsequals() {
         //given
         GuestId guestId = new GuestId("1");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
+        Salutation salutation = Salutation.MRS;
         String firstName = ("Anna");
         String lastName = ("Bauer");
         LocalDate dateOfBirth = getContextLocalDate().minusYears(18L);
@@ -22,17 +23,18 @@ public class GuestTest extends AbstractTest {
         String specialNotes = ("Frühstück aufs Zimmer");
 
         //when
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MRS), firstName, lastName, dateOfBirth, address, specialNotes);
+        Guest guest = new Guest(guestId, organization, String.valueOf(salutation), firstName, lastName, dateOfBirth, address, specialNotes);
 
         //then
         assertEquals(guestId, guest.getGuestId());
         assertEquals(Optional.of(organization), guest.getOrganization());
-        assertEquals(Salutation.MRS, guest.getSalutation());
+        assertEquals(salutation, guest.getSalutation());
         assertEquals(firstName, guest.getFirstName());
         assertEquals(lastName, guest.getLastName());
         assertEquals(firstName, guest.getFirstName());
         assertEquals(dateOfBirth, guest.getDateOfBirth());
         assertEquals(address, guest.getAddress());
         assertEquals(specialNotes, guest.getSpecialNotes());
+        assertEquals(BigDecimal.valueOf(0.25), guest.getDiscountRate().orElseThrow());
     }
 }

@@ -2,15 +2,17 @@ package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
+
+import at.fhv.hotelmanagement.domain.model.category.*;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CategoryTest extends AbstractTest {
     @Test
@@ -58,11 +60,49 @@ public class CategoryTest extends AbstractTest {
     }
 
     @Test
-    void given_categorywithoccupiedrooms_when_releaserooms_then_availableroomnumbersequalsrooms() {
+    void given_categorywithavailablerooms_when_assignavailablerooms_then_returnsemptyavailableroomnumbers() throws RoomAlreadyExistsException, InsufficientRoomsException {
         // given
+        CategoryId categoryId = new CategoryId("1");
+        String name = ("Honeymoon Suite DZ");
+        String description = ("description");
+        Integer maxPersons = 2;
+        Price price = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(categoryId, name, description, maxPersons, price, price);
+        Room room1 = new Room(new RoomNumber("100"), RoomState.AVAILABLE);
+        Room room2 = new Room(new RoomNumber("111"), RoomState.AVAILABLE);
+        category.createRoom(room1);
+        category.createRoom(room2);
+        LocalDate fromDate = LocalDate.now();
+        LocalDate toDate = fromDate.plusDays(1L);
 
         // when
+        category.assignAvailableRooms(2, fromDate, toDate, new StayId("1"));
 
         // then
+        assertEquals(Collections.emptySet(), category.getAvailableRoomNumbers(fromDate, toDate));
+    }
+
+    @Test
+    void given_categorywithoccupiedrooms_when_releaserooms_then_roomsareavailable() throws RoomAlreadyExistsException, InsufficientRoomsException {
+        // given
+        CategoryId categoryId = new CategoryId("1");
+        String name = ("Honeymoon Suite DZ");
+        String description = ("description");
+        Integer maxPersons = 2;
+        Price price = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(categoryId, name, description, maxPersons, price, price);
+        Room room1 = new Room(new RoomNumber("100"), RoomState.AVAILABLE);
+        Room room2 = new Room(new RoomNumber("111"), RoomState.AVAILABLE);
+        category.createRoom(room1);
+        category.createRoom(room2);
+        LocalDate fromDate = LocalDate.now();
+        LocalDate toDate = fromDate.plusDays(1L);
+        category.assignAvailableRooms(2, fromDate, toDate, new StayId("1"));
+
+        // when
+        category.releaseRooms(List.of(room1.getRoomNumber(), room2.getRoomNumber()), new StayId("1"));
+
+        // then
+        assertEquals(2, category.getAvailableRoomsCount(fromDate, toDate));
     }
 }

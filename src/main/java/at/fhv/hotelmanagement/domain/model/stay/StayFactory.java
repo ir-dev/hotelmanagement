@@ -14,6 +14,9 @@ import java.time.LocalTime;
 import java.util.Map;
 
 public class StayFactory {
+    private StayFactory() {}
+
+    // NOTE: we will not use the data from the booking, but the adjusted data provided
     public static Stay createStayForBooking(StayId stayId,
                                             Booking booking,
                                             BookingNo bookingNo,
