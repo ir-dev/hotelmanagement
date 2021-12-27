@@ -1,6 +1,5 @@
 package at.fhv.hotelmanagement.application.dto;
 
-import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 

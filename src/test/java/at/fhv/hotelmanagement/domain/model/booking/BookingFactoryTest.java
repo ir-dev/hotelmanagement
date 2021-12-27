@@ -2,10 +2,6 @@ package at.fhv.hotelmanagement.domain.model.booking;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.booking.Booking;
-import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
-import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
-import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;

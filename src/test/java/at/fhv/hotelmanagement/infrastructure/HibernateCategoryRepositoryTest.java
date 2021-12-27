@@ -2,9 +2,7 @@ package at.fhv.hotelmanagement.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;

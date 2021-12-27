@@ -14,7 +14,7 @@ public class InvoiceLine {
     private Price price;
 
     // required for hibernate
-    private InvoiceLine() {};
+    private InvoiceLine() {}
 
     InvoiceLine(ProductType type, String product, String description, Integer quantity, Price price) {
         this.type = type;

@@ -21,7 +21,7 @@ public class GuestServiceImpl implements GuestService {
     @Transactional(readOnly = true)
     @Override
     public List<GuestDTO> allGuests() {
-        List<Guest> guests = guestRepository.findAll();
+        List<Guest> guests = this.guestRepository.findAll();
         List<GuestDTO> guestsDto = new ArrayList<>();
 
         for (Guest guest : guests) {
@@ -34,7 +34,7 @@ public class GuestServiceImpl implements GuestService {
     @Transactional(readOnly = true)
     @Override
     public Optional<GuestDTO> guestByGuestId(String guestId) {
-        Optional<Guest> guest = guestRepository.findById(new GuestId(guestId));
+        Optional<Guest> guest = this.guestRepository.findById(new GuestId(guestId));
         if (guest.isEmpty()) {
             return Optional.empty();
         }

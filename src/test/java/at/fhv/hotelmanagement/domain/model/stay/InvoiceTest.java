@@ -3,7 +3,6 @@ package at.fhv.hotelmanagement.domain.model.stay;
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
-import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
