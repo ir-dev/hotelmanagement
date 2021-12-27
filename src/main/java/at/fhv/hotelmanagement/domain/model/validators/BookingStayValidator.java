@@ -5,7 +5,6 @@ import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 public class BookingStayValidator {

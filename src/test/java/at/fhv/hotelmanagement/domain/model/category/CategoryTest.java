@@ -2,9 +2,10 @@ package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
+
 import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

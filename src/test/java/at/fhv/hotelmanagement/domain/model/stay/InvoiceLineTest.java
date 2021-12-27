@@ -2,16 +2,12 @@ package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
-import at.fhv.hotelmanagement.domain.model.guest.Address;
-import at.fhv.hotelmanagement.domain.model.guest.Country;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class InvoiceLineTest extends AbstractTest {
     @Test

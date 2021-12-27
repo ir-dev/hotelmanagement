@@ -1,13 +1,11 @@
 package at.fhv.hotelmanagement.application.converters;
 import at.fhv.hotelmanagement.application.impl.EntityNotFoundException;
 import at.fhv.hotelmanagement.domain.model.category.Category;
-import at.fhv.hotelmanagement.domain.model.stay.Stay;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Component
 public class CategoryConverter {
