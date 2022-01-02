@@ -78,10 +78,10 @@ public class StaySteps extends ScenarioTXBoundary {
     }
 
 
-    @Given("a stay with stayId {word} and arrivalDate {word} and departureDate {word} and number of persons {int} " +
+    @Given("a stay with stayId {word} and arrivalDate today and departureDate {word} and number of persons {int} " +
             "and payment information with cardHolderName {word} and cardNumber {string} and cardValidThru {word} " +
             "and cardCvc {word} and paymentType {word} and selected categories room count")
-    public void setupStayCheckingOut(String stayId, String arrivalDate, String departureDate, Integer numberOfPersons, String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, String paymentType,
+    public void setupStayCheckingOut(String stayId, String departureDate, Integer numberOfPersons, String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, String paymentType,
                                      DataTable selectedCategoriesRoomCountTable) throws CreateStayException, EntityNotFoundException {
         PaymentInformation paymentInformation = new PaymentInformation(cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType);
         System.out.println(paymentInformation.getCardHolderName());
@@ -90,7 +90,7 @@ public class StaySteps extends ScenarioTXBoundary {
 
         setupStayForWalkinGuest(
                 stayId,
-                LocalDate.parse(arrivalDate),
+                LocalDate.now(),
                 LocalDate.parse(departureDate),
                 numberOfPersons,
                 selectedCategoriesRoomCountMap,
