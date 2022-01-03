@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="H2" uuid="2a6e994b-6ac1-4930-a97e-c1777b1a59fa">
+    <data-source source="LOCAL" name="project2021_hotelmanagement" uuid="06a63698-daf1-47b5-aa86-a60b07dd18ba">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://94.130.178.35:3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="H2" uuid="92739c31-e68d-482c-8b55-1d6e0ba7b2fe">
       <driver-ref>h2.unified</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.h2.Driver</jdbc-driver>
-      <jdbc-url>jdbc:h2:~/hotelmanagement;AUTO_SERVER=TRUE</jdbc-url>
+      <jdbc-url>jdbc:h2:mem:</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
