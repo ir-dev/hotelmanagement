@@ -53,10 +53,10 @@ public class HibernateStayRepository implements StayRepository {
     }
 
     @Override
-    public Optional<String> nextInvoiceSeq() {
+    public String nextInvoiceSeq() {
         Query query = this.em.createNativeQuery("select next value for seq_invoiceNo");
         String key = query.getSingleResult().toString();
-        return Optional.ofNullable(key);
+        return key;
     }
 
     @Override

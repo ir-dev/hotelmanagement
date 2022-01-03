@@ -36,8 +36,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly ('org.mariadb.jdbc:mariadb-java-client:2.7.4')
-    testImplementation ('com.h2database:h2')
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.4'
+    implementation 'com.h2database:h2'
     testImplementation 'io.cucumber:cucumber-java:6.10.4'
     testImplementation 'io.cucumber:cucumber-junit:6.10.4'
     testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '6.10.4'

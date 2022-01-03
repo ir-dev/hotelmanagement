@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Currency;
-import java.util.Optional;
 import java.util.Set;
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -31,16 +30,17 @@ public class Invoice {
     // required for hibernate
     private Invoice() {}
 
+    Invoice(Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, BigDecimal discountRate, double taxRate) throws PriceCurrencyMismatchException {
+        this(new InvoiceNo("0"), lineItems, arrivalDate, departureDate, discountRate, taxRate);
+    }
 
-    Invoice(Optional<InvoiceNo> invoiceNoOpt, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, Optional<BigDecimal> discountRate, double taxRate) throws PriceCurrencyMismatchException {
-        this.invoiceNo = new InvoiceNo("0");
-        invoiceNoOpt.ifPresent(invoiceNo1 -> this.invoiceNo = invoiceNo1);
+    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, BigDecimal discountRate, double taxRate) throws PriceCurrencyMismatchException {
+        this.invoiceNo = invoiceNo;
         this.lineItems = lineItems;
         this.nights = (int) DAYS.between(arrivalDate, departureDate);
         this.createdDate = LocalDate.now();
         this.dueDate = departureDate;
-        this.discountRate = BigDecimal.valueOf(0);
-        discountRate.ifPresent(bigDecimal -> this.discountRate = bigDecimal);
+        this.discountRate = discountRate;
         this.taxRate = taxRate;
 
         if (lineItems.size() > 0) {

@@ -246,7 +246,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
 
-        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getDiscountRate()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getOrganizationDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional(readOnly = true)
@@ -257,7 +257,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getDiscountRate()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getOrganizationDiscountRate()), guest, stay.getStayId());
     }
 
     @Transactional
@@ -268,7 +268,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq().orElseThrow(),selectedLineItemProductsCount, guest.getDiscountRate()).getNo();
+        return stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq(),selectedLineItemProductsCount, guest.getOrganizationDiscountRate()).getNo();
     }
 
     @Transactional

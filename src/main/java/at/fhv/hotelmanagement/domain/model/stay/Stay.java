@@ -78,18 +78,18 @@ public class Stay {
         return new InvoiceNo(currentDate + invoiceSeq);
     }
 
-    public InvoiceNo finalizeInvoice(String invoiceSeq, Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
+    public InvoiceNo finalizeInvoice(String invoiceSeq, Map<Category, Integer> selectedLineItemProductsCount, BigDecimal discountRate) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
-        Invoice invoice = new Invoice(Optional.of(buildInvoiceNo(invoiceSeq)), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
+        Invoice invoice = new Invoice(buildInvoiceNo(invoiceSeq), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
         this.invoices.add(invoice);
 
         return invoice.getInvoiceNo();
     }
 
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException{
-        return new Invoice(Optional.empty(), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, BigDecimal discountRate) throws PriceCurrencyMismatchException{
+        return new Invoice(buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE);
     }
 
     private Set<InvoiceLine> buildLineItems(Map<Category, Integer> selectedLineItemProductsCount) {

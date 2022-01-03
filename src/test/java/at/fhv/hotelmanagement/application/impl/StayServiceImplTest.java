@@ -133,7 +133,7 @@ public class StayServiceImplTest extends AbstractTest {
         //given
         Stay stay = createStayDummy();
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
-        Optional<BigDecimal> discount = Optional.of(BigDecimal.valueOf(10));
+        BigDecimal discount = BigDecimal.valueOf(10);
 
         createCategoriesDummy().forEach(category -> selectedLineItemProductsCount.put(category, 2));
 
@@ -215,7 +215,7 @@ public class StayServiceImplTest extends AbstractTest {
         Stay stay = createStayDummy();
         Map<Category, Integer> selectedLineItemProductsCount1 = new HashMap<>();
         Map<Category, Integer> selectedLineItemProductsCount2 = new HashMap<>();
-        Optional<BigDecimal> discount = Optional.of(BigDecimal.valueOf(10));
+        BigDecimal discount = BigDecimal.valueOf(10);
         Guest guest = createGuestDummy();
 
         createCategoriesDummy().forEach(i -> selectedLineItemProductsCount1.put(i, 1));
@@ -300,7 +300,7 @@ public class StayServiceImplTest extends AbstractTest {
         Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
 
         Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
-        Optional<BigDecimal> discount = Optional.of(BigDecimal.valueOf(0));
+        BigDecimal discount = BigDecimal.valueOf(0);
 
         Invoice previewInvoice = stay.generateInvoice(billableLineItemCounts, discount);
         InvoiceDTO previewInvoiceDtoExpected = InvoiceDTO.builder()
@@ -353,7 +353,7 @@ public class StayServiceImplTest extends AbstractTest {
 
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         selectedLineItemProductsCount.put(category, 1);
-        Optional<BigDecimal> discount = Optional.of(BigDecimal.valueOf(0));
+        BigDecimal discount = BigDecimal.valueOf(0);
 
         Invoice previewInvoice = stay.generateInvoice(selectedLineItemProductsCount, discount);
         InvoiceDTO previewInvoiceDtoExpected = InvoiceDTO.builder()
@@ -418,7 +418,7 @@ public class StayServiceImplTest extends AbstractTest {
         Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
-        Mockito.when(this.stayRepository.nextInvoiceSeq()).thenReturn(Optional.of("1"));
+        Mockito.when(this.stayRepository.nextInvoiceSeq()).thenReturn("1");
 
         //when
         String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount));
@@ -437,13 +437,13 @@ public class StayServiceImplTest extends AbstractTest {
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         categories.forEach(category -> selectedLineItemProductsCount.put(category, 2)); //Select ALL line items
 
-        InvoiceNo invoiceNo = stay.finalizeInvoice("1", selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
+        InvoiceNo invoiceNo = stay.finalizeInvoice("1", selectedLineItemProductsCount, BigDecimal.valueOf(0));
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
         Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
         Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
-        Mockito.when(this.stayRepository.nextInvoiceSeq()).thenReturn(Optional.of("1"));
+        Mockito.when(this.stayRepository.nextInvoiceSeq()).thenReturn("1");
 
         //when..then
         assertThrows(IllegalStateException.class, () -> {
@@ -488,7 +488,7 @@ public class StayServiceImplTest extends AbstractTest {
         //given
         Stay stay = createStayDummy();
         List<Category> categories = createCategoriesDummy();
-        Optional<BigDecimal> discount = Optional.of(BigDecimal.valueOf(10));
+        BigDecimal discount = BigDecimal.valueOf(10);
 
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         categories.forEach(category -> selectedLineItemProductsCount.put(category, 2));

@@ -30,7 +30,7 @@ import java.util.*;
 
 @Component
 @Transactional
-@Profile("!test")
+@Profile("dev")
 public class TestData implements ApplicationRunner {
 
     @Autowired
@@ -46,7 +46,7 @@ public class TestData implements ApplicationRunner {
     private StayRepository stayRepository;
 
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

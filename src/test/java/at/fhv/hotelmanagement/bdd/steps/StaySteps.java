@@ -61,7 +61,7 @@ public class StaySteps extends ScenarioTXBoundary {
     @Given("a category with name {string} and max persons {int} and half board price {int} full board price {int} and currency {word}")
     public void setupFirstSelectedCategory(String name, int maxPersons, int halfboard, int fullboard, String currency) throws RoomAlreadyExistsException {
         Currency curr = Currency.getInstance(currency);
-        Category category = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(),name, "", maxPersons, Price.of(BigDecimal.valueOf(halfboard), curr), Price.of(BigDecimal.valueOf(fullboard), curr));
+        Category category = CategoryFactory.createCategory(this.categoryRepository.nextIdentity(), name, "", maxPersons, Price.of(BigDecimal.valueOf(halfboard), curr), Price.of(BigDecimal.valueOf(fullboard), curr));
         this.categoryRepository.store(category);
 
         category.createRoom(new Room(new RoomNumber("120"), RoomState.AVAILABLE));

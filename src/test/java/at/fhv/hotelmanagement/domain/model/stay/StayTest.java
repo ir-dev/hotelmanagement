@@ -113,7 +113,7 @@ class StayTest extends AbstractTest {
         selectedLineItemProductsCount.put(category, 1);
 
         // when
-        InvoiceNo invoiceNo = stay.finalizeInvoice("1",selectedLineItemProductsCount, guest.getDiscountRate());
+        InvoiceNo invoiceNo = stay.finalizeInvoice("1",selectedLineItemProductsCount, guest.getOrganizationDiscountRate());
         stay.checkout();
 
         // then

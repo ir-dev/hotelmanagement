@@ -24,17 +24,17 @@ public class InvoiceTest extends AbstractTest {
         Set<InvoiceLine> lineItems = new HashSet<>();
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(5L);
-        Optional<BigDecimal> discountRate = Optional.of(BigDecimal.valueOf(0.25));
+        BigDecimal discountRate = BigDecimal.valueOf(0.25);
         double taxRate = 0.1;
 
         // when
-        Invoice invoice1 = new Invoice(Optional.of(invoiceNo), lineItems, arrivalDate, departureDate, discountRate, taxRate);
+        Invoice invoice1 = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate);
 
         // then
         assertEquals(invoiceNo, invoice1.getInvoiceNo());
         assertEquals(LocalDate.now(), invoice1.getCreatedDate());
         assertEquals(5, invoice1.getNights());
-        assertEquals(discountRate, Optional.of(invoice1.getDiscountRate()));
+        assertEquals(discountRate, invoice1.getDiscountRate());
         assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotalPerNight());
         assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getSubTotal());
         assertEquals(Price.of(BigDecimal.ZERO, Currency.getInstance("EUR")), invoice1.getDiscountAmount());
@@ -56,11 +56,11 @@ public class InvoiceTest extends AbstractTest {
         lineItems.add(new InvoiceLine(ProductType.CATEGORY, "Honeymoon Suite DZ", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", 1, Price.of(BigDecimal.TEN, Currency.getInstance("EUR"))));
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(5L);
-        Optional<BigDecimal> discountRate = Optional.of(BigDecimal.valueOf(0.25));
+        BigDecimal discountRate = BigDecimal.valueOf(0.25);
         double taxRate = 0.1;
 
         // when
-        Invoice invoice = new Invoice(Optional.of(invoiceNo), lineItems, arrivalDate, departureDate, discountRate, taxRate);
+        Invoice invoice = new Invoice(invoiceNo, lineItems, arrivalDate, departureDate, discountRate, taxRate);
 
         // then
         assertEquals(invoiceNo, invoice.getInvoiceNo());
@@ -69,7 +69,7 @@ public class InvoiceTest extends AbstractTest {
 
         BigDecimal expectedSubTotalPerNight = BigDecimal.valueOf(12L);
         BigDecimal expectedSubTotal = expectedSubTotalPerNight.multiply(BigDecimal.valueOf(nightsExpected));
-        BigDecimal expectedDiscountAmount = expectedSubTotal.multiply(discountRate.get());
+        BigDecimal expectedDiscountAmount = expectedSubTotal.multiply(discountRate);
         BigDecimal expectedSubTotalDiscounted = expectedSubTotal.add(expectedDiscountAmount.multiply(BigDecimal.valueOf(-1)));
         BigDecimal expectedTax = expectedSubTotalDiscounted.multiply(BigDecimal.valueOf(taxRate));
         BigDecimal expectedGrandTotal = expectedSubTotalDiscounted.add(expectedTax);

@@ -194,6 +194,6 @@ alter table stay_selected_categories_room_counts
         foreign key (stay_id)
             references stay (id);
 
-CREATE SEQUENCE seq_invoiceNo START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_bookingNo START WITH 100000 INCREMENT BY 1;
-CREATE SEQUENCE seq_stayId START WITH 100000 INCREMENT BY 1;
+CREATE SEQUENCE if not exists seq_invoiceNo START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE if not exists seq_bookingNo START WITH 100000 INCREMENT BY 1;
+CREATE SEQUENCE if not exists seq_stayId START WITH 100000 INCREMENT BY 1;

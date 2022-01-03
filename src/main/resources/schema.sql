@@ -1,3 +1,14 @@
+drop table if exists booking CASCADE;
+drop table if exists booking_selected_categories_room_counts CASCADE;
+drop table if exists category CASCADE;
+drop table if exists guest CASCADE;
+drop table if exists invoice CASCADE;
+drop table if exists invoice_line CASCADE;
+drop table if exists room CASCADE;
+drop table if exists room_occupancy CASCADE;
+drop table if exists stay CASCADE;
+drop table if exists stay_selected_categories_room_counts CASCADE;
+
 create table booking
 (
     id               bigint       not null auto_increment,
@@ -12,7 +23,6 @@ create table booking
     card_number      varchar(255),
     card_valid_thru  varchar(255),
     card_cvc         varchar(255),
-    payment_type     varchar(255),
     primary key (id)
 );
 
@@ -129,7 +139,6 @@ create table stay
     card_number      varchar(255),
     card_valid_thru  varchar(255),
     card_cvc         varchar(255),
-    payment_type     varchar(255),
     primary key (id)
 );
 
@@ -185,6 +194,6 @@ alter table stay_selected_categories_room_counts
         foreign key (stay_id)
             references stay (id);
 
-create sequence if not exists  seq_invoiceNo START WITH 1 INCREMENT BY 1;
-create sequence if not exists seq_bookingNo START WITH 100000 INCREMENT BY 1;
-create sequence if not exists seq_stayId START WITH 100000 INCREMENT BY 1;
+CREATE SEQUENCE seq_invoiceNo START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_bookingNo START WITH 100000 INCREMENT BY 1;
+CREATE SEQUENCE seq_stayId START WITH 100000 INCREMENT BY 1;
