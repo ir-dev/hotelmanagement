@@ -93,23 +93,115 @@
     </table>
 </div>
 
-
-<div class="card-body" th:fragment="invoiceCardBody">
+<div class="card-body" th:fragment="invoiceCardBodyPreview">
     <div class="row mb-4">
         <div class="col-sm-6">
             <h5 class="mb-3">From:</h5>
             <h3 class="text-dark mb-1">Hotel Schwarz</h3>
             <div>Hochschulstraße 1</div>
+            <div>6850 Dornbirn</div>
             <div>AT</div>
-            <div>6850, Dornbirn</div>
         </div>
         <div class="col-sm-6">
             <h5 class="mb-3">To:</h5>
-            <h3 class="text-dark mb-1"><span th:text="*{guest.firstName + ' ' + guest.lastName}"></span>
-            </h3>
-            <div><span th:text="*{guest.addressStreet}"></span></div>
-            <div><span th:text="*{guest.addressCountry}"></span></div>
-            <div><span th:text="*{guest.addressZipcode + ', ' + guest.addressCity}"></span></div>
+            <div th:if="*{guest.organizationName}">
+                <div>
+                    <h3 class="text-dark mb-1"><span th:text="*{guest.organizationName}"></span></h3>
+                    <span th:text="${invoiceRecipientForm.firstName + ' ' + invoiceRecipientForm.lastName}"></span>
+                </div>
+            </div>
+            <div th:unless="*{guest.organizationName}">
+                <div>
+                    <h3 class="text-dark mb-1"><span
+                            th:text="${invoiceRecipientForm.firstName + ' ' + invoiceRecipientForm.lastName}"></span>
+                    </h3>
+                </div>
+            </div>
+
+            <div><span th:text="${invoiceRecipientForm.street}"></span></div>
+            <div><span th:text="${invoiceRecipientForm.zipcode + ' ' + invoiceRecipientForm.city}"></span></div>
+            <div><span th:text="${invoiceRecipientForm.country}"></span></div>
+        </div>
+    </div>
+    <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems"/>
+    <div class="row">
+        <div class="col-lg-4 col-sm-5">
+        </div>
+        <div class="col-lg-4 col-sm-5 ml-auto">
+            <table class="table table-clear">
+                <tbody>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Subtotal per night</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotalPerNight}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Subtotal (<span th:text="*{nights}"></span> Nights)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotal}"></span></td>
+                </tr>
+                <tr th:if="*{hasDiscount}">
+                    <td class="left">
+                        <strong class="text-dark">Discount (<span th:text="*{discountRate}"></span>%)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{discountAmount}"></span></td>
+                </tr>
+                <tr th:if="*{hasDiscount}">
+                    <td class="left">
+                        <strong class="text-dark">Subtotal (Discounted)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{subTotalDiscounted}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">VAT (10%)</strong>
+                    </td>
+                    <td class="right"><span th:text="*{tax}"></span></td>
+                </tr>
+                <tr>
+                    <td class="left">
+                        <strong class="text-dark">Total</strong>
+                    </td>
+                    <td class="right">
+                        <strong class="text-dark"><span th:text="*{grandTotal}"></span></strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card-body" th:fragment="invoiceCardBody">
+
+    <div class="row mb-4">
+        <div class="col-sm-6">
+            <h5 class="mb-3">From:</h5>
+            <h3 class="text-dark mb-1">Hotel Schwarz</h3>
+            <div>Hochschulstraße 1</div>
+            <div>6850 Dornbirn</div>
+            <div>AT</div>
+        </div>
+        <div class="col-sm-6">
+            <h5 class="mb-3">To:</h5>
+            <div th:if="*{guest.organizationName}">
+                <div>
+                    <h3 class="text-dark mb-1"><span th:text="*{guest.organizationName}"></span></h3>
+                    <span th:text="*{invoiceRecipient.firstName + ' ' + invoiceRecipient.lastName}"></span>
+                </div>
+            </div>
+            <div th:unless="*{guest.organizationName}">
+                <div>
+                    <h3 class="text-dark mb-1"><span
+                            th:text="*{invoiceRecipient.firstName + ' ' + invoiceRecipient.lastName}"></span>
+                    </h3>
+                </div>
+            </div>
+            <div><span th:text="*{invoiceRecipient.addressStreet}"></span></div>
+            <div><span th:text="*{invoiceRecipient.addressZipcode + ' ' + invoiceRecipient.addressCity}"></span></div>
+            <div><span th:text="*{invoiceRecipient.addressCountry}"></span></div>
         </div>
     </div>
     <th:block th:replace="/fragments/parts/invoice :: invoiceLineItems"/>
@@ -186,6 +278,7 @@
         </div>
 
         <div class="card" id="container_content">
+
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardHeader"/>
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody"/>
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardBankCredentials"/>
@@ -210,7 +303,7 @@
 
         <div class="card" id="container_content">
             <th:block th:replace="/fragments/parts/invoice :: invoicePreviewCardHeader"/>
-            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBody"/>
+            <th:block th:replace="/fragments/parts/invoice :: invoiceCardBodyPreview"/>
             <th:block th:replace="/fragments/parts/invoice :: invoiceCardFooter"/>
         </div>
 
@@ -224,7 +317,20 @@
                                    th:field="*{selectedLineItemsCount['__${selectedLineItemCount.key}__']}">
                         </th:block>
                     </th:block>
-
+                    <th:block th:object="${invoiceRecipientForm}">
+                        <input type="hidden"
+                               th:field="*{firstName}">
+                        <input type="hidden"
+                               th:field="*{lastName}">
+                        <input type="hidden"
+                               th:field="*{street}">
+                        <input type="hidden"
+                               th:field="*{zipcode}">
+                        <input type="hidden"
+                               th:field="*{city}">
+                        <input type="hidden"
+                               th:field="*{country}">
+                    </th:block>
                     <button type="submit" class="btn btn-space btn-primary">Confirm and Create Invoice</button>
                 </form>
             </div>
@@ -278,8 +384,8 @@
         function isBillable() {
             checkboxes = document.getElementsByName('checkbox');
             document.getElementById("btnBillselectedPositions").disabled = true;
-            for(var i=0, n=checkboxes.length;i<n;i++) {
-                if(checkboxes[i].checked) {
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                if (checkboxes[i].checked) {
                     document.getElementById("btnBillselectedPositions").disabled = false;
                 }
             }

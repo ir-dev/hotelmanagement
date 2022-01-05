@@ -120,11 +120,13 @@ public class StayServiceImplTest extends AbstractTest {
         //given
         Stay stay = createStayDummy();
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        Guest guest = createGuestDummy();
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
 
         createCategoriesDummy().stream().map(i -> selectedLineItemProductsCount.put(i, 2));
 
-        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(10)));
-        Guest guest = createGuestDummy();
+        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(10)), invoiceRecipient);
+
 
         List<InvoiceDTO> invoiceDtosExpected = new ArrayList<>();
         for (Invoice inv : stay.getInvoices()) {
@@ -132,6 +134,7 @@ public class StayServiceImplTest extends AbstractTest {
                     .withStayId(stay.getStayId())
                     .withInvoiceEntity(inv)
                     .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                    .withInvoiceRecipientDTO(InvoiceRecipientDTO.builder().withInvoiceRecipientEntity(invoiceRecipient).build())
                     .withLineItemsDTO(buildLineItemsDto(inv.getLineItems()))
                     .build()
             );
@@ -150,19 +153,21 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_invoice_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_invoice_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException, GenerateInvoiceException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
         Category category = createCategoryDummy();
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
 
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         selectedLineItemProductsCount.put(category, 1);
 
-        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
+        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)), invoiceRecipient);
         InvoiceDTO invoiceDtoExpected = InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                .withInvoiceRecipientDTO(InvoiceRecipientDTO.builder().withInvoiceRecipientEntity(invoiceRecipient).build())
                 .withStayId(stay.getStayId())
                 .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
                 .build();
@@ -180,65 +185,72 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_invoice_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
+    void given_invoice_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException, GenerateInvoiceException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
         Category category = createCategoryDummy();
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
 
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         selectedLineItemProductsCount.put(category, 1);
 
 
-        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
+        Invoice invoice = stay.generateInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)), invoiceRecipient);
 
         Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
+        Mockito.when(this.stayRepository.findRecipientById(invoiceRecipient.getId())).thenReturn(Optional.of(invoiceRecipient));
 
         //when
-        String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount));
+        String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount), invoiceRecipient);
 
         //then
         assertEquals(invoice.getInvoiceNo().getNo(), actualInvoiceNo);
     }
 
     @Test
-    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, GenerateInvoiceException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
+    void given_composedinvoice_when_chargeStay_then_throw() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, GenerateInvoiceException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
         Category category = createCategoryDummy();
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
 
         Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
         selectedLineItemProductsCount.put(category, 1);
 
-        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)));
+        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, Optional.of(BigDecimal.valueOf(0)), invoiceRecipient);
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
         Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
+        Mockito.when(this.stayRepository.findRecipientById(invoiceRecipient.getId())).thenReturn(Optional.of(invoiceRecipient));
 
         //when..then
         assertThrows(IllegalStateException.class, () -> {
-            String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount));
+            String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount), invoiceRecipient);
         }, "IllegalStateException was expected");
     }
 
     @Test
-    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException, GenerateInvoiceException, EntityNotFoundException {
+    void given_billedstay_when_checkout_then_checkedOut() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, PriceCurrencyMismatchException, EntityNotFoundException, GenerateInvoiceException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
         Category category = createCategoryDummy();
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
+
 
         Map<Category, Integer> cat = new HashMap<>();
         cat.put(category, 1);
-        stay.composeInvoice(cat, guest.getDiscountRate());
+        stay.composeInvoice(cat, guest.getDiscountRate(), invoiceRecipient);
 
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
         Mockito.when(this.guestRepository.findById(stay.getGuestId())).thenReturn(Optional.of(guest));
         Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
+        Mockito.when(this.stayRepository.findRecipientById(invoiceRecipient.getId())).thenReturn(Optional.of(invoiceRecipient));
 
         RoomNumber[] rs = new RoomNumber[10];
         //when
@@ -251,7 +263,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException {
+    void given_unbilledstay_when_checkout_then_throw() throws CreateBookingException, CreateGuestException, CreateStayException, RoomAlreadyExistsException {
         //given
         Stay stay = createStayDummy();
         Category category = createCategoryDummy();
@@ -376,6 +388,21 @@ public class StayServiceImplTest extends AbstractTest {
                 address,
                 ""
         );
+    }
+
+    private InvoiceRecipient createInvoiceRecipientDummy()  {
+        Address address = new Address(
+                "Musterstrasse 2",
+                "6890",
+                "Lustenau",
+                String.valueOf(Country.AT));
+
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                "Sarah",
+                "Müller",
+                address);
+
+        return invoiceRecipient;
     }
 
     private StayId nextDummyStayIdentity() {

@@ -26,6 +26,8 @@ public class Invoice {
     private Price grandTotal;
     private Price tax;
     private Set<InvoiceLine> lineItems;
+    private InvoiceRecipient invoiceRecipient;
+
 
     private double taxRate;
     private long dueDateDays;
@@ -33,7 +35,7 @@ public class Invoice {
     // required for hibernate
     private Invoice() {}
 
-    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, Optional<BigDecimal> discountRate, double taxRate, long dueDateDays) throws PriceCurrencyMismatchException {
+    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, Optional<BigDecimal> discountRate, double taxRate, long dueDateDays, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, GenerateInvoiceException {
         this.invoiceNo = invoiceNo;
         this.lineItems = lineItems;
         this.nights = (int) DAYS.between(arrivalDate, departureDate);
@@ -43,6 +45,7 @@ public class Invoice {
         this.taxRate = taxRate;
         this.dueDateDays = dueDateDays;
         this.dueDate = this.createdDate.plusDays(this.dueDateDays);
+        this.invoiceRecipient = invoiceRecipient;
 
         if (lineItems.size() > 0) {
             determinePrices();
@@ -66,51 +69,29 @@ public class Invoice {
         this.grandTotal = this.subTotalDiscounted.add(this.tax);
     }
 
-    public InvoiceNo getInvoiceNo() {
-        return this.invoiceNo;
-    }
+    public InvoiceNo getInvoiceNo() {return this.invoiceNo;}
 
-    public LocalDate getCreatedDate() {
-        return this.createdDate;
-    }
+    public LocalDate getCreatedDate() {return this.createdDate;}
 
-    public LocalDate getDueDate() {
-        return this.dueDate;
-    }
+    public LocalDate getDueDate() {return this.dueDate;}
 
-    public Integer getNights() {
-        return this.nights;
-    }
+    public Integer getNights() {return this.nights;}
 
-    public Price getSubTotalPerNight() {
-        return this.subTotalPerNight;
-    }
+    public Price getSubTotalPerNight() {return this.subTotalPerNight;}
 
-    public BigDecimal getDiscountRate() {
-        return this.discountRate;
-    }
+    public BigDecimal getDiscountRate() {return this.discountRate;}
 
-    public Price getDiscountAmount() {
-        return this.discountAmount;
-    }
+    public Price getDiscountAmount() {return this.discountAmount;}
 
-    public Price getSubTotalDiscounted() {
-        return this.subTotalDiscounted;
-    }
+    public Price getSubTotalDiscounted() {return this.subTotalDiscounted;}
 
-    public Price getSubTotal() {
-        return this.subTotal;
-    }
+    public Price getSubTotal() {return this.subTotal;}
 
-    public Price getGrandTotal() {
-        return this.grandTotal;
-    }
+    public Price getGrandTotal() {return this.grandTotal;}
 
-    public Price getTax() {
-        return this.tax;
-    }
+    public Price getTax() {return this.tax;}
 
-    public Set<InvoiceLine> getLineItems() {
-        return Collections.unmodifiableSet(this.lineItems);
-    }
+    public Set<InvoiceLine> getLineItems() {return Collections.unmodifiableSet(this.lineItems);}
+
+    public InvoiceRecipient getInvoiceRecipient() {return this.invoiceRecipient;}
 }
