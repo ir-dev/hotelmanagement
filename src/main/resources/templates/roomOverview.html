@@ -77,37 +77,32 @@
                                         </thead>
                                         <tbody id="myTable">
 
-                                        <th:block th:each="category : ${categories}" th:if="not ${category.rooms.isEmpty()}">
+                                        <th:block th:each="category : ${categories}"
+                                                  th:if="not ${category.rooms.isEmpty()}">
                                             <tr>
                                                 <td colspan="3"><h3 th:text="${category.name}"></h3></td>
                                             </tr>
                                             <tr th:each="room : ${category.rooms}">
-                                                <td th:text="${room.key}"/></td>
-                                                <td th:text="${room.value}"/></td>
+                                                <td th:text="${room.key}"/>
+                                                <td th:text="${room.value}"/>
                                                 <td style="width: 300px;">
                                                     <div th:switch="${room.value}">
+                                                        <form th:action="@{/room(number=${room.key}, category=${category.name})}" method="POST">
+                                                            <p th:case="'AVAILABLE'">
+                                                                <input type="submit" class="btn btn-space btn-warning" style="width: 125px" th:name="state" th:value="cleaning">
+                                                                <input type="submit" class="btn btn-space btn-danger" style="width: 125px" th:name="state" th:value="maintenance">
+                                                            </p>
 
-                                                        <p th:case="'AVAILABLE'">
-                                                            <a class="btn btn-space btn-warning"
-                                                               th:href="@{/room(number=${room.key}, state='cleaning', category=${category.name})}">Cleaning</a>
-                                                            <a class="btn btn-space btn-danger"
-                                                               th:href="@{/room(number=${room.key}, state='maintenance', category=${category.name})}">Maintenance</a>
-                                                        </p>
+                                                            <p th:case="'CLEANING'">
+                                                                <input type="submit" class="btn btn-space btn-success" style="width: 125px" th:name="state" th:value="available">
+                                                                <input type="submit" class="btn btn-space btn-danger" style="width: 125px" th:name="state" th:value="maintenance">
+                                                            </p>
 
-                                                        <p th:case="'CLEANING'">
-                                                            <a class="btn btn-space btn-success"
-                                                               th:href="@{/room(number=${room.key}, state='available', category=${category.name})}">Available</a>
-                                                            <a class="btn btn-space btn-danger"
-                                                               th:href="@{/room(number=${room.key}, state='maintenance', category=${category.name})}">Maintenance</a>
-                                                        </p>
-
-                                                        <p th:case="'MAINTENANCE'">
-                                                            <a class="btn btn-space btn-success"
-                                                               th:href="@{/room(number=${room.key}, state='available', category=${category.name})}">Available</a>
-                                                            <a class="btn btn-space btn-warning"
-                                                               th:href="@{/room(number=${room.key}, state='cleaning', category=${category.name})}">Cleaning</a>
-                                                        </p>
-
+                                                            <p th:case="'MAINTENANCE'">
+                                                                <input type="submit" class="btn btn-space btn-success" style="width: 125px" th:name="state" th:value="available">
+                                                                <input type="submit" class="btn btn-space btn-warning" style="width: 125px" th:name="state" th:value="cleaning">
+                                                            </p>
+                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>

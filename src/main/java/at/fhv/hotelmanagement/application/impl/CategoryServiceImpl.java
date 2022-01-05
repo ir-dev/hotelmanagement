@@ -5,7 +5,6 @@ import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.CategoryDTO;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.Room;
-import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,16 +66,15 @@ public class CategoryServiceImpl implements CategoryService {
         if (Arrays.stream(RoomState.values()).noneMatch(state -> state.name().equalsIgnoreCase(roomState))) {
             throw new IllegalArgumentException();
         }
-        RoomState currState = room.get().getRoomState();
         switch (roomState) {
             case "available":
-                if (currState == RoomState.CLEANING || currState == RoomState.MAINTENANCE) room.get().available();
+                room.get().available();
                 break;
             case "cleaning":
-                if (currState == RoomState.AVAILABLE || currState == RoomState.MAINTENANCE) room.get().cleaning();
+                room.get().cleaning();
                 break;
             case "maintenance":
-                if (currState == RoomState.AVAILABLE || currState == RoomState.CLEANING) room.get().maintenance();
+                room.get().maintenance();
                 break;
         }
     }
