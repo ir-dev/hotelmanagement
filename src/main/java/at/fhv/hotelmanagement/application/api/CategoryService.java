@@ -1,7 +1,7 @@
 package at.fhv.hotelmanagement.application.api;
 
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.dto.RoomDTO;
+import at.fhv.hotelmanagement.application.dto.CategoryDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
 public interface CategoryService {
     List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate);
 
-    List<RoomDTO> allRooms();
+    List<CategoryDTO> allCategories();
 
+    void manageRoom(String categoryName, String roomNumber, String roomState);
 }

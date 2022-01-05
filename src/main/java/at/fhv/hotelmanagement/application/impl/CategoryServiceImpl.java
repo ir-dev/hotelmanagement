@@ -2,7 +2,7 @@ package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.dto.RoomDTO;
+import at.fhv.hotelmanagement.application.dto.CategoryDTO;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
@@ -42,16 +42,43 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<RoomDTO> allRooms() {
+    public List<CategoryDTO> allCategories() {
         List<Category> categories = this.categoryRepository.findAll();
-        List<RoomDTO> allRoomsDto = new ArrayList<>();
+        List<CategoryDTO> allCategoriesDto = new ArrayList<>();
 
         for (Category category : categories) {
-            Set<Room> rooms = category.getAllRooms();
-            rooms.forEach((room) -> allRoomsDto.add(buildRoomDto(room)));
+            allCategoriesDto.add(buildCategoryDto(category));
         }
 
-        return allRoomsDto;
+        return allCategoriesDto;
+    }
+
+    @Transactional
+    @Override
+    public void manageRoom(String categoryName, String roomNumber, String roomState) {
+        Optional<Category> category = this.categoryRepository.findByName(categoryName);
+        if (category.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        Optional<Room> room = category.get().getRoomByRoomNumber(roomNumber);
+        if (room.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (Arrays.stream(RoomState.values()).noneMatch(state -> state.name().equalsIgnoreCase(roomState))) {
+            throw new IllegalArgumentException();
+        }
+        RoomState currState = room.get().getRoomState();
+        switch (roomState) {
+            case "available":
+                if (currState == RoomState.CLEANING || currState == RoomState.MAINTENANCE) room.get().available();
+                break;
+            case "cleaning":
+                if (currState == RoomState.AVAILABLE || currState == RoomState.MAINTENANCE) room.get().cleaning();
+                break;
+            case "maintenance":
+                if (currState == RoomState.AVAILABLE || currState == RoomState.CLEANING) room.get().maintenance();
+                break;
+        }
     }
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
@@ -62,10 +89,10 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
     }
 
-    private RoomDTO buildRoomDto(Room room) {
-        return RoomDTO.builder()
-                .withNumber(room.getRoomNumber().getNumber())
-                .withState(room.getRoomState().name())
+    private CategoryDTO buildCategoryDto(Category category) {
+        return CategoryDTO.builder()
+                .withName(category.getName())
+                .withRooms(category.getAllRoomsForDTO())
                 .build();
     }
 

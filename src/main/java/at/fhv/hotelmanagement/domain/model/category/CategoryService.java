@@ -30,4 +30,5 @@ public class CategoryService {
             category.releaseRooms(roomNumbers, stayId);
         }
     }
+
 }

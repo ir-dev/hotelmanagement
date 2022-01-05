@@ -15,7 +15,7 @@ public class GuestTest extends AbstractTest {
         //given
         GuestId guestId = new GuestId("1");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
-        Salutation salutation = Salutation.MRS;
+        Salutation salutation = Salutation.MS;
         String firstName = ("Anna");
         String lastName = ("Bauer");
         LocalDate dateOfBirth = getContextLocalDate().minusYears(18L);

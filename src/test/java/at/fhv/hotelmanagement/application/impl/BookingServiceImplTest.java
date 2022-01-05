@@ -135,7 +135,7 @@ public class BookingServiceImplTest extends AbstractTest {
         Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         return GuestFactory.createGuest(
                 new GuestId("1"),
-                null, String.valueOf(Salutation.MRS),
+                null, String.valueOf(Salutation.MS),
                 "Fritz",
                 "Mayer",
                 getContextLocalDate().minusYears(18L),

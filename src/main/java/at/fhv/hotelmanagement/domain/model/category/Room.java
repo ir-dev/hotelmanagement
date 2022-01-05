@@ -44,6 +44,14 @@ public class Room {
         return true;
     }
 
+    public void available() throws IllegalStateException {
+        this.roomState = RoomState.AVAILABLE;
+    }
+
+    public void maintenance() throws IllegalStateException {
+        this.roomState = RoomState.MAINTENANCE;
+    }
+
     public void occupied(LocalDate fromDate, LocalDate toDate, StayId stayId) throws IllegalStateException {
         createRoomOccupancy(fromDate, toDate, stayId);
         this.roomState = RoomState.OCCUPIED;
@@ -53,6 +61,10 @@ public class Room {
         // muss occupied sein!
 
         updateRoomOccupanciesToDate(stayId);
+        this.roomState = RoomState.CLEANING;
+    }
+
+    public void cleaning() {
         this.roomState = RoomState.CLEANING;
     }
 

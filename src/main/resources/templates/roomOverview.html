@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="page-header">
-                        <h2 class="pageheader-title">Rooms</h2>
+                        <h2 class="pageheader-title">Rooms Overview</h2>
                         <div class="page-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -77,44 +77,41 @@
                                         </thead>
                                         <tbody id="myTable">
 
-                                        <tr th:each="room : ${rooms}">
-                                            <td><span th:text="${room.number}"/></td>
-                                            <td><span th:text="${room.state}"/></td>
-                                            <td style="width: 300px;">
-                                                <div th:switch="${room.state}">
-                                                    <p th:case="'AVAILABLE'">
-                                                        <a class="btn btn-space btn-warning"
-                                                           th:href="@{/rooms}">Cleaning</a>
-                                                        <a class="btn btn-space btn-danger"
-                                                           th:href="@{/rooms}">Maintenance</a>
-                                                    </p>
+                                        <th:block th:each="category : ${categories}" th:if="not ${category.rooms.isEmpty()}">
+                                            <tr>
+                                                <td colspan="3"><h3 th:text="${category.name}"></h3></td>
+                                            </tr>
+                                            <tr th:each="room : ${category.rooms}">
+                                                <td th:text="${room.key}"/></td>
+                                                <td th:text="${room.value}"/></td>
+                                                <td style="width: 300px;">
+                                                    <div th:switch="${room.value}">
 
-                                                    <p th:case="'CLEANING'">
-                                                        <a class="btn btn-space btn-success"
-                                                           th:href="@{/rooms}">Available</a>
-                                                        <a class="btn btn-space btn-danger"
-                                                           th:href="@{/rooms}">Maintenance</a>
-                                                    </p>
+                                                        <p th:case="'AVAILABLE'">
+                                                            <a class="btn btn-space btn-warning"
+                                                               th:href="@{/room(number=${room.key}, state='cleaning', category=${category.name})}">Cleaning</a>
+                                                            <a class="btn btn-space btn-danger"
+                                                               th:href="@{/room(number=${room.key}, state='maintenance', category=${category.name})}">Maintenance</a>
+                                                        </p>
 
-                                                    <p th:case="'MAINTENANCE'">
-                                                        <a class="btn btn-space btn-success"
-                                                           th:href="@{/rooms}">Available</a>
-                                                        <a class="btn btn-space btn-warning"
-                                                           th:href="@{/rooms}">Cleaning</a>
-                                                    </p>
+                                                        <p th:case="'CLEANING'">
+                                                            <a class="btn btn-space btn-success"
+                                                               th:href="@{/room(number=${room.key}, state='available', category=${category.name})}">Available</a>
+                                                            <a class="btn btn-space btn-danger"
+                                                               th:href="@{/room(number=${room.key}, state='maintenance', category=${category.name})}">Maintenance</a>
+                                                        </p>
 
-<!--                                                    <p th:case="'OCCUPIED'">-->
-<!--                                                        <a class="btn btn-space btn-success"-->
-<!--                                                           th:href="@{/rooms}">Available</a>-->
-<!--                                                        <a class="btn btn-space btn-warning"-->
-<!--                                                           th:href="@{/rooms}">Cleaning</a>-->
-<!--                                                        <a class="btn btn-space btn-danger"-->
-<!--                                                           th:href="@{/rooms}">Maintenance</a>-->
-<!--                                                    </p>-->
+                                                        <p th:case="'MAINTENANCE'">
+                                                            <a class="btn btn-space btn-success"
+                                                               th:href="@{/room(number=${room.key}, state='available', category=${category.name})}">Available</a>
+                                                            <a class="btn btn-space btn-warning"
+                                                               th:href="@{/room(number=${room.key}, state='cleaning', category=${category.name})}">Cleaning</a>
+                                                        </p>
 
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </th:block>
                                         </tbody>
                                     </table>
                                 </div>

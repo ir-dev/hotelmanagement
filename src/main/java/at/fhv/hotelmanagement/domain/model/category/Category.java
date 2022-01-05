@@ -84,14 +84,25 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
+    public Map<String, String> getAllRoomsForDTO() {
+        Map<String, String> rooms = new HashMap<>();
+        this.rooms.forEach((room) -> {
+            System.out.println(room.getRoomNumber().getNumber() + " " + room.getRoomState().name());
+            rooms.put(room.getRoomNumber().getNumber(), room.getRoomState().name());
+        });
+        return Collections.unmodifiableMap(rooms);
+    }
+
     public Set<Room> getAllRooms() {
-        final Set<Room> rooms = new HashSet<>(this.rooms);
-        return Collections.unmodifiableSet(rooms);
+        return Collections.unmodifiableSet(this.rooms);
+    }
+
+    public Optional<Room> getRoomByRoomNumber(String roomNumber) {
+        return this.rooms.stream().filter(room -> room.getRoomNumber().getNumber().equals(roomNumber)).findFirst();
     }
 
     public CategoryId getCategoryId() {
         return this.categoryId;
-
     }
 
     public String getName() {
