@@ -76,4 +76,8 @@ public class Room {
     public RoomNumber getRoomNumber() {
         return this.roomNumber;
     }
+
+    public RoomState getRoomState() {
+        return this.roomState;
+    }
 }

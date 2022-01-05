@@ -2,7 +2,11 @@ package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
+import at.fhv.hotelmanagement.application.dto.RoomDTO;
 import at.fhv.hotelmanagement.domain.model.category.Category;
+import at.fhv.hotelmanagement.domain.model.category.Room;
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +40,20 @@ public class CategoryServiceImpl implements CategoryService {
         return availableCategoriesDto;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<RoomDTO> allRooms() {
+        List<Category> categories = this.categoryRepository.findAll();
+        List<RoomDTO> allRoomsDto = new ArrayList<>();
+
+        for (Category category : categories) {
+            Set<Room> rooms = category.getAllRooms();
+            rooms.forEach((room) -> allRoomsDto.add(buildRoomDto(room)));
+        }
+
+        return allRoomsDto;
+    }
+
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
         return AvailableCategoryDTO.builder()
                 .withName(category.getName())
@@ -43,4 +61,12 @@ public class CategoryServiceImpl implements CategoryService {
                 .withAvailableRoomsCount(availableRoomsCount)
                 .build();
     }
+
+    private RoomDTO buildRoomDto(Room room) {
+        return RoomDTO.builder()
+                .withNumber(room.getRoomNumber().getNumber())
+                .withState(room.getRoomState().name())
+                .build();
+    }
+
 }

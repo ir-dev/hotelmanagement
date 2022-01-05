@@ -62,7 +62,6 @@ public class Category {
         }
     }
 
-
     public Set<RoomNumber> getAvailableRoomNumbers(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).stream()
                 .map(Room::getRoomNumber)
@@ -85,6 +84,10 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
+    public Set<Room> getAllRooms() {
+        final Set<Room> rooms = new HashSet<>(this.rooms);
+        return Collections.unmodifiableSet(rooms);
+    }
 
     public CategoryId getCategoryId() {
         return this.categoryId;
