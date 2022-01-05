@@ -3,14 +3,16 @@ package at.fhv.hotelmanagement.infrastructure;
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
+import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.model.stay.*;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -84,7 +86,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, GenerateInvoiceException, RoomAlreadyExistsException {
+    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException, GenerateInvoiceException {
         // given
         Stay stayExpected = createStayDummy();
         this.stayRepository.store(stayExpected);
@@ -99,7 +101,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, GenerateInvoiceException, RoomAlreadyExistsException {
+    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException, GenerateInvoiceException {
         // given
         Stay stay = createStayDummy();
         Invoice invoiceExcepted = stay.getInvoices().stream().findFirst().orElseThrow();
@@ -112,6 +114,23 @@ class HibernateStayRepositoryTest extends AbstractTest {
         // then
         assertEquals(invoiceExcepted, invoiceActual);
         assertEquals(invoiceExcepted.getInvoiceNo(), invoiceActual.getInvoiceNo());
+    }
+
+    @Test
+    void given_invoicerecipient_when_addinvoicerecipienttorepository_then_returnequalsinvoicerecipient() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
+        // given
+        Stay stayExcepted = createStayDummy();
+        Invoice invoiceExcepted = stayExcepted.getInvoices().stream().findFirst().orElseThrow();
+        InvoiceRecipient invoiceRecipientExpected = invoiceExcepted.getInvoiceRecipient();
+
+        // when
+        this.stayRepository.save(invoiceRecipientExpected);
+        this.em.flush();
+        InvoiceRecipient invoiceRecipientActual = this.stayRepository.findRecipientById(invoiceRecipientExpected.getId()).orElseThrow();
+
+        // then
+        assertEquals(invoiceRecipientExpected, invoiceRecipientActual);
+        assertEquals(invoiceRecipientExpected.getId(), invoiceRecipientActual.getId());
     }
 
     private static Integer nextDummyCategoryIdentity = 1;
@@ -168,6 +187,12 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 ""
         );
 
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                guest.getFirstName(),
+                guest.getLastName(),
+                guest.getAddress()
+        );
+
         Booking booking = BookingFactory.createBooking(
                 nextDummyBookingIdentity(),
                 getContextLocalDate(),
@@ -191,7 +216,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount, guest.getDiscountRate());
+        stay.composeInvoice(selectedCategoriesRoomCount, guest.getDiscountRate(), invoiceRecipient);
 
         return stay;
     }

@@ -51,17 +51,9 @@ public class Stay {
         this.invoices = new HashSet<>();
     }
 
-    public boolean isCheckedIn() {
-        return (this.stayState == StayState.CHECKED_IN);
-    }
+    public boolean isCheckedIn() {return (this.stayState == StayState.CHECKED_IN);}
 
-    public boolean isBilled() {
-        return billableLineItemCounts().size() == 0;
-    }
-
-    public boolean isCheckedOut() {
-        return (this.stayState == StayState.CHECKED_OUT);
-    }
+    public boolean isBilled() {return billableLineItemCounts().size() == 0;}
 
     public void checkout() throws BillingOpenException, IllegalStateException {
         if (!isCheckedIn()) {
@@ -80,26 +72,25 @@ public class Stay {
         return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
     }
 
-    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, GenerateInvoiceException, IllegalStateException {
+    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
 
-        Invoice invoice = generateInvoice(selectedLineItemProductsCount, discountRate);
+        Invoice invoice = generateInvoice(selectedLineItemProductsCount, discountRate, invoiceRecipient);
         this.invoices.add(invoice);
 
         return invoice;
     }
 
-    // NOTE: so far specified positions in selectedLineItemProductsCount which are already completely billed are ignored (no exception thrown) and as well it is also possible to generate an empty invoice without positions (line items)
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate) throws PriceCurrencyMismatchException, GenerateInvoiceException {
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, GenerateInvoiceException {
         Set<InvoiceLine> lineItems = new HashSet<>();
 
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
             for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
                 if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
-                    if (billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
-                        throw new GenerateInvoiceException("Selected position not billable for the given amount.");
+                    if (selectedLineItemProductCount.getValue() <= 0 && billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
+                        throw new RuntimeException("Selected position not billable");
                     }
 
                     lineItems.add(new InvoiceLine(
@@ -112,7 +103,7 @@ public class Stay {
             }
         }
 
-        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS);
+        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS, invoiceRecipient);
     }
 
     private Set<InvoiceLine> billedLineItems() {
@@ -121,7 +112,7 @@ public class Stay {
 
         for (Invoice invoice : this.invoices) {
             for (InvoiceLine lineItem : invoice.getLineItems()) {
-                // if (lineItem.getType() == ProductType.CATEGORY) {
+                if (lineItem.getType() == ProductType.CATEGORY) {
                     lineCategoryItems.add(lineItem);
 
                     String lineItemCategoryName = lineItem.getProduct();
@@ -133,7 +124,7 @@ public class Stay {
                     } else {
                         billedCategoryCounts.put(lineItemCategoryName, lineItemQuantity);
                     }
-                // }
+                }
             }
         }
 
@@ -154,8 +145,14 @@ public class Stay {
         return billedLineItems;
     }
 
-    // line items that are not fully paid (selectedCategoryRoomsCount - billedLineItems)
+    // Line items that are not paid fully (selectedCategoryRoomsCount - billedLineItems)
     public Map<String, Integer> billableLineItemCounts() {
+        /*
+            billableLineItems -> positionen, die noch offen sind
+            1. selectedCategoryRoomsCount iterieren -> jeweils prüfen, ob entsprechendes billedLineItem vorhanden
+            -> wenn ja: neues LineItem mit "subtrahierter Quantity"
+            -> wenn nein: neues LineItem mit voller Quantity von selectedCategoryRoomsCount
+         */
         Map<String, Integer> billableLineItemCounts = new HashMap<>();
         Set<InvoiceLine> billedLineItems = billedLineItems();
 
@@ -166,7 +163,7 @@ public class Stay {
             boolean lineItemFound = false;
             for (InvoiceLine billedLineItem : billedLineItems) {
 
-                if (/* billedLineItem.getType() == ProductType.CATEGORY && */ billedLineItem.getProduct().equals(categoryName)) {
+                if (billedLineItem.getType() == ProductType.CATEGORY && billedLineItem.getProduct().equals(categoryName)) {
                     int toBillCount = roomCount - billedLineItem.getQuantity();
 
                     if (toBillCount > 0) {
@@ -185,60 +182,33 @@ public class Stay {
         return billableLineItemCounts;
     }
 
-    public Integer getNumberOfBookedRooms() {
-        return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
-    }
+    public Integer getNumberOfBookedRooms() {return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();}
 
+    public StayId getStayId() {return this.stayId;}
 
-    public StayId getStayId() {
-        return this.stayId;
-    }
+    public Optional<BookingNo> getBookingNo() {return Optional.ofNullable(this.bookingNo);}
 
-    public Optional<BookingNo> getBookingNo() {
-        return Optional.ofNullable(this.bookingNo);
-    }
+    public StayState getStayState() {return this.stayState;}
 
-    public StayState getStayState() {
-        return this.stayState;
-    }
+    public LocalDateTime getCheckedInAt() {return this.checkedInAt;}
 
-    public LocalDateTime getCheckedInAt() {
-        return this.checkedInAt;
-    }
+    public Optional<LocalDateTime> getCheckedOutAt() {return Optional.ofNullable(this.checkedOutAt);}
 
-    public Optional<LocalDateTime> getCheckedOutAt() {
-        return Optional.ofNullable(this.checkedOutAt);
-    }
+    public boolean isCheckedOut() {return this.stayState == StayState.CHECKED_OUT;}
 
-    public LocalDate getArrivalDate() {
-        return this.arrivalDate;
-    }
+    public LocalDate getArrivalDate() {return this.arrivalDate;}
 
-    public LocalDate getDepartureDate() {
-        return this.departureDate;
-    }
+    public LocalDate getDepartureDate() {return this.departureDate;}
 
-    public LocalTime getArrivalTime() {
-        return this.arrivalTime;
-    }
+    public LocalTime getArrivalTime() {return this.arrivalTime;}
 
-    public Integer getNumberOfPersons() {
-        return this.numberOfPersons;
-    }
+    public Integer getNumberOfPersons() {return this.numberOfPersons;}
 
-    public Map<String, Integer> getSelectedCategoriesRoomCount() {
-        return this.selectedCategoriesRoomCount;
-    }
+    public Map<String, Integer> getSelectedCategoriesRoomCount() {return this.selectedCategoriesRoomCount;}
 
-    public GuestId getGuestId() {
-        return this.guestId;
-    }
+    public GuestId getGuestId() {return this.guestId;}
 
-    public PaymentInformation getPaymentInformation() {
-        return this.paymentInformation;
-    }
+    public PaymentInformation getPaymentInformation() {return this.paymentInformation;}
 
-    public Set<Invoice> getInvoices() {
-        return Collections.unmodifiableSet(this.invoices);
-    }
+    public Set<Invoice> getInvoices() {return Collections.unmodifiableSet(this.invoices);}
 }
