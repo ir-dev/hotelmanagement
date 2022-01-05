@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.infrastructure;
 
+import at.fhv.hotelmanagement.domain.model.stay.InvoiceRecipient;
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 import at.fhv.hotelmanagement.domain.model.stay.InvoiceNo;
 import at.fhv.hotelmanagement.domain.model.stay.Stay;
@@ -51,7 +52,21 @@ public class HibernateStayRepository implements StayRepository {
     }
 
     @Override
+    public Optional<InvoiceRecipient> findRecipientById(Long id) {
+        TypedQuery<InvoiceRecipient> query = this.em.createQuery("FROM InvoiceRecipient AS ir WHERE ir.id = :id", InvoiceRecipient.class);
+        query.setParameter("id", id);
+        return query.getResultStream().findFirst();
+    }
+
+    @Override
     public void store(Stay stay) {
         this.em.persist(stay);
     }
+
+    @Override
+    public void save(InvoiceRecipient invoiceRecipient) {
+        this.em.persist(invoiceRecipient);
+    }
+
+
 }

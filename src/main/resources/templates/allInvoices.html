@@ -48,7 +48,7 @@
                             <div class="card">
                                 <h5 class="card-header">Open Positions of Stay</h5>
                                 <div class="card-body" th:object="${openPositionsInvoicePreview}">
-                                    <form id="selectedLineItems" th:action="@{/stays/invoices/create(stayId=*{stayId}, preview=true)}" method="POST">
+                                    <form id="selectedLineItems" th:action="@{/stays/invoices/invoiceRecipient(stayId=*{stayId})}" method="POST">
                                         <th:block th:replace="/fragments/parts/invoice :: selectableInvoiceLineItems"/>
                                     </form>
                                 </div>

@@ -56,5 +56,8 @@
             <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.InvoiceLine"/>
         </set>
 
+        <many-to-one name="invoiceRecipient" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceRecipient" cascade="merge" unique="true"/>
+
+
     </class>
 </hibernate-mapping>

@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.domain.repositories;
 
+import at.fhv.hotelmanagement.domain.model.stay.InvoiceRecipient;
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 import at.fhv.hotelmanagement.domain.model.stay.InvoiceNo;
 import at.fhv.hotelmanagement.domain.model.stay.Stay;
@@ -22,4 +23,8 @@ public interface StayRepository {
     Optional<Invoice> findInvoiceByInvoiceNo(InvoiceNo invoiceNo);
 
     void store(Stay stay);
+
+    void save(InvoiceRecipient invoiceRecipient);
+
+    Optional<InvoiceRecipient> findRecipientById(Long id);
 }

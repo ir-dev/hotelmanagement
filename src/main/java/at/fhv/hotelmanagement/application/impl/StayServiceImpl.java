@@ -15,6 +15,7 @@ import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
+import at.fhv.hotelmanagement.view.forms.InvoiceRecipientForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -119,6 +120,45 @@ public class StayServiceImpl implements StayService {
         return guest;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<InvoiceDTO> invoiceByInvoiceNo(String invoiceNo) {
+        Optional<Stay> stayOpt = this.stayRepository.findByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (stayOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Optional<Guest> guestOpt = this.guestRepository.findById(stayOpt.get().getGuestId());
+        Optional<Invoice> invoiceOpt = this.stayRepository.findInvoiceByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (guestOpt.isEmpty() || invoiceOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(buildInvoiceDto(invoiceOpt.get(), guestOpt.get(), invoiceOpt.get().getInvoiceRecipient(), stayOpt.get().getStayId()));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<InvoiceDTO> allStayInvoices(String stayId) throws EntityNotFoundException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                guest.getFirstName(),
+                guest.getLastName(),
+                guest.getAddress()
+        );
+
+        if (stay.getInvoices().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return stay.getInvoices().stream()
+                .map(i -> buildInvoiceDto(i, guest, invoiceRecipient, stay.getStayId()))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public void createStayForBooking(String bookingNoStr, StayForm stayForm) throws CreateStayException, CreateGuestException, RoomAssignmentException {
@@ -204,71 +244,62 @@ public class StayServiceImpl implements StayService {
         );
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public Optional<InvoiceDTO> invoiceByInvoiceNo(String invoiceNo) {
-        Optional<Stay> stayOpt = this.stayRepository.findByInvoiceNo(new InvoiceNo(invoiceNo));
+    public InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm) {
 
-        if (stayOpt.isEmpty()) {
-            return Optional.empty();
-        }
+        Address address = new Address(
+                invoiceRecipientForm.getStreet(),
+                invoiceRecipientForm.getZipcode(),
+                invoiceRecipientForm.getCity(),
+                invoiceRecipientForm.getCountry()
+        );
 
-        Optional<Guest> guestOpt = this.guestRepository.findById(stayOpt.get().getGuestId());
-        Optional<Invoice> invoiceOpt = this.stayRepository.findInvoiceByInvoiceNo(new InvoiceNo(invoiceNo));
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                invoiceRecipientForm.getFirstName(),
+                invoiceRecipientForm.getLastName(),
+                address);
 
-        if (guestOpt.isEmpty() || invoiceOpt.isEmpty()) {
-            return Optional.empty();
-        }
+        this.stayRepository.save(invoiceRecipient);
 
-        return Optional.of(buildInvoiceDto(invoiceOpt.get(), guestOpt.get(), stayOpt.get().getStayId()));
+        return invoiceRecipient;
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<InvoiceDTO> allStayInvoices(String stayId) throws EntityNotFoundException {
+    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
-
-        if (stay.getInvoices().isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return stay.getInvoices().stream()
-                .map(i -> buildInvoiceDto(i, guest, stay.getStayId()))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException {
-        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
-        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
-
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                guest.getFirstName(),
+                guest.getLastName(),
+                guest.getAddress()
+        );
         Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
 
-        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getDiscountRate()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getDiscountRate(), invoiceRecipient), guest, invoiceRecipient, stay.getStayId());
     }
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException {
+    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipient invoiceRecipient) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getDiscountRate()), guest, stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getDiscountRate(), invoiceRecipient), guest, invoiceRecipient,  stay.getStayId());
     }
 
     @Transactional
     @Override
-    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException, IllegalStateException {
+    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipient invoiceRecipient) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate()).getInvoiceNo().getNo();
+        return stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate(), invoiceRecipient).getInvoiceNo().getNo();
     }
 
     @Transactional
@@ -291,11 +322,12 @@ public class StayServiceImpl implements StayService {
         );
     }
 
-    private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest, StayId stayId) {
+    private InvoiceDTO buildInvoiceDto(Invoice invoice, Guest guest, InvoiceRecipient invoiceRecipient, StayId stayId) {
         return InvoiceDTO.builder()
                 .withInvoiceEntity(invoice)
                 .withLineItemsDTO(buildLineItemsDto(invoice.getLineItems()))
                 .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                .withInvoiceRecipientDTO(InvoiceRecipientDTO.builder().withInvoiceRecipientEntity(invoiceRecipient).build())
                 .withStayId(stayId)
                 .build();
     }
