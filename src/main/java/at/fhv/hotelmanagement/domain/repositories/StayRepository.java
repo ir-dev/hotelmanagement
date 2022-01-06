@@ -22,9 +22,11 @@ public interface StayRepository {
 
     Optional<Invoice> findInvoiceByInvoiceNo(InvoiceNo invoiceNo);
 
+    String nextInvoiceSeq();
+
     void store(Stay stay);
 
-    void save(InvoiceRecipient invoiceRecipient);
+    void storeRecipient(InvoiceRecipient invoiceRecipient);
 
     Optional<InvoiceRecipient> findRecipientById(Long id);
 }

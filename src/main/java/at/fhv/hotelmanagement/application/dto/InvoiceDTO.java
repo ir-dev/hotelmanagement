@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.application.dto;
 
+import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.stay.Invoice;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,7 +27,6 @@ public class InvoiceDTO {
     private String tax;
     private Set<InvoiceLineDTO> lineItems;
 
-    public static InvoiceDTO.Builder builder() {return new InvoiceDTO.Builder();}
 
     public GuestDTO guest() {return this.guest;}
 
@@ -33,38 +34,72 @@ public class InvoiceDTO {
 
     public String stayId() { return this.stayId; }
 
-    public String invoiceNo() {return this.invoiceNo;}
+    public String invoiceNo() {
+        return this.invoiceNo;
+    }
 
-    public LocalDate createdDate() {return this.createdDate;}
+    public LocalDate createdDate() {
+        return this.createdDate;
+    }
 
-    public LocalDate currentDate() {return LocalDate.now();}
+    public LocalDate currentDate() {
+        return LocalDate.now();
+    }
 
-    public LocalDate dueDate() {return this.dueDate;}
+    public LocalDate dueDate() {
+        return this.dueDate;
+    }
 
-    public Integer nights() {return this.nights;}
+    public Integer nights() {
+        return this.nights;
+    }
 
-    public String discountRate() {return this.discountRate;}
+    public String discountRate() {
+        return this.discountRate;
+    }
 
-    public Boolean hasDiscount() {return !this.discountRate.equals("0");}
+    public Boolean hasDiscount() {
+        return !this.discountRate.equals("0");
+    }
 
-    public String subTotalPerNight() {return this.subTotalPerNight;}
+    public String subTotalPerNight() {
+        return this.subTotalPerNight;
+    }
 
-    public String subTotal() {return this.subTotal;}
+    public String subTotal() {
+        return this.subTotal;
+    }
 
-    public String discountAmount() {return this.discountAmount;}
+    public String discountAmount() {
+        return this.discountAmount;
+    }
 
-    public String subTotalDiscounted() {return this.subTotalDiscounted;}
+    public String subTotalDiscounted() {
+        return this.subTotalDiscounted;
+    }
 
-    public String grandTotal() {return this.grandTotal;}
+    public String grandTotal() {
+        return this.grandTotal;
+    }
 
-    public String tax() {return this.tax;}
+    public String tax() {
+        return this.tax;
+    }
 
-    public Set<InvoiceLineDTO> lineItems() {return this.lineItems;}
+    public Set<InvoiceLineDTO> lineItems() {
+        return this.lineItems;
+    }
+
+    public static InvoiceDTO.Builder builder() {
+        return new InvoiceDTO.Builder();
+    }
 
     public static class Builder {
         private InvoiceDTO instance;
 
-        private Builder() {this.instance = new InvoiceDTO();}
+        private Builder() {
+            this.instance = new InvoiceDTO();
+        }
 
         public Builder withStayId(StayId stayId) {
             this.instance.stayId = String.valueOf(stayId.getId());

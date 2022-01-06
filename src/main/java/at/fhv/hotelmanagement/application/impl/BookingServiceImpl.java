@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingsService {
             return Optional.empty();
         }
 
-        return Optional.of(buildBookingDetailsDto(booking.get()));
+        return Optional.of(buildBookingDetailsDto(booking.orElseThrow()));
     }
 
     private BookingDTO buildBookingDto(Booking booking) {
@@ -81,11 +81,11 @@ public class BookingServiceImpl implements BookingsService {
     private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
         return BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
-                .withGuestDTO(guestByBooking(booking).get())
+                .withGuestDTO(guestByBooking(booking).orElseThrow())
                 .build();
     }
 
-    public Optional<GuestDTO> guestByBooking(Booking booking) {
+    private Optional<GuestDTO> guestByBooking(Booking booking) {
         Optional<Guest> guest = this.guestRepository.findById(booking.getGuestId());
         if (guest.isEmpty()) {
             return Optional.empty();

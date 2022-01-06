@@ -78,7 +78,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         // when
         this.stayRepository.store(stayExcepted);
         this.em.flush();
-        Stay stayActual = this.stayRepository.findById(stayExcepted.getStayId()).get();
+        Stay stayActual = this.stayRepository.findById(stayExcepted.getStayId()).orElseThrow();
 
         // then
         assertEquals(stayExcepted, stayActual);
@@ -124,7 +124,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         InvoiceRecipient invoiceRecipientExpected = invoiceExcepted.getInvoiceRecipient();
 
         // when
-        this.stayRepository.save(invoiceRecipientExpected);
+        this.stayRepository.storeRecipient(invoiceRecipientExpected);
         this.em.flush();
         InvoiceRecipient invoiceRecipientActual = this.stayRepository.findRecipientById(invoiceRecipientExpected.getId()).orElseThrow();
 
@@ -216,7 +216,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount, guest.getDiscountRate(), invoiceRecipient);
+        stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq(), selectedCategoriesRoomCount, guest.getOrganizationDiscountRate(), invoiceRecipient);
 
         return stay;
     }

@@ -31,8 +31,6 @@ public interface StayService {
 
     void createStayForWalkIn(StayForm form) throws CreateStayException, CreateGuestException, RoomAssignmentException;
 
-    InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm);
-
     InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException;
 
     InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemsCount, InvoiceRecipient invoiceRecipient) throws EntityNotFoundException, GenerateInvoiceException, PriceCurrencyMismatchException;

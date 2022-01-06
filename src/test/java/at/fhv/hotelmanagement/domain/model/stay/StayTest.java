@@ -118,7 +118,7 @@ class StayTest extends AbstractTest {
         selectedLineItemProductsCount.put(category, 1);
 
         // when
-        Invoice invoice = stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate(), invoiceRecipient);
+        InvoiceNo invoiceNo = stay.finalizeInvoice("1",selectedLineItemProductsCount, guest.getOrganizationDiscountRate(), invoiceRecipient);
         stay.checkout();
 
         // then
@@ -134,9 +134,11 @@ class StayTest extends AbstractTest {
         assertEquals(guestId, stay.getGuestId());
         assertEquals(paymentInformation, stay.getPaymentInformation());
         assertEquals(1, stay.getInvoices().size());
-        Invoice composedInvoice = stay.getInvoices().stream().findFirst().orElseThrow();
-        assertEquals(invoiceRecipient, composedInvoice.getInvoiceRecipient());
-        assertEquals(invoice, composedInvoice);
+        assertEquals(invoiceNo.getNo(), "2020011");
+
+        Invoice finalizedInvoice = stay.getInvoices().stream().findFirst().orElseThrow();
+        assertEquals(invoiceRecipient, finalizedInvoice.getInvoiceRecipient());
+
 
         assertEquals(1, stay.getNumberOfBookedRooms());
 

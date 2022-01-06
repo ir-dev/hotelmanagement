@@ -8,7 +8,6 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingState;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;

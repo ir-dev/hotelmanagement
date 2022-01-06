@@ -21,9 +21,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a th:href="@{/stays}" class="breadcrumb-link">Stays</a>
-                                    <li class="breadcrumb-item"><a th:href="@{/stay(id=*{stayId})}"
-                                                                   class="breadcrumb-link">Stay ID.: <span
-                                            th:text="*{stayId}"/></a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{/stay(id=*{stayId})}" class="breadcrumb-link">Stay ID.: <span th:text="*{stayId}"/></a></li>
                                     <li class="breadcrumb-item active" aria-current="page">Invoice Recipient</li>
                                 </ol>
                             </nav>
@@ -52,41 +50,39 @@
                                     <div class="form-group">
                                         <label th:for="firstName" class="col-form-label">First Name</label>
                                         <input type="text" th:name="firstName" class="form-control" th:id="firstName"
-                                               th:value="${guest.get.firstName}">
+                                               th:value="${guest.firstName}">
                                     </div>
                                     <div class="form-group">
                                         <label th:for="lastName" class="col-form-label">Last Name</label>
                                         <input type="text" th:name="lastName" class="form-control" th:id="lastName"
-                                               th:value="${guest.get.lastName}">
+                                               th:value="${guest.lastName}">
                                     </div>
                                     <div class="form-group">
                                         <label th:for="street" class="col-form-label">Street</label>
                                         <input type="text" th:name="street" class="form-control" th:id="street"
-                                               th:value="${guest.get.addressStreet}">
+                                               th:value="${guest.addressStreet}">
                                     </div>
                                     <div class="form-group">
                                         <label th:for="zipcode" class="col-form-label">Zipcode</label>
                                         <input type="text" th:name="zipcode" class="form-control" th:id="zipcode"
-                                               th:value="${guest.get.addressZipcode}">
+                                               th:value="${guest.addressZipcode}">
                                     </div>
                                     <div class="form-group">
                                         <label th:for="city" class="col-form-label">City</label>
                                         <input type="text" th:name="city" class="form-control" th:id="city"
-                                               th:value="${guest.get.addressCity}">
+                                               th:value="${guest.addressCity}">
                                     </div>
                                     <div class="form-group">
                                         <label for="country">Country</label>
                                         <select th:field="*{invoiceRecipientForm.country}" class="form-control"
                                                 th:insert="/fragments/forms/optionsets :: country" id="country"
-                                                th:value="${guest.get.addressCountry}"></select>
+                                                th:value="${guest.addressCountry}"></select>
                                     </div>
 
                                     <div class="text-right">
                                         <a th:href="@{/stays/invoices(stayId=*{stayId})}"
                                            class="btn btn-space btn-secondary">Back</a>
-                                        <button type="submit" class="btn btn-space btn-primary"> Confirm Invoice
-                                            Recipient
-                                        </button>
+                                        <button type="submit" class="btn btn-space btn-primary"> Confirm Invoice Recipient</button>
                                     </div>
                                 </form>
 
@@ -101,7 +97,5 @@
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
 <th:block th:replace="/fragments/parts/invoice :: js"/>
-
-
 </body>
 </html>
