@@ -244,6 +244,41 @@ public class StayServiceImpl implements StayService {
         );
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<InvoiceDTO> invoiceByInvoiceNo(String invoiceNo) {
+        Optional<Stay> stayOpt = this.stayRepository.findByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (stayOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Optional<Guest> guestOpt = this.guestRepository.findById(stayOpt.get().getGuestId());
+        Optional<Invoice> invoiceOpt = this.stayRepository.findInvoiceByInvoiceNo(new InvoiceNo(invoiceNo));
+
+        if (guestOpt.isEmpty() || invoiceOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(buildInvoiceDto(invoiceOpt.get(), guestOpt.get(), stayOpt.get().getStayId()));
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<InvoiceDTO> allStayInvoices(String stayId) throws EntityNotFoundException {
+        Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
+        Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+
+        if (stay.getInvoices().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return stay.getInvoices().stream()
+                .map(i -> buildInvoiceDto(i, guest, stay.getStayId()))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm) {
@@ -267,7 +302,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    public InvoiceDTO chargeStayPreview(String stayId) throws EntityNotFoundException, PriceCurrencyMismatchException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
@@ -275,6 +310,7 @@ public class StayServiceImpl implements StayService {
                 guest.getLastName(),
                 guest.getAddress()
         );
+
         Map<Category, Integer> billableLineItemCounts = CategoryConverter.convertToSelectedCategoriesRoomCount(stay.billableLineItemCounts());
 
         return buildInvoiceDto(stay.generateInvoice(billableLineItemCounts, guest.getDiscountRate(), invoiceRecipient), guest, invoiceRecipient, stay.getStayId());
@@ -288,7 +324,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getDiscountRate(), invoiceRecipient), guest, invoiceRecipient,  stay.getStayId());
+        return buildInvoiceDto(stay.generateInvoice(selectedLineItemProductsCount, guest.getOrganizationDiscountRate(), invoiceRecipient), guest, invoiceRecipient, stay.getStayId());
     }
 
     @Transactional
@@ -299,7 +335,7 @@ public class StayServiceImpl implements StayService {
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
-        return stay.composeInvoice(selectedLineItemProductsCount, guest.getDiscountRate(), invoiceRecipient).getInvoiceNo().getNo();
+        return stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq(), selectedLineItemProductsCount, guest.getOrganizationDiscountRate(), invoiceRecipient).getNo();
     }
 
     @Transactional

@@ -7,9 +7,9 @@ import at.fhv.hotelmanagement.domain.model.stay.Stay;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,9 @@ public class HibernateStayRepository implements StayRepository {
 
     @Override
     public StayId nextIdentity() {
-        return new StayId(java.util.UUID.randomUUID().toString().toUpperCase());
+        Query query = this.em.createNativeQuery("select next value for seq_stayid");
+        String key = query.getSingleResult().toString();
+        return new StayId("S" + key);
     }
 
     @Override
@@ -56,6 +58,13 @@ public class HibernateStayRepository implements StayRepository {
         TypedQuery<InvoiceRecipient> query = this.em.createQuery("FROM InvoiceRecipient AS ir WHERE ir.id = :id", InvoiceRecipient.class);
         query.setParameter("id", id);
         return query.getResultStream().findFirst();
+    }
+
+    @Override
+    public String nextInvoiceSeq() {
+        Query query = this.em.createNativeQuery("select next value for seq_invoiceno");
+        String key = query.getSingleResult().toString();
+        return key;
     }
 
     @Override

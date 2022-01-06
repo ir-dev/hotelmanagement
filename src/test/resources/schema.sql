@@ -26,7 +26,6 @@ create table booking
     card_number      varchar(255),
     card_valid_thru  varchar(255),
     card_cvc         varchar(255),
-    payment_type     varchar(255),
     primary key (id)
 );
 
@@ -143,7 +142,6 @@ create table stay
     card_number      varchar(255),
     card_valid_thru  varchar(255),
     card_cvc         varchar(255),
-    payment_type     varchar(255),
     primary key (id)
 );
 
