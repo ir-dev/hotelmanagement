@@ -45,18 +45,16 @@ public class Room {
     }
 
     public void available() throws IllegalStateException {
-        if (!(this.roomState == RoomState.CLEANING || this.roomState == RoomState.MAINTENANCE)) {
+        if (this.roomState != RoomState.CLEANING && this.roomState != RoomState.MAINTENANCE) {
             throw new IllegalStateException("Room must be in CLEANING or MAINTENANCE state");
         }
-        System.out.println("setting to available");
         this.roomState = RoomState.AVAILABLE;
     }
 
     public void maintenance() throws IllegalStateException {
-        if (!(this.roomState == RoomState.AVAILABLE || this.roomState == RoomState.CLEANING)) {
+        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.CLEANING) {
             throw new IllegalStateException("Room must be in AVAILABLE or CLEANING state");
         }
-        System.out.println("setting to maintenance");
         this.roomState = RoomState.MAINTENANCE;
     }
 
@@ -73,10 +71,9 @@ public class Room {
 
     public void cleaning() {
         // set room manually to cleaning state (e.g. after maintenance)
-        if (!(this.roomState == RoomState.AVAILABLE || this.roomState == RoomState.MAINTENANCE)) {
+        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.MAINTENANCE) {
             throw new IllegalStateException("Room must be in AVAILABLE or MAINTENANCE state");
         }
-        System.out.println("setting to cleaning");
         this.roomState = RoomState.CLEANING;
     }
 
