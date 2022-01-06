@@ -73,7 +73,7 @@ public class HibernateStayRepository implements StayRepository {
     }
 
     @Override
-    public void save(InvoiceRecipient invoiceRecipient) {
+    public void storeRecipient(InvoiceRecipient invoiceRecipient) {
         this.em.persist(invoiceRecipient);
     }
 

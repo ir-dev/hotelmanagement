@@ -10,7 +10,7 @@ Feature: Check out of a stay
       | Business Casual EZ  | 2 |
       | Business Casual DZ  | 1 |
     And a guest with guestId G100090 and salutation MR and first name Hans and last name Mayr and date of birth 1999-12-24 and street Musterstrasse and zipcode 8888 and city Musterhausen and country DE
-    When Stay with stayId S100000 is charged with all selected line items
+    When Stay with stayId S100000 is charged to recipient with first name Bruno and last name Winkler and street Blumenstrasse and zipcode 7777 and city Blumenhausen and country DE with all selected line items
       | Business Casual EZ  | 2 |
       | Business Casual DZ  | 1 |
     And Stay with stayId S100000 is checked out

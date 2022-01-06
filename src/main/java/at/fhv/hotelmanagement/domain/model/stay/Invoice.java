@@ -25,8 +25,6 @@ public class Invoice {
     private Price tax;
     private Set<InvoiceLine> lineItems;
     private InvoiceRecipient invoiceRecipient;
-
-
     private double taxRate;
 
     // required for hibernate

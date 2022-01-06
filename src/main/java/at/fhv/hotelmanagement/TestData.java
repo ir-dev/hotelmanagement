@@ -19,7 +19,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -57,7 +56,7 @@ public class TestData implements ApplicationRunner {
         c1.createRoom(new Room(new RoomNumber("121"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("122"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("123"), RoomState.CLEANING));
-        c1.createRoom(new Room(new RoomNumber("124"), RoomState.MAINTENANCE));
+        c1.createRoom(new Room(new RoomNumber("124"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("125"), RoomState.AVAILABLE));
 
         c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));

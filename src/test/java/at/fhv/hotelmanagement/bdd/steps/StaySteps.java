@@ -84,7 +84,6 @@ public class StaySteps extends ScenarioTXBoundary {
     public void setupStayCheckingOut(String stayId, String departureDate, Integer numberOfPersons, String cardHolderName, String cardNumber, String cardValidThru, String cardCvc, String paymentType,
                                      DataTable selectedCategoriesRoomCountTable) throws CreateStayException, EntityNotFoundException {
         PaymentInformation paymentInformation = new PaymentInformation(cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType);
-        System.out.println(paymentInformation.getCardHolderName());
 
         Map<String, Integer> selectedCategoriesRoomCountMap = selectedCategoriesRoomCountTable.asMap(String.class, Integer.class);
 
@@ -126,10 +125,13 @@ public class StaySteps extends ScenarioTXBoundary {
         this.stayRepository.store(stay);
     }
 
-    @When("Stay with stayId {word} is charged with all selected line items")
-    public void chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount) {
+    @When("Stay with stayId {word} is charged to recipient with " +
+            "first name {word} and last name {word} and street {word} " +
+            "and zipcode {word} and city {word} and country {word} with all selected line items")
+    public void chargeStay(String stayId, String firstName, String lastName, String street, String zipcode,
+                           String city, String country, Map<String, Integer> selectedLineItemProductNamesCount) throws GenerateInvoiceException {
         try {
-            this.stayService.chargeStay(stayId, selectedLineItemProductNamesCount);
+            this.stayService.chargeStay(stayId, selectedLineItemProductNamesCount, new InvoiceRecipient(firstName, lastName, new Address(street, zipcode, city, country)));
         } catch (EntityNotFoundException | PriceCurrencyMismatchException e) {
             e.printStackTrace();
         }

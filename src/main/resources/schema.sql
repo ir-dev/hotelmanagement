@@ -4,6 +4,7 @@ drop table if exists category CASCADE;
 drop table if exists guest CASCADE;
 drop table if exists invoice CASCADE;
 drop table if exists invoice_line CASCADE;
+drop table if exists invoice_recipient CASCADE;
 drop table if exists room CASCADE;
 drop table if exists room_occupancy CASCADE;
 drop table if exists stay CASCADE;
@@ -91,6 +92,7 @@ create table invoice
     grand_total_amount            decimal(19, 2),
     grand_total_currency          varchar(255),
     stay_id                       bigint,
+    invoice_recipient             bigint,
     primary key (id)
 );
 
@@ -104,6 +106,18 @@ create table invoice_line
     price_amount   decimal(19, 2),
     price_currency varchar(255),
     invoice_no     bigint,
+    primary key (id)
+);
+
+create table invoice_recipient
+(
+    id                bigint       not null auto_increment,
+    first_name        varchar(255),
+    last_name         varchar(255),
+    address_street    varchar(255),
+    address_zipcode   varchar(255),
+    address_city      varchar(255),
+    address_country   varchar(255),
     primary key (id)
 );
 
@@ -198,6 +212,13 @@ alter table stay_selected_categories_room_counts
     add constraint FK3f3i5boa8fldw6l2wg9cevjpx
         foreign key (stay_id)
             references stay (id);
+
+
+alter table invoice
+    add constraint FKe1oiesellboiudfyj3a5l4ebf
+        foreign key (invoice_recipient)
+            references invoice_recipient;
+
 
 create sequence seq_invoiceno start with 1 increment by 1;
 

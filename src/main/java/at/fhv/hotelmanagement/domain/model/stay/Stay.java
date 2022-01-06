@@ -5,7 +5,6 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

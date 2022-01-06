@@ -124,7 +124,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         InvoiceRecipient invoiceRecipientExpected = invoiceExcepted.getInvoiceRecipient();
 
         // when
-        this.stayRepository.save(invoiceRecipientExpected);
+        this.stayRepository.storeRecipient(invoiceRecipientExpected);
         this.em.flush();
         InvoiceRecipient invoiceRecipientActual = this.stayRepository.findRecipientById(invoiceRecipientExpected.getId()).orElseThrow();
 
