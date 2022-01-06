@@ -121,7 +121,7 @@ create table room_occupancy
     start_date date,
     end_date   date,
     stay_id    varchar(255) not null,
-    room_id    bigint       not null,
+    room_id    bigint,
     primary key (id)
 );
 

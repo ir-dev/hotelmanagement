@@ -20,7 +20,7 @@ public class HibernateStayRepository implements StayRepository {
 
     @Override
     public StayId nextIdentity() {
-        Query query = this.em.createNativeQuery("select next value for seq_stayId");
+        Query query = this.em.createNativeQuery("select next value for seq_stayid");
         String key = query.getSingleResult().toString();
         return new StayId("S" + key);
     }
@@ -54,7 +54,7 @@ public class HibernateStayRepository implements StayRepository {
 
     @Override
     public String nextInvoiceSeq() {
-        Query query = this.em.createNativeQuery("select next value for seq_invoiceNo");
+        Query query = this.em.createNativeQuery("select next value for seq_invoiceno");
         String key = query.getSingleResult().toString();
         return key;
     }

@@ -8,6 +8,9 @@ drop table if exists room CASCADE;
 drop table if exists room_occupancy CASCADE;
 drop table if exists stay CASCADE;
 drop table if exists stay_selected_categories_room_counts CASCADE;
+drop sequence if exists seq_invoiceno;
+drop sequence if exists seq_bookingno;
+drop sequence if exists seq_stayid;
 
 create table booking
 (
@@ -118,7 +121,7 @@ create table room_occupancy
     start_date date,
     end_date   date,
     stay_id    varchar(255) not null,
-    room_id    bigint       not null,
+    room_id    bigint,
     primary key (id)
 );
 
@@ -194,6 +197,8 @@ alter table stay_selected_categories_room_counts
         foreign key (stay_id)
             references stay (id);
 
-CREATE SEQUENCE if not exists seq_invoiceNo START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE if not exists seq_bookingNo START WITH 100000 INCREMENT BY 1;
-CREATE SEQUENCE if not exists seq_stayId START WITH 100000 INCREMENT BY 1;
+create sequence seq_invoiceno start with 1 increment by 1;
+
+create sequence seq_bookingno start with 100000 increment by 1;
+
+create sequence seq_stayid start with 100000 increment by 1;

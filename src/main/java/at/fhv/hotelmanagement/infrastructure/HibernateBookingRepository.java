@@ -18,7 +18,7 @@ public class HibernateBookingRepository implements BookingRepository {
 
     @Override
     public BookingNo nextIdentity() {
-        Query query = this.em.createNativeQuery("select next value for seq_bookingNo");
+        Query query = this.em.createNativeQuery("select next value for seq_bookingno");
         String key = query.getSingleResult().toString();
         return new BookingNo("B" + key);
     }
