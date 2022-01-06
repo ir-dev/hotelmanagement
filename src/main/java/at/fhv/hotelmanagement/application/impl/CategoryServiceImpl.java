@@ -67,13 +67,13 @@ public class CategoryServiceImpl implements CategoryService {
             throw new IllegalArgumentException();
         }
         switch (roomState) {
-            case "available":
+            case "AVAILABLE":
                 room.get().available();
                 break;
-            case "cleaning":
+            case "CLEANING":
                 room.get().cleaning();
                 break;
-            case "maintenance":
+            case "MAINTENANCE":
                 room.get().maintenance();
                 break;
         }

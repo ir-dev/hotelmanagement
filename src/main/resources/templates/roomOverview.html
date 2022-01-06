@@ -2,8 +2,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <th:block th:replace="/fragments/layout/page :: meta(description='Create a booking for your stay at the hotel.')"/>
-    <title>Dashboard | Hotel Schwarz</title>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all rooms')"/>
+    <title>Rooms | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
     <style>
 
@@ -70,37 +70,34 @@
                                     <table class="table" style="text-align: center" id="myTable2">
                                         <thead>
                                         <tr>
-                                            <th onclick="sortTable(0)" style="cursor: pointer">Number</th>
-                                            <th onclick="sortTable(1)" style="cursor: pointer">State</th>
-                                            <th style="cursor: pointer">Actions</th>
+                                            <th onclick="sortTable(0)" style="cursor: pointer; width: 250px">Category</th>
+                                            <th onclick="sortTable(1)" style="cursor: pointer">Number</th>
+                                            <th onclick="sortTable(2)" style="cursor: pointer">State</th>
+                                            <th style="width: 300px">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody id="myTable">
 
                                         <th:block th:each="category : ${categories}"
                                                   th:if="not ${category.rooms.isEmpty()}">
-                                            <tr>
-                                                <td colspan="3"><h3 th:text="${category.name}"></h3></td>
-                                            </tr>
-                                            <tr th:each="room : ${category.rooms}">
+                                            <tr th:each="room : ${category.rooms}" style="height: 60px">
+                                                <td th:text="${category.name}"/>
                                                 <td th:text="${room.key}"/>
                                                 <td th:text="${room.value}"/>
-                                                <td style="width: 300px;">
+                                                <td>
                                                     <div th:switch="${room.value}">
                                                         <form th:action="@{/room(number=${room.key}, category=${category.name})}" method="POST">
                                                             <p th:case="'AVAILABLE'">
-                                                                <input type="submit" class="btn btn-space btn-warning" style="width: 125px" th:name="state" th:value="cleaning">
-                                                                <input type="submit" class="btn btn-space btn-danger" style="width: 125px" th:name="state" th:value="maintenance">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-warning" style="width: 125px" th:name="state" th:value="CLEANING">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-danger" style="width: 125px" th:name="state" th:value="MAINTENANCE">
                                                             </p>
-
                                                             <p th:case="'CLEANING'">
-                                                                <input type="submit" class="btn btn-space btn-success" style="width: 125px" th:name="state" th:value="available">
-                                                                <input type="submit" class="btn btn-space btn-danger" style="width: 125px" th:name="state" th:value="maintenance">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-success" style="width: 125px" th:name="state" th:value="AVAILABLE">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-danger" style="width: 125px" th:name="state" th:value="MAINTENANCE">
                                                             </p>
-
                                                             <p th:case="'MAINTENANCE'">
-                                                                <input type="submit" class="btn btn-space btn-success" style="width: 125px" th:name="state" th:value="available">
-                                                                <input type="submit" class="btn btn-space btn-warning" style="width: 125px" th:name="state" th:value="cleaning">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-success" style="width: 125px" th:name="state" th:value="AVAILABLE">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-warning" style="width: 125px" th:name="state" th:value="CLEANING">
                                                             </p>
                                                         </form>
                                                     </div>
