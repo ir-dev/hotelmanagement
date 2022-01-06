@@ -90,7 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryDTO buildCategoryDto(Category category) {
         return CategoryDTO.builder()
                 .withName(category.getName())
-                .withRooms(category.getAllRoomsForDTO())
+                .withRooms(category.getAllRoomNumbersWithRoomStates())
                 .build();
     }
 

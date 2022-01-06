@@ -84,12 +84,9 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
-    public Map<String, String> getAllRoomsForDTO() {
+    public Map<String, String> getAllRoomNumbersWithRoomStates() {
         Map<String, String> rooms = new HashMap<>();
-        this.rooms.forEach((room) -> {
-            System.out.println(room.getRoomNumber().getNumber() + " " + room.getRoomState().name());
-            rooms.put(room.getRoomNumber().getNumber(), room.getRoomState().name());
-        });
+        this.rooms.forEach((room) -> rooms.put(room.getRoomNumber().getNumber(), room.getRoomState().name()));
         return Collections.unmodifiableMap(rooms);
     }
 
