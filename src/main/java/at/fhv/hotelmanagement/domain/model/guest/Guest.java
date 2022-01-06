@@ -64,11 +64,11 @@ public class Guest {
         return this.specialNotes;
     }
 
-    public Optional<BigDecimal> getDiscountRate() {
+    public BigDecimal getOrganizationDiscountRate() {
         if (this.organization != null) {
-            return Optional.of(this.organization.getDiscountRate());
+            return this.organization.getDiscountRate();
         } else {
-            return Optional.of(BigDecimal.valueOf(0));
+            return BigDecimal.valueOf(0);
         }
     }
 }

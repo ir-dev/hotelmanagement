@@ -30,8 +30,8 @@
 
         <map name="selectedCategoriesRoomCount" table="bookingSelectedCategoriesRoomCounts" cascade="all">
             <key column="booking_id"></key>
-            <index column="category" type="java.lang.String"></index>
-            <element column="number" type="java.lang.Integer"></element>
+            <index column="category" type="java.lang.String"/>
+            <element column="number" type="java.lang.Integer"/>
         </map>
 
         <component name="guestId" class="at.fhv.hotelmanagement.domain.model.guest.GuestId">
@@ -44,7 +44,7 @@
             <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />
             <property name="cardCvc" column="card_cvc" type="java.lang.String" />
 
-            <property name="paymentType" column="payment_type" update="true" insert="true" index="true">
+            <property name="paymentType" column="payment_type" update="true" insert="true">
                 <type name="org.hibernate.type.EnumType">
                     <param name="enumClass">at.fhv.hotelmanagement.domain.model.guest.PaymentType</param>
                     <param name="type">12</param>

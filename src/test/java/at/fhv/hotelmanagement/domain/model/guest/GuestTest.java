@@ -15,7 +15,7 @@ public class GuestTest extends AbstractTest {
         //given
         GuestId guestId = new GuestId("1");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
-        Salutation salutation = Salutation.MRS;
+        Salutation salutation = Salutation.MS;
         String firstName = ("Anna");
         String lastName = ("Bauer");
         LocalDate dateOfBirth = getContextLocalDate().minusYears(18L);
@@ -35,6 +35,6 @@ public class GuestTest extends AbstractTest {
         assertEquals(dateOfBirth, guest.getDateOfBirth());
         assertEquals(address, guest.getAddress());
         assertEquals(specialNotes, guest.getSpecialNotes());
-        assertEquals(BigDecimal.valueOf(0.25), guest.getDiscountRate().orElseThrow());
+        assertEquals(BigDecimal.valueOf(0.25), guest.getOrganizationDiscountRate());
     }
 }

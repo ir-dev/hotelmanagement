@@ -5,16 +5,15 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Stay {
     private static final double INVOICE_TAX_RATE = 0.1;
-    private static final long INVOICE_DUE_DATE_DAYS = 14L;
 
     // generated hibernate id
     private Long id;
@@ -51,9 +50,13 @@ public class Stay {
         this.invoices = new HashSet<>();
     }
 
-    public boolean isCheckedIn() {return (this.stayState == StayState.CHECKED_IN);}
+    public boolean isCheckedIn() {
+        return (this.stayState == StayState.CHECKED_IN);
+    }
 
-    public boolean isBilled() {return billableLineItemCounts().size() == 0;}
+    public boolean isBilled() {
+        return billableLineItemCounts().size() == 0;
+    }
 
     public void checkout() throws BillingOpenException, IllegalStateException {
         if (!isCheckedIn()) {
@@ -68,22 +71,27 @@ public class Stay {
         this.stayState = StayState.CHECKED_OUT;
     }
 
-    private InvoiceNo nextInvoiceNo() {
-        return new InvoiceNo(String.format("%s_%04d", this.stayId.getId(), this.invoices.size() + 1));
+    private InvoiceNo buildInvoiceNo(String invoiceSeq) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM");
+        String currentDate = LocalDate.now().format(formatter).replace("/","");
+        return new InvoiceNo(currentDate + invoiceSeq);
     }
 
-    public Invoice composeInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
+    public InvoiceNo finalizeInvoice(String invoiceSeq, Map<Category, Integer> selectedLineItemProductsCount, BigDecimal discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, IllegalStateException {
         if (isBilled()) {
             throw new IllegalStateException("Stay has already been billed.");
         }
-
-        Invoice invoice = generateInvoice(selectedLineItemProductsCount, discountRate, invoiceRecipient);
+        Invoice invoice = new Invoice(buildInvoiceNo(invoiceSeq), buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, invoiceRecipient);
         this.invoices.add(invoice);
 
-        return invoice;
+        return invoice.getInvoiceNo();
     }
 
-    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, Optional<BigDecimal> discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException, GenerateInvoiceException {
+    public Invoice generateInvoice(Map<Category, Integer> selectedLineItemProductsCount, BigDecimal discountRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException{
+        return new Invoice(buildLineItems(selectedLineItemProductsCount), this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, invoiceRecipient);
+    }
+
+    private Set<InvoiceLine> buildLineItems(Map<Category, Integer> selectedLineItemProductsCount) {
         Set<InvoiceLine> lineItems = new HashSet<>();
 
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
@@ -102,8 +110,7 @@ public class Stay {
                 }
             }
         }
-
-        return new Invoice(nextInvoiceNo(), lineItems, this.arrivalDate, this.departureDate, discountRate, INVOICE_TAX_RATE, INVOICE_DUE_DATE_DAYS, invoiceRecipient);
+        return lineItems;
     }
 
     private Set<InvoiceLine> billedLineItems() {
@@ -182,33 +189,64 @@ public class Stay {
         return billableLineItemCounts;
     }
 
-    public Integer getNumberOfBookedRooms() {return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();}
+    public Integer getNumberOfBookedRooms() {
+        return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
+    }
 
-    public StayId getStayId() {return this.stayId;}
 
-    public Optional<BookingNo> getBookingNo() {return Optional.ofNullable(this.bookingNo);}
+    public StayId getStayId() {
+        return this.stayId;
+    }
 
-    public StayState getStayState() {return this.stayState;}
+    public Optional<BookingNo> getBookingNo() {
+        return Optional.ofNullable(this.bookingNo);
+    }
 
-    public LocalDateTime getCheckedInAt() {return this.checkedInAt;}
+    public StayState getStayState() {
+        return this.stayState;
+    }
 
-    public Optional<LocalDateTime> getCheckedOutAt() {return Optional.ofNullable(this.checkedOutAt);}
+    public LocalDateTime getCheckedInAt() {
+        return this.checkedInAt;
+    }
 
-    public boolean isCheckedOut() {return this.stayState == StayState.CHECKED_OUT;}
+    public Optional<LocalDateTime> getCheckedOutAt() {
+        return Optional.ofNullable(this.checkedOutAt);
+    }
 
-    public LocalDate getArrivalDate() {return this.arrivalDate;}
+    public boolean isCheckedOut() {
+        return this.stayState == StayState.CHECKED_OUT;
+    }
 
-    public LocalDate getDepartureDate() {return this.departureDate;}
+    public LocalDate getArrivalDate() {
+        return this.arrivalDate;
+    }
 
-    public LocalTime getArrivalTime() {return this.arrivalTime;}
+    public LocalDate getDepartureDate() {
+        return this.departureDate;
+    }
 
-    public Integer getNumberOfPersons() {return this.numberOfPersons;}
+    public LocalTime getArrivalTime() {
+        return this.arrivalTime;
+    }
 
-    public Map<String, Integer> getSelectedCategoriesRoomCount() {return this.selectedCategoriesRoomCount;}
+    public Integer getNumberOfPersons() {
+        return this.numberOfPersons;
+    }
 
-    public GuestId getGuestId() {return this.guestId;}
+    public Map<String, Integer> getSelectedCategoriesRoomCount() {
+        return this.selectedCategoriesRoomCount;
+    }
 
-    public PaymentInformation getPaymentInformation() {return this.paymentInformation;}
+    public GuestId getGuestId() {
+        return this.guestId;
+    }
 
-    public Set<Invoice> getInvoices() {return Collections.unmodifiableSet(this.invoices);}
+    public PaymentInformation getPaymentInformation() {
+        return this.paymentInformation;
+    }
+
+    public Set<Invoice> getInvoices() {
+        return Collections.unmodifiableSet(this.invoices);
+    }
 }

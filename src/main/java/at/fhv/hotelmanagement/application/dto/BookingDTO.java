@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public final class BookingDTO {
     private BookingDetailsDTO details;
-
     private String bookingNo;
     private String bookingState;
     private LocalDate arrivalDate;

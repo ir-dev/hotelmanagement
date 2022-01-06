@@ -252,16 +252,15 @@ public class StayViewController {
     }
 
     @PostMapping(CREATE_INVOICE_RECIPIENT_URL)
-    public ModelAndView showInvoiceRecipient(
+    public ModelAndView createInvoiceRecipient(
             @RequestParam(value = "stayId", required = false) String stayId,
-            @RequestParam(value = "preview", required = false) boolean isPreview,
             @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) {
 
-        final Optional<GuestDTO> guest = Optional.ofNullable(this.stayService.stayByStayId(stayId).get().guest());
+        final Optional<GuestDTO> guest = Optional.ofNullable(this.stayService.stayByStayId(stayId).orElseThrow().guest());
 
         model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
-        model.addAttribute("guest", guest);
+        model.addAttribute("guest", guest.orElseThrow());
         model.addAttribute("stayId", stayId);
         model.addAttribute("invoiceRecipientForm", new InvoiceRecipientForm());
 
@@ -293,10 +292,8 @@ public class StayViewController {
         InvoiceDTO invoiceDto = null;
         try {
             if (!isPreview) {
-
-                InvoiceRecipient invoiceRecipientEnd = this.stayService.createInvoiceRecipient(invoiceRecipientForm);
                 Map<String, String> redirectParams = new HashMap<>();
-                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipientEnd));
+                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipient));
 
                 return redirect(STAY_INVOICE_URL, redirectParams);
             }
