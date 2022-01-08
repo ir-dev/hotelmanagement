@@ -11,5 +11,5 @@ public interface CategoryService {
 
     List<CategoryDTO> allCategories();
 
-    void manageRoom(String categoryName, String roomNumber, String roomState);
+    void manageCategory(String categoryName, String roomNumber, String roomState);
 }

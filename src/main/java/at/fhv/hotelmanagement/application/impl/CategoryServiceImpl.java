@@ -54,29 +54,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public void manageRoom(String categoryName, String roomNumber, String roomState) {
-        Optional<Category> category = this.categoryRepository.findByName(categoryName);
-        if (category.isEmpty()) {
-            throw new IllegalArgumentException();
+    public void manageCategory(String categoryName, String roomNumber, String roomState) throws IllegalArgumentException {
+        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryName);
+        if (categoryOpt.isEmpty()) {
+            throw new IllegalArgumentException("Category not found");
         }
-        Optional<Room> room = category.get().getRoomByRoomNumber(roomNumber);
-        if (room.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        if (Arrays.stream(RoomState.values()).noneMatch(state -> state.name().equalsIgnoreCase(roomState))) {
-            throw new IllegalArgumentException();
-        }
-        switch (roomState) {
-            case "AVAILABLE":
-                room.get().available();
-                break;
-            case "CLEANING":
-                room.get().cleaning();
-                break;
-            case "MAINTENANCE":
-                room.get().maintenance();
-                break;
-        }
+        Category category = categoryOpt.get();
+        category.manageRoom(
+                category.getAllRoomNumbers().stream()
+                        .filter((roomNumber1 -> roomNumber1.getNumber().equalsIgnoreCase(roomNumber)))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Room number not found")),
+                RoomState.valueOf(roomState));
     }
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {

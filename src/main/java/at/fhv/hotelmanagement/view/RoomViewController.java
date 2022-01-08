@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 import static at.fhv.hotelmanagement.view.GenericViewController.redirect;
+import static at.fhv.hotelmanagement.view.GenericViewController.redirectError;
 
 @Controller
 public class RoomViewController {
@@ -45,8 +45,11 @@ public class RoomViewController {
             @RequestParam("number") String number,
             @RequestParam("state") String state) {
 
-        this.categoryService.manageRoom(category, number, state);
-
+        try {
+            this.categoryService.manageCategory(category, number, state);
+        } catch (IllegalArgumentException e) {
+            return redirectError(e.getMessage());
+        }
         return redirect(ROOMS_URL);
     }
 

@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -193,6 +194,7 @@ public class StayServiceImplTest extends AbstractTest {
         //then
         assertTrue(invoiceDto.isEmpty());
     }
+
     @Test
     void given_stayinrepository_and_noinvoiceNoinrepository_when_invoicebyinvoisceNo_then_returnEmpty() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
         //given
@@ -457,9 +459,11 @@ public class StayServiceImplTest extends AbstractTest {
         Mockito.when(this.stayRepository.nextInvoiceSeq()).thenReturn("1");
 
         //when..then
-        assertThrows(IllegalStateException.class, () -> {
-            String actualInvoiceNo = this.stayService.chargeStay(stay.getStayId().getId(), CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount), invoiceRecipient);
-        }, "IllegalStateException was expected");
+        assertThrows(IllegalStateException.class, () ->
+                        this.stayService.chargeStay(
+                                stay.getStayId().getId(),
+                                CategoryConverter.convertToSelectedCategoryNamesRoomCount(selectedLineItemProductsCount), invoiceRecipient),
+                "IllegalStateException was expected");
     }
 
     @Test
@@ -532,9 +536,9 @@ public class StayServiceImplTest extends AbstractTest {
         Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
 
         //when..then
-        assertThrows(BillingOpenException.class, () -> {
-            this.stayService.checkoutStay(stay.getStayId().getId());
-        }, "BillingOpenException was expected");
+        assertThrows(BillingOpenException.class, () ->
+                this.stayService.checkoutStay(stay.getStayId().getId()),
+                "BillingOpenException was expected");
     }
 
     @Test
@@ -543,9 +547,9 @@ public class StayServiceImplTest extends AbstractTest {
         StayId stayId = new StayId("1");
 
         //when..then
-        assertThrows(EntityNotFoundException.class, () -> {
-            this.stayService.checkoutStay(stayId.getId());
-        }, "EntityNotFoundException was expected");
+        assertThrows(EntityNotFoundException.class, () ->
+                this.stayService.checkoutStay(stayId.getId()),
+                "EntityNotFoundException was expected");
     }
 
 
@@ -602,7 +606,6 @@ public class StayServiceImplTest extends AbstractTest {
         return Arrays.asList(category1, category2);
     }
 
-
     private Stay createStayDummy() throws CreateBookingException, RoomAlreadyExistsException, CreateStayException {
         //Booking
         LocalDate arrivalDate = LocalDate.now();
@@ -653,34 +656,24 @@ public class StayServiceImplTest extends AbstractTest {
         );
     }
 
-    private InvoiceRecipient createGuestAsInvoiceRecipient(Guest guest)  {
+    private InvoiceRecipient createGuestAsInvoiceRecipient(Guest guest) {
         Address address = new Address(
                 guest.getAddress().getStreet(),
                 guest.getAddress().getZipcode(),
                 guest.getAddress().getCity(),
                 guest.getAddress().getCountry().toString());
 
-        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
-                guest.getFirstName(),
-                guest.getLastName(),
-                address);
-
-        return invoiceRecipient;
+        return new InvoiceRecipient(guest.getFirstName(), guest.getLastName(), address);
     }
 
-    private InvoiceRecipient createInvoiceRecipientDummy()  {
+    private InvoiceRecipient createInvoiceRecipientDummy() {
         Address address = new Address(
                 "Musterstrasse 2",
                 "6890",
                 "Lustenau",
                 String.valueOf(Country.AT));
 
-        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
-                "Sarah",
-                "Müller",
-                address);
-
-        return invoiceRecipient;
+        return new InvoiceRecipient("Sarah", "Müller", address);
     }
 
     private StayId nextDummyStayIdentity() {

@@ -26,9 +26,16 @@ public class CategoryService {
     }
 
     public void releaseRooms(List<RoomNumber> roomNumbers, Set<Category> categories, StayId stayId) throws IllegalArgumentException {
-        for (Category category : categories) {
-            category.releaseRooms(roomNumbers, stayId);
-        }
+        roomNumbers.forEach(roomNumber -> {
+            boolean isHandled = false;
+            for (Category category : categories) {
+                if (category.getAllRoomNumbers().contains(roomNumber)) {
+                    category.releaseRoom(roomNumber, stayId);
+                    isHandled = true;
+                }
+            }
+            if (!isHandled) throw new IllegalArgumentException("Room number to release not found");
+        });
     }
 
 }

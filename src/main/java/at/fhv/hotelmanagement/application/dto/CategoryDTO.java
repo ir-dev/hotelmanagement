@@ -1,5 +1,9 @@
 package at.fhv.hotelmanagement.application.dto;
 
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.category.RoomState;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,8 +38,10 @@ public final class CategoryDTO {
             return this;
         }
 
-        public Builder withRooms(Map<String, String> rooms) {
-            this.instance.rooms = rooms;
+        public Builder withRooms(Map<RoomNumber, RoomState> rooms) {
+            Map<String, String> roomMap = new HashMap<>();
+            rooms.forEach((key, value) -> roomMap.put(key.getNumber(), value.name()));
+            this.instance.rooms = roomMap;
             return this;
         }
 

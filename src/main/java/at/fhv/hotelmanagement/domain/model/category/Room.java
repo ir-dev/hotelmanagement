@@ -14,12 +14,11 @@ public class Room {
     private Set<RoomOccupancy> roomOccupancies;
 
     // required for hibernate
-    private Room() {
-    }
+    private Room() {}
 
     public Room(RoomNumber roomNumber, RoomState roomState) {
         // disallow (resp. explicitly allow) some initial room states (this must be always conform with all room state changes!!)
-        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.CLEANING)) {
+        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.CLEANING || roomState == RoomState.MAINTENANCE)) {
             throw new IllegalArgumentException("Forbidden initial room state: " + roomState);
         }
 

@@ -193,7 +193,6 @@ public class Stay {
         return this.selectedCategoriesRoomCount.values().stream().mapToInt(i->i).sum();
     }
 
-
     public StayId getStayId() {
         return this.stayId;
     }
