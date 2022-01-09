@@ -50,6 +50,14 @@ public class Room {
         this.roomState = RoomState.AVAILABLE;
     }
 
+    public void cleaning() {
+        // set room manually to cleaning (e.g. after maintenance)
+        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.MAINTENANCE) {
+            throw new IllegalStateException("Room must be in AVAILABLE or MAINTENANCE state");
+        }
+        this.roomState = RoomState.CLEANING;
+    }
+
     public void maintenance() throws IllegalStateException {
         if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.CLEANING) {
             throw new IllegalStateException("Room must be in AVAILABLE or CLEANING state");
@@ -63,16 +71,8 @@ public class Room {
     }
 
     public void cleaning(StayId stayId) {
-        // muss occupied sein!
+        // must be occupied!
         updateRoomOccupanciesToDate(stayId);
-        this.roomState = RoomState.CLEANING;
-    }
-
-    public void cleaning() {
-        // set room manually to cleaning state (e.g. after maintenance)
-        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.MAINTENANCE) {
-            throw new IllegalStateException("Room must be in AVAILABLE or MAINTENANCE state");
-        }
         this.roomState = RoomState.CLEANING;
     }
 
@@ -80,7 +80,6 @@ public class Room {
         if (!isAvailableForPeriod(fromDate, toDate)) {
             throw new IllegalStateException("Room is not available for given period.");
         }
-
         RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate, stayId);
         this.roomOccupancies.add(roomOccupancy);
     }

@@ -18,7 +18,7 @@ import static at.fhv.hotelmanagement.view.GenericViewController.redirectError;
 @Controller
 public class RoomViewController {
     // roomview url
-    private static final String ROOMS_URL = "/rooms";
+    private static final String ALL_ROOMS_URL = "/rooms";
     private static final String ROOM_URL = "/room";
 
     // roomview view
@@ -27,7 +27,7 @@ public class RoomViewController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping(ROOMS_URL)
+    @GetMapping(ALL_ROOMS_URL)
     public String rooms(Model model) {
 
         // Fetch rooms
@@ -50,7 +50,7 @@ public class RoomViewController {
         } catch (IllegalArgumentException e) {
             return redirectError(e.getMessage());
         }
-        return redirect(ROOMS_URL);
+        return redirect(ALL_ROOMS_URL);
     }
 
 }
