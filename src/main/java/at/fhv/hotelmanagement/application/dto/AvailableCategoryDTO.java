@@ -51,7 +51,7 @@ public final class AvailableCategoryDTO {
         public AvailableCategoryDTO build() {
             Objects.requireNonNull(this.instance.name, "name must be set in CategoryDTO");
             Objects.requireNonNull(this.instance.description, "description must be set in CategoryDTO");
-            Objects.requireNonNull(this.instance.description, "availableRoomsCount must be set in CategoryDTO");
+            Objects.requireNonNull(this.instance.availableRoomsCount, "availableRoomsCount must be set in CategoryDTO");
 
             return this.instance;
         }

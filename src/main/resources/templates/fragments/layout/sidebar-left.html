@@ -26,12 +26,14 @@
                             <i class="fas fa-fw fa-hotel"></i>Stays
                         </a>
                     </li>
-
-                    <!--
                     <li class="nav-divider">
                         Back-Office
                     </li>
-                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${#request.requestURI.startsWith('/room')} ? active : ''" th:href="@{/rooms}">
+                            <i class="fas fa-fw fa-bold"></i>Rooms
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

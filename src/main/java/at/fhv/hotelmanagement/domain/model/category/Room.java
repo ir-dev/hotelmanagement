@@ -14,12 +14,11 @@ public class Room {
     private Set<RoomOccupancy> roomOccupancies;
 
     // required for hibernate
-    private Room() {
-    }
+    private Room() {}
 
     public Room(RoomNumber roomNumber, RoomState roomState) {
         // disallow (resp. explicitly allow) some initial room states (this must be always conform with all room state changes!!)
-        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.CLEANING)) {
+        if (!(roomState == RoomState.AVAILABLE || roomState == RoomState.CLEANING || roomState == RoomState.MAINTENANCE)) {
             throw new IllegalArgumentException("Forbidden initial room state: " + roomState);
         }
 
@@ -44,14 +43,35 @@ public class Room {
         return true;
     }
 
+    public void available() throws IllegalStateException {
+        if (this.roomState != RoomState.CLEANING && this.roomState != RoomState.MAINTENANCE) {
+            throw new IllegalStateException("Room must be in CLEANING or MAINTENANCE state");
+        }
+        this.roomState = RoomState.AVAILABLE;
+    }
+
+    public void cleaning() {
+        // set room manually to cleaning (e.g. after maintenance)
+        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.MAINTENANCE) {
+            throw new IllegalStateException("Room must be in AVAILABLE or MAINTENANCE state");
+        }
+        this.roomState = RoomState.CLEANING;
+    }
+
+    public void maintenance() throws IllegalStateException {
+        if (this.roomState != RoomState.AVAILABLE && this.roomState != RoomState.CLEANING) {
+            throw new IllegalStateException("Room must be in AVAILABLE or CLEANING state");
+        }
+        this.roomState = RoomState.MAINTENANCE;
+    }
+
     public void occupied(LocalDate fromDate, LocalDate toDate, StayId stayId) throws IllegalStateException {
         createRoomOccupancy(fromDate, toDate, stayId);
         this.roomState = RoomState.OCCUPIED;
     }
 
     public void cleaning(StayId stayId) {
-        // muss occupied sein!
-
+        // must be occupied!
         updateRoomOccupanciesToDate(stayId);
         this.roomState = RoomState.CLEANING;
     }
@@ -60,7 +80,6 @@ public class Room {
         if (!isAvailableForPeriod(fromDate, toDate)) {
             throw new IllegalStateException("Room is not available for given period.");
         }
-
         RoomOccupancy roomOccupancy = new RoomOccupancy(fromDate, toDate, stayId);
         this.roomOccupancies.add(roomOccupancy);
     }
@@ -75,5 +94,9 @@ public class Room {
 
     public RoomNumber getRoomNumber() {
         return this.roomNumber;
+    }
+
+    public RoomState getRoomState() {
+        return this.roomState;
     }
 }

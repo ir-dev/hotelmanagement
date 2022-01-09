@@ -52,16 +52,30 @@ public class Category {
         }
     }
 
-    public void releaseRooms(List<RoomNumber> roomNumbers, StayId stayId) throws IllegalArgumentException {
-        for (RoomNumber roomNumber : roomNumbers) {
-            this.rooms.stream()
-                    .filter(r -> r.getRoomNumber().equals(roomNumber))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Room number to release not found for given category."))
-                    .cleaning(stayId);
-        }
+    public void releaseRoom(RoomNumber roomNumber, StayId stayId) throws IllegalArgumentException {
+        this.rooms.stream()
+                .filter(r -> r.getRoomNumber().equals(roomNumber))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Room number to release not found for given category."))
+                .cleaning(stayId);
     }
 
+    public void manageRoom(RoomNumber roomNumber, RoomState roomState) throws IllegalArgumentException {
+        Room room = this.getRoomByRoomNumber(roomNumber);
+        switch (roomState) {
+            case AVAILABLE:
+                room.available();
+                break;
+            case CLEANING:
+                room.cleaning();
+                break;
+            case MAINTENANCE:
+                room.maintenance();
+                break;
+            default:
+                throw new IllegalArgumentException("Occupied not allowed");
+        }
+    }
 
     public Set<RoomNumber> getAvailableRoomNumbers(LocalDate fromDate, LocalDate toDate) {
         return getAvailableRooms(fromDate, toDate).stream()
@@ -85,10 +99,27 @@ public class Category {
         return Collections.unmodifiableSet(availableRooms);
     }
 
+    public Map<RoomNumber, RoomState> getAllRoomNumbersWithRoomStates() {
+        Map<RoomNumber, RoomState> rooms = new HashMap<>();
+        this.rooms.forEach((room) -> rooms.put(room.getRoomNumber(), room.getRoomState()));
+        return Collections.unmodifiableMap(rooms);
+    }
+
+    public Set<RoomNumber> getAllRoomNumbers() {
+        Set<RoomNumber> roomNumbers = new HashSet<>();
+        this.rooms.forEach((room) -> roomNumbers.add(room.getRoomNumber()));
+        return Collections.unmodifiableSet(roomNumbers);
+    }
+
+    public Room getRoomByRoomNumber(RoomNumber roomNumber) throws IllegalArgumentException {
+        return this.rooms.stream()
+                .filter(room -> room.getRoomNumber().equals(roomNumber))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Room not found"));
+    }
 
     public CategoryId getCategoryId() {
         return this.categoryId;
-
     }
 
     public String getName() {

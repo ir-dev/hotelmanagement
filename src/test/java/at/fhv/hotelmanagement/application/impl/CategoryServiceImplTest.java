@@ -3,6 +3,7 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
+import at.fhv.hotelmanagement.application.dto.CategoryDTO;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.category.Category;
@@ -35,13 +36,23 @@ public class CategoryServiceImplTest extends AbstractTest {
     private CategoryRepository categoryRepository;
 
     @Test
-    void given_emptyrepository_when_fetchingallbookings_then_empty() {
+    void given_emptyrepository_when_fetchallavailablecategories_then_empty() {
         //given
         Mockito.when(this.categoryRepository.findAll()).thenReturn(Collections.emptyList());
         //when
-        List<AvailableCategoryDTO> bookingsDto = this.categoryService.availableCategories(LocalDate.now(), LocalDate.now().plusDays(2));
+        List<AvailableCategoryDTO> categoriesDto = this.categoryService.availableCategories(LocalDate.now(), LocalDate.now().plusDays(2));
         //then
-        assertTrue(bookingsDto.isEmpty());
+        assertTrue(categoriesDto.isEmpty());
+    }
+
+    @Test
+    void given_emptyrepository_when_fetchallcategories_then_empty() {
+        //given
+        Mockito.when(this.categoryRepository.findAll()).thenReturn(Collections.emptyList());
+        //when
+        List<CategoryDTO> categoriesDto = this.categoryService.allCategories();
+        //then
+        assertTrue(categoriesDto.isEmpty());
     }
 
     @Test
@@ -69,13 +80,36 @@ public class CategoryServiceImplTest extends AbstractTest {
         }
     }
 
+    @Test
+    void given_2categories_when_fetchallcategories_then_returnequalcategories() throws RoomAlreadyExistsException {
+        //given
+        List<Category> categories = createCategoriesDummy();
+        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
+
+        List<CategoryDTO> categoriesDtoExpected = new ArrayList<>();
+        for (Category c : categories) {
+            CategoryDTO categoryDto = CategoryDTO.builder()
+                    .withName(c.getName())
+                    .withRooms(c.getAllRoomNumbersWithRoomStates())
+                    .build();
+            categoriesDtoExpected.add(categoryDto);
+        }
+
+        //when
+        List<CategoryDTO> categoriesDtoActual = this.categoryService.allCategories();
+
+        //then
+        for (CategoryDTO c : categoriesDtoActual) {
+            assertTrue(categoriesDtoExpected.contains(c));
+        }
+    }
 
     @Test
     void given_category_without_availablerooms_when_fetchavailablecategories_then_returnempty() {
         //given
         Price p1 = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Business Casual EZ", "A casual accommodation for business guests.", 1, p1, p1);
-        List<Category> categories = Arrays.asList(category);
+        List<Category> categories = List.of(category);
         Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
 
         //when
@@ -85,6 +119,23 @@ public class CategoryServiceImplTest extends AbstractTest {
         assertTrue(availableCategoriesDto.isEmpty());
     }
 
+    @Test
+    void given_category_when_managecategory_then_throwsanddoesnotthrow() throws IllegalArgumentException, RoomAlreadyExistsException {
+        //given
+        List<Category> categories = createCategoriesDummy();
+
+        // when.category not found.then
+        Mockito.when(this.categoryRepository.findByName("noCategory")).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> this.categoryService.manageCategory("noCategory", categories.get(0).getRoomByRoomNumber(new RoomNumber("100")).getRoomNumber().getNumber(), "AVAILABLE"));
+
+        // when.room not found.then
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        assertThrows(IllegalArgumentException.class, () -> this.categoryService.manageCategory(categories.get(0).getName(), "0", "CLEANING"));
+
+        // when.everything is fine.then
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        assertDoesNotThrow(() -> this.categoryService.manageCategory(categories.get(0).getName(), categories.get(0).getRoomByRoomNumber(new RoomNumber("100")).getRoomNumber().getNumber(), "CLEANING"));
+    }
 
     private List<Category> createCategoriesDummy() throws RoomAlreadyExistsException {
         Price p1 = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));

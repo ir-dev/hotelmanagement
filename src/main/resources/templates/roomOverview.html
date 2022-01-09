@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="/fragments/layout/page :: meta(description='View all rooms')"/>
+    <title>Rooms | Hotel Schwarz</title>
+    <th:block th:replace="/fragments/layout/page :: css"/>
+    <style>
+
+        div.scroll {
+
+            width: 100%;
+            height: 480px;
+            overflow: auto;
+            text-align: justify;
+            border: #9e9fa7 2px solid;
+        }
+
+        th {
+            top: 0;
+            position: sticky;
+            background: white;
+
+        }
+    </style>
+</head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <th:block th:replace="/fragments/layout/navbar :: content"/>
+    <th:block th:replace="/fragments/layout/sidebar-left :: content"/>
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content">
+
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <h2 class="pageheader-title">Rooms Overview</h2>
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a th:href="@{/rooms}" class="breadcrumb-link">Rooms</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">View</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 2%">
+                <div class="col-xl-10">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                            <input class="form-control" list="mostSearched" id="myInput" type="text" autocomplete=”on”
+                                   placeholder="Search..."><br>
+
+                            <datalist id="mostSearched">
+                                <option value="AVAILABLE">
+                                <option value="OCCUPIED">
+                                <option value="CLEANING">
+                                <option value="MAINTENANCE">
+                            </datalist>
+
+                            <div class="card">
+                                <div class="scroll">
+                                    <table class="table" style="text-align: center" id="myTable2">
+                                        <thead>
+                                        <tr>
+                                            <th onclick="sortTable(0)" style="cursor: pointer; width: 250px">Category</th>
+                                            <th onclick="sortTable(1)" style="cursor: pointer">Number</th>
+                                            <th onclick="sortTable(2)" style="cursor: pointer">State</th>
+                                            <th style="width: 300px">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="myTable">
+
+                                        <th:block th:each="category : ${categories}"
+                                                  th:if="not ${category.rooms.isEmpty()}">
+                                            <tr th:each="room : ${category.rooms}" style="height: 60px">
+                                                <td th:text="${category.name}"/>
+                                                <td th:text="${room.key}"/>
+                                                <td th:text="${room.value}"/>
+                                                <td>
+                                                    <div th:switch="${room.value}">
+                                                        <form th:action="@{/room(number=${room.key}, category=${category.name})}" method="POST">
+                                                            <p th:case="'AVAILABLE'">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-warning" style="width: 125px" th:name="state" th:value="CLEANING">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-danger" style="width: 125px" th:name="state" th:value="MAINTENANCE">
+                                                            </p>
+                                                            <p th:case="'CLEANING'">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-success" style="width: 125px" th:name="state" th:value="AVAILABLE">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-danger" style="width: 125px" th:name="state" th:value="MAINTENANCE">
+                                                            </p>
+                                                            <p th:case="'MAINTENANCE'">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-success" style="width: 125px" th:name="state" th:value="AVAILABLE">
+                                                                <input type="submit" class="btn btn-space btn-sm btn-warning" style="width: 125px" th:name="state" th:value="CLEANING">
+                                                            </p>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </th:block>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/fragments/layout/footer :: content"/>
+
+
+<th:block th:replace="/fragments/layout/page :: js"/>
+</body>
+
+</html>
+

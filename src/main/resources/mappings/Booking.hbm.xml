@@ -29,7 +29,7 @@
         <property name="numberOfPersons" column="number_persons" type="java.lang.Integer" />
 
         <map name="selectedCategoriesRoomCount" table="bookingSelectedCategoriesRoomCounts" cascade="all">
-            <key column="booking_id"></key>
+            <key column="booking_id"/>
             <index column="category" type="java.lang.String"/>
             <element column="number" type="java.lang.Integer"/>
         </map>
