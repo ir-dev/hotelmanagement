@@ -16,8 +16,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -43,7 +42,22 @@ public class CategoryServiceTest extends AbstractTest {
     }
 
     @Test
-    void given_category_when_releaserooms_then_throwsanddoesnotthrow() throws RoomAlreadyExistsException, RoomAssignmentException {
+    void given_category_when_autoassignrooms_then_roomsassigned() throws RoomAlreadyExistsException, RoomAssignmentException {
+        // given
+        List<Category> categories = createCategoriesDummy();
+        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        selectedCategoriesRoomCount.put(categories.get(0), 2);
+
+        // when
+        this.categoryService.autoAssignRooms(selectedCategoriesRoomCount, LocalDate.now(), LocalDate.now().plusDays(3), new StayId("1"));
+
+        // then
+        assertTrue(categories.get(0).getAvailableRoomNumbers(LocalDate.now(), LocalDate.now().plusDays(3)).isEmpty());
+    }
+
+    @Test
+    void given_category_when_releaserooms_then_roomsavailable() throws RoomAlreadyExistsException, RoomAssignmentException {
         // given
         List<Category> categories = createCategoriesDummy();
         Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
