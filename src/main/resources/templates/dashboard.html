@@ -89,8 +89,8 @@
                                             <td colspan="6"> no bookings available</td>
                                         </tr>
 
-                                        <tr th:each="booking : ${bookings}">
-                                            <th:block th:if="(${booking.arrivalDate().equals(localDate) && (booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING'))})">
+                                        <tr th:each="booking : ${bookings}"
+                                            th:if="(${booking.arrivalDate().equals(localDate) && (booking.bookingState().equalsIgnoreCase('CONFIRMED') || booking.bookingState().equalsIgnoreCase('PENDING'))})">
                                                 <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
                                                         th:text="${booking.bookingNo()}"/></a>
                                                 </td>
@@ -112,7 +112,6 @@
                                                        th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
                                                             class="fas fa-check"></i> Check-In</a>
                                                 </td>
-                                            </th:block>
                                         </tr>
                                         </tbody>
                                     </table>
