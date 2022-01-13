@@ -26,8 +26,6 @@ public class GuestServiceImplTest extends AbstractTest {
     @MockBean
     private GuestRepository guestRepository;
 
-    private static Integer nextDummyGuestIdentity = 1;
-
     @Test
     void given_emptyrepository_when_fetchingallguests_then_empty() {
         //given
@@ -98,7 +96,7 @@ public class GuestServiceImplTest extends AbstractTest {
     private Guest createGuestDummy() throws CreateGuestException {
         Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         return GuestFactory.createGuest(
-                nextDummyGuestIdentity(),
+                new GuestId("1"),
                 null, String.valueOf(Salutation.MR),
                 "Fritz",
                 "Mayer",
@@ -107,10 +105,5 @@ public class GuestServiceImplTest extends AbstractTest {
                 ""
         );
     }
-
-    private GuestId nextDummyGuestIdentity() {
-        return new GuestId((nextDummyGuestIdentity++).toString());
-    }
-
 
 }

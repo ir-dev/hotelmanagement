@@ -5,24 +5,16 @@ import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
+import at.fhv.hotelmanagement.domain.model.booking.*;
+import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.stay.*;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.booking.Booking;
-import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
-import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
-import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
-import at.fhv.hotelmanagement.domain.model.category.Category;
-import at.fhv.hotelmanagement.domain.model.category.CategoryFactory;
-import at.fhv.hotelmanagement.domain.model.category.CategoryId;
-import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
-import at.fhv.hotelmanagement.domain.model.category.Room;
-import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
+import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +50,163 @@ public class StayServiceImplTest extends AbstractTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
-    private static Integer nextDummyBookingIdentity = 1;
-    private static Integer nextDummyStayIdentity = 1;
+
+    @Test
+    void given_stayform_with_booking_when_createstayforbooking_then_booking_closed() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
+        //given
+        Booking booking = createBookingDummy();
+        List<Category> categories = createCategoriesDummy();
+        Guest guest = createGuestDummy();
+
+        BookingDTO bookingDTO = BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(BookingDetailsDTO.builder()
+                        .withBookingEntity(booking)
+                        .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                        .build())
+                .build();
+        StayForm stayForm = new StayForm();
+        stayForm.addBooking(bookingDTO);
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
+
+        //when.
+        this.stayService.createStayForBooking(booking.getBookingNo().getNo(), stayForm);
+
+        //then
+        assertEquals(BookingState.CLOSED, booking.getBookingState());
+    }
+
+
+    @Test
+    void given_stayform_with_booking_and_nocategoryinrepository_when_createstayforbooking_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException {
+        //given
+        Booking booking = createBookingDummy();
+        Guest guest = createGuestDummy();
+        BookingDTO bookingDTO = BookingDTO.builder()
+                                        .withBookingEntity(booking)
+                                        .withDetails(BookingDetailsDTO.builder()
+                                                .withBookingEntity(booking)
+                                                .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                                                .build())
+                                        .build();
+        StayForm stayForm = new StayForm();
+        stayForm.addBooking(bookingDTO);
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+
+
+        //when..then
+        assertThrows(NoSuchElementException.class, () -> {
+                        this.stayService.createStayForBooking(booking.getBookingNo().getNo(), stayForm);
+        },      "NoSuchElementException was expected");
+    }
+
+    @Test
+    void given_stayform_with_booking_and_guest_with25percentdiscount_when_createstayforbooking_then_booking_closed() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
+        //given
+        Booking booking = createBookingDummy();
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(25));
+        List<Category> categories = createCategoriesDummy();
+        BookingDTO bookingDTO = BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(BookingDetailsDTO.builder()
+                        .withBookingEntity(booking)
+                        .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                        .build())
+                .build();
+        StayForm stayForm = new StayForm();
+        stayForm.addBooking(bookingDTO);
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
+
+        //when
+        this.stayService.createStayForBooking(booking.getBookingNo().getNo(), stayForm);
+
+        //then
+        assertEquals(BookingState.CLOSED, booking.getBookingState());
+    }
+
+    @Test
+    void given_stayform_with_booking_and_guest_with150percentdiscount_when_createstayforbooking_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
+        //given
+        Booking booking = createBookingDummy();
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(150));
+        List<Category> categories = createCategoriesDummy();
+        BookingDTO bookingDTO = BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(BookingDetailsDTO.builder()
+                        .withBookingEntity(booking)
+                        .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                        .build())
+                .build();
+        StayForm stayForm = new StayForm();
+        stayForm.addBooking(bookingDTO);
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
+
+        //when..then
+        assertThrows(CreateGuestException.class, () -> {
+            this.stayService.createStayForBooking(booking.getBookingNo().getNo(), stayForm);
+        }, "CreateGuestException was expected");
+    }
+
+    @Test
+    void given_stayform_and_guest_withminus20percentdiscount_when_createstayforbooking_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
+        //given
+        Booking booking = createBookingDummy();
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(-20));
+        List<Category> categories = createCategoriesDummy();
+        BookingDTO bookingDTO = BookingDTO.builder()
+                .withBookingEntity(booking)
+                .withDetails(BookingDetailsDTO.builder()
+                        .withBookingEntity(booking)
+                        .withGuestDTO(GuestDTO.builder().withGuestEntity(guest).build())
+                        .build())
+                .build();
+        StayForm stayForm = new StayForm();
+        stayForm.addBooking(bookingDTO);
+
+        Mockito.when(this.bookingRepository.findByNo(booking.getBookingNo())).thenReturn(Optional.of(booking));
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+        Mockito.when(this.categoryRepository.findByName(categories.get(1).getName())).thenReturn(Optional.of(categories.get(1)));
+
+        //when..then
+        assertThrows(CreateGuestException.class, () -> {
+            this.stayService.createStayForBooking(booking.getBookingNo().getNo(), stayForm);
+        }, "CreateGuestException was expected");
+    }
+
+    @Test
+    void given_stayform_when_createstayforwalkin_then_not_throws() throws RoomAlreadyExistsException {
+        //given
+        StayForm stayForm = initializeStayForm();
+        List<Category> categories = createCategoriesDummy();
+
+        Mockito.when(this.categoryRepository.findByName(categories.get(0).getName())).thenReturn(Optional.of(categories.get(0)));
+
+        //when..then
+        assertDoesNotThrow(() -> {
+            this.stayService.createStayForWalkIn(stayForm);
+        });
+    }
+
+    @Test
+    void given_stayform_and_nocategoryinrepository_when_createstayforwalkin_then_throws() {
+        //given
+        StayForm stayForm = initializeStayForm();
+
+        //when..then
+        assertThrows(NoSuchElementException.class, () -> {
+            this.stayService.createStayForWalkIn(stayForm);
+        }, "NoSuchElementException was expected");
+    }
 
     @Test
     void given_emptyrepository_when_fetchingallstays_then_empty() {
@@ -552,6 +699,27 @@ public class StayServiceImplTest extends AbstractTest {
                 "EntityNotFoundException was expected");
     }
 
+    @Test
+    void given_stayinrepository_and_nocategoriesinrepository_when_checkoutStay_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, BillingOpenException, EntityNotFoundException, PriceCurrencyMismatchException {
+        //given
+        Stay stay = createStayDummy();
+        List<Category> categories = createCategoriesDummy();
+        Map<Category, Integer> selectedLineItemProductsCount = new HashMap<>();
+        categories.forEach(category -> selectedLineItemProductsCount.put(category, 2)); //Select ALL line items
+        BigDecimal discount = BigDecimal.valueOf(10);
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipientDummy();
+
+        stay.finalizeInvoice("1", selectedLineItemProductsCount, discount, invoiceRecipient);
+
+        Mockito.when(this.stayRepository.findById(stay.getStayId())).thenReturn(Optional.of(stay));
+
+        //when..then
+        assertThrows(NoSuchElementException.class, () ->
+                        this.stayService.checkoutStay(stay.getStayId().getId()),
+                "NoSuchElementException was expected");
+    }
+
+
 
     private StayDTO buildStayDto(Stay stay) throws CreateGuestException {
         return StayDTO.builder()
@@ -610,6 +778,33 @@ public class StayServiceImplTest extends AbstractTest {
         //Booking
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = LocalDate.now().plusDays(2);
+        Integer numberOfPersons = 1;
+        Map<Category, Integer> selectCategoriesRoomCount = new HashMap<>();
+
+        createCategoriesDummy().forEach(category -> selectCategoriesRoomCount.put(category, 2));
+
+        GuestId guestId = new GuestId("1");
+        PaymentInformation paymentInformation = new PaymentInformation("Franz Huber", "1234 5678 9012 3456", "05/24", "123", String.valueOf(PaymentType.CASH));
+
+        Booking booking = createBookingDummy();
+
+        return StayFactory.createStayForBooking(
+                new StayId("S100000"),
+                booking,
+                new BookingNo("B100000"),
+                arrivalDate,
+                departureDate,
+                numberOfPersons,
+                selectCategoriesRoomCount,
+                guestId,
+                paymentInformation
+        );
+    }
+
+    private Booking createBookingDummy() throws CreateBookingException, RoomAlreadyExistsException {
+        //Booking
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(2);
         LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 1;
         Map<Category, Integer> selectCategoriesRoomCount = new HashMap<>();
@@ -619,9 +814,8 @@ public class StayServiceImplTest extends AbstractTest {
         GuestId guestId = new GuestId("1");
         PaymentInformation paymentInformation = new PaymentInformation("Franz Huber", "1234 5678 9012 3456", "05/24", "123", String.valueOf(PaymentType.CASH));
 
-        BookingNo bookingNo = this.bookingRepository.nextIdentity();
-        Booking booking = BookingFactory.createBooking(
-                nextDummyBookingIdentity(),
+        return BookingFactory.createBooking(
+                new BookingNo("B100000"),
                 arrivalDate,
                 departureDate,
                 arrivalTime,
@@ -629,19 +823,8 @@ public class StayServiceImplTest extends AbstractTest {
                 selectCategoriesRoomCount,
                 guestId,
                 paymentInformation);
-
-        return StayFactory.createStayForBooking(
-                nextDummyStayIdentity(),
-                booking,
-                bookingNo,
-                arrivalDate,
-                departureDate,
-                numberOfPersons,
-                selectCategoriesRoomCount,
-                guestId,
-                paymentInformation
-        );
     }
+
 
     private Guest createGuestDummy() throws CreateGuestException {
         Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
@@ -654,6 +837,49 @@ public class StayServiceImplTest extends AbstractTest {
                 address,
                 ""
         );
+    }
+
+    private Guest createGuestWithOrganizationDummy(BigDecimal discount) throws CreateGuestException {
+        Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
+        Organization organization = new Organization("FHV", discount);
+        return GuestFactory.createGuest(
+                new GuestId("1"),
+                organization,
+                String.valueOf(Salutation.MS),
+                "Fritz",
+                "Mayer",
+                LocalDate.now().minusYears(18L),
+                address,
+                ""
+        );
+    }
+
+    private StayForm initializeStayForm() {
+        StayForm stayForm = new StayForm();
+        //Payment Information
+        stayForm.setCardHolderName("Franz Huber");
+        stayForm.setCardNumber("1234 5678 9012 3456");
+        stayForm.setCardValidThru("05/24");
+        stayForm.setCardCvc("123");
+        stayForm.setPaymentType("CASH");
+        //Guest Information
+        stayForm.setSalutation("MR");
+        stayForm.setFirstName("Fritz");
+        stayForm.setLastName("Mayer");
+        stayForm.setDateOfBirth(LocalDate.now().minusYears(18L));
+        stayForm.setStreet("Musterstrasse 1");
+        stayForm.setZipcode("6850");
+        stayForm.setCity("Dornbirn");
+        stayForm.setCountry("AT");
+        stayForm.setSpecialNotes("");
+        stayForm.setIsOrganization(false);
+        //Stay Information
+        stayForm.setDepartureDate(LocalDate.now().plusDays(2));
+        stayForm.setNumberOfPersons(1);
+        Map<String, Integer> selectCategoriesRoomCount = new HashMap<>();
+        selectCategoriesRoomCount.put("Business Casual EZ", 1);
+        stayForm.setSelectedCategoriesRoomCount(selectCategoriesRoomCount);
+        return stayForm;
     }
 
     private InvoiceRecipient createGuestAsInvoiceRecipient(Guest guest) {
@@ -674,14 +900,6 @@ public class StayServiceImplTest extends AbstractTest {
                 String.valueOf(Country.AT));
 
         return new InvoiceRecipient("Sarah", "Müller", address);
-    }
-
-    private StayId nextDummyStayIdentity() {
-        return new StayId((nextDummyStayIdentity++).toString());
-    }
-
-    private BookingNo nextDummyBookingIdentity() {
-        return new BookingNo((nextDummyBookingIdentity++).toString());
     }
 
 }
