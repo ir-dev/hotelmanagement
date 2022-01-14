@@ -1,11 +1,14 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import org.springframework.boot.jackson.JsonComponent;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+@JsonComponent
 public final class BookingDTO {
     private BookingDetailsDTO details;
     private String bookingNo;
@@ -20,38 +23,47 @@ public final class BookingDTO {
         return new BookingDTO.Builder();
     }
 
+    @JsonGetter()
     public BookingDetailsDTO details() {
         return this.details;
     }
 
+    @JsonGetter
     public String bookingNo() {
         return this.bookingNo;
     }
 
+    @JsonGetter
     public String bookingState() {
         return this.bookingState;
     }
 
+    @JsonGetter
     public LocalDate arrivalDate() {
         return this.arrivalDate;
     }
 
+    @JsonGetter
     public LocalDate departureDate() {
         return this.departureDate;
     }
 
+    @JsonGetter
     public LocalTime arrivalTime() {
         return this.arrivalTime;
     }
 
+    @JsonGetter
     public Integer numberOfPersons() {
         return this.numberOfPersons;
     }
 
+    @JsonGetter
     public Integer numberOfBookedRooms() {
         return this.numberOfBookedRooms;
     }
 
+    @JsonGetter
     public String getBookingStateTextColorClass() {
         Objects.requireNonNull(this.bookingState);
 
