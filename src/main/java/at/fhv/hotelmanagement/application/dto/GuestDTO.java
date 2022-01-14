@@ -80,7 +80,7 @@ public final class GuestDTO {
             if (this.instance.isOrganization) {
                 Organization organization = guest.getOrganization().get();
                 this.instance.organizationName = organization.getOrganizationName();
-                this.instance.discountRate = organization.getDiscountRate();
+                this.instance.discountRate = organization.getDiscountRate().multiply(BigDecimal.valueOf(100)).stripTrailingZeros().setScale(0);
             }
             this.instance.salutation = String.valueOf(guest.getSalutation());
             this.instance.firstName = guest.getFirstName();
