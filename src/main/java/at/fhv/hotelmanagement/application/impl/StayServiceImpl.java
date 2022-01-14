@@ -247,24 +247,20 @@ public class StayServiceImpl implements StayService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    @Override
-    public InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm) {
 
+    private InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm) {
         Address address = new Address(
                 invoiceRecipientForm.getStreet(),
                 invoiceRecipientForm.getZipcode(),
                 invoiceRecipientForm.getCity(),
                 invoiceRecipientForm.getCountry()
         );
-
-        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+        return new InvoiceRecipient(
                 invoiceRecipientForm.getFirstName(),
                 invoiceRecipientForm.getLastName(),
                 address);
-
-        return invoiceRecipient;
     }
+
 
     @Transactional(readOnly = true)
     @Override
@@ -284,9 +280,10 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipient invoiceRecipient) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipient(invoiceRecipientForm);
 
         Map<Category, Integer> selectedLineItemProductsCount = CategoryConverter.convertToSelectedCategoriesRoomCount(selectedLineItemProductNamesCount);
 
@@ -295,7 +292,8 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipient invoiceRecipient) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
+    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
+        InvoiceRecipient invoiceRecipient = createInvoiceRecipient(invoiceRecipientForm);
         this.stayRepository.storeRecipient(invoiceRecipient);
 
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
