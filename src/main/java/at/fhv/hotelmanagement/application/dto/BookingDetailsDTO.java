@@ -2,7 +2,7 @@ package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.util.Map;
@@ -22,29 +22,29 @@ public final class BookingDetailsDTO {
         return new BookingDetailsDTO.Builder();
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public Map<String, Integer> selectedCategoriesRoomCount() {
         return this.selectedCategoriesRoomCount;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public GuestDTO guest() {
         return this.guest;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String cardHolderName() { return this.cardHolderName; }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String cardNumber() { return this.cardNumber; }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String cardValidThru() { return this.cardValidThru; }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String cardCvc() { return this.cardCvc; }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String paymentType() { return this.paymentType; }
 
     private BookingDetailsDTO() {

@@ -2,7 +2,7 @@ package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import org.springframework.boot.jackson.JsonComponent;
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,47 +23,47 @@ public final class BookingDTO {
         return new BookingDTO.Builder();
     }
 
-    @JsonGetter()
+    @JsonProperty(required = true)
     public BookingDetailsDTO details() {
         return this.details;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String bookingNo() {
         return this.bookingNo;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String bookingState() {
         return this.bookingState;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public LocalDate arrivalDate() {
         return this.arrivalDate;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public LocalDate departureDate() {
         return this.departureDate;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public LocalTime arrivalTime() {
         return this.arrivalTime;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public Integer numberOfPersons() {
         return this.numberOfPersons;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public Integer numberOfBookedRooms() {
         return this.numberOfBookedRooms;
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String getBookingStateTextColorClass() {
         Objects.requireNonNull(this.bookingState);
 

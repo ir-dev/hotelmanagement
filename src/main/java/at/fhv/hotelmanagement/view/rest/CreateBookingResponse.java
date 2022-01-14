@@ -1,6 +1,6 @@
 package at.fhv.hotelmanagement.view.rest;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.boot.jackson.JsonComponent;
 
 @JsonComponent
@@ -29,12 +29,12 @@ public class CreateBookingResponse {
         return new CreateBookingResponse(e.getMessage());
     }
 
-    @JsonGetter
+    @JsonProperty(required = true)
     public String status() {
         return this.status;
     }
 
-    @JsonGetter
+    @JsonProperty
     public String message() {
         return this.message;
     }
