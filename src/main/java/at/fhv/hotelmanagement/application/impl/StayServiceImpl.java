@@ -247,6 +247,24 @@ public class StayServiceImpl implements StayService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public InvoiceRecipient createInvoiceRecipient(InvoiceRecipientForm invoiceRecipientForm) {
+
+        Address address = new Address(
+                invoiceRecipientForm.getStreet(),
+                invoiceRecipientForm.getZipcode(),
+                invoiceRecipientForm.getCity(),
+                invoiceRecipientForm.getCountry()
+        );
+
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                invoiceRecipientForm.getFirstName(),
+                invoiceRecipientForm.getLastName(),
+                address);
+
+        return invoiceRecipient;
+    }
 
     @Transactional(readOnly = true)
     @Override

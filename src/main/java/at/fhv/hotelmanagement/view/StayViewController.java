@@ -276,18 +276,7 @@ public class StayViewController {
             @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) throws GenerateInvoiceException {
 
-        Address address = new Address(
-                invoiceRecipientForm.getStreet(),
-                invoiceRecipientForm.getZipcode(),
-                invoiceRecipientForm.getCity(),
-                invoiceRecipientForm.getCountry()
-        );
-
-        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
-                invoiceRecipientForm.getFirstName(),
-                invoiceRecipientForm.getLastName(),
-                address
-        );
+        InvoiceRecipient invoiceRecipient = this.stayService.createInvoiceRecipient(invoiceRecipientForm);
 
         InvoiceDTO invoiceDto = null;
         try {
