@@ -109,7 +109,7 @@ public class StayServiceImplTest extends AbstractTest {
     void given_stayform_with_booking_and_guest_with25percentdiscount_when_createstayforbooking_then_booking_closed() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
         //given
         Booking booking = createBookingDummy();
-        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(25));
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(0.25));
         List<Category> categories = createCategoriesDummy();
         BookingDTO bookingDTO = BookingDTO.builder()
                 .withBookingEntity(booking)
@@ -136,7 +136,7 @@ public class StayServiceImplTest extends AbstractTest {
     void given_stayform_with_booking_and_guest_with150percentdiscount_when_createstayforbooking_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
         //given
         Booking booking = createBookingDummy();
-        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(150));
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(1.5));
         List<Category> categories = createCategoriesDummy();
         BookingDTO bookingDTO = BookingDTO.builder()
                 .withBookingEntity(booking)
@@ -162,7 +162,7 @@ public class StayServiceImplTest extends AbstractTest {
     void given_stayform_and_guest_withminus20percentdiscount_when_createstayforbooking_then_throws() throws CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, RoomAssignmentException {
         //given
         Booking booking = createBookingDummy();
-        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(-20));
+        Guest guest = createGuestWithOrganizationDummy(BigDecimal.valueOf(-0.2));
         List<Category> categories = createCategoriesDummy();
         BookingDTO bookingDTO = BookingDTO.builder()
                 .withBookingEntity(booking)
