@@ -276,19 +276,17 @@ public class StayViewController {
             @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) throws GenerateInvoiceException {
 
-        InvoiceRecipient invoiceRecipient = this.stayService.createInvoiceRecipient(invoiceRecipientForm);
-
         InvoiceDTO invoiceDto = null;
         try {
             if (!isPreview) {
                 Map<String, String> redirectParams = new HashMap<>();
-                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipient));
+                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipientForm));
 
                 return redirect(STAY_INVOICE_URL, redirectParams);
             }
 
             model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
-            invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipient);
+            invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipientForm);
 
         } catch (EntityNotFoundException e) {
             return redirectError(e.getMessage());
