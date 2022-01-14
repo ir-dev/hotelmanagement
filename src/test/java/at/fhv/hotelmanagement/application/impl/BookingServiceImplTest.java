@@ -6,6 +6,7 @@ import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
+import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
@@ -14,6 +15,7 @@ import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
+import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,8 +42,8 @@ public class BookingServiceImplTest extends AbstractTest {
     @MockBean
     private GuestRepository guestRepository;
 
-
-    private static Integer nextDummyBookingIdentity = 1;
+    @MockBean
+    private CategoryRepository categoryRepository;
 
     @Test
     void given_emptyrepository_when_fetchingallbookings_then_empty() {
@@ -174,18 +175,97 @@ public class BookingServiceImplTest extends AbstractTest {
         }, "NoSuchElementException was expected");
     }
 
+    @Test
+    void given_bookingform_when_createBooking_then_not_throws() throws RoomAlreadyExistsException {
+        //given
+        BookingForm bookingForm = initializeBookingForm();
+        Category category = createCategoryDummy();
+
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
+
+        //when..then
+        assertDoesNotThrow(() -> {
+            this.bookingsService.createBooking(bookingForm);
+        });
+    }
+
+    @Test
+    void given_bookingform_with25percentdiscount_when_createBooking_then_throws() throws RoomAlreadyExistsException {
+        //given
+        Category category = createCategoryDummy();
+        BookingForm bookingForm = initializeBookingForm();
+        bookingForm.setIsOrganization(true);
+        bookingForm.setOrganizationName("FHV");
+        bookingForm.setDiscountRate(BigDecimal.valueOf(25));
+
+        Mockito.when(this.categoryRepository.findByName(category.getName())).thenReturn(Optional.of(category));
+
+        //when..then
+        assertDoesNotThrow(() -> {
+            this.bookingsService.createBooking(bookingForm);
+        });
+    }
+
+    @Test
+    void given_bookingform_with150percentdiscount_when_createBooking_then_throws() {
+        //given
+        BookingForm bookingForm = initializeBookingForm();
+        bookingForm.setIsOrganization(true);
+        bookingForm.setOrganizationName("FHV");
+        bookingForm.setDiscountRate(BigDecimal.valueOf(150));
+
+        //when..then
+        assertThrows(CreateGuestException.class, () -> {
+            this.bookingsService.createBooking(bookingForm);
+        }, "CreateGuestException was expected");
+    }
+
+    @Test
+    void given_bookingform_withminus20percentdiscount_when_createBooking_then_throws() {
+        //given
+        BookingForm bookingForm = initializeBookingForm();
+        bookingForm.setIsOrganization(true);
+        bookingForm.setOrganizationName("FHV");
+        bookingForm.setDiscountRate(BigDecimal.valueOf(-20));
+
+        //when..then
+        assertThrows(CreateGuestException.class, () -> {
+            this.bookingsService.createBooking(bookingForm);
+        }, "CreateGuestException was expected");
+    }
+
+    @Test
+    void given_bookingform_and_nocategoryinrepository_when_createBooking_then_throws() {
+        //given
+        BookingForm bookingForm = initializeBookingForm();
+
+        //when..then
+        assertThrows(NoSuchElementException.class, () -> {
+            this.bookingsService.createBooking(bookingForm);
+        }, "NoSuchElementException was expected");
+    }
+
 
     private Guest createGuestDummy() throws CreateGuestException {
         Address address = new Address("Musterstrasse 1", "6850", "Dornbirn", String.valueOf(Country.AT));
         return GuestFactory.createGuest(
                 new GuestId("1"),
-                null, String.valueOf(Salutation.MS),
+                null,
+                String.valueOf(Salutation.MS),
                 "Fritz",
                 "Mayer",
                 LocalDate.now().minusYears(18L),
                 address,
                 ""
         );
+    }
+
+    private Category createCategoryDummy() throws RoomAlreadyExistsException {
+        Price p1 = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));
+        Category category = CategoryFactory.createCategory(new CategoryId("1"), "Business Casual EZ", "A casual accommodation for business guests.", 1, p1, p1);
+        category.createRoom(new Room(new RoomNumber("100"), RoomState.AVAILABLE));
+        category.createRoom(new Room(new RoomNumber("101"), RoomState.AVAILABLE));
+        return category;
     }
 
 
@@ -204,7 +284,7 @@ public class BookingServiceImplTest extends AbstractTest {
         PaymentInformation paymentInformation = new PaymentInformation("Hans-Peter Mayer", "5432 9876 5678 1234", "12/21", "123", String.valueOf(PaymentType.INVOICE));
 
         return BookingFactory.createBooking(
-                nextDummyBookingIdentity(),
+                new BookingNo("B100000"),
                 arrivalDate,
                 departureDate,
                 arrivalTime,
@@ -215,7 +295,32 @@ public class BookingServiceImplTest extends AbstractTest {
         );
     }
 
-    private BookingNo nextDummyBookingIdentity() {
-        return new BookingNo((nextDummyBookingIdentity++).toString());
+    private BookingForm initializeBookingForm() {
+        BookingForm bookingForm = new BookingForm();
+        //Payment Information
+        bookingForm.setCardHolderName("Franz Huber");
+        bookingForm.setCardNumber("1234 5678 9012 3456");
+        bookingForm.setCardValidThru("05/24");
+        bookingForm.setCardCvc("123");
+        bookingForm.setPaymentType("CASH");
+        //Guest Information
+        bookingForm.setSalutation("MR");
+        bookingForm.setFirstName("Fritz");
+        bookingForm.setLastName("Mayer");
+        bookingForm.setDateOfBirth(LocalDate.now().minusYears(18L));
+        bookingForm.setStreet("Musterstrasse 1");
+        bookingForm.setZipcode("6850");
+        bookingForm.setCity("Dornbirn");
+        bookingForm.setCountry("AT");
+        bookingForm.setSpecialNotes("");
+        bookingForm.setIsOrganization(false);
+        //Stay Information
+        bookingForm.setArrivalDate(LocalDate.now());
+        bookingForm.setDepartureDate(LocalDate.now().plusDays(2));
+        bookingForm.setNumberOfPersons(1);
+        Map<String, Integer> selectCategoriesRoomCount = new HashMap<>();
+        selectCategoriesRoomCount.put("Business Casual EZ", 1);
+        bookingForm.setSelectedCategoriesRoomCount(selectCategoriesRoomCount);
+        return bookingForm;
     }
 }
