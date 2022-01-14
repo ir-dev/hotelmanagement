@@ -2,24 +2,14 @@ package at.fhv.hotelmanagement.view.rest;
 
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.CategoryService;
-import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
-import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import static at.fhv.hotelmanagement.view.GenericViewController.redirect;
-import static at.fhv.hotelmanagement.view.GenericViewController.redirectError;
 
 @RestController
 @RequestMapping("/rest")
@@ -63,7 +53,8 @@ public class BookingViewRestController {
     }
 
     @PostMapping(CREATE_BOOKING_URL)
-    public CreateBookingResponse createBooking(@ModelAttribute BookingForm form) {
+    @ResponseBody
+    public CreateBookingResponse createBooking(@RequestBody BookingForm form) {
         try {
             this.bookingsService.createBooking(form);
             return CreateBookingResponse.success();
