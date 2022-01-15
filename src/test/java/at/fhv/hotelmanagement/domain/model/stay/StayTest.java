@@ -71,12 +71,13 @@ class StayTest extends AbstractTest {
         assertEquals(1, stay.getNumberOfBookedRooms());
 
         assertTrue(stay.isCheckedIn());
+        assertFalse(stay.isCheckedOut());
         assertFalse(stay.isBilled());
         assertThrows(BillingOpenException.class, stay::checkout);
     }
 
     @Test
-    void given_checkedinstay_when_billedandcheckedout_then_returnequalsdetails() throws CreateBookingException, CreateStayException, PriceCurrencyMismatchException, BillingOpenException, RoomAlreadyExistsException, CreateGuestException, GenerateInvoiceException {
+    void given_checkedinstay_when_billedandcheckedout_then_returnequalsdetails() throws CreateBookingException, CreateStayException, PriceCurrencyMismatchException, BillingOpenException, RoomAlreadyExistsException, CreateGuestException {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("2");
@@ -139,11 +140,11 @@ class StayTest extends AbstractTest {
         Invoice finalizedInvoice = stay.getInvoices().stream().findFirst().orElseThrow();
         assertEquals(invoiceRecipient, finalizedInvoice.getInvoiceRecipient());
 
-
         assertEquals(1, stay.getNumberOfBookedRooms());
 
         assertFalse(stay.isCheckedIn());
         assertTrue(stay.isBilled());
+        assertTrue(stay.isCheckedOut());
         assertThrows(IllegalStateException.class, stay::checkout);
     }
 }

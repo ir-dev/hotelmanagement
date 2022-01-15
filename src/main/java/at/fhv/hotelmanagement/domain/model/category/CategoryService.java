@@ -26,10 +26,6 @@ public class CategoryService {
     }
 
     public void releaseRooms(List<RoomNumber> roomNumbers, Set<Category> categories, StayId stayId) throws IllegalArgumentException {
-//        roomNumbers.forEach(roomNumber -> categories.stream()
-//                        .filter((c -> c.getAllRoomNumbers().contains(roomNumber)))
-//                        .findFirst().ifPresent(category -> category.releaseRoom(roomNumber, stayId)));
-
         roomNumbers.forEach(roomNumber -> {
             boolean isHandled = false;
             for (Category category : categories) {
