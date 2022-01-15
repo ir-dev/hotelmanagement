@@ -56,8 +56,9 @@ public class CategoryServiceTest extends AbstractTest {
         assertTrue(categories.get(0).getAvailableRoomNumbers(LocalDate.now(), LocalDate.now().plusDays(3)).isEmpty());
     }
 
+    // TODO: refactor tests
     @Test
-    void given_category_when_releaserooms_then_roomsavailable() throws RoomAlreadyExistsException, RoomAssignmentException {
+    void given_category_when_releaserooms_then_throwsanddoesnotthrow() throws RoomAlreadyExistsException, RoomAssignmentException {
         // given
         List<Category> categories = createCategoriesDummy();
         Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
@@ -78,6 +79,21 @@ public class CategoryServiceTest extends AbstractTest {
                         new StayId("1")));
     }
 
+    @Test
+    void given_category_when_releaserooms_then_roomsfree() throws RoomAlreadyExistsException, RoomAssignmentException {
+        // given
+        List<Category> categories = createCategoriesDummy();
+        Mockito.when(this.categoryRepository.findAll()).thenReturn(categories);
+        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
+        selectedCategoriesRoomCount.put(categories.get(0), 2);
+        this.categoryService.autoAssignRooms(selectedCategoriesRoomCount, LocalDate.now(), LocalDate.now().plusDays(3), new StayId("1"));
+
+        // when
+        this.categoryService.releaseRooms(categories.get(0).getAllRoomNumbers().stream().collect(Collectors.toList()), Set.of(categories.get(0)), new StayId("1"));
+
+        // then
+        assertEquals(2, categories.get(0).getAvailableRoomNumbers(LocalDate.now(), LocalDate.now().plusDays(3)).size());
+    }
 
     private List<Category> createCategoriesDummy() throws RoomAlreadyExistsException {
         Price p1 = Price.of(BigDecimal.valueOf(150), Currency.getInstance("EUR"));
