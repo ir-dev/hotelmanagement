@@ -3,22 +3,133 @@ package at.fhv.hotelmanagement.application.impl;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
 import at.fhv.hotelmanagement.application.dto.CategoryDTO;
+import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import at.fhv.hotelmanagement.domain.model.booking.BookingState;
 import at.fhv.hotelmanagement.domain.model.category.Category;
-import at.fhv.hotelmanagement.domain.model.category.Room;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.stay.Stay;
+import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
+import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class CategoryServiceImpl implements CategoryService {
+    private static final double OVERBOOKING_RATIO = 0.1D;
+
+    @Autowired
+    BookingRepository bookingRepository;
+
+    @Autowired
+    StayRepository stayRepository;
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AvailableCategoryDTO> availableCategoriesForBooking(LocalDate arrivalDate, LocalDate departureDate) {
+        List<Stay> stays = this.stayRepository.findAll();
+        List<Booking> bookings = this.bookingRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAll();
+        Map<String, Integer> reservedCategoriesRoomCount = new HashMap<>();
+
+        for (Stay stay : stays) {
+            if (stay.isCheckedIn()) {
+                LocalDate arrDate = stay.getArrivalDate();
+                LocalDate depDate = stay.getDepartureDate();
+                Map<String, Integer> bookingSelectedCategoriesRoomCount = stay.getSelectedCategoriesRoomCount();
+
+                // (analogue to room.isAvailableForPeriod(LocalDate fromDate, LocalDate toDate))
+                for (Map.Entry<String, Integer> e : bookingSelectedCategoriesRoomCount.entrySet()) {
+                    String k = e.getKey();
+                    Integer v = e.getValue();
+
+                    if (arrivalDate.compareTo(depDate) < 0 && departureDate.compareTo(arrDate) > 0) {
+                        // recognise this bookings categories as reserved
+                        if (!reservedCategoriesRoomCount.containsKey(k)) {
+                            reservedCategoriesRoomCount.put(k, v);
+                        } else {
+                            reservedCategoriesRoomCount.put(k, reservedCategoriesRoomCount.get(k) + v);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Booking booking : bookings) {
+            if (booking.getBookingState() == BookingState.PENDING) {
+                LocalDate arrDate = booking.getArrivalDate();
+                LocalDate depDate = booking.getDepartureDate();
+                Map<String, Integer> bookingSelectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
+
+                // (analogue to room.isAvailableForPeriod(LocalDate fromDate, LocalDate toDate))
+                for (Map.Entry<String, Integer> e : bookingSelectedCategoriesRoomCount.entrySet()) {
+                    String k = e.getKey();
+                    Integer v = e.getValue();
+
+                    if (arrivalDate.compareTo(depDate) < 0 && departureDate.compareTo(arrDate) > 0) {
+                        // recognise this bookings categories as reserved
+                        if (!reservedCategoriesRoomCount.containsKey(k)) {
+                            reservedCategoriesRoomCount.put(k, v);
+                        } else {
+                            reservedCategoriesRoomCount.put(k, reservedCategoriesRoomCount.get(k) + v);
+                        }
+                    }
+                }
+            }
+        }
+
+        // allCategoriesRoomCount * (1 + OVERBOOKING_RATIO) = bookableCategoriesRoomCount
+        Map<String, Integer> allCategoriesRoomCount = categories.stream()
+                .collect(Collectors.toMap(Category::getName, c->c.getAllRoomNumbers().size()));
+        Map<String, Integer> bookableCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> category : allCategoriesRoomCount.entrySet()) {
+            // because of the rounding off, it is not always guaranteed that the overbooking rate
+            // can be reached exactly, but it is guaranteed that it will not be exceeded
+            bookableCategoriesRoomCount.put(category.getKey(), (int) (category.getValue() * (1 + OVERBOOKING_RATIO)));
+        }
+
+        // bookableCategoriesRoomCount - reservedCategoriesRoomCount = availableCategoriesRoomCount
+        Map<String, Integer> availableCategoriesRoomCount = new HashMap<>();
+        for (Map.Entry<String, Integer> category : bookableCategoriesRoomCount.entrySet()) {
+            String k = category.getKey();
+            Integer v =  category.getValue();
+
+            if (!reservedCategoriesRoomCount.containsKey(k)) {
+                availableCategoriesRoomCount.put(k, v);
+            } else {
+                int availableCategoryRoomCount = v - reservedCategoriesRoomCount.get(k);
+
+                if (availableCategoryRoomCount > 0) {
+                    availableCategoriesRoomCount.put(k, availableCategoryRoomCount);
+                }
+            }
+        }
+
+        List<AvailableCategoryDTO> availableCategoriesDto = new ArrayList<>();
+        for (Category category : categories) {
+            String k = category.getName();
+
+            if (availableCategoriesRoomCount.containsKey(k)) {
+                int availableRoomsCount = availableCategoriesRoomCount.get(k);
+
+                if (availableRoomsCount > 0) {
+                    availableCategoriesDto.add(
+                            buildAvailableCategoryDto(category, availableRoomsCount)
+                    );
+                }
+            }
+        }
+
+        return availableCategoriesDto;
+    }
 
     @Transactional(readOnly = true)
     @Override

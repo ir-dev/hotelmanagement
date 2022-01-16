@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface CategoryService {
+    List<AvailableCategoryDTO> availableCategoriesForBooking(LocalDate arrivalDate, LocalDate departureDate);
+
     List<AvailableCategoryDTO> availableCategories(LocalDate arrivalDate, LocalDate departureDate);
 
     List<CategoryDTO> allCategories();
