@@ -97,7 +97,7 @@ public class Stay {
         for (Map.Entry<Category, Integer> selectedLineItemProductCount : selectedLineItemProductsCount.entrySet()) {
             for (Map.Entry<String, Integer> billableLineItemCount : billableLineItemCounts().entrySet()) {
                 if (selectedLineItemProductCount.getKey().getName().equals(billableLineItemCount.getKey())) {
-                    if (selectedLineItemProductCount.getValue() <= 0 && billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
+                    if (selectedLineItemProductCount.getValue() <= 0 || billableLineItemCount.getValue() < selectedLineItemProductCount.getValue()) {
                         throw new RuntimeException("Selected position not billable");
                     }
 
