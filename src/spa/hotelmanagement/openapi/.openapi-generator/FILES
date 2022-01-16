@@ -1,0 +1,14 @@
+.openapi-generator-ignore
+api/BookingViewRestControllerApi.ts
+api/api.ts
+configuration.ts
+git_push.sh
+index.ts
+model/BookingDTO.ts
+model/BookingDetailsDTO.ts
+model/BookingForm.ts
+model/CreateBookingResponse.ts
+model/GuestDTO.ts
+model/LocalTime.ts
+model/models.ts
+variables.ts
