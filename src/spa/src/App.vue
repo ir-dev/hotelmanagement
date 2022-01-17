@@ -1,20 +1,30 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <form>
+    <StayDetails></StayDetails>
+    <RoomAssignment></RoomAssignment>
+  </form>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import StayDetails from "@/components/StayDetails";
+import RoomAssignment from "@/components/RoomAssignment";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    RoomAssignment,
+    StayDetails
   }
 }
 </script>
 
 <style>
+@import './assets/css/bootstrap.min.css';
+@import './assets/css/datepicker.css';
+@import './assets/css/tooplate-style.css';
+@import './assets/font-awesome-4.7.0/css/font-awesome.css';
+@import './assets/font-awesome-4.7.0/css/font-awesome.min.css';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
