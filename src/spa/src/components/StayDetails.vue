@@ -2,28 +2,38 @@
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-1">
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-100">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input
-          name="city"
-          type="text"
-          class="form-control"
-          id="inputCity"
-          placeholder="Type your destination..."
-        />
-      </div>
-      <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
         <input
-          name="check-in"
+          name="arrivalDate"
           type="text"
           class="form-control"
-          id="inputCheckIn"
-          placeholder="Check In"
+          id="arrivalDate"
+          placeholder="Arrival Date"
+        />
+      </div>
+      <div class="form-group tm-form-element tm-form-element-100">
+        <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
+        <input
+          name="departureDate"
+          type="text"
+          class="form-control"
+          id="departureDate"
+          placeholder="Departure Date"
+        />
+      </div>
+      <div class="form-group tm-form-element tm-form-element-100">
+        <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
+        <input
+          name="arrivalTime"
+          type="text"
+          class="form-control"
+          id="arrivalTime"
+          placeholder="Arrival Time"
         />
       </div>
     </div>
     <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-2">
+      <div class="form-group tm-form-element tm-form-element-">
         <select name="adult" class="form-control tm-select" id="adult">
           <option value="">Adult</option>
           <option value="1">1</option>
