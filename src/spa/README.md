@@ -1,4 +1,4 @@
-# hotelmanagement
+# spa
 
 ## Project setup
 ```

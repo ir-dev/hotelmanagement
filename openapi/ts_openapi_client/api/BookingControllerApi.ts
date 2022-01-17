@@ -19,7 +19,7 @@ import { Configuration } from '../configuration';
 /* tslint:disable:no-unused-variable member-ordering */
 
 
-export class BookingViewRestControllerApi {
+export class BookingControllerApi {
     protected basePath = 'http://localhost:8080';
     public defaultHeaders: Array<string> = [];
     public defaultExtraJQueryAjaxSettings?: JQueryAjaxSettings = undefined;
@@ -48,78 +48,32 @@ export class BookingViewRestControllerApi {
 
     /**
      * 
+     * @param arrivalDate 
+     * @param departureDate 
      */
-    public allBookings(extraJQueryAjaxSettings?: JQueryAjaxSettings): JQuery.Promise<
-    { response: JQueryXHR; body: Array<models.BookingDTO>;  },
+    public categories(arrivalDate: string, departureDate: string, extraJQueryAjaxSettings?: JQueryAjaxSettings): JQuery.Promise<
+    { response: JQueryXHR; body: Array<object>;  },
     { response: JQueryXHR; errorThrown: string }
     > {
-        let localVarPath = this.basePath + '/rest/bookings';
+        let localVarPath = this.basePath + '/rest/categories';
 
         let queryParameters: any = {};
         let headerParams: any = {};
-
-        localVarPath = localVarPath + "?" + $.param(queryParameters);
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-            '*/*'
-        ];
-
-
-        let requestOptions: JQueryAjaxSettings = {
-            url: localVarPath,
-            type: 'GET',
-            headers: headerParams,
-            processData: false
-        };
-
-        if (headerParams['Content-Type']) {
-            requestOptions.contentType = headerParams['Content-Type'];
+        // verify required parameter 'arrivalDate' is not null or undefined
+        if (arrivalDate === null || arrivalDate === undefined) {
+            throw new Error('Required parameter arrivalDate was null or undefined when calling categories.');
         }
 
-        if (extraJQueryAjaxSettings) {
-            requestOptions = (<any>Object).assign(requestOptions, extraJQueryAjaxSettings);
+        // verify required parameter 'departureDate' is not null or undefined
+        if (departureDate === null || departureDate === undefined) {
+            throw new Error('Required parameter departureDate was null or undefined when calling categories.');
         }
 
-        if (this.defaultExtraJQueryAjaxSettings) {
-            requestOptions = (<any>Object).assign(requestOptions, this.defaultExtraJQueryAjaxSettings);
+        if (arrivalDate !== null && arrivalDate !== undefined) {
+            queryParameters['arrivalDate'] = arrivalDate.toISOString();
         }
-
-        let dfd = $.Deferred<
-            { response: JQueryXHR; body: Array<models.BookingDTO>;  },
-            { response: JQueryXHR; errorThrown: string }
-        >();
-        $.ajax(requestOptions).then(
-            (data: Array<models.BookingDTO>, textStatus: string, jqXHR: JQueryXHR) =>
-                dfd.resolve({response: jqXHR, body: data}),
-            (xhr: JQueryXHR, textStatus: string, errorThrown: string) =>
-                dfd.reject({response: xhr, errorThrown: errorThrown})
-        );
-        return dfd.promise();
-    }
-
-    /**
-     * 
-     * @param no 
-     */
-    public booking(no: string, extraJQueryAjaxSettings?: JQueryAjaxSettings): JQuery.Promise<
-    { response: JQueryXHR; body: models.BookingDTO;  },
-    { response: JQueryXHR; errorThrown: string }
-    > {
-        let localVarPath = this.basePath + '/rest/booking';
-
-        let queryParameters: any = {};
-        let headerParams: any = {};
-        // verify required parameter 'no' is not null or undefined
-        if (no === null || no === undefined) {
-            throw new Error('Required parameter no was null or undefined when calling booking.');
-        }
-
-        if (no !== null && no !== undefined) {
-            queryParameters['no'] = <string><any>no;
+        if (departureDate !== null && departureDate !== undefined) {
+            queryParameters['departureDate'] = departureDate.toISOString();
         }
 
         localVarPath = localVarPath + "?" + $.param(queryParameters);
@@ -153,11 +107,11 @@ export class BookingViewRestControllerApi {
         }
 
         let dfd = $.Deferred<
-            { response: JQueryXHR; body: models.BookingDTO;  },
+            { response: JQueryXHR; body: Array<object>;  },
             { response: JQueryXHR; errorThrown: string }
         >();
         $.ajax(requestOptions).then(
-            (data: models.BookingDTO, textStatus: string, jqXHR: JQueryXHR) =>
+            (data: Array<object>, textStatus: string, jqXHR: JQueryXHR) =>
                 dfd.resolve({response: jqXHR, body: data}),
             (xhr: JQueryXHR, textStatus: string, errorThrown: string) =>
                 dfd.reject({response: xhr, errorThrown: errorThrown})

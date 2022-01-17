@@ -1,1 +1,203 @@
-{"openapi":"3.0.1","info":{"title":"OpenAPI definition","version":"v0"},"servers":[{"url":"http://localhost:8080/","description":"Generated server url"}],"paths":{"/rest/bookings/create":{"post":{"tags":["booking-view-rest-controller"],"operationId":"createBooking","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookingForm"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CreateBookingResponse"}}}}}}},"/rest/bookings":{"get":{"tags":["booking-view-rest-controller"],"operationId":"allBookings","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/BookingDTO"}}}}}}}},"/rest/booking":{"get":{"tags":["booking-view-rest-controller"],"operationId":"booking","parameters":[{"name":"no","in":"query","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookingDTO"}}}}}}}},"components":{"schemas":{"BookingForm":{"type":"object","properties":{"arrivalDate":{"type":"string","format":"date"},"departureDate":{"type":"string","format":"date"},"arrivalTime":{"$ref":"#/components/schemas/LocalTime"},"numberOfPersons":{"type":"integer","format":"int32"},"selectedCategoriesRoomCount":{"type":"object","additionalProperties":{"type":"integer","format":"int32"}},"isOrganization":{"type":"boolean"},"organizationName":{"type":"string"},"discountRate":{"type":"number"},"salutation":{"type":"string"},"firstName":{"type":"string"},"lastName":{"type":"string"},"dateOfBirth":{"type":"string","format":"date"},"street":{"type":"string"},"zipcode":{"type":"string"},"city":{"type":"string"},"country":{"type":"string"},"specialNotes":{"type":"string"},"cardHolderName":{"type":"string"},"cardNumber":{"type":"string"},"cardValidThru":{"type":"string"},"cardCvc":{"type":"string"},"paymentType":{"type":"string"}}},"LocalTime":{"type":"object","properties":{"hour":{"type":"integer","format":"int32"},"minute":{"type":"integer","format":"int32"},"second":{"type":"integer","format":"int32"},"nano":{"type":"integer","format":"int32"}}},"CreateBookingResponse":{"required":["status"],"type":"object","properties":{"status":{"type":"string"},"message":{"type":"string"}}},"BookingDTO":{"required":["arrivalDate","arrivalTime","bookingNo","bookingState","bookingStateTextColorClass","departureDate","details","numberOfBookedRooms","numberOfPersons"],"type":"object","properties":{"details":{"$ref":"#/components/schemas/BookingDetailsDTO"},"bookingNo":{"type":"string"},"bookingState":{"type":"string"},"arrivalDate":{"type":"string","format":"date"},"departureDate":{"type":"string","format":"date"},"arrivalTime":{"$ref":"#/components/schemas/LocalTime"},"numberOfPersons":{"type":"integer","format":"int32"},"numberOfBookedRooms":{"type":"integer","format":"int32"},"bookingStateTextColorClass":{"type":"string"}}},"BookingDetailsDTO":{"required":["cardCvc","cardHolderName","cardNumber","cardValidThru","guest","paymentType","selectedCategoriesRoomCount"],"type":"object","properties":{"selectedCategoriesRoomCount":{"type":"object","additionalProperties":{"type":"integer","format":"int32"}},"guest":{"$ref":"#/components/schemas/GuestDTO"},"cardHolderName":{"type":"string"},"cardNumber":{"type":"string"},"cardValidThru":{"type":"string"},"cardCvc":{"type":"string"},"paymentType":{"type":"string"}}},"GuestDTO":{"type":"object","properties":{"organization":{"type":"boolean"}}}}}}
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/rest/bookings/create": {
+      "post": {
+        "tags": ["booking-controller"],
+        "operationId": "createBooking",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingForm"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBookingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rest/categories": {
+      "get": {
+        "tags": ["booking-controller"],
+        "operationId": "categories",
+        "parameters": [
+          {
+            "name": "arrivalDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "departureDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailableCategoryDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BookingForm": {
+        "type": "object",
+        "properties": {
+          "arrivalDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "departureDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "arrivalTime": {
+            "$ref": "#/components/schemas/LocalTime"
+          },
+          "numberOfPersons": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selectedCategoriesRoomCount": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "isOrganization": {
+            "type": "boolean"
+          },
+          "organizationName": {
+            "type": "string"
+          },
+          "discountRate": {
+            "type": "number"
+          },
+          "salutation": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "street": {
+            "type": "string"
+          },
+          "zipcode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "specialNotes": {
+            "type": "string"
+          },
+          "cardHolderName": {
+            "type": "string"
+          },
+          "cardNumber": {
+            "type": "string"
+          },
+          "cardValidThru": {
+            "type": "string"
+          },
+          "cardCvc": {
+            "type": "string"
+          },
+          "paymentType": {
+            "type": "string"
+          }
+        }
+      },
+      "LocalTime": {
+        "type": "object",
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minute": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "second": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CreateBookingResponse": {
+        "required": ["status"],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "AvailableCategoryDTO": {
+        "type": "object"
+      }
+    }
+  }
+}
