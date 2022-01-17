@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InvoiceTest extends AbstractTest {
     @Test
-    void given_emptyinvoicedetails_when_createemptyinvoice_then_returnequalsdetails() throws PriceCurrencyMismatchException, GenerateInvoiceException {
+    void given_emptyinvoicedetails_when_createemptyinvoice_then_returnequalsdetails() throws PriceCurrencyMismatchException {
         // given
         InvoiceNo invoiceNo = new InvoiceNo("1");
         Set<InvoiceLine> lineItems = new HashSet<>();
@@ -50,7 +50,7 @@ public class InvoiceTest extends AbstractTest {
     }
 
     @Test
-    void given_invoicedetails_when_createinvoice_then_returnequalsdetails() throws PriceCurrencyMismatchException, GenerateInvoiceException {
+    void given_invoicedetails_when_createinvoice_then_returnequalsdetails() throws PriceCurrencyMismatchException {
         // given
         InvoiceNo invoiceNo = new InvoiceNo("2");
         Set<InvoiceLine> lineItems = new HashSet<>();
