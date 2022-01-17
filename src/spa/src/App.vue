@@ -5,15 +5,12 @@
       <div class="container ie-h-align-center-fix">
         <div class="row">
           <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
-            <form
-              action="index.html"
-              method="get"
-              class="tm-search-form tm-section-pad-2"
-            >
+            <form action="localhost:8080/rest/bookings/create" method="post" class="tm-search-form tm-section-pad-2">
               <StayDetails></StayDetails>
               <RoomAssignment></RoomAssignment>
               <GuestDetails></GuestDetails>
               <PaymentDetails></PaymentDetails>
+              <input type="submit" class="btn" />
             </form>
           </div>
         </div>

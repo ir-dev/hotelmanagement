@@ -3,33 +3,15 @@
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-100">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input
-          name="arrivalDate"
-          type="text"
-          class="form-control"
-          id="arrivalDate"
-          placeholder="Arrival Date"
-        />
+        <input name="arrivalDate" type="text" class="form-control" id="arrivalDate" placeholder="Arrival Date" />
       </div>
       <div class="form-group tm-form-element tm-form-element-100">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input
-          name="departureDate"
-          type="text"
-          class="form-control"
-          id="departureDate"
-          placeholder="Departure Date"
-        />
+        <input name="departureDate" type="text" class="form-control" id="departureDate" placeholder="Departure Date" />
       </div>
       <div class="form-group tm-form-element tm-form-element-100">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input
-          name="arrivalTime"
-          type="text"
-          class="form-control"
-          id="arrivalTime"
-          placeholder="Arrival Time"
-        />
+        <input name="arrivalTime" type="text" class="form-control" id="arrivalTime" placeholder="Arrival Time" />
       </div>
     </div>
     <div class="form-row tm-search-form-row">
@@ -45,9 +27,7 @@
           <option value="">Children</option>
           <option value="0">0</option>
         </select>
-        <i
-          class="fa fa-user tm-form-element-icon tm-form-element-icon-small"
-        ></i>
+        <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-2">
         <select name="room" class="form-control tm-select" id="room">

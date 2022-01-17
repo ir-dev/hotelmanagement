@@ -3,23 +3,11 @@
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-100">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input
-          name="city"
-          type="text"
-          class="form-control"
-          id="inputCity"
-          placeholder="Type your destination..."
-        />
+        <input name="city" type="text" class="form-control" id="inputCity" placeholder="Type your destination..." />
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input
-          name="check-in"
-          type="text"
-          class="form-control"
-          id="inputCheckIn"
-          placeholder="Check In"
-        />
+        <input name="check-in" type="text" class="form-control" id="inputCheckIn" placeholder="Check In" />
       </div>
     </div>
     <div class="form-row tm-search-form-row">
@@ -35,9 +23,7 @@
           <option value="">Children</option>
           <option value="0">0</option>
         </select>
-        <i
-          class="fa fa-user tm-form-element-icon tm-form-element-icon-small"
-        ></i>
+        <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-2">
         <select name="room" class="form-control tm-select" id="room">
