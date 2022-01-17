@@ -1,40 +1,21 @@
 <template>
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-1">
     <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-100">
+      <div class="form-group tm-form-element">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="arrivalDate" type="text" class="form-control" id="arrivalDate" placeholder="Arrival Date" />
+        <input name="arrivalDate" type="date" class="form-control" id="arrivalDate" required>
       </div>
-      <div class="form-group tm-form-element tm-form-element-100">
+      <div class="form-group tm-form-element">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="departureDate" type="text" class="form-control" id="departureDate" placeholder="Departure Date" />
+        <input name="departureDate" type="date" class="form-control" id="departureDate" required>
       </div>
-      <div class="form-group tm-form-element tm-form-element-100">
+      <div class="form-group tm-form-element">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="arrivalTime" type="text" class="form-control" id="arrivalTime" placeholder="Arrival Time" />
+        <input name="arrivalTime" type="time" class="form-control" id="arrivalTime" required>
       </div>
-    </div>
-    <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-">
-        <select name="adult" class="form-control tm-select" id="adult">
-          <option value="">Adult</option>
-          <option value="1">1</option>
-        </select>
+      <div class="form-group tm-form-element">
         <i class="fa fa-2x fa-user tm-form-element-icon"></i>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="children" class="form-control tm-select" id="children">
-          <option value="">Children</option>
-          <option value="0">0</option>
-        </select>
-        <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="room" class="form-control tm-select" id="room">
-          <option value="">Room</option>
-          <option value="1">1</option>
-        </select>
-        <i class="fa fa-2x fa-bed tm-form-element-icon"></i>
+        <input type="number" id="numberOfPersons" class="form-control" min="1" placeholder="2" required>
       </div>
     </div>
   </div>
