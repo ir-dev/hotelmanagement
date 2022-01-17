@@ -22,3 +22,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# categories rest api
+# http://localhost:8080/rest/categories?arrivalDate=17/01/2022&departureDate=20/01/2022
