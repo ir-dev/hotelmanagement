@@ -4,6 +4,7 @@ api/api.ts
 configuration.ts
 git_push.sh
 index.ts
+model/AvailableCategoryDTO.ts
 model/BookingForm.ts
 model/CreateBookingResponse.ts
 model/LocalTime.ts

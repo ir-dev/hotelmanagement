@@ -52,7 +52,7 @@ export class BookingControllerApi {
      * @param departureDate 
      */
     public categories(arrivalDate: string, departureDate: string, extraJQueryAjaxSettings?: JQueryAjaxSettings): JQuery.Promise<
-    { response: JQueryXHR; body: Array<object>;  },
+    { response: JQueryXHR; body: Array<models.AvailableCategoryDTO>;  },
     { response: JQueryXHR; errorThrown: string }
     > {
         let localVarPath = this.basePath + '/rest/categories';
@@ -107,11 +107,11 @@ export class BookingControllerApi {
         }
 
         let dfd = $.Deferred<
-            { response: JQueryXHR; body: Array<object>;  },
+            { response: JQueryXHR; body: Array<models.AvailableCategoryDTO>;  },
             { response: JQueryXHR; errorThrown: string }
         >();
         $.ajax(requestOptions).then(
-            (data: Array<object>, textStatus: string, jqXHR: JQueryXHR) =>
+            (data: Array<models.AvailableCategoryDTO>, textStatus: string, jqXHR: JQueryXHR) =>
                 dfd.resolve({response: jqXHR, body: data}),
             (xhr: JQueryXHR, textStatus: string, errorThrown: string) =>
                 dfd.reject({response: xhr, errorThrown: errorThrown})

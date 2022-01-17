@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@JsonComponent
 public final class BookingDTO {
     private BookingDetailsDTO details;
     private String bookingNo;
@@ -23,47 +22,38 @@ public final class BookingDTO {
         return new BookingDTO.Builder();
     }
 
-    @JsonProperty(required = true)
     public BookingDetailsDTO details() {
         return this.details;
     }
 
-    @JsonProperty(required = true)
     public String bookingNo() {
         return this.bookingNo;
     }
 
-    @JsonProperty(required = true)
     public String bookingState() {
         return this.bookingState;
     }
 
-    @JsonProperty(required = true)
     public LocalDate arrivalDate() {
         return this.arrivalDate;
     }
 
-    @JsonProperty(required = true)
     public LocalDate departureDate() {
         return this.departureDate;
     }
 
-    @JsonProperty(required = true)
     public LocalTime arrivalTime() {
         return this.arrivalTime;
     }
 
-    @JsonProperty(required = true)
     public Integer numberOfPersons() {
         return this.numberOfPersons;
     }
 
-    @JsonProperty(required = true)
     public Integer numberOfBookedRooms() {
         return this.numberOfBookedRooms;
     }
 
-    @JsonProperty(required = true)
     public String getBookingStateTextColorClass() {
         Objects.requireNonNull(this.bookingState);
 
