@@ -1,5 +1,5 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-2">
+  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-3">
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-100">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
@@ -52,7 +52,7 @@
 
 <script>
 export default {
-  name: "RoomAssignment",
+  name: "GuestDetails",
 };
 </script>
 
