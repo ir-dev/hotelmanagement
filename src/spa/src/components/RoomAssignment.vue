@@ -1,36 +1,26 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-2">
-    <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-100">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="city" type="text" class="form-control" id="inputCity" placeholder="Type your destination..." />
-      </div>
-      <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="check-in" type="text" class="form-control" id="inputCheckIn" placeholder="Check In" />
-      </div>
-    </div>
-    <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="adult" class="form-control tm-select" id="adult">
-          <option value="">Adult</option>
-          <option value="1">1</option>
-        </select>
-        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="children" class="form-control tm-select" id="children">
-          <option value="">Children</option>
-          <option value="0">0</option>
-        </select>
-        <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="room" class="form-control tm-select" id="room">
-          <option value="">Room</option>
-          <option value="1">1</option>
-        </select>
-        <i class="fa fa-2x fa-bed tm-form-element-icon"></i>
+  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+          <div class="tm-article-carousel">
+            <article class="tm-bg-white mr-2 tm-carousel-item">
+              <img src="../assets/img/business-casual-ez.jpg" alt="Image" class="img-fluid" />
+              <div class="tm-article-pad">
+                <header><h3 class="text-uppercase tm-article-title-2">Business Casual Single Bed</h3></header>
+                <p>asdf</p>
+              </div>
+            </article>
+            <article class="tm-bg-white mr-2 tm-carousel-item">
+              <img src="../assets/img/honeymoon-suite-dz.jpg" alt="Image" class="img-fluid" />
+              <div class="tm-article-pad">
+                <header><h3 class="text-uppercase tm-article-title-2">Honeymoon Suite DZ</h3></header>
+                <p>asdf</p>
+                <a href="#" class="text-uppercase btn-primary tm-btn-primary">View Detail</a>
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -40,6 +40,10 @@ export default {
 </script>
 
 <style>
+@import 'assets/slick/slick.less';
+@import 'assets/slick/slick.scss';
+@import 'assets/slick/slick.css';
+@import 'assets/slick/slick-theme.css';
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/datepicker.css";
 @import "assets/css/tooplate-style.css";
