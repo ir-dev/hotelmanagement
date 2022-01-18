@@ -23,9 +23,9 @@ public class BookingFactoryTest extends AbstractTest {
     void given_bookingdetails_when_createbookingfromfactory_then_detailsequals() throws CreateBookingException, RoomAlreadyExistsException {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price price = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, price, price);
@@ -60,13 +60,13 @@ public class BookingFactoryTest extends AbstractTest {
     void given_bookingwithinvalidvalidationconstraint_when_createbookingfromfactory_then_throwscreatebookingexception() throws RoomAlreadyExistsException {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1);
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1);
         LocalDate arrivalDateMinus1d = arrivalDate.minusDays(1L);
         LocalDate arrivalDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus2d = arrivalDate.plusDays(2L);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price price = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, price, price);

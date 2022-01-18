@@ -241,9 +241,9 @@ class StayTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("2");
-        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(5);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 5;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
@@ -312,7 +312,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", LocalDate.now().minusYears(18L), address, "");
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
                 guest.getFirstName(),
                 guest.getLastName(),

@@ -18,7 +18,7 @@ public class GuestTest extends AbstractTest {
         Salutation salutation = Salutation.MS;
         String firstName = ("Anna");
         String lastName = ("Bauer");
-        LocalDate dateOfBirth = getContextLocalDate().minusYears(18L);
+        LocalDate dateOfBirth = LocalDate.now().minusYears(18L);
         Address address = new Address("Musterstraße 5", "6900", "Bregenz", String.valueOf(Country.AT));
         String specialNotes = ("Frühstück aufs Zimmer");
 
