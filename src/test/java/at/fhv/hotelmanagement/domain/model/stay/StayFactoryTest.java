@@ -173,17 +173,15 @@ public class StayFactoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staydetailswithinvalidvalidationconstraint_when_createstayforwalkinfromfactory_then_throwscreatestayexception() throws RoomAlreadyExistsException, CreateBookingException {
+    void given_staydetailswithinvalidvalidationconstraint_when_createstayforwalkinfromfactory_then_throwscreatestayexception() throws RoomAlreadyExistsException {
         // given
         StayId stayId = new StayId("1");
-        BookingNo bookingNo = new BookingNo("1");
         LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(1L);
         LocalDate arrivalDateMinus1d = arrivalDate.minusDays(1L);
         LocalDate arrivalDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus2d = arrivalDate.plusDays(2L);
-        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
@@ -212,6 +210,10 @@ public class StayFactoryTest extends AbstractTest {
 
         //test numberOfPersons < totalMaxPersons
         assertThrows(CreateStayException.class, () -> StayFactory.createStayForWalkIn(stayId, arrivalDate, departureDate, 5, selectedCategoriesRoomCount, guestId, paymentInformation));
+
+        //test selectedCategoryRoomCount = -1
+        selectedCategoriesRoomCount.put(category, -1);
+        assertThrows(CreateStayException.class, () -> StayFactory.createStayForWalkIn(stayId, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation));
 
         //test availableRoomCount < selectedCategoryRoomCount
         selectedCategoriesRoomCount.put(category, 4);

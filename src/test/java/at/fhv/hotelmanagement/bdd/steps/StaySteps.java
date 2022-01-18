@@ -12,6 +12,7 @@ import at.fhv.hotelmanagement.domain.model.stay.*;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
+import at.fhv.hotelmanagement.view.forms.InvoiceRecipientForm;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -130,8 +131,15 @@ public class StaySteps extends ScenarioTXBoundary {
             "and zipcode {word} and city {word} and country {word} with all selected line items")
     public void chargeStay(String stayId, String firstName, String lastName, String street, String zipcode,
                            String city, String country, Map<String, Integer> selectedLineItemProductNamesCount) throws GenerateInvoiceException {
+        InvoiceRecipientForm invoiceRecipientForm = new InvoiceRecipientForm();
+        invoiceRecipientForm.setFirstName(firstName);
+        invoiceRecipientForm.setLastName(lastName);
+        invoiceRecipientForm.setCity(city);
+        invoiceRecipientForm.setStreet(street);
+        invoiceRecipientForm.setZipcode(zipcode);
+        invoiceRecipientForm.setCountry(country);
         try {
-            this.stayService.chargeStay(stayId, selectedLineItemProductNamesCount, new InvoiceRecipient(firstName, lastName, new Address(street, zipcode, city, country)));
+            this.stayService.chargeStay(stayId, selectedLineItemProductNamesCount, invoiceRecipientForm);
         } catch (EntityNotFoundException | PriceCurrencyMismatchException e) {
             e.printStackTrace();
         }
