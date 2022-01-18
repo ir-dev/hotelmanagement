@@ -44,20 +44,16 @@ public class CategoryServiceImpl implements CategoryService {
             if (stay.isCheckedIn()) {
                 LocalDate arrDate = stay.getArrivalDate();
                 LocalDate depDate = stay.getDepartureDate();
-                Map<String, Integer> bookingSelectedCategoriesRoomCount = stay.getSelectedCategoriesRoomCount();
+                Map<String, Integer> selectedCategoriesRoomCount = stay.getSelectedCategoriesRoomCount();
 
                 // (analogue to room.isAvailableForPeriod(LocalDate fromDate, LocalDate toDate))
-                for (Map.Entry<String, Integer> e : bookingSelectedCategoriesRoomCount.entrySet()) {
+                for (Map.Entry<String, Integer> e : selectedCategoriesRoomCount.entrySet()) {
                     String k = e.getKey();
                     Integer v = e.getValue();
 
                     if (arrivalDate.compareTo(depDate) < 0 && departureDate.compareTo(arrDate) > 0) {
                         // recognise this bookings categories as reserved
-                        if (!reservedCategoriesRoomCount.containsKey(k)) {
-                            reservedCategoriesRoomCount.put(k, v);
-                        } else {
-                            reservedCategoriesRoomCount.put(k, reservedCategoriesRoomCount.get(k) + v);
-                        }
+                        reservedCategoriesRoomCount.put(k, v); // no duplicate keys at this point
                     }
                 }
             }
@@ -67,10 +63,10 @@ public class CategoryServiceImpl implements CategoryService {
             if (booking.getBookingState() == BookingState.PENDING) {
                 LocalDate arrDate = booking.getArrivalDate();
                 LocalDate depDate = booking.getDepartureDate();
-                Map<String, Integer> bookingSelectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
+                Map<String, Integer> selectedCategoriesRoomCount = booking.getSelectedCategoriesRoomCount();
 
                 // (analogue to room.isAvailableForPeriod(LocalDate fromDate, LocalDate toDate))
-                for (Map.Entry<String, Integer> e : bookingSelectedCategoriesRoomCount.entrySet()) {
+                for (Map.Entry<String, Integer> e : selectedCategoriesRoomCount.entrySet()) {
                     String k = e.getKey();
                     Integer v = e.getValue();
 
@@ -86,11 +82,11 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
 
-        // allCategoriesRoomCount * (1 + OVERBOOKING_RATIO) = bookableCategoriesRoomCount
-        Map<String, Integer> allCategoriesRoomCount = categories.stream()
-                .collect(Collectors.toMap(Category::getName, c->c.getAllRoomNumbers().size()));
+        // allAvailableCategoriesRoomCount * floor(1 + OVERBOOKING_RATIO) = bookableCategoriesRoomCount
+        Map<String, Integer> allAvailableCategoriesRoomCount = categories.stream()
+                .collect(Collectors.toMap(Category::getName, c -> c.getAllRoomNumbers().size()));
         Map<String, Integer> bookableCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> category : allCategoriesRoomCount.entrySet()) {
+        for (Map.Entry<String, Integer> category : allAvailableCategoriesRoomCount.entrySet()) {
             // because of the rounding off, it is not always guaranteed that the overbooking rate
             // can be reached exactly, but it is guaranteed that it will not be exceeded
             bookableCategoriesRoomCount.put(category.getKey(), (int) (category.getValue() * (1 + OVERBOOKING_RATIO)));
