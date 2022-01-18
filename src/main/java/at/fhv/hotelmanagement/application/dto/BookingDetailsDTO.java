@@ -8,7 +8,6 @@ import org.springframework.boot.jackson.JsonComponent;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonComponent
 public final class BookingDetailsDTO {
     private Map<String, Integer> selectedCategoriesRoomCount;
     private GuestDTO guest;
@@ -22,29 +21,22 @@ public final class BookingDetailsDTO {
         return new BookingDetailsDTO.Builder();
     }
 
-    @JsonProperty(required = true)
     public Map<String, Integer> selectedCategoriesRoomCount() {
         return this.selectedCategoriesRoomCount;
     }
 
-    @JsonProperty(required = true)
     public GuestDTO guest() {
         return this.guest;
     }
 
-    @JsonProperty(required = true)
     public String cardHolderName() { return this.cardHolderName; }
 
-    @JsonProperty(required = true)
     public String cardNumber() { return this.cardNumber; }
 
-    @JsonProperty(required = true)
     public String cardValidThru() { return this.cardValidThru; }
 
-    @JsonProperty(required = true)
     public String cardCvc() { return this.cardCvc; }
 
-    @JsonProperty(required = true)
     public String paymentType() { return this.paymentType; }
 
     private BookingDetailsDTO() {

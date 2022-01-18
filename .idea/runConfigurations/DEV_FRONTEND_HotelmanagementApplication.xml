@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DEV-FRONTEND HotelmanagementApplication" type="js.build_tools.npm" folderName="DEV">
+    <package-json value="$PROJECT_DIR$/src/spa/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="serve" />
+    </scripts>
+    <arguments value="-- --port=3030 --open" />
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2">
+      <option name="NpmBeforeRunTask" enabled="true">
+        <package-json value="$PROJECT_DIR$/src/spa/package.json" />
+        <command value="install" />
+        <arguments value="--production=false" />
+        <node-interpreter value="project" />
+        <envs />
+      </option>
+    </method>
+  </configuration>
+</component>

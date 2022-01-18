@@ -1,7 +1,11 @@
 package at.fhv.hotelmanagement.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.boot.jackson.JsonComponent;
+
 import java.util.Objects;
 
+@JsonComponent
 public final class AvailableCategoryDTO {
     private String name;
     private String description;
@@ -11,14 +15,17 @@ public final class AvailableCategoryDTO {
         return new AvailableCategoryDTO.Builder();
     }
 
+    @JsonProperty(required = true)
     public String name() {
         return this.name;
     }
 
+    @JsonProperty(required = true)
     public String description() {
         return this.description;
     }
 
+    @JsonProperty(required = true)
     public Integer availableRoomsCount() {
         return this.availableRoomsCount;
     }
@@ -49,9 +56,9 @@ public final class AvailableCategoryDTO {
         }
 
         public AvailableCategoryDTO build() {
-            Objects.requireNonNull(this.instance.name, "name must be set in CategoryDTO");
-            Objects.requireNonNull(this.instance.description, "description must be set in CategoryDTO");
-            Objects.requireNonNull(this.instance.availableRoomsCount, "availableRoomsCount must be set in CategoryDTO");
+            Objects.requireNonNull(this.instance.name, "name must be set in AvailableCategoryDTO");
+            Objects.requireNonNull(this.instance.description, "description must be set in AvailableCategoryDTO");
+            Objects.requireNonNull(this.instance.availableRoomsCount, "availableRoomsCount must be set in AvailableCategoryDTO");
 
             return this.instance;
         }
