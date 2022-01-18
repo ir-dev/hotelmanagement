@@ -31,7 +31,7 @@ export default {
   name: "RoomAssignment",
   data() {
     return {
-      selectedCategoriesRoomCount: ""
+      selectedCategoriesRoomCount: {}
     }
   }
 };

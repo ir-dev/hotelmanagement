@@ -75,7 +75,7 @@ export default {
   name: "GuestDetails",
   data() {
     return {
-      isOrganization: "",
+      isOrganization: true,
       organizationName: "",
       discountRate: "",
       salutation: "",
@@ -86,7 +86,7 @@ export default {
       zipcode: "",
       city: "",
       country: "",
-      specialNotes: "",
+      specialNotes: ""
     }
   }
 };

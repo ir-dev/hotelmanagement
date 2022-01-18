@@ -38,7 +38,7 @@ export default {
       cardNumber: "",
       cardValidThru: "",
       cardCvc: "",
-      paymentType: "",
+      paymentType: ""
     }
   }
 };

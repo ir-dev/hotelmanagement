@@ -29,7 +29,7 @@ export default {
       arrivalDate: "",
       departureDate: "",
       arrivalTime: "",
-      numberOfPersons: "",
+      numberOfPersons: ""
     }
   }
 };

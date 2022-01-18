@@ -5,7 +5,7 @@
       <div class="container ie-h-align-center-fix">
         <div class="row">
           <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
-            <form @submit.prevent="submitForm()" class="tm-search-form tm-section-pad-2">
+            <form @submit.prevent="submitForm" class="tm-search-form tm-section-pad-2">
               <StayDetails></StayDetails>
               <RoomAssignment></RoomAssignment>
               <GuestDetails></GuestDetails>
@@ -34,35 +34,11 @@ export default {
     StayDetails,
     RoomAssignment,
     GuestDetails,
-    PaymentDetails,
+    PaymentDetails
   },
-  // data() {
-    // arrivalDate: String,
-    // departureDate,
-    // arrivalTime,
-    // numberOfPersons,
-    // selectedCategoriesRoomCount,
-    // isOrganization,
-    // organizationName,
-    // discountRate,
-    // salutation,
-    // firstName,
-    // lastName,
-    // dateOfBirth,
-    // street,
-    // zipcode,
-    // city,
-    // country,
-    // specialNotes,
-    // cardHolderName,
-    // cardNumber,
-    // cardValidThru,
-    // cardCvc,
-    // paymentType
-  // },
   methods: {
     async submitForm() {
-      const res = await fetch("http://localhost:8080/rest/bookings/create", {
+      await fetch("http://localhost:8080/rest/bookings/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -87,11 +63,10 @@ export default {
           cardNumber: this.cardNumber,
           cardValidThru: this.cardValidThru,
           cardCvc: this.cardCvc,
-          paymentType: this.paymentType,
-        }),
+          paymentType: this.paymentType
+        })
       });
-      console.log(res)
-    },
+    }
   }
 };
 </script>
