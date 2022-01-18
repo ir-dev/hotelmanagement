@@ -1,5 +1,5 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
+  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-2">
     <div class="container">
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -29,6 +29,11 @@
 <script>
 export default {
   name: "RoomAssignment",
+  data() {
+    return {
+      selectedCategoriesRoomCount: ""
+    }
+  }
 };
 </script>
 

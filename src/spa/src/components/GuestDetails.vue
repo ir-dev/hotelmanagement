@@ -1,36 +1,70 @@
 <template>
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-3">
     <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-100">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="city" type="text" class="form-control" id="inputCity" placeholder="Type your destination..." />
+      <div class="form-group tm-form-element">
+        <label for="isOrganization" class="form-label">Organization</label>
+        <input type="checkbox" id="isOrganization" v-model="isOrganization" class="form-control"/>
       </div>
-      <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="check-in" type="text" class="form-control" id="inputCheckIn" placeholder="Check In" />
+      <div class="form-group tm-form-element">
+        <label for="organizationName" class="form-label">Organization Name</label>
+        <input type="text" id="organizationName" v-model="organizationName" class="form-control" placeholder="FHV" />
+      </div>
+      <div class="form-group tm-form-element">
+        <label for="discountRate" class="form-label">Discount Rate</label>
+        <input type="number" id="discountRate" v-model="discountRate" class="form-control" placeholder="25" />
       </div>
     </div>
     <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="adult" class="form-control tm-select" id="adult">
-          <option value="">Adult</option>
-          <option value="1">1</option>
+      <div class="form-group tm-form-element">
+        <label for="salutation" class="form-label">Salutation</label>
+        <select id="salutation" name="salutation" v-model="salutation">
+          <option value="MR">MR</option>
+          <option value="MS">MS</option>
+          <option value="DIVERSER">DIVERSE</option>
         </select>
-        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
       </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="children" class="form-control tm-select" id="children">
-          <option value="">Children</option>
-          <option value="0">0</option>
-        </select>
-        <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
+      <div class="form-group tm-form-element">
+        <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
+        <label for="dateOfBirth" class="form-label">Date of Birth</label>
+        <input name="dateOfBirth" v-model="dateOfBirth" type="date" class="form-control" id="dateOfBirth">
       </div>
-      <div class="form-group tm-form-element tm-form-element-2">
-        <select name="room" class="form-control tm-select" id="room">
-          <option value="">Room</option>
-          <option value="1">1</option>
+    </div>
+    <div class="form-row tm-search-form-row">
+      <div class="form-group tm-form-element">
+        <label for="firstName" class="form-label">First Name</label>
+        <input type="text" id="firstName" v-model="firstName" class="form-control" placeholder="###" />
+      </div>
+      <div class="form-group tm-form-element">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input type="text" id="lastName" v-model="lastName" class="form-control" placeholder="###" />
+      </div>
+    </div>
+    <div class="form-row tm-search-form-row">
+      <div class="form-group tm-form-element">
+        <label for="street" class="form-label">Street</label>
+        <input type="text" id="street" v-model="street" class="form-control" placeholder="Street 1" />
+      </div>
+      <div class="form-group tm-form-element">
+        <label for="zipcode" class="form-label">Zipcode</label>
+        <input type="text" id="zipcode" v-model="zipcode" class="form-control" placeholder="6900" />
+      </div>
+      <div class="form-group tm-form-element">
+        <label for="city" class="form-label">City</label>
+        <input type="text" id="city" v-model="city" class="form-control" placeholder="Bregenz" />
+      </div>
+    </div>
+    <div class="form-row tm-search-form-row">
+      <div class="form-group tm-form-element">
+        <label for="country" class="form-label">Country</label>
+        <select id="country" name="country" v-model="country">
+          <option value="AT">AT</option>
+          <option value="DE">DE</option>
+          <option value="CH">CH</option>
         </select>
-        <i class="fa fa-2x fa-bed tm-form-element-icon"></i>
+      </div>
+      <div class="form-group tm-form-element">
+        <label for="specialNotes" class="form-label">Special Notes</label>
+        <input type="text" id="specialNotes" v-model="specialNotes" class="form-control"/>
       </div>
     </div>
   </div>
@@ -39,6 +73,22 @@
 <script>
 export default {
   name: "GuestDetails",
+  data() {
+    return {
+      isOrganization: "",
+      organizationName: "",
+      discountRate: "",
+      salutation: "",
+      dateOfBirth: "",
+      firstName: "",
+      lastName: "",
+      street: "",
+      zipcode: "",
+      city: "",
+      country: "",
+      specialNotes: "",
+    }
+  }
 };
 </script>
 
