@@ -13,8 +13,8 @@ public class RoomOccupancyTest extends AbstractTest {
     @Test
     void given_roomdetails_when_createroom_then_detailsequals() {
         //given
-        LocalDate startDate = getContextLocalDate();
-        LocalDate endDate = getContextLocalDate().plusDays(3L);
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(3L);
 
         //when
         RoomOccupancy roomOccupancy = new RoomOccupancy(startDate, endDate, new StayId("1"));

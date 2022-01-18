@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -107,7 +108,7 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
         for (RoomNumber rn : roomNumbersExpected) {
             Room room = new Room(rn, roomState);
             category.createRoom(room);
-            room.occupied(getContextLocalDate(), getContextLocalDate().plusDays(2), new StayId("1"));
+            room.occupied(LocalDate.now(), LocalDate.now().plusDays(2), new StayId("1"));
         }
 
         this.categoryRepository.store(category);

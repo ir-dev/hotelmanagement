@@ -2,8 +2,6 @@ package at.fhv.hotelmanagement.domain.model.category;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-
-import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.stay.StayId;
 
 import org.junit.jupiter.api.Test;
@@ -30,9 +28,9 @@ public class CategoryTest extends AbstractTest {
         Price p1 = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Price p2 = Price.of(BigDecimal.ONE, Currency.getInstance("EUR"));
 
-        LocalDate fromdate = getContextLocalDate();
-        LocalDate todate1 = getContextLocalDate().plusDays(1L);
-        LocalDate todate2 = getContextLocalDate().plusDays(2L);
+        LocalDate fromdate = LocalDate.now();
+        LocalDate todate1 = LocalDate.now().plusDays(1L);
+        LocalDate todate2 = LocalDate.now().plusDays(2L);
 
         //when
         Category category = CategoryFactory.createCategory(categoryId, name, description, maxPersons, p1, p2);

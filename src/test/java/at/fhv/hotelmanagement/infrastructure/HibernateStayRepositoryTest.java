@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -182,7 +183,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );
@@ -195,8 +196,8 @@ class HibernateStayRepositoryTest extends AbstractTest {
 
         Booking booking = BookingFactory.createBooking(
                 nextDummyBookingIdentity(),
-                getContextLocalDate(),
-                getContextLocalDate().plusDays(1L),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1L),
                 null,
                 2,
                 selectedCategoriesRoomCount,

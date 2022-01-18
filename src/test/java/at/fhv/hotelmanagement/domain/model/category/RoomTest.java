@@ -33,7 +33,7 @@ public class RoomTest extends AbstractTest {
         //given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         LocalDate inBetweenPeriod = fromDate.plusDays(1L);
         Room room = new Room(roomNumber, roomState);
@@ -55,7 +55,7 @@ public class RoomTest extends AbstractTest {
         //given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         LocalDate inBetweenPeriod = fromDate.plusDays(1L);
         Room room = new Room(roomNumber, roomState);
@@ -78,7 +78,7 @@ public class RoomTest extends AbstractTest {
         // given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         Room room = new Room(roomNumber, roomState);
         StayId stayId = new StayId("1");
@@ -93,7 +93,7 @@ public class RoomTest extends AbstractTest {
         // given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         Room room = new Room(roomNumber, roomState);
         StayId stayId = new StayId("1");
@@ -119,7 +119,7 @@ public class RoomTest extends AbstractTest {
         // given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         Room room = new Room(roomNumber, roomState);
         StayId stayId = new StayId("1");
@@ -144,7 +144,7 @@ public class RoomTest extends AbstractTest {
         // given
         RoomNumber roomNumber = new RoomNumber("100");
         RoomState roomState = RoomState.AVAILABLE;
-        LocalDate fromDate = getContextLocalDate();
+        LocalDate fromDate = LocalDate.now();
         LocalDate toDate = fromDate.plusDays(5L);
         Room room = new Room(roomNumber, roomState);
         StayId stayId = new StayId("1");

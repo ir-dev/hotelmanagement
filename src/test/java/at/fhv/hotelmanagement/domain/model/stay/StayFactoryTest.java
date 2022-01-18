@@ -28,8 +28,8 @@ public class StayFactoryTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1L);
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1L);
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
@@ -39,7 +39,7 @@ public class StayFactoryTest extends AbstractTest {
         selectedCategoriesRoomCount.put(category, 2);
         GuestId guestId = new GuestId("1");
         PaymentInformation paymentInformation = new PaymentInformation("Anna Bauer", "1234", "12/23", "123", "CASH");
-        Booking booking = BookingFactory.createBooking(bookingNo, arrivalDate, departureDate, getContextLocalTime(), numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
+        Booking booking = BookingFactory.createBooking(bookingNo, arrivalDate, departureDate, LocalTime.now(), numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
 
         // when
         Stay stay = StayFactory.createStayForBooking(stayId, booking, bookingNo, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, guestId, paymentInformation);
@@ -48,7 +48,7 @@ public class StayFactoryTest extends AbstractTest {
         assertEquals(Optional.of(bookingNo), stay.getBookingNo());
         assertEquals(arrivalDate, stay.getArrivalDate());
         assertEquals(departureDate, stay.getDepartureDate());
-        assertEquals(getContextLocalTime(), stay.getArrivalTime());
+        assertEquals(LocalTime.now(), stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
         assertEquals(2, stay.getNumberOfBookedRooms());
         assertEquals(guestId, stay.getGuestId());
@@ -65,8 +65,8 @@ public class StayFactoryTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1L);
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1L);
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
@@ -84,7 +84,7 @@ public class StayFactoryTest extends AbstractTest {
         assertEquals(Optional.empty(), stay.getBookingNo());
         assertEquals(arrivalDate, stay.getArrivalDate());
         assertEquals(departureDate, stay.getDepartureDate());
-        assertEquals(getContextLocalTime(), stay.getArrivalTime());
+        assertEquals(LocalTime.now(), stay.getArrivalTime());
         assertEquals(numberOfPersons, stay.getNumberOfPersons());
         assertEquals(2, stay.getNumberOfBookedRooms());
         assertEquals(guestId, stay.getGuestId());
@@ -101,13 +101,13 @@ public class StayFactoryTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(1L);
         LocalDate arrivalDateMinus1d = arrivalDate.minusDays(1L);
         LocalDate arrivalDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus2d = arrivalDate.plusDays(2L);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
@@ -129,13 +129,13 @@ public class StayFactoryTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(1L);
         LocalDate arrivalDateMinus1d = arrivalDate.minusDays(1L);
         LocalDate arrivalDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus2d = arrivalDate.plusDays(2L);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
@@ -177,13 +177,13 @@ public class StayFactoryTest extends AbstractTest {
         // given
         StayId stayId = new StayId("1");
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
+        LocalDate arrivalDate = LocalDate.now();
         LocalDate departureDate = arrivalDate.plusDays(1L);
         LocalDate arrivalDateMinus1d = arrivalDate.minusDays(1L);
         LocalDate arrivalDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus1d = arrivalDate.plusDays(1L);
         LocalDate departureDatePlus2d = arrivalDate.plusDays(2L);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(new CategoryId("1"), "Honeymoon Suite DZ", "", 2, p, p);
