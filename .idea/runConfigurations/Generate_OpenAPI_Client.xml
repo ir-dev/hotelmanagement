@@ -5,7 +5,7 @@
     <option name="customJreEnabled" value="false" />
     <option name="customTemplatesPath" value="" />
     <option name="enableDebugLogging" value="false" />
-    <option name="generateToPath" value="C:\Users\Ivo\OneDrive - FH Vorarlberg\FHV Tuition Files\Semester 3 (WS 2021)\Software Engineering\project\hotelmanagement\openapi\ts_openapi_client" />
+    <option name="generateToPath" value="$PROJECT_DIR$\openapi\ts_openapi_client" />
     <option name="generationParameters">
       <list>
         <CliArgumentViewModel>
@@ -14,10 +14,10 @@
         </CliArgumentViewModel>
       </list>
     </option>
-    <option name="generatorPath" value="C:\Users\Ivo\OneDrive - FH Vorarlberg\FHV Tuition Files\Semester 3 (WS 2021)\Software Engineering\project\hotelmanagement\openapi\openapi-generator-cli.jar" />
+    <option name="generatorPath" value="$PROJECT_DIR$\openapi\openapi-generator-cli.jar" />
     <option name="jdkPath" value="Default" />
     <option name="language" value="typescript-jquery" />
-    <option name="specificationPath" value="C:\Users\Ivo\OneDrive - FH Vorarlberg\FHV Tuition Files\Semester 3 (WS 2021)\Software Engineering\project\hotelmanagement\openapi\openapi.json" />
+    <option name="specificationPath" value="$PROJECT_DIR$\openapi\openapi.json" />
     <method v="2" />
   </configuration>
 </component>
