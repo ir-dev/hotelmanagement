@@ -27,10 +27,10 @@ public class BookingController {
 
     @GetMapping(CATEGORIES_URL)
     @ResponseBody
-    public List<AvailableCategoryDTO> categories(
+    public List<AvailableCategoryDTO> availableCategoriesForBooking(
             @RequestParam("arrivalDate") LocalDate arrivalDate,
             @RequestParam("departureDate") LocalDate departureDate) {
-        return this.categoryService.availableCategories(arrivalDate, departureDate);
+        return this.categoryService.availableCategoriesForBooking(arrivalDate, departureDate);
     }
 
     @CrossOrigin(origins = "http://localhost:8081")
