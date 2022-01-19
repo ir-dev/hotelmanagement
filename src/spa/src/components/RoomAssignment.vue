@@ -1,28 +1,29 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
-          <div class="tm-article-carousel">
-            <article class="tm-bg-white mr-2 tm-carousel-item">
-              <img src="../assets/img/business-casual-ez.jpg" alt="Image" class="img-fluid" />
-              <div class="tm-article-pad">
-                <header><h3 class="text-uppercase tm-article-title-2">Business Casual Single Bed</h3></header>
-                <p>asdf</p>
-              </div>
-            </article>
-            <article class="tm-bg-white mr-2 tm-carousel-item">
-              <img src="../assets/img/honeymoon-suite-dz.jpg" alt="Image" class="img-fluid" />
-              <div class="tm-article-pad">
-                <header><h3 class="text-uppercase tm-article-title-2">Honeymoon Suite DZ</h3></header>
-                <p>asdf</p>
-                <a href="#" class="text-uppercase btn-primary tm-btn-primary">View Detail</a>
-              </div>
-            </article>
-          </div>
+  <div id="tm-section-2">
+  <div class="card">
+    <div class="card-horizontal">
+      <div class="img-square-wrapper">
+        <img class="img" src="../assets/img/business-casual-ez.jpg" alt="Card image cap">
+      </div>
+      <div class="card" style="width: 18rem;float:right">
+        <div class="card-body">
+          <h5 class="card-title">€ 162 / Night</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Book Now</a>
+        </div>
+      </div>
+      <div class="card" style="width: 18rem;float:right">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
       </div>
     </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated 3 mins ago</small>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -33,12 +34,10 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.img {
+  float:left;
+  width: 20rem;
+
 }
+
 </style>
