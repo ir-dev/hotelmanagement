@@ -185,13 +185,7 @@ public class CategoryServiceImpl implements CategoryService {
         String categoryNameBase64 = Base64.getUrlEncoder().encodeToString(category.getName().getBytes());
         Resource resource = this.resourceLoader.getResource("classpath:static/assets/images/category/" +categoryNameBase64+ ".jpg");
 
-        String resourceUrl = "";
-        try {
-            if (resource.exists()) {
-                resourceUrl = resource.getURL().toExternalForm();
-            }
-
-        } catch(IOException ignored) {}
+        String resourceUrl = "/assets/images/category/" +categoryNameBase64+ ".jpg";
 
         return AvailableCategoryDTO.builder()
                 .withName(category.getName())

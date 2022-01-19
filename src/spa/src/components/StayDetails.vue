@@ -38,6 +38,7 @@ export default {
   methods: {
     updateForm() {
       this.$emit("update-form", this.form);
+      this.$emit("get-categories", this.form);
     },
     copyFormProp() {
       let localObj = {};

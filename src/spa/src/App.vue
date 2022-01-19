@@ -5,18 +5,28 @@
       <div class="container ie-h-align-center-fix">
         <div class="row">
           <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
-            <form v-on:submit.prevent="submitForm()" method="post" class="tm-search-form tm-section-pad-2">
-              <StayDetails :formProp="form" @update-form="updateFormStayDetails"></StayDetails>
-              <RoomAssignment @selected-categories="updateSelectedCategories"></RoomAssignment>
-              <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
-              <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
-              <input type="reset" class="btn"/>
-              <input type="submit" class="btn"/>
-            </form>
-          </div>
+            <form v-on:submit.prevent="submitForm()" method="post" id="bookingForm" class="tm-search-form tm-section-pad-2">
+              <StayDetails :formProp="form" @update-form="updateFormStayDetails"
+                           @get-categories="getCategories"></StayDetails>
+
+              <div class="card-header" style="background: #ee4c52" id="tm-section-2">
+                <h5>Categories</h5>
+              </div>
+              <RoomAssignment v-for="category in categories" :key="category.name" :category="category"
+                              @selected-categories="updateSelectedCategories"></RoomAssignment>
+              <div class="card-footer">
+                <small class="text-muted">Last updated 3 mins ago</small>
+              </div>
+
+          <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
+          <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
+          <input type="reset" class="btn"/>
+          <input type="submit" class="btn"/>
+          </form>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -30,8 +40,8 @@ import PaymentDetails from "@/components/PaymentDetails";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import {createApp} from "vue";
-createApp().use(VueAxios, axios)
 
+createApp().use(VueAxios, axios)
 
 export default {
   name: "App",
@@ -42,59 +52,62 @@ export default {
     GuestDetails,
     PaymentDetails
   },
-  data(){
+  data() {
     return {
-        form: {
-          selectedCategoriesRoomCount: {},
+      form: {
+        arrivalDate: '',
+        departureDate: '',
+        arrivalTime: '',
+        numberOfPersons: '',
 
-          arrivalDate: '',
-          departureDate: '',
-          arrivalTime: '',
-          numberOfPersons: '',
+        selectedCategoriesRoomCount: {},
 
-          isOrganization: false,
-          organizationName: '',
-          discountRate: '',
-          salutation: '',
-          firstName: '',
-          lastName: '',
-          dateOfBirth: '',
-          street: '',
-          zipcode: '',
-          city: '',
-          country: '',
-          specialNotes: '',
+        isOrganization: false,
+        organizationName: '',
+        discountRate: '',
+        salutation: '',
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        street: '',
+        zipcode: '',
+        city: '',
+        country: '',
+        specialNotes: '',
 
-          cardHolderName: '',
-          cardNumber: '',
-          cardValidThru: '',
-          cardCvc: '',
-          paymentType: ''
-        },
-
-
+        cardHolderName: '',
+        cardNumber: '',
+        cardValidThru: '',
+        cardCvc: '',
+        paymentType: ''
+      },
+      categories: null,
     }
   },
   methods: {
-    submitForm(){
+    getCategories() {
+      axios.get("http://127.0.0.1:8080/rest/categories?arrivalDate=" + this.form.arrivalDate + "&departureDate=" + this.form.departureDate)
+          .then((response) => {
+            console.log(response.data)
+            this.categories = response.data
+          }, (error) => {
+            console.log(error)
+          })
+    },
+    submitForm() {
       axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form)
-          .then( function( response ){
-            if( response.status != 201 ){
-              this.fetchError = response.status;
-            }else{
-              response.json().then( function( data ){
-                this.fetchResponse = data;
-              }.bind(this));
-            }
-          }.bind(this));
-
+          .then((response) => {
+            console.log(response.status)
+            document.getElementById("bookingForm").reset();
+          }, (error) => {
+            console.log(error)
+          })
     },
     updateFormStayDetails(form) {
       this.form.arrivalDate = form.arrivalDate;
       this.form.departureDate = form.departureDate;
       this.form.arrivalTime = form.arrivalTime;
       this.form.numberOfPersons = form.numberOfPersons;
-
     },
     updateFormGuestDetails(form) {
       this.form.isOrganization = form.isOrganization;
@@ -118,8 +131,8 @@ export default {
       this.form.paymentType = form.paymentType;
     },
 
-    updateSelectedCategories(roomCount) {
-      this.form.selectedCategoriesRoomCount['Business Casual EZ'] = roomCount;
+    updateSelectedCategories(categoryName, roomCount) {
+      this.form.selectedCategoriesRoomCount[categoryName] = roomCount;
     },
   }
 };

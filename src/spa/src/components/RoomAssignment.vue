@@ -1,20 +1,16 @@
 <template>
-  <div class="card-header" style="background: #ee4c52" id="tm-section-2">
-    <h5>Categories</h5>
-  </div>
   <div class="card">
     <div class="card-horizontal">
       <div class="img-square-wrapper">
-        <img class="img" src="../assets/img/business-casual-ez.jpg" alt="Card image cap">
+        <img class="img" :src="category.imageUrl" alt="Card image cap"/>
       </div>
       <div style="width: 18rem;float:left">
         <div class="card-body">
-          <h5 class="card-title">Business Casual Singe Bed</h5>
+          <h5 class="card-title">{{ this.category.name }}</h5>
           <p class="card-text">
-            fully air-conditioned, very good soundproof windows, non-smoking,
-            with bathtub/WC, hairdryer,
-            desk, carpeted floor, room safe, SAT-TV + Sky, telephone, WLAN
+            {{this.category.description}}
           </p>
+          <div class="d-inline p-2 bg-primary text-white">{{this.category.price.amount}} {{this.category.price.currency.code}} Per Night</div>
         </div>
       </div>
       <div style="width: 25rem;float:right">
@@ -30,9 +26,6 @@
         </div>
       </div>
     </div>
-    <div class="card-footer">
-      <small class="text-muted">Last updated 3 mins ago</small>
-    </div>
   </div>
 
 </template>
@@ -45,17 +38,23 @@ export default {
       roomCount: 0
     }
   },
+  props: {
+    category: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
     incrementCounter: function() {
       if(this.roomCount < 15) {
         this.roomCount += 1
-        this.$emit('selected-categories', this.roomCount)
+        this.$emit('selected-categories', this.category.name, this.roomCount)
       }
     },
     decrementCounter: function() {
       if(this.roomCount > 0){
         this.roomCount -= 1
-        this.$emit('selected-categories', this.roomCount)
+        this.$emit('selected-categories', this.category.name, this.roomCount)
       }
     }
   }
