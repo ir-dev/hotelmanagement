@@ -31,6 +31,11 @@ public final class AvailableCategoryDTO {
     }
 
     @JsonProperty(required = true)
+    public Integer availableRoomsCount() {
+        return this.availableRoomsCount;
+    }
+
+    @JsonProperty(required = true)
     @JsonSerialize(using = PriceSerializer.class)
     public Price price() {
         return this.price;
