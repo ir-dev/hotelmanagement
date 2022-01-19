@@ -19,25 +19,26 @@
 
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
-        <select name="gender" class="form-control tm-select" id="gender">
-          <option value="">Mr</option>
-          <option value="1">Ms</option>
+        <select v-model="form.salutation" @change="updateForm" class="form-control tm-select" id="salutation">
+          <option value="">Salutation</option>
+          <option value="MR" >Mr</option>
+          <option value="MS">Ms</option>
         </select>
         <i class="fa fa-2x fa-user tm-form-element-icon"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="firstname" v-model="form.firstname" @change="updateForm" type="text" class="form-control" id="firstname" placeholder="Firstname"/>
+        <input name="firstName" v-model="form.firstName" @change="updateForm" type="text" class="form-control" id="firstName" placeholder="Firstname"/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="lastname" v-model="form.lastname" @change="updateForm" type="text" class="form-control" id="lastname" placeholder="Lastname"/>
+        <input name="lastName" v-model="form.lastName" @change="updateForm" type="text" class="form-control" id="lastName" placeholder="Lastname"/>
       </div>
     </div>
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="text" class="form-control" id="dateOfBirth" placeholder="Date Of Birth"/>
+        <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="date" class="form-control" id="dateOfBirth" placeholder="Date Of Birth"/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
@@ -54,19 +55,24 @@
         <input name="city" v-model="form.city" @change="updateForm" type="text" class="form-control" id="city" placeholder="City"/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="country" v-model="form.country" @change="updateForm" type="text" class="form-control" id="country" placeholder="country"/>
+        <select v-model="form.country" @change="updateForm" class="form-control tm-select" id="country">
+          <option value="AT">Austria</option>
+          <option value="DE">Germany</option>
+          <option value="CH">Switzerland</option>
+        </select>
+        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
         <input name="zipcode" v-model="form.specialNotes" @change="updateForm" type="text" class="form-control" id="specialNotes" placeholder="Special Notes"/>
       </div>
     </div>
-
-
   </div>
 
 </template>
+
+
+
 
 <script>
 
@@ -99,10 +105,10 @@ export default {
       } else {
         organizationName.disabled = true;
         organizationName.placeholder = "";
-        organizationName.value = "";
+        this.form.organizationName = "";
         discountRate.disabled = true;
         discountRate.placeholder = "";
-        discountRate.value = "";
+        this.form.discountRate = "";
       }
     },
     copyFormProp() {

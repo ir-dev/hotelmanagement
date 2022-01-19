@@ -7,7 +7,7 @@
           <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
             <form v-on:submit.prevent="submitForm()" method="post" class="tm-search-form tm-section-pad-2">
               <StayDetails :formProp="form" @update-form="updateFormStayDetails"></StayDetails>
-              <RoomAssignment></RoomAssignment>
+              <RoomAssignment @selected-categories="updateSelectedCategories"></RoomAssignment>
               <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
               <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
               <input type="reset" class="btn"/>
@@ -32,6 +32,7 @@ import VueAxios from "vue-axios";
 import {createApp} from "vue";
 createApp().use(VueAxios, axios)
 
+
 export default {
   name: "App",
   components: {
@@ -44,6 +45,8 @@ export default {
   data(){
     return {
         form: {
+          selectedCategoriesRoomCount: {},
+
           arrivalDate: '',
           departureDate: '',
           arrivalTime: '',
@@ -52,8 +55,9 @@ export default {
           isOrganization: false,
           organizationName: '',
           discountRate: '',
-          firstname: '',
-          lastname: '',
+          salutation: '',
+          firstName: '',
+          lastName: '',
           dateOfBirth: '',
           street: '',
           zipcode: '',
@@ -64,13 +68,16 @@ export default {
           cardHolderName: '',
           cardNumber: '',
           cardValidThru: '',
-          cardCvc: ''
-        }
+          cardCvc: '',
+          paymentType: ''
+        },
+
+
     }
   },
   methods: {
     submitForm(){
-      axios.post("127.0.0.1:8080/rest/bookings/create", this.form)
+      axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form)
           .then( function( response ){
             if( response.status != 201 ){
               this.fetchError = response.status;
@@ -93,8 +100,9 @@ export default {
       this.form.isOrganization = form.isOrganization;
       this.form.organizationName = form.organizationName;
       this.form.discountRate = form.discountRate;
-      this.form.firstname = form.firstname;
-      this.form.lastname = form.lastname;
+      this.form.salutation = form.salutation;
+      this.form.firstName = form.firstName;
+      this.form.lastName = form.lastName;
       this.form.dateOfBirth = form.dateOfBirth;
       this.form.street = form.street;
       this.form.zipcode = form.zipcode;
@@ -107,7 +115,12 @@ export default {
       this.form.cardNumber = form.cardNumber;
       this.form.cardValidThru = form.cardValidThru;
       this.form.cardCvc = form.cardCvc;
-    }
+      this.form.paymentType = form.paymentType;
+    },
+
+    updateSelectedCategories(roomCount) {
+      this.form.selectedCategoriesRoomCount['Business Casual EZ'] = roomCount;
+    },
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="arrivalDate" v-model="form.arrivalDate" @change="updateForm" type="date" class="form-control" id="arrivalDate" required>
+        <input name="arrivalDate" v-model="form.arrivalDate" @change="updateForm" type="date" class="form-control" id="arrivalDate" >
       </div>
       <div class="form-group tm-form-element">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>

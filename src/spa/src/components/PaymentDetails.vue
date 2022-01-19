@@ -3,23 +3,33 @@
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element">
         <label for="cardHolderName" class="form-label">Card Holder Name</label>
-        <input type="text" v-model="form.cardHolderName" @change="updateForm" id="cardHolderName" class="form-control" placeholder="Max Mustermann" required />
+        <input type="text" v-model="form.cardHolderName" @change="updateForm" id="cardHolderName" class="form-control" placeholder="Max Mustermann"  />
       </div>
       <div class="form-group tm-form-element">
         <label for="cardNumber" class="form-label">Card Number</label>
-        <input type="text" v-model="form.cardNumber" @change="updateForm" id="cardNumber" class="form-control" placeholder="#### #### #### #### ####" required />
+        <input type="text" v-model="form.cardNumber" @change="updateForm" id="cardNumber" class="form-control" placeholder="#### #### #### #### ####"  />
       </div>
       <div class="form-group tm-form-element">
         <label for="cardValidThru" class="form-label">Valid thru</label>
-        <input type="text" v-model="form.cardValidThru" @change="updateForm" id="cardValidThru" class="form-control" placeholder="12/24" required />
+        <input type="text" v-model="form.cardValidThru" @change="updateForm" id="cardValidThru" class="form-control" placeholder="12/24"  />
       </div>
       <div class="form-group tm-form-element">
         <label for="cardCvc" class="form-label">CVC</label>
-        <input type="text" v-model="form.cardCvc" @change="updateForm" id="cardCvc" class="form-control" placeholder="###" required />
+        <input type="text" v-model="form.cardCvc" @change="updateForm" id="cardCvc" class="form-control" placeholder="###"  />
+      </div>
+      <div class="form-group tm-form-element">
+        <label class="form-label">PaymentType</label>
+        <select v-model="form.paymentType" @change="updateForm" class="form-control" id="paymentType" >
+          <option value="CREDITCARD">Credit Card</option>
+          <option value="CASH">Cash</option>
+          <option value="INVOICE">Invoice</option>
+        </select>
       </div>
     </div>
   </div>
 </template>
+
+
 
 <script>
 export default {
