@@ -33,6 +33,7 @@ public class BookingController {
         return this.categoryService.availableCategories(arrivalDate, departureDate);
     }
 
+    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping(CREATE_BOOKING_URL)
     @ResponseBody
     public CreateBookingResponse createBooking(

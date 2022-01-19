@@ -39,7 +39,7 @@ export default {
     StayDetails,
     RoomAssignment,
     GuestDetails,
-    PaymentDetails,
+    PaymentDetails
   },
   data(){
     return {
