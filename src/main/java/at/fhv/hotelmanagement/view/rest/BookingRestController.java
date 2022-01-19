@@ -7,6 +7,7 @@ import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -29,8 +30,8 @@ public class BookingRestController {
     @GetMapping(CATEGORIES_URL)
     @ResponseBody
     public List<AvailableCategoryDTO> availableCategoriesForBooking(
-            @RequestParam("arrivalDate") LocalDate arrivalDate,
-            @RequestParam("departureDate") LocalDate departureDate) {
+            @RequestParam("arrivalDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate arrivalDate,
+            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate) {
         return this.categoryService.availableCategoriesForBooking(arrivalDate, departureDate);
     }
 
