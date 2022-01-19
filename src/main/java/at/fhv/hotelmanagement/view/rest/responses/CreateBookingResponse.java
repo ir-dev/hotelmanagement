@@ -1,4 +1,4 @@
-package at.fhv.hotelmanagement.view.rest;
+package at.fhv.hotelmanagement.view.rest.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.boot.jackson.JsonComponent;
