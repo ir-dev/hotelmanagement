@@ -12,9 +12,12 @@ import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +34,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     @Transactional(readOnly = true)
     @Override
@@ -176,10 +182,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
+        String categoryNameBase64 = Base64.getUrlEncoder().encodeToString(category.getName().getBytes());
+        Resource resource = this.resourceLoader.getResource("classpath:static/assets/images/category/" +categoryNameBase64+ ".jpg");
+
+        String resourceUrl = "";
+        try {
+            if (resource.exists()) {
+                resourceUrl = resource.getURL().toExternalForm();
+            }
+
+        } catch(IOException ignored) {}
+
         return AvailableCategoryDTO.builder()
                 .withName(category.getName())
                 .withDescription(category.getDescription())
                 .withAvailableRoomsCount(availableRoomsCount)
+                .withPrice(category.getFullBoardPrice())
+                .withImageUrl(resourceUrl)
                 .build();
     }
 
