@@ -1,19 +1,14 @@
 package at.fhv.hotelmanagement.domain.model.booking;
 
 import at.fhv.hotelmanagement.AbstractTest;
-import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +17,9 @@ public class BookingTest extends AbstractTest {
     void given_bookingdetails_when_createbooking_then_detailsequals() {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
         selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
@@ -51,9 +46,9 @@ public class BookingTest extends AbstractTest {
     void given_booking_when_close_then_bookingstateclosed() {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
         selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
@@ -72,9 +67,9 @@ public class BookingTest extends AbstractTest {
     void given_closedbooking_when_close_then_throwsillegalstateexception() {
         // given
         BookingNo bookingNo = new BookingNo("1");
-        LocalDate arrivalDate = getContextLocalDate();
-        LocalDate departureDate = getContextLocalDate().plusDays(1);
-        LocalTime arrivalTime = getContextLocalTime();
+        LocalDate arrivalDate = LocalDate.now();
+        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalTime arrivalTime = LocalTime.now();
         Integer numberOfPersons = 4;
         Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
         selectedCategoryNamesRoomCount.put("Honeymoon Suite DZ", 2);
