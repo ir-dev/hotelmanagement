@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 api/BookingControllerApi.ts
 api/api.ts
 configuration.ts
