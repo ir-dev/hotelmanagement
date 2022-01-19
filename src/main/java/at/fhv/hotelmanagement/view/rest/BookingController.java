@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
+@CrossOrigin(origins = {"http://localhost:3030"})
 public class BookingController {
     // bookings urls
     private static final String CATEGORIES_URL = "/categories";
@@ -33,7 +34,6 @@ public class BookingController {
         return this.categoryService.availableCategoriesForBooking(arrivalDate, departureDate);
     }
 
-    @CrossOrigin(origins = "http://localhost:8081")
     @PostMapping(CREATE_BOOKING_URL)
     @ResponseBody
     public CreateBookingResponse createBooking(
