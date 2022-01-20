@@ -3,16 +3,18 @@
     <div class="container">
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light">
-          <div class="col">
-            <img src="../assets/img/hotelschwarz.png" height="100px" />
-          </div>
-          <div class="col">
-            <h1>Hotel Schwarz</h1>
-          </div>
-          <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
+            <a class="navbar-brand mr-auto" href="#" style="color: #0062cc">
+              <img src="../assets/img/hotelschwarz.png" alt="logo" height="60px"/>
+            Hotel Schwarz
+            </a>
+          <button id="nav-toggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="mainNav" class="navbar-collapse tm-bg-white collapse show" style="">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a class="nav-link" href="#tm-section-1">StayDetails</a>
+                <span class="sr-only">(current)</span>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#tm-section-2">RoomAssignment</a>
