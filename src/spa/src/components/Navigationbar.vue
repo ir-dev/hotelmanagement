@@ -1,13 +1,14 @@
 <template>
   <div class="tm-top-bar" id="tm-top-bar">
-    <!-- Top Navbar -->
     <div class="container">
       <div class="row">
-        <nav class="navbar navbar-expand-lg narbar-light">
-          <a class="navbar-brand mr-auto" href="#">
-            <img src="img/logo.png" alt="Site logo" />
-            Level
-          </a>
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="col">
+            <img src="../assets/img/hotelschwarz.png" height="100px" />
+          </div>
+          <div class="col">
+            <h1>Hotel Schwarz</h1>
+          </div>
           <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">

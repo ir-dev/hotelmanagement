@@ -1,32 +1,37 @@
 <template>
   <div class="tm-main-content" id="top">
     <Navigationbar></Navigationbar>
+    <div class="alert alert-danger" role="alert" v-if="errormessage">
+      <h1>{{ this.errormessage }}</h1>
+    </div>
     <div class="tm-bg-white ie-container-width-fix-2">
       <div class="container ie-h-align-center-fix">
         <div class="row">
           <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
             <form v-on:submit.prevent="submitForm()" method="post" id="bookingForm" class="tm-search-form tm-section-pad-2">
-              <StayDetails :formProp="form" @update-form="updateFormStayDetails"
-                           @get-categories="getCategories"></StayDetails>
-
+              <StayDetails :formProp="form" @update-form="updateFormStayDetails" @get-categories="getCategories"></StayDetails>
               <div class="card-header" style="background: #ee4c52" id="tm-section-2">
                 <h5>Categories</h5>
               </div>
-              <RoomAssignment v-for="category in categories" :key="category.name" :category="category"
-                              @selected-categories="updateSelectedCategories"></RoomAssignment>
+              <RoomAssignment
+                v-for="category in categories"
+                :key="category.name"
+                :category="category"
+                @selected-categories="updateSelectedCategories"
+              >
+              </RoomAssignment>
               <div class="card-footer">
                 <small class="text-muted">Last updated 3 mins ago</small>
               </div>
-
-          <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
-          <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
-          <input type="reset" class="btn"/>
-          <input type="submit" class="btn"/>
-          </form>
+              <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
+              <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
+              <input type="reset" class="btn" />
+              <input type="submit" class="btn" />
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -39,9 +44,9 @@ import PaymentDetails from "@/components/PaymentDetails";
 
 import axios from "axios";
 import VueAxios from "vue-axios";
-import {createApp} from "vue";
+import { createApp } from "vue";
 
-createApp().use(VueAxios, axios)
+createApp().use(VueAxios, axios);
 
 export default {
   name: "App",
@@ -50,58 +55,69 @@ export default {
     StayDetails,
     RoomAssignment,
     GuestDetails,
-    PaymentDetails
+    PaymentDetails,
   },
   data() {
     return {
       form: {
-        arrivalDate: '',
-        departureDate: '',
-        arrivalTime: '',
-        numberOfPersons: '',
+        arrivalDate: "",
+        departureDate: "",
+        arrivalTime: "",
+        numberOfPersons: "",
 
         selectedCategoriesRoomCount: {},
 
         isOrganization: false,
-        organizationName: '',
-        discountRate: '',
-        salutation: '',
-        firstName: '',
-        lastName: '',
-        dateOfBirth: '',
-        street: '',
-        zipcode: '',
-        city: '',
-        country: '',
-        specialNotes: '',
+        organizationName: "",
+        discountRate: "",
+        salutation: "",
+        firstName: "",
+        lastName: "",
+        dateOfBirth: "",
+        street: "",
+        zipcode: "",
+        city: "",
+        country: "",
+        specialNotes: "",
 
-        cardHolderName: '',
-        cardNumber: '',
-        cardValidThru: '',
-        cardCvc: '',
-        paymentType: ''
+        cardHolderName: "",
+        cardNumber: "",
+        cardValidThru: "",
+        cardCvc: "",
+        paymentType: "",
       },
       categories: null,
-    }
+      errormessage: "",
+    };
   },
   methods: {
     getCategories() {
-      axios.get("http://127.0.0.1:8080/rest/categories?arrivalDate=" + this.form.arrivalDate + "&departureDate=" + this.form.departureDate)
-          .then((response) => {
-            console.log(response.data)
-            this.categories = response.data
-          }, (error) => {
-            console.log(error)
-          })
+      if (this.form.arrivalDate && this.form.departureDate) {
+        axios.get("http://127.0.0.1:8080/rest/categories?arrivalDate=" + this.form.arrivalDate + "&departureDate=" + this.form.departureDate).then(
+          (response) => {
+            console.log(response.data);
+            this.categories = response.data;
+            this.errormessage = response.data.message;
+          },
+          (error) => {
+            console.log(error);
+            this.errormessage = error.message;
+          }
+        );
+      }
     },
     submitForm() {
-      axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form)
-          .then((response) => {
-            console.log(response.status)
-            document.getElementById("bookingForm").reset();
-          }, (error) => {
-            console.log(error)
-          })
+      axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form).then(
+        (response) => {
+          console.log(response.status);
+          document.getElementById("bookingForm").reset();
+          this.errormessage = response.data.message;
+        },
+        (error) => {
+          console.log(error);
+          this.errormessage = error.message;
+        }
+      );
     },
     updateFormStayDetails(form) {
       this.form.arrivalDate = form.arrivalDate;
@@ -120,11 +136,11 @@ export default {
       this.form.street = form.street;
       this.form.zipcode = form.zipcode;
       this.form.city = form.city;
-      this.form.country = form.country
+      this.form.country = form.country;
       this.form.specialNotes = form.specialNotes;
     },
     updateFormPaymentDetails(form) {
-      this.form.cardHolderName = form.cardHolderName
+      this.form.cardHolderName = form.cardHolderName;
       this.form.cardNumber = form.cardNumber;
       this.form.cardValidThru = form.cardValidThru;
       this.form.cardCvc = form.cardCvc;
@@ -134,7 +150,7 @@ export default {
     updateSelectedCategories(categoryName, roomCount) {
       this.form.selectedCategoriesRoomCount[categoryName] = roomCount;
     },
-  }
+  },
 };
 </script>
 
