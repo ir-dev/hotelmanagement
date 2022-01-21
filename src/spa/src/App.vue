@@ -26,8 +26,8 @@
       </div>
       <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
       <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
-      <input type="reset" class="btn"/>
-      <input type="submit" class="btn"/>
+      <input type="reset" class="btn btn-outline-dark" value="Reset"/>
+      <input type="submit" class="btn btn-primary" value="Send"/>
     </form>
   </div>
 </template>
