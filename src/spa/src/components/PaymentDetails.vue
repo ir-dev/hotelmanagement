@@ -1,5 +1,5 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
+  <div class="tm-section tm-section-pad tm-bg-gray">
     <div clas="tm-section-4 ie-h-align-center-fix">
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">

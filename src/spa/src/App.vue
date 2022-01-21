@@ -7,6 +7,9 @@
       id="bookingForm"
       class="tm-search-form tm-section-pad-2"
     >
+      <div class="card-header">
+        <h5 style="color: #9fcdff">Stay Details</h5>
+      </div>
       <StayDetails
         :formProp="form"
         @update-form="updateFormStayDetails"
@@ -22,10 +25,16 @@
         @selected-categories="updateSelectedCategories"
       >
       </RoomAssignment>
-      <div v-if="categories" class="row" style="height: 2rm; width: 12.5rem; float: right">
-        <h5>Total Sum: {{ calculateSum() }}€</h5>
+      <div v-if="categories" style="text-align: end; padding: 15px 75px 15px 20px">
+        <h5>Total Sum:</h5><h4>{{ calculateSum() }}€</h4>
+      </div>
+      <div class="card-header" id="tm-section-3">
+        <h5 style="color: #9fcdff">Guest Details</h5>
       </div>
       <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
+      <div class="card-header" id="tm-section-4">
+        <h5 style="color: #9fcdff">Payment Details</h5>
+      </div>
       <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
       <div style="padding: 25px">
         <input type="reset" class="btn btn-outline-dark" value="Reset" />
