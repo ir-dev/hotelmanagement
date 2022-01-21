@@ -1,14 +1,16 @@
 <template>
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-3">
+
     <div class="form-row tm-search-form-row">
       <div class="form-check">
         <input class="form-check-input" v-model="form.isOrganization" @click="toggle()" @change="updateForm" type="checkbox" value="true" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">
-          Organization
-        </label>
+        <label class="form-check-label" for="flexCheckDefault">Organization</label>
       </div>
+    </div>
+    <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+
         <input name="organizationName" v-model="form.organizationName" @change="updateForm" type="text" class="form-control" id="organizationName" placeholder="" disabled/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
@@ -19,7 +21,7 @@
 
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
-        <select v-model="form.salutation" @change="updateForm" class="form-control tm-select" id="salutation">
+        <select v-model="form.salutation" @change="updateForm" class="form-control tm-select" id="salutation" required>
           <option value="">Salutation</option>
           <option value="MR" >Mr</option>
           <option value="MS">Ms</option>
@@ -27,44 +29,45 @@
         <i class="fa fa-2x fa-user tm-form-element-icon"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="firstName" v-model="form.firstName" @change="updateForm" type="text" class="form-control" id="firstName" placeholder="Firstname"/>
+        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
+        <input name="firstName" v-model="form.firstName" @change="updateForm" type="text" class="form-control" id="firstName" placeholder="Firstname" required/>
       </div>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
+        <input name="lastName" v-model="form.lastName" @change="updateForm" type="text" class="form-control" id="lastName" placeholder="Lastname" required/>
+      </div>
+    </div>
+    <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-        <input name="lastName" v-model="form.lastName" @change="updateForm" type="text" class="form-control" id="lastName" placeholder="Lastname"/>
+        <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="date" class="form-control" id="dateOfBirth" placeholder="Date Of Birth" required/>
+      </div>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+        <input name="street" v-model="form.street" @change="updateForm" type="text" class="form-control" id="street" placeholder="Street" required/>
+      </div>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+        <input name="zipcode" v-model="form.zipcode" @change="updateForm" type="text" class="form-control" id="zipcode" placeholder="Zipcode" required/>
       </div>
     </div>
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
         <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="date" class="form-control" id="dateOfBirth" placeholder="Date Of Birth"/>
+        <input name="city" v-model="form.city" @change="updateForm" type="text" class="form-control" id="city" placeholder="City" required/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="street" v-model="form.street" @change="updateForm" type="text" class="form-control" id="street" placeholder="Street"/>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="zipcode" v-model="form.zipcode" @change="updateForm" type="text" class="form-control" id="zipcode" placeholder="Zipcode"/>
-      </div>
-    </div>
-    <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="city" v-model="form.city" @change="updateForm" type="text" class="form-control" id="city" placeholder="City"/>
-      </div>
-      <div class="form-group tm-form-element tm-form-element-50">
-        <select v-model="form.country" @change="updateForm" class="form-control tm-select" id="country">
+        <select v-model="form.country" @change="updateForm" class="form-control tm-select" id="country" required>
+          <option value="" disabled selected hidden>Country</option>
           <option value="AT">Austria</option>
           <option value="DE">Germany</option>
           <option value="CH">Switzerland</option>
         </select>
-        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
+        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-        <input name="zipcode" v-model="form.specialNotes" @change="updateForm" type="text" class="form-control" id="specialNotes" placeholder="Special Notes"/>
+        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
+        <input name="zipcode" v-model="form.specialNotes" @change="updateForm" type="text" class="form-control" id="specialNotes" placeholder="Special Notes" required/>
       </div>
     </div>
   </div>
@@ -121,5 +124,7 @@ export default {
 </script>
 
 <style>
+
+
 
 </style>

@@ -25,8 +25,10 @@
               </div>
               <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
               <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
-              <input type="reset" class="btn" />
-              <input type="submit" class="btn" />
+              <div class="form-group tm-form-element tm-form-element-2">
+                <input type="reset" class="btn btn-primary tm-btn-search" />
+                <input type="submit" class="btn btn-primary tm-btn-search" />
+              </div>
             </form>
           </div>
         </div>
@@ -158,4 +160,5 @@ export default {
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/tooplate-style.css";
 @import "assets/font-awesome-4.7.0/css/font-awesome.css";
+
 </style>
