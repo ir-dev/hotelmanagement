@@ -1,39 +1,38 @@
 <template>
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-4">
-    <div class="container ie-h-align-center-fix">
-    <div class="form-row tm-search-form-row">
-      <div class="form-group tm-form-element">
-        <label for="cardHolderName" class="form-label">Card Holder Name</label>
-        <input type="text" v-model="form.cardHolderName" @change="updateForm" id="cardHolderName" class="form-control"
-               placeholder="Max Mustermann"/>
+    <div clas="tm-section-4 ie-h-align-center-fix">
+     <div class="form-row tm-search-form-row">
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-2x fa-user tm-form-element-icon"></i>
+        <input type="text" v-model="form.cardHolderName" @change="updateForm" id="cardHolderName" class="form-control" placeholder="Card Holder Name" required/>
       </div>
-      <div class="form-group tm-form-element">
-        <label for="cardNumber" class="form-label">Card Number</label>
-        <input type="text" v-model="form.cardNumber" @change="updateForm" id="cardNumber" class="form-control"
-               placeholder="#### #### #### #### ####"/>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
+        <input type="text" v-model="form.cardNumber" @change="updateForm" id="cardNumber" class="form-control" placeholder="Card Number" required/>
       </div>
-      <div class="form-group tm-form-element">
-        <label for="cardValidThru" class="form-label">Valid thru</label>
-        <input type="text" v-model="form.cardValidThru" @change="updateForm" id="cardValidThru" class="form-control"
-               placeholder="12/24"/>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
+        <input type="text" v-model="form.cardValidThru" @change="updateForm" id="cardValidThru" class="form-control" placeholder="Valid thru" required/>
       </div>
-      <div class="form-group tm-form-element">
-        <label for="cardCvc" class="form-label">CVC</label>
-        <input type="text" v-model="form.cardCvc" @change="updateForm" id="cardCvc" class="form-control"
-               placeholder="###"/>
+      <div class="form-group tm-form-element tm-form-element-50">
+        <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
+        <input type="text" v-model="form.cardCvc" @change="updateForm" id="cardCvc" class="form-control" placeholder="CVC" required/>
       </div>
-      <div class="form-group tm-form-element">
-        <label class="form-label">PaymentType</label>
-        <select v-model="form.paymentType" @change="updateForm" class="form-control" id="paymentType">
+      <div class="form-group tm-form-element tm-form-element-50">
+        <select v-model="form.paymentType" @change="updateForm" class="form-control tm-select" id="PaymentType" required>
+          <option value="" selected disabled hidden>Payment Type</option>
           <option value="CREDITCARD">Credit Card</option>
           <option value="CASH">Cash</option>
           <option value="INVOICE">Invoice</option>
         </select>
+        <i class="fa fa-credit-card fa-2x tm-form-element-icon"></i>
       </div>
     </div>
   </div>
   </div>
+
 </template>
+
 
 
 <script>

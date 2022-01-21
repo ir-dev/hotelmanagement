@@ -17,7 +17,7 @@
       </div>
 
       <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element">
           <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
           <input
             name="organizationName"
@@ -30,27 +30,15 @@
             disabled
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
-          <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
-          <input
-            name="discountRate"
-            v-model="form.discountRate"
-            @change="updateForm"
-            type="text"
-            class="form-control"
-            id="discountRate"
-            placeholder=""
-            disabled
-          />
-        </div>
       </div>
 
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <select v-model="form.salutation" @change="updateForm" class="form-control tm-select" id="salutation" required>
-            <option value="">Salutation</option>
+            <option disabled>Salutation</option>
             <option value="MR">Mr</option>
             <option value="MS">Ms</option>
+            <option value="DIV">Diverse</option>
           </select>
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
         </div>
@@ -82,16 +70,8 @@
         </div>
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-          <input
-            name="dateOfBirth"
-            v-model="form.dateOfBirth"
-            @change="updateForm"
-            type="date"
-            class="form-control"
-            id="dateOfBirth"
-            placeholder="Date Of Birth"
-            required
-          />
+          <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="text" class="form-control"
+                 id="dateOfBirth" placeholder="Date Of Birth" required/>
         </div>
       </div>
       <div class="form-row tm-search-form-row">
@@ -137,6 +117,9 @@
       </div>
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
+          <i class="fa fa-2x fa-sticky-note tm-form-element-icon"></i>
+          <input name="zipcode" v-model="form.specialNotes" @change="updateForm" type="text" class="form-control"
+                 id="specialNotes" placeholder="Special Notes" required/>
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
             name="zipcode"
