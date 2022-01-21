@@ -10,10 +10,8 @@
       </RoomAssignment>
       <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
       <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
-      <div style="padding: 25px">
-        <input type="reset" class="btn btn-outline-dark" value="Reset" />
-        <input type="submit" class="btn btn-primary" value="Send" />
-      </div>
+      <input type="reset" class="btn btn-outline-danger btn-lg mr-lg-5" value="Reset"/>
+      <input type="submit" class="btn btn-outline-success btn-lg" value="Send"/>
     </form>
   </div>
 </template>
@@ -147,10 +145,7 @@ export default {
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/tooplate-style.css";
 @import "assets/font-awesome-4.7.0/css/font-awesome.css";
-html {
-  scroll-padding-top: 300px;
-}
-.card-header {
-  background: #0062cc;
+.card-header{
+  background: #0062cc
 }
 </style>

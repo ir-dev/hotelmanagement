@@ -23,7 +23,7 @@
                 <span class="sr-only">(current)</span>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#tm-section-2">RoomAssignment</a>
+                <a class="nav-link" href="#tm-section-2">RoomDetails</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#tm-section-3">GuestDetails</a>
