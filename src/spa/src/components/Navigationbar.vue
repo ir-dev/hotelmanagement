@@ -3,9 +3,9 @@
     <div class="container">
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand mr-auto" href="#" style="color: #0062cc">
-              <img src="../assets/img/hotelschwarz.png" alt="logo" height="60px"/>
-            Hotel Schwarz
+            <a class="navbar-brand mr-auto" href="#" id="nav">
+              <img src="../assets/img/hotelschwarz.png" alt="logo" id="img"/>
+            HOTEL SCHWARZ
             </a>
           <button id="nav-toggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,12 +40,24 @@ export default {
 </script>
 
 <style>
+
+#nav{
+  color: #0062cc;
+  font-family: Dubai;
+  font-size: 45px;
+}
+
+#img{
+  height: 60px;
+  margin-bottom: 10px;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Dubai;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #0062cc;
   margin-top: 60px;
 }
 </style>

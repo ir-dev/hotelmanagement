@@ -1,10 +1,10 @@
 <template>
   <div id="tm-section-1" class="tm-section tm-bg-img">
-  <div class="tm-bg-img ie-container-width-fix-2">
+  <div class="tm-bg-video ie-container-width-fix-2">
     <div class="container ie-h-align-center-fix">
       <div class="row">
-        <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
-        <div class="form-row tm-search-form-row">
+        <div class="col ml-auto mr-auto ie-container-width-fix">
+        <div class="form-row tm-search-form">
           <div class="form-group tm-form-element">
             <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
             <input name="arrivalDate" v-model="form.arrivalDate" @change="updateForm" type="date" class="form-control"
@@ -16,7 +16,7 @@
                    class="form-control" id="departureDate">
           </div>
           <div class="form-group tm-form-element">
-            <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
+            <i class="fa fa-clock-o fa-2x tm-form-element-icon"></i>
             <input name="arrivalTime" v-model="form.arrivalTime" @change="updateForm" type="time" class="form-control"
                    id="arrivalTime">
           </div>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: "StayDetails",
   props: {
@@ -59,6 +61,7 @@ export default {
     }
   },
 };
+
 </script>
 
 

@@ -10,7 +10,7 @@
       <StayDetails :formProp="form" @update-form="updateFormStayDetails"
                    @get-categories="getCategories"></StayDetails>
 
-      <div class="card-header" style="background: #0062cc" id="tm-section-2">
+      <div class="card-header" id="tm-section-2">
 
         <h5 style="color: #9fcdff">Categories</h5>
       </div>
@@ -155,4 +155,7 @@ export default {
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/tooplate-style.css";
 @import "assets/font-awesome-4.7.0/css/font-awesome.css";
+.card-header{
+  background: #0062cc
+}
 </style>

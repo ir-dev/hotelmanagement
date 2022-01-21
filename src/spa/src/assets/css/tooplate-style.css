@@ -7,8 +7,8 @@ https://www.tooplate.com/view/2095-level
 */
 
 body {
-	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-	font-size: 13px;
+	font-family: Dubai;
+	font-size: 15px;
 	font-weight: 400;
 	overflow-x: hidden;
 }
@@ -22,13 +22,13 @@ a:focus {
 
 .tm-position-relative { position: relative; }
 .tm-flex-align-center { align-items: center; }
-.tm-fa-6x { font-size: 6em; }
+.tm-fa-6x { font-size: 7em; }
 .tm-margin-b-0 { margin-bottom: 0; }
 .tm-margin-b-20 { margin-bottom: 20px; }
 .tm-p-4 { padding: 2rem!important; }
 .tm-color-white { color: white; }
-.tm-color-primary {	color: #0336c5; }
-.tm-bg-primary { background: #02449b; }
+.tm-color-primary {	color: #0062cc; }
+.tm-bg-primary { background: #0062cb; }
 .tm-bg-gray { background: #F4F4F4; }
 .tm-bg-white { background: white; }
 .tm-bg-dark-blue { background: #1f3646; }
@@ -48,7 +48,7 @@ a:focus {
 
 a.tm-color-primary:hover,
 a.tm-color-primary:active {
-	color: #0643d7;
+	color: #0062cc;
 }
 
 .tm-font-light { font-weight: 300; }
@@ -57,7 +57,7 @@ a.tm-color-primary:active {
 
 p {
 	color: #898989;
-	line-height: 1.9;
+	line-height: 2;
 }
 
 .navbar {
@@ -66,8 +66,8 @@ p {
 	padding-bottom: 0;
 }
 .navbar-brand {
-	font-size: 1.8rem;
-	font-weight: 700;
+	font-size: 2.5rem;
+	font-weight: 500;
 }
 .navbar a { color: black; }
 
@@ -76,27 +76,28 @@ p {
 }
 
 .navbar-toggler {
-	border-color: rgb(9, 75, 160);
+	border-color: rgb(0, 98, 204);
 	cursor: pointer;
 }
 
 .nav-item {
 	background: transparent;
-	border-left: 1px solid #ccc;
+	border-left: 1px #002752;
 	cursor: pointer;
 	font-size: 0.8rem;
-	font-weight: 300;
+	font-weight: bold;
     text-transform: uppercase;
     padding: 0;
     transition: all 0.5s ease;
 }
 
-.nav-item:last-child { border-right: 1px solid #ccc; }
+.nav-item:last-child {  }
 
 .nav-link.active,
 .nav-link:hover {
 	color: white;
-	background: #0447d7;
+	background: #0062cc;
+	border-radius: 5px;
 }
 
 .tm-top-bar .navbar-expand-lg .navbar-nav .nav-link { padding: 50px 35px; }
@@ -111,6 +112,7 @@ p {
     transition: all 0.2s ease-in-out;
     height: 119px;
     background: white;
+	border-radius: 5px
 }
 
 .tm-top-bar.active {
@@ -151,12 +153,13 @@ p {
 }
 
 .qs-datepicker {
-	font-family:  'Open Sans', Helvetica, Arial, sans-serif;
+	font-family:  Dubai;
 	font-size: 0.8rem;
+	border-radius: 5px
 }
 
 .form-control {
-	border-radius: 0;
+	border-radius: 5px;
 	padding: 0.6rem 0.75rem;
 }
 
@@ -168,7 +171,7 @@ p {
 .btn-primary {
 	background-color: #2f5ed3;
 	border-color: #507dee;
-	border-radius: 0;
+	border-radius: 5px;
 	cursor: pointer;
 	font-size: 0.7rem;
 	font-weight: 600;
@@ -215,16 +218,16 @@ select:not([multiple]) {
 select.tm-select::-ms-expand { display: none; }
 
 .tm-select {
-    border-radius: 0;
+    border-radius: 5px;
     color: #858789;
 }
 
 .tm-search-form .form-control {
-	font-size: 0.8rem;
-	padding: 0.75rem 0.75rem 0.75rem 45px;
+	font-size: 1rem;
+	padding: 0.75rem 1rem 0.5rem 45px;
 }
 
-.tm-search-form .tm-form-element { width: 33.3333%; }
+.tm-search-form .tm-form-element { width: 25%; }
 .tm-search-form .tm-form-element-2 { width: 25%; }
 .tm-search-form-row { width: 900px; }
 .tm-btn-search { width: 100%; }
@@ -443,11 +446,11 @@ video {
 	.tm-top-bar.active, .tm-top-bar, .tm-top-bar-bg { height: 65px; }
 	.tm-top-bar.active .navbar-expand-lg .navbar-nav .nav-link,
 	.tm-top-bar .navbar-expand-lg .navbar-nav .nav-link {
-	    padding: 12px 15px;
+	    padding: 12px 30px;
 	}
 	#mainNav {
 		width: 180px;
-	    position: absolute;
+	    position: fixed;
 	    top: 60px;
 	    right: 15px;
 
@@ -481,8 +484,8 @@ video {
 	}
 
 	#tm-section-1 {
-		padding-left: 15px;
-		padding-right: 15px;
+		padding-left: 0px;
+		padding-right: 0px;
 	}
 
 	.tm-media-container,
