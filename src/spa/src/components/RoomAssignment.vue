@@ -15,7 +15,9 @@
       <div style="width: 15rem; float: right">
         <div class="card-body">
           <h4>Sum:</h4>
-          <h5 class="card-title">{{ this.category.price.amount * roomCount }} {{ this.category.price.currency.code }}</h5>
+          <h5 class="card-title">
+            {{ this.category.price.amount * roomCount }} {{ this.category.price.currency.code }}
+          </h5>
         </div>
       </div>
       <div style="width: 25rem; float: right">
@@ -23,16 +25,26 @@
           <h4>Selected Rooms</h4>
           <table class="center">
             <tr>
-              <td><button type="button" class="btn btn-outline-danger" @click="decrementCounter">-</button></td>
+              <td>
+                <button type="button" class="btn btn-outline-danger" @click="decrementCounter">
+                  -
+                </button>
+              </td>
               <td><input type="number" style="width: 50px; height: 30px" :value="roomCount" /></td>
-              <td><button type="button" class="btn btn-outline-success" @click="incrementCounter">+</button></td>
+              <td>
+                <button type="button" class="btn btn-outline-success" @click="incrementCounter">
+                  +
+                </button>
+              </td>
             </tr>
           </table>
         </div>
       </div>
       <div style="width: 10rem; float: right">
         <div class="card-body">
-          <h4>{{ this.category.price.amount }} {{ this.category.price.currency.code }}</h4><br/><h5>per Night</h5>
+          <h4>{{ this.category.price.amount }} {{ this.category.price.currency.code }}</h4>
+          <br />
+          <h5>per Night</h5>
         </div>
       </div>
     </div>

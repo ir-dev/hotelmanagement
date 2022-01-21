@@ -1,12 +1,26 @@
 <template>
   <div class="tm-main-content" id="top">
     <Navigationbar></Navigationbar>
-    <form v-on:submit.prevent="submitForm()" method="post" id="bookingForm" class="tm-search-form tm-section-pad-2">
-      <StayDetails :formProp="form" @update-form="updateFormStayDetails" @get-categories="getCategories"></StayDetails>
+    <form
+      v-on:submit.prevent="submitForm()"
+      method="post"
+      id="bookingForm"
+      class="tm-search-form tm-section-pad-2"
+    >
+      <StayDetails
+        :formProp="form"
+        @update-form="updateFormStayDetails"
+        @get-categories="getCategories"
+      ></StayDetails>
       <div class="card-header" id="tm-section-2">
         <h5 style="color: #9fcdff">Categories</h5>
       </div>
-      <RoomAssignment v-for="category in categories" :key="category.name" :category="category" @selected-categories="updateSelectedCategories">
+      <RoomAssignment
+        v-for="category in categories"
+        :key="category.name"
+        :category="category"
+        @selected-categories="updateSelectedCategories"
+      >
       </RoomAssignment>
       <div v-if="categories" class="row" style="height: 2rm; width: 12.5rem; float: right">
         <h5>Total Sum: {{ calculateSum() }}€</h5>
@@ -83,7 +97,9 @@ export default {
         for (let x = 0; x < this.categories.length; x++) {
           if (this.form.selectedCategoriesRoomCount[this.categories[x].name]) {
             console.log(this.form.selectedCategoriesRoomCount[this.categories[x].name]);
-            price += this.form.selectedCategoriesRoomCount[this.categories[x].name] * this.categories[x].price.amount;
+            price +=
+              this.form.selectedCategoriesRoomCount[this.categories[x].name] *
+              this.categories[x].price.amount;
           }
         }
         return price;
@@ -91,17 +107,24 @@ export default {
     },
     getCategories() {
       if (this.form.arrivalDate && this.form.departureDate) {
-        axios.get("http://127.0.0.1:8080/rest/categories?arrivalDate=" + this.form.arrivalDate + "&departureDate=" + this.form.departureDate).then(
-          (response) => {
-            console.log(response.data);
-            this.categories = response.data;
-            if (response.data.message) alert(response.data.message);
-          },
-          (error) => {
-            console.log(error);
-            alert(error.message);
-          }
-        );
+        axios
+          .get(
+            "http://127.0.0.1:8080/rest/categories?arrivalDate=" +
+              this.form.arrivalDate +
+              "&departureDate=" +
+              this.form.departureDate
+          )
+          .then(
+            (response) => {
+              console.log(response.data);
+              this.categories = response.data;
+              if (response.data.message) alert(response.data.message);
+            },
+            (error) => {
+              console.log(error);
+              alert(error.message);
+            }
+          );
       }
     },
     submitForm() {

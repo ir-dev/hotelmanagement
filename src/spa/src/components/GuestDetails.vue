@@ -34,8 +34,14 @@
 
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
-          <select v-model="form.salutation" @change="updateForm" class="form-control tm-select" id="salutation" required>
-            <option disabled>Salutation</option>
+          <select
+            v-model="form.salutation"
+            @change="updateForm"
+            class="form-control tm-select"
+            id="salutation"
+            required
+          >
+            <option value="" selected disabled hidden>Salutation</option>
             <option value="MR">Mr</option>
             <option value="MS">Ms</option>
             <option value="DIV">Diverse</option>
@@ -74,10 +80,9 @@
             name="dateOfBirth"
             v-model="form.dateOfBirth"
             @change="updateForm"
-            type="text"
+            type="date"
             class="form-control"
             id="dateOfBirth"
-            placeholder="Date Of Birth"
             required
           />
         </div>
@@ -111,10 +116,25 @@
         </div>
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-          <input name="city" v-model="form.city" @change="updateForm" type="text" class="form-control" id="city" placeholder="City" required />
+          <input
+            name="city"
+            v-model="form.city"
+            @change="updateForm"
+            type="text"
+            class="form-control"
+            id="city"
+            placeholder="City"
+            required
+          />
         </div>
         <div class="form-group tm-form-element tm-form-element-50">
-          <select v-model="form.country" @change="updateForm" class="form-control tm-select" id="country" required>
+          <select
+            v-model="form.country"
+            @change="updateForm"
+            class="form-control tm-select"
+            id="country"
+            required
+          >
             <option value="" disabled selected hidden>Country</option>
             <option value="AT">Austria</option>
             <option value="DE">Germany</option>
