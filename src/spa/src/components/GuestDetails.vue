@@ -1,23 +1,24 @@
 <template>
   <div class="tm-section tm-section-pad tm-bg-gray" id="tm-section-3">
-
     <div class="form-row tm-search-form-row">
+
       <div class="form-check">
-        <input class="form-check-input" v-model="form.isOrganization" @click="toggle()" @change="updateForm" type="checkbox" value="true" id="flexCheckDefault">
-        <label class="form-check-label" for="flexCheckDefault">Organization</label>
+        <input class="form-check-input" v-model="form.isOrganization" @click="toggle()" @change="updateForm" type="checkbox" value="true" id="flexCheckChecked">
+        <label class="form-check-label" for="flexCheckChecked">Organization</label>
       </div>
     </div>
+
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+        <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
 
         <input name="organizationName" v-model="form.organizationName" @change="updateForm" type="text" class="form-control" id="organizationName" placeholder="" disabled/>
       </div>
       <div class="form-group tm-form-element tm-form-element-50">
-        <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+        <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
         <input name="discountRate" v-model="form.discountRate" @change="updateForm" type="text" class="form-control" id="discountRate" placeholder="" disabled/>
       </div>
-    </div>
+</div>
 
     <div class="form-row tm-search-form-row">
       <div class="form-group tm-form-element tm-form-element-50">
@@ -99,7 +100,7 @@ export default {
     toggle() {
       let organizationName = document.getElementById("organizationName");
       let discountRate = document.getElementById("discountRate");
-      let checkbox = document.getElementById("flexCheckDefault");
+      let checkbox = document.getElementById("flexCheckChecked");
       if(checkbox.checked){
         organizationName.disabled = false;
         organizationName.placeholder = "Organization Name";
@@ -124,6 +125,25 @@ export default {
 </script>
 
 <style>
+
+.form-check-label {
+  padding: 12px;
+
+  cursor: pointer;
+  margin: 12px 12px 12px 5px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  color: gray;
+  font-size: 17px
+
+}
+.form-check {
+  margin: 12px 12px 12px 45px;
+}
+
+#flexCheckChecked.form-check-input {
+  margin: 30px -10px 10px -25px;
+  box-sizing: border-box;
+}
 
 
 
