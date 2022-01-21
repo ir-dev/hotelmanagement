@@ -89,17 +89,25 @@ export default {
       }
     },
     submitForm() {
-      axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form).then(
-        (response) => {
-          console.log(response.status);
-          document.getElementById("bookingForm").reset();
-          if (response.data.message) alert(response.data.message);
-        },
-        (error) => {
-          console.log(error);
-          alert(error.message);
-        }
-      );
+      if (JSON.stringify(this.form.selectedCategoriesRoomCount) !== "{}") {
+        axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form).then(
+          (response) => {
+            console.log(response.status);
+            if (!response.data.message) {
+              document.getElementById("bookingForm").reset();
+              alert("Buchung erfolgreich");
+            } else {
+              alert(response.data.message);
+            }
+          },
+          (error) => {
+            console.log(error);
+            alert(error.message);
+          }
+        );
+      } else {
+        alert("Bitte wählen Sie Kategorien!");
+      }
     },
     updateFormStayDetails(form) {
       this.form.arrivalDate = form.arrivalDate;
@@ -128,7 +136,6 @@ export default {
       this.form.cardCvc = form.cardCvc;
       this.form.paymentType = form.paymentType;
     },
-
     updateSelectedCategories(categoryName, roomCount) {
       this.form.selectedCategoriesRoomCount[categoryName] = roomCount;
     },
@@ -140,7 +147,9 @@ export default {
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/tooplate-style.css";
 @import "assets/font-awesome-4.7.0/css/font-awesome.css";
-
+html {
+  scroll-padding-top: 300px;
+}
 .card-header {
   background: #0062cc;
 }

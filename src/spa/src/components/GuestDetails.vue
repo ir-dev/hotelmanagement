@@ -19,7 +19,6 @@
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
-
           <input
             name="organizationName"
             v-model="form.organizationName"
@@ -81,8 +80,6 @@
             required
           />
         </div>
-      </div>
-      <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
           <input
@@ -96,6 +93,8 @@
             required
           />
         </div>
+      </div>
+      <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
           <input
@@ -122,8 +121,6 @@
             required
           />
         </div>
-      </div>
-      <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
           <input name="city" v-model="form.city" @change="updateForm" type="text" class="form-control" id="city" placeholder="City" required />
@@ -137,6 +134,8 @@
           </select>
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
         </div>
+      </div>
+      <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
