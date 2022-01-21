@@ -3,11 +3,17 @@
     <div class="container">
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand mr-auto" href="#" id="nav">
-              <img src="../assets/img/hotelschwarz.png" alt="logo" id="img"/>
-            HOTEL SCHWARZ
-            </a>
-          <button id="nav-toggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-expanded="true" aria-label="Toggle navigation">
+          <img src="../assets/img/hotelschwarz.png" alt="logo" id="img" />
+          <h1>HOTEL SCHWARZ</h1>
+          <button
+            id="nav-toggle"
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#mainNav"
+            aria-expanded="true"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div id="mainNav" class="navbar-collapse tm-bg-white collapse show" style="">
@@ -40,16 +46,16 @@ export default {
 </script>
 
 <style>
-
-#nav{
+#nav {
   color: #0062cc;
   font-family: Dubai;
   font-size: 45px;
 }
 
-#img{
-  height: 60px;
+#img {
+  height: 80px;
   margin-bottom: 10px;
+  margin-right: 25px;
 }
 
 #app {
