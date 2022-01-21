@@ -8,6 +8,9 @@
       </div>
       <RoomAssignment v-for="category in categories" :key="category.name" :category="category" @selected-categories="updateSelectedCategories">
       </RoomAssignment>
+      <div v-if="categories" class="row" style="height: 2rm; width: 12.5rem; float: right">
+        <h5>Total Sum: {{ calculateSum() }}€</h5>
+      </div>
       <GuestDetails :formProp="form" @update-form="updateFormGuestDetails"></GuestDetails>
       <PaymentDetails :formProp="form" @update-form="updateFormPaymentDetails"></PaymentDetails>
       <div style="padding: 25px">
@@ -73,6 +76,19 @@ export default {
     };
   },
   methods: {
+    calculateSum() {
+      if (this.categories !== null) {
+        let price = 0;
+        console.log(this.categories);
+        for (let x = 0; x < this.categories.length; x++) {
+          if (this.form.selectedCategoriesRoomCount[this.categories[x].name]) {
+            console.log(this.form.selectedCategoriesRoomCount[this.categories[x].name]);
+            price += this.form.selectedCategoriesRoomCount[this.categories[x].name] * this.categories[x].price.amount;
+          }
+        }
+        return price;
+      }
+    },
     getCategories() {
       if (this.form.arrivalDate && this.form.departureDate) {
         axios.get("http://127.0.0.1:8080/rest/categories?arrivalDate=" + this.form.arrivalDate + "&departureDate=" + this.form.departureDate).then(
@@ -89,7 +105,7 @@ export default {
       }
     },
     submitForm() {
-      if (JSON.stringify(this.form.selectedCategoriesRoomCount) !== "{}") {
+      if (this.form.selectedCategoriesRoomCount !== null) {
         axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form).then(
           (response) => {
             console.log(response.status);
@@ -147,9 +163,6 @@ export default {
 @import "assets/css/bootstrap.min.css";
 @import "assets/css/tooplate-style.css";
 @import "assets/font-awesome-4.7.0/css/font-awesome.css";
-html {
-  scroll-padding-top: 300px;
-}
 .card-header {
   background: #0062cc;
 }
