@@ -70,8 +70,16 @@
         </div>
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-          <input name="dateOfBirth" v-model="form.dateOfBirth" @change="updateForm" type="text" class="form-control"
-                 id="dateOfBirth" placeholder="Date Of Birth" required/>
+          <input
+            name="dateOfBirth"
+            v-model="form.dateOfBirth"
+            @change="updateForm"
+            type="text"
+            class="form-control"
+            id="dateOfBirth"
+            placeholder="Date Of Birth"
+            required
+          />
         </div>
       </div>
       <div class="form-row tm-search-form-row">
@@ -118,11 +126,8 @@
       <div class="form-row tm-search-form-row">
         <div class="form-group tm-form-element tm-form-element-50">
           <i class="fa fa-2x fa-sticky-note tm-form-element-icon"></i>
-          <input name="zipcode" v-model="form.specialNotes" @change="updateForm" type="text" class="form-control"
-                 id="specialNotes" placeholder="Special Notes" required/>
-          <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
-            name="zipcode"
+            name="specialNotes"
             v-model="form.specialNotes"
             @change="updateForm"
             type="text"
