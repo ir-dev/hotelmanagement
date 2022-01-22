@@ -130,7 +130,7 @@ public class StaySteps extends ScenarioTXBoundary {
             "first name {word} and last name {word} and street {word} " +
             "and zipcode {word} and city {word} and country {word} with all selected line items")
     public void chargeStay(String stayId, String firstName, String lastName, String street, String zipcode,
-                           String city, String country, Map<String, Integer> selectedLineItemProductNamesCount) throws GenerateInvoiceException {
+                           String city, String country, Map<String, Integer> selectedLineItemProductNamesCount) {
         InvoiceRecipientForm invoiceRecipientForm = new InvoiceRecipientForm();
         invoiceRecipientForm.setFirstName(firstName);
         invoiceRecipientForm.setLastName(lastName);

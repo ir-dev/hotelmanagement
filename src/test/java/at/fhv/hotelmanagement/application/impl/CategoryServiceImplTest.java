@@ -224,6 +224,8 @@ public class CategoryServiceImplTest extends AbstractTest {
                 AvailableCategoryDTO.builder()
                     .withName(category1.getName())
                     .withDescription(category1.getDescription())
+                    .withPrice(category1.getFullBoardPrice())
+                    .withImageUrl("/assets/images/category/"+Base64.getUrlEncoder().encodeToString(category1.getName().getBytes())+".jpg")
                     .withAvailableRoomsCount(3)
                     .build()
         );
@@ -232,6 +234,9 @@ public class CategoryServiceImplTest extends AbstractTest {
                 AvailableCategoryDTO.builder()
                         .withName(category3.getName())
                         .withDescription(category3.getDescription())
+                        .withPrice(category3.getFullBoardPrice())
+                        .withImageUrl("/assets/images/category/"+Base64.getUrlEncoder().encodeToString(category3.getName().getBytes())+".jpg")
+                        .withAvailableRoomsCount(3)
                         .withAvailableRoomsCount(1)
                         .build()
         );
@@ -256,6 +261,8 @@ public class CategoryServiceImplTest extends AbstractTest {
             AvailableCategoryDTO availableCategoryDto = AvailableCategoryDTO.builder()
                     .withName(c.getName())
                     .withDescription(c.getDescription())
+                    .withPrice(c.getFullBoardPrice())
+                    .withImageUrl("/assets/images/category/"+Base64.getUrlEncoder().encodeToString(c.getName().getBytes())+".jpg")
                     .withAvailableRoomsCount(c.getAvailableRoomsCount(LocalDate.now(), LocalDate.now().plusDays(2)))
                     .build();
             availableCategoriesDtoExpected.add(availableCategoryDto);

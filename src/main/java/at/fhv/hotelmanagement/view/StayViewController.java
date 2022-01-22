@@ -6,13 +6,10 @@ import at.fhv.hotelmanagement.application.api.StayService;
 import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.application.impl.EntityNotFoundException;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
-import at.fhv.hotelmanagement.domain.model.guest.Address;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
-import at.fhv.hotelmanagement.domain.model.stay.GenerateInvoiceException;
-import at.fhv.hotelmanagement.domain.model.stay.InvoiceRecipient;
 import at.fhv.hotelmanagement.view.forms.InvoiceRecipientForm;
 import at.fhv.hotelmanagement.view.forms.SelectedLineItemsForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
@@ -238,7 +235,7 @@ public class StayViewController {
             openPositionsInvoicePreview = this.stayService.chargeStayPreview(stayId);
             invoices = this.stayService.allStayInvoices(stayId);
 
-        } catch (EntityNotFoundException | GenerateInvoiceException e) {
+        } catch (EntityNotFoundException e) {
             return redirectError(e.getMessage());
         } catch (PriceCurrencyMismatchException e) {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
@@ -274,7 +271,7 @@ public class StayViewController {
             @RequestParam(value = "preview", required = false) boolean isPreview,
             @ModelAttribute("invoiceRecipientForm") InvoiceRecipientForm invoiceRecipientForm,
             @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
-            Model model) throws GenerateInvoiceException {
+            Model model) {
 
         InvoiceDTO invoiceDto = null;
         try {

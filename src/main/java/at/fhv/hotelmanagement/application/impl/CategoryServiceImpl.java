@@ -12,17 +12,14 @@ import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
 import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CategoryServiceImpl implements CategoryService {
     private static final double OVERBOOKING_RATIO = 0.1D;
 
@@ -34,9 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
-
-    @Autowired
-    ResourceLoader resourceLoader;
 
     @Transactional(readOnly = true)
     @Override
@@ -183,8 +177,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
         String categoryNameBase64 = Base64.getUrlEncoder().encodeToString(category.getName().getBytes());
-        Resource resource = this.resourceLoader.getResource("classpath:static/assets/images/category/" +categoryNameBase64+ ".jpg");
-
         String resourceUrl = "/assets/images/category/" +categoryNameBase64+ ".jpg";
 
         return AvailableCategoryDTO.builder()

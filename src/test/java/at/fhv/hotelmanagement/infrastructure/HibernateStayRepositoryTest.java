@@ -46,7 +46,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     private EntityManager em;
 
     @Test
-    void given_3staysinrepository_when_findallstays_then_returnequalsstays() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    void given_3staysinrepository_when_findallstays_then_returnequalsstays() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
         // given
         List<Stay> staysExpected = Arrays.asList(
                 createStayDummy(),
@@ -72,7 +72,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_stay_when_addstaytorepository_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    void given_stay_when_addstaytorepository_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
         // given
         Stay stayExcepted = createStayDummy();
 
@@ -87,7 +87,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException, GenerateInvoiceException {
+    void given_staywithinvoiceinrepository_when_findstaybyinvoiceno_then_returnequalsstay() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
         // given
         Stay stayExpected = createStayDummy();
         this.stayRepository.store(stayExpected);
@@ -102,7 +102,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException, GenerateInvoiceException {
+    void given_staywithinvoiceinrepository_when_findinvoicebyinvoiceno_then_returnequalsinvoice() throws CreateGuestException, CreateBookingException, CreateStayException, PriceCurrencyMismatchException, RoomAlreadyExistsException {
         // given
         Stay stay = createStayDummy();
         Invoice invoiceExcepted = stay.getInvoices().stream().findFirst().orElseThrow();
@@ -118,7 +118,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
     }
 
     @Test
-    void given_invoicerecipient_when_addinvoicerecipienttorepository_then_returnequalsinvoicerecipient() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    void given_invoicerecipient_when_addinvoicerecipienttorepository_then_returnequalsinvoicerecipient() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
         // given
         Stay stayExcepted = createStayDummy();
         Invoice invoiceExcepted = stayExcepted.getInvoices().stream().findFirst().orElseThrow();
@@ -150,7 +150,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         return new BookingNo((nextDummyBookingIdentity++).toString());
     }
 
-    private Stay createStayDummy() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    private Stay createStayDummy() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
         // create value objects for entities
         Address address = new Address(
                 "Musterstr. 123",
