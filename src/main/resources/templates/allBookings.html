@@ -82,61 +82,34 @@
                                         <td colspan="6"> no bookings available</td>
                                     </tr>
                                     <tr th:each="booking : ${bookings}">
-                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span
-                                                th:text="${booking.bookingNo()}"/></a>
-                                        </td>
-                                        <td><span
-                                                th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/>
-                                        </td>
+                                        <td><a th:href="@{/booking(no=${booking.bookingNo()})}"><span th:text="${booking.bookingNo()}"/></a></td>
+                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
                                         <td><span th:text="${booking.arrivalDate}"/></td>
                                         <td><span th:text="${booking.departureDate}"/></td>
-                                        <td><span th:text="${booking.bookingState}"
-                                                  th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
+                                        <td><span th:text="${booking.bookingState}" th:classappend="${booking.getBookingStateTextColorClass()}"/></td>
                                         <td><span th:text="${booking.numberOfBookedRooms}"/></td>
                                         <td style="width: 200px;">
                                             <div th:switch="${booking.bookingState()}">
                                                 <p th:case="'PENDING'">
-                                                    <a class="btn btn-space btn-light"
-                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a class="btn btn-space btn-success"
-                                                       th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
-                                                            class="fas fa-check"></i> Check-In</a>
+                                                    <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space btn-success" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i class="fas fa-check"></i> Check-In</a>
                                                 </p>
-
                                                 <p th:case="'CLOSED'">
-                                                    <a class="btn btn-space btn-light"
-                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a class="btn btn-space, text-white" style="cursor: default"><i
-                                                            class="fas fa-check"></i> Check-In</a>
+                                                    <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space, text-white" style="cursor: default"><i class="fas fa-check"></i> Check-In</a>
                                                 </p>
-
                                                 <p th:case="'CANCELLED'">
-                                                    <a class="btn btn-space btn-light"
-                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a class="btn btn-space, text-white" style="cursor: default"><i
-                                                            class="fas fa-check"></i> Check-In</a>
+                                                    <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space, text-white" style="cursor: default"><i class="fas fa-check"></i> Check-In</a>
                                                 </p>
-
                                                 <p th:case="'EXPIRED'">
-                                                    <a class="btn btn-space btn-light"
-                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a class="btn btn-space, text-white" style="cursor: default"><i
-                                                            class="fas fa-check"></i> Check-In</a>
+                                                    <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space, text-white" style="cursor: default"><i class="fas fa-check"></i> Check-In</a>
                                                 </p>
-
                                                 <p th:case="'CONFIRMED'">
-                                                    <a class="btn btn-space btn-light"
-                                                       th:href="@{/booking(no=${booking.bookingNo()})}"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a class="btn btn-space btn-success"
-                                                       th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i
-                                                            class="fas fa-check"></i> Check-In</a>
+                                                    <a class="btn btn-space btn-light" th:href="@{/booking(no=${booking.bookingNo()})}"><i class="fas fa-eye"></i></a>
+                                                    <a class="btn btn-space btn-success" th:href="@{/checkin(bookingNo=${booking.bookingNo()})}"><i class="fas fa-check"></i> Check-In</a>
                                                 </p>
-
                                             </div>
                                         </td>
                                     </tr>
@@ -151,5 +124,6 @@
     </div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
+<script>window.onload = sortTable(4);</script>
 </body>
 </html>

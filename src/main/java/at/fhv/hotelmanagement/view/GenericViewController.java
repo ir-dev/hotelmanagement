@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
 
@@ -12,9 +13,16 @@ import java.util.Map;
 public class GenericViewController {
     // generic urls
     private static final String ERROR_URL = "/displayerror";
+    private static final String SPA_URL = "/spa";
 
     // generic views
     private static final String ERROR_VIEW = "errorView";
+    private static final String SPA_VIEW = "/spa/index.html";
+
+    @GetMapping(SPA_URL)
+    public RedirectView spa() {
+        return new RedirectView(SPA_VIEW);
+    }
 
     @GetMapping(ERROR_URL)
     public String displayError(@RequestParam("msg") String msg, Model model) {

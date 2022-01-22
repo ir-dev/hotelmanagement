@@ -438,6 +438,6 @@ class StayTest extends AbstractTest {
         assertFalse(stay.isCheckedIn());
         assertTrue(stay.isBilled());
         assertTrue(stay.isCheckedOut());
-        assertThrows(IllegalStateException.class, stay::checkout);;
+        assertThrows(IllegalStateException.class, stay::checkout);
     }
 }

@@ -1,83 +1,53 @@
 <template>
-  <div class="tm-section tm-bg-img" id="tm-section-1">
-    <div class="tm-bg-white ie-container-width-fix-2">
-      <div class="container ie-h-align-center-fix">
-        <div class="row">
-          <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
-            <form action="index.html" method="get" class="tm-search-form tm-section-pad-2">
-              <div class="form-row tm-search-form-row">
-                <div class="form-group tm-form-element tm-form-element-100">
-                  <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
-                  <input name="city" type="text" class="form-control" id="inputCity" placeholder="Type your destination...">
-                </div>
-                <div class="form-group tm-form-element tm-form-element-50">
-                  <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-                  <input name="check-in" type="text" class="form-control" id="inputCheckIn" placeholder="Check In">
-                </div>
-                <div class="form-group tm-form-element tm-form-element-50">
-                  <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
-                  <input name="check-out" type="text" class="form-control" id="inputCheckOut" placeholder="Check Out">
-                </div>
-              </div>
-              <div class="form-row tm-search-form-row">
-                <div class="form-group tm-form-element tm-form-element-2">
-                  <select name="adult" class="form-control tm-select" id="adult">
-                    <option value="">Adult</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                  <i class="fa fa-2x fa-user tm-form-element-icon"></i>
-                </div>
-                <div class="form-group tm-form-element tm-form-element-2">
-                  <select name="children" class="form-control tm-select" id="children">
-                    <option value="">Children</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                  <i class="fa fa-user tm-form-element-icon tm-form-element-icon-small"></i>
-                </div>
-                <div class="form-group tm-form-element tm-form-element-2">
-                  <select name="room" class="form-control tm-select" id="room">
-                    <option value="">Room</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select>
-                  <i class="fa fa-2x fa-bed tm-form-element-icon"></i>
-                </div>
-                <div class="form-group tm-form-element tm-form-element-2">
-                  <button type="submit" class="btn btn-primary tm-btn-search">Check Availability</button>
-                </div>
-              </div>
-              <div class="form-row clearfix pl-2 pr-2 tm-fx-col-xs">
-                <p class="tm-margin-b-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <a href="#" class="ie-10-ml-auto ml-auto mt-1 tm-font-semibold tm-color-primary">Need Help?</a>
-              </div>
-            </form>
+  <div class="tm-bg-img mr-auto ie-container-width-fix" >
+    <div class="card">
+      <div class="card-horizontal">
+        <div class="img-square-wrapper">
+          <img class="img" :src="category.imageUrl" alt="Card image cap" />
+        </div>
+        <div style="width: 18rem; float: left">
+          <div class="card-body">
+            <h5 class="card-title">{{ this.category.name }}</h5>
+            <p class="card-text">
+              {{ this.category.description }}
+            </p>
+          </div>
+        </div>
+        <div style="width: 15rem; float: right">
+          <div class="card-body">
+            <h4>Sum:</h4>
+            <h5 class="card-title">
+              {{ this.category.price.amount * roomCount }} {{ this.category.price.currency.code }}
+            </h5>
+          </div>
+        </div>
+        <div style="width: 25rem; float: right">
+          <div class="card-body">
+            <h4>Selected Rooms</h4>
+            <table class="center">
+              <tr>
+                <td>
+                  <button type="button" class="btn btn-outline-danger" @click="decrementCounter">
+                    -
+                  </button>
+                </td>
+                <td>
+                  <input type="number" style="width: 50px; height: 30px" :value="roomCount" />
+                </td>
+                <td>
+                  <button type="button" class="btn btn-outline-success" @click="incrementCounter">
+                    +
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div style="width: 10rem; float: right">
+          <div class="card-body">
+            <h4>{{ this.category.price.amount }} {{ this.category.price.currency.code }}</h4>
+            <br />
+            <h5>per Night</h5>
           </div>
         </div>
       </div>
@@ -87,19 +57,55 @@
 
 <script>
 export default {
-  name: 'RoomAssignment'
-
-}
+  name: "RoomAssignment",
+  data() {
+    return {
+      roomCount: 0,
+    };
+  },
+  props: {
+    category: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    incrementCounter: function () {
+      if (this.roomCount < 15) {
+        this.roomCount += 1;
+        this.$emit("selected-categories", this.category.name, this.roomCount);
+      }
+    },
+    decrementCounter: function () {
+      if (this.roomCount > 0) {
+        this.roomCount -= 1;
+        this.$emit("selected-categories", this.category.name, this.roomCount);
+      }
+    },
+  },
+};
 </script>
 
 <style>
+.img {
+  float: left;
+  width: 17rem;
+}
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hide Arrows in number fields*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>
