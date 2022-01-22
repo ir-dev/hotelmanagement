@@ -22,8 +22,7 @@
         v-for="category in categories"
         :key="category.name"
         :category="category"
-        @selected-categories="updateSelectedCategories"
-      >
+        @selected-categories="updateSelectedCategories">
       </RoomAssignment>
       <div v-if="categories" style="text-align: end; padding: 15px 75px 15px 20px">
         <h5>Total Sum:</h5><h4>{{ calculateSum() }}€</h4>
@@ -56,7 +55,6 @@ import VueAxios from "vue-axios";
 import { createApp } from "vue";
 
 createApp().use(VueAxios, axios);
-
 export default {
   name: "App",
   components: {
@@ -69,16 +67,15 @@ export default {
   data() {
     return {
       form: {
-        arrivalDate: "",
-        departureDate: "",
+        arrivalDate: this.currentDay(),
+        departureDate: this.currentDatePlus7Days(),
         arrivalTime: "",
-        numberOfPersons: "",
+        numberOfPersons: 2,
 
         selectedCategoriesRoomCount: {},
 
         isOrganization: false,
         organizationName: "",
-        discountRate: "",
         salutation: "",
         firstName: "",
         lastName: "",
@@ -116,8 +113,7 @@ export default {
     },
     getCategories() {
       if (this.form.arrivalDate && this.form.departureDate) {
-        axios
-          .get(
+        axios.get(
             "http://127.0.0.1:8080/rest/categories?arrivalDate=" +
               this.form.arrivalDate +
               "&departureDate=" +
@@ -143,7 +139,7 @@ export default {
             console.log(response.status);
             if (!response.data.message) {
               document.getElementById("bookingForm").reset();
-              alert("Buchung erfolgreich");
+              alert("Booking successfully created");
             } else {
               alert(response.data.message);
             }
@@ -154,7 +150,7 @@ export default {
           }
         );
       } else {
-        alert("Bitte wählen Sie Kategorien!");
+        alert("Please select categories!");
       }
     },
     updateFormStayDetails(form) {
@@ -166,7 +162,6 @@ export default {
     updateFormGuestDetails(form) {
       this.form.isOrganization = form.isOrganization;
       this.form.organizationName = form.organizationName;
-      this.form.discountRate = form.discountRate;
       this.form.salutation = form.salutation;
       this.form.firstName = form.firstName;
       this.form.lastName = form.lastName;
@@ -187,7 +182,15 @@ export default {
     updateSelectedCategories(categoryName, roomCount) {
       this.form.selectedCategoriesRoomCount[categoryName] = roomCount;
     },
-  },
+    currentDay() {
+      return new Date().toISOString().substring(0,10);
+    },
+    currentDatePlus7Days() {
+      var date = new Date();
+      date.setDate(date.getDate() + 7);
+      return date.toISOString().substring(0,10);
+    }
+  }
 };
 </script>
 

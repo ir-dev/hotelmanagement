@@ -65,6 +65,11 @@ public class TestData implements ApplicationRunner {
         c1.createRoom(new Room(new RoomNumber("128"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("129"), RoomState.AVAILABLE));
         c1.createRoom(new Room(new RoomNumber("130"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("131"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("132"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("133"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("134"), RoomState.AVAILABLE));
+        c1.createRoom(new Room(new RoomNumber("135"), RoomState.AVAILABLE));
 
         c2.createRoom(new Room(new RoomNumber("220"), RoomState.AVAILABLE));
         c2.createRoom(new Room(new RoomNumber("221"), RoomState.AVAILABLE));
@@ -93,14 +98,16 @@ public class TestData implements ApplicationRunner {
         Address ad5 = new Address("Rotstrasse", "7070", "Musterhausen", String.valueOf(Country.DE));
         Address ad6 = new Address("Orangestrasse", "8080", "Porthausen", String.valueOf(Country.DE));
         Address ad7 = new Address("Weißstrasse", "7070", "Musterhausen", String.valueOf(Country.DE));
+        Address ad8 = new Address("Blaustrasse", "1234", "München", String.valueOf(Country.DE));
 
         Guest g1 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1, String.valueOf(Salutation.MR), "Franz", "Beckenbauer", LocalDate.of(1999,12,24), ad1, "I don't want the housekeeping to disturb us");
         Guest g2 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orga1, String.valueOf(Salutation.MR),"Fritz", "Mayer", LocalDate.of(1979,12,24), ad2, "");
         Guest g3 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MR), "Andreas", "Müller", LocalDate.of(1979,12,18), ad3, "Red slippers please");
         Guest g4 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MS),"Maria", "Schelling", LocalDate.of(1965,4,11), ad4, "");
         Guest g5 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MR),"Norbert", "Winkler", LocalDate.of(1975,6,21), ad5, "");
-        Guest g6 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MS),"Robert", "Braun", LocalDate.of(1995,2,27), ad6, "");
-        Guest g7 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MS),"Sigmund", "Freud", LocalDate.of(1987,5,23), ad7, "Not the real Sigmund Freud");
+        Guest g6 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MR),"Robert", "Braun", LocalDate.of(1995,2,27), ad6, "");
+        Guest g7 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MR),"Sigmund", "Freud", LocalDate.of(1987,5,23), ad7, "Not the real Sigmund Freud");
+        Guest g8 = GuestFactory.createGuest(this.guestRepository.nextIdentity(), orgaEmpty, String.valueOf(Salutation.MR),"Günther", "Jauch", LocalDate.of(1956,7,13), ad8, "");
 
         this.guestRepository.store(g1);
         this.guestRepository.store(g2);
@@ -109,14 +116,14 @@ public class TestData implements ApplicationRunner {
         this.guestRepository.store(g5);
         this.guestRepository.store(g6);
         this.guestRepository.store(g7);
-
+        this.guestRepository.store(g8);
 
         Map<Category, Integer> categoryRooms1 = new HashMap<>();
         categoryRooms1.put(c1, 1);
         categoryRooms1.put(c2, 2);
         Map<Category, Integer> categoryRooms2 = new HashMap<>();
+        categoryRooms2.put(c1, 1);
         categoryRooms2.put(c2, 2);
-        categoryRooms2.put(c1, 2);
         Map<Category, Integer> categoryRooms3 = new HashMap<>();
         categoryRooms3.put(c1, 1);
         categoryRooms3.put(c2, 1);
@@ -129,30 +136,34 @@ public class TestData implements ApplicationRunner {
         PaymentInformation paymentInformation4 = new PaymentInformation("Gerhard Schelling", "6535 5424 6543 5436", "09/18", "842", String.valueOf(PaymentType.CREDITCARD));
         PaymentInformation paymentInformation5 = new PaymentInformation("Norbert Winkler", "4531 5431 3513 3341", "01/28", "942", String.valueOf(PaymentType.CASH));
         PaymentInformation paymentInformation6 = new PaymentInformation("Robert Braun", "4332 5462 3435 4542", "02/22", "325", String.valueOf(PaymentType.CASH));
-        PaymentInformation paymentInformation7 = new PaymentInformation("Norbert Winkler", "9086 2143 5442 5445", "05/12", "431", String.valueOf(PaymentType.CASH));
-
+        PaymentInformation paymentInformation7 = new PaymentInformation("Sigmund Freud", "3254 2353 2353 2431", "01/13", "531", String.valueOf(PaymentType.INVOICE));
+        PaymentInformation paymentInformation8 = new PaymentInformation("Günther Jauch", "2341 2324 5542 3356", "04/18", "248", String.valueOf(PaymentType.INVOICE));
 
 
         Booking bk1 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
                 LocalDate.now().plusDays(5), LocalTime.now(), 3, categoryRooms1, g1.getGuestId(), paymentInformation1);
 
         Booking bk2 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now().plusDays(1),
-                LocalDate.now().plusDays(3), null, 5, categoryRooms2, g2.getGuestId(), paymentInformation2);
+                LocalDate.now().plusDays(3), null, 3, categoryRooms2, g2.getGuestId(), paymentInformation2);
 
         Booking bk3 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now().plusDays(2),
                 LocalDate.now().plusDays(4), null, 3, categoryRooms3, g3.getGuestId(), paymentInformation3);
 
         Booking bk4 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
-                LocalDate.now().plusDays(4), null, 2, categoryRooms4, g4.getGuestId(), paymentInformation4);
+                LocalDate.now().plusDays(4), null, 3, categoryRooms3, g4.getGuestId(), paymentInformation4);
 
         Booking bk5 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
                 LocalDate.now().plusDays(6), null, 3, categoryRooms1, g5.getGuestId(), paymentInformation5);
+
+        Booking bk6 = BookingFactory.createBooking(this.bookingRepository.nextIdentity(), LocalDate.now(),
+                LocalDate.now().plusDays(6), null, 1, categoryRooms4, g7.getGuestId(), paymentInformation7);
 
         this.bookingRepository.store(bk1);
         this.bookingRepository.store(bk2);
         this.bookingRepository.store(bk3);
         this.bookingRepository.store(bk4);
         this.bookingRepository.store(bk5);
+        this.bookingRepository.store(bk6);
 
         Map<Category, Integer> selectedCategoriesRoomCount1 = CategoryConverter.convertToSelectedCategoriesRoomCount(bk2.getSelectedCategoriesRoomCount());
         Stay stay1 = StayFactory.createStayForBooking(
@@ -207,12 +218,14 @@ public class TestData implements ApplicationRunner {
         Stay stay5 = StayFactory.createStayForWalkIn(
                 this.stayRepository.nextIdentity(),
                 LocalDate.now(),
-                LocalDate.now().plusDays(3),
-                1,
+                LocalDate.now().plusDays(7),
+                2,
                 categoryRooms4,
-                g7.getGuestId(),
-                paymentInformation7
+                g8.getGuestId(),
+                paymentInformation8
         );
+
+
 
         this.stayRepository.store(stay1);
         this.stayRepository.store(stay2);
@@ -242,14 +255,14 @@ public class TestData implements ApplicationRunner {
         );
 
         this.categoryService.autoAssignRooms(
-                selectedCategoriesRoomCount2,
+                categoryRooms1,
                 stay4.getArrivalDate(),
                 stay4.getDepartureDate(),
                 stay4.getStayId()
         );
 
         this.categoryService.autoAssignRooms(
-                selectedCategoriesRoomCount3,
+                categoryRooms4,
                 stay5.getArrivalDate(),
                 stay5.getDepartureDate(),
                 stay5.getStayId()
