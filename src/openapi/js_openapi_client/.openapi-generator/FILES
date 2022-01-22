@@ -1,6 +1,5 @@
 .babelrc
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 docs/AvailableCategoryDTO.md
@@ -22,10 +21,3 @@ src/model/CreateBookingResponse.js
 src/model/LocalTime.js
 src/model/Price.js
 src/model/PriceCurrency.js
-test/api/BookingRestControllerApi.spec.js
-test/model/AvailableCategoryDTO.spec.js
-test/model/BookingForm.spec.js
-test/model/CreateBookingResponse.spec.js
-test/model/LocalTime.spec.js
-test/model/Price.spec.js
-test/model/PriceCurrency.spec.js
