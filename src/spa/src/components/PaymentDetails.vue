@@ -1,8 +1,10 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray">
-    <div clas="tm-section-4 ie-h-align-center-fix">
+  <div class="tm-section tm-bg-img">
+    <div class="tm-bg-img ie-container-width-fix-2">
+    <div class="container ie-h-align-center-fix">
+      <div class="col ml-auto mr-auto ie-container-width-fix">
       <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
             type="text"
@@ -14,7 +16,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
           <input
             type="text"
@@ -26,7 +28,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
           <input
             type="text"
@@ -38,7 +40,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-credit-card tm-form-element-icon"></i>
           <input
             type="text"
@@ -50,7 +52,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <select
             v-model="form.paymentType"
             @change="updateForm"
@@ -67,6 +69,8 @@
         </div>
       </div>
     </div>
+  </div>
+  </div>
   </div>
 </template>
 
@@ -97,4 +101,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

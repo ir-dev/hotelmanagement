@@ -111,7 +111,7 @@ p {
     transition: all 0.2s ease-in-out;
     height: 122px;
     background: white;
-	border-radius: 5px
+	border-radius: 5px;
 }
 
 .tm-top-bar.active {
@@ -129,7 +129,7 @@ p {
 }
 
 #tm-section-1 {
-	background-image: url('../img/sauna.jpg');
+	background-image: url("../img/Pub3.jpg");
 	height: 475px;
 }
 
@@ -160,6 +160,7 @@ p {
 .form-control {
 	border-radius: 5px;
 	padding: 0.6rem 0.75rem;
+	border: 1px solid #002752;
 }
 
 .form-control:focus {
@@ -227,7 +228,7 @@ select.tm-select::-ms-expand { display: none; }
 }
 
 .tm-search-form .tm-form-element { width: 25%; }
-.tm-search-form .tm-form-element-2 { width: 25%; }
+.tm-search-form .tm-form-element-2 { width: 33.333333%; }
 .tm-search-form-row { width: 900px; }
 .tm-btn-search { width: 100%; }
 
@@ -246,6 +247,7 @@ select.tm-select::-ms-expand { display: none; }
 	background: #5094ee;
 	padding-top: 50px;
 	position: relative;
+	margin-top: 20%;
 }
 
 .tm-section-title {

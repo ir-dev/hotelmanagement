@@ -1,7 +1,9 @@
 <template>
-  <div class="tm-section tm-section-pad tm-bg-gray">
-    <div class="container ie-h-align-center-fix">
-      <div class="form-row tm-search-form-row">
+  <div class="tm-section tm-bg-img" id="tm-section-2">
+    <div class="tm-bg-img ie-container-width-fix-2">
+      <div class="container ie-h-align-center-fix">
+        <div class="col ml-auto mr-auto ie-container-width-fix">
+          <div class="form-row tm-search-form">
         <div class="form-check">
           <input
             class="form-check-input"
@@ -12,12 +14,12 @@
             value="true"
             id="flexCheckChecked"
           />
-          <label class="form-check-label" for="flexCheckChecked">Organization</label>
+          <label class="form-check-label" for="flexCheckChecked">ORGANIZATION</label>
         </div>
       </div>
 
-      <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element">
+      <div class="form-row tm-search-form ">
+        <div class="form-group tm-form-element" id="rowFlex">
           <i class="fa fa-2x fa-building-o tm-form-element-icon"></i>
           <input
             name="organizationName"
@@ -33,7 +35,7 @@
       </div>
 
       <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <select
             v-model="form.salutation"
             @change="updateForm"
@@ -48,7 +50,7 @@
           </select>
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
             name="firstName"
@@ -61,7 +63,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-user tm-form-element-icon"></i>
           <input
             name="lastName"
@@ -74,7 +76,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
           <input
             name="dateOfBirth"
@@ -86,9 +88,9 @@
             required
           />
         </div>
-      </div>
-      <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element-50">
+
+
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
           <input
             name="street"
@@ -101,7 +103,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
           <input
             name="zipcode"
@@ -114,7 +116,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
           <input
             name="city"
@@ -127,7 +129,7 @@
             required
           />
         </div>
-        <div class="form-group tm-form-element tm-form-element-50">
+        <div class="form-group tm-form-element tm-form-element-2">
           <select
             v-model="form.country"
             @change="updateForm"
@@ -142,9 +144,8 @@
           </select>
           <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
         </div>
-      </div>
-      <div class="form-row tm-search-form-row">
-        <div class="form-group tm-form-element tm-form-element-50">
+
+        <div class="form-group tm-form-element tm-form-element-2">
           <i class="fa fa-2x fa-sticky-note tm-form-element-icon"></i>
           <input
             name="specialNotes"
@@ -159,6 +160,9 @@
       </div>
     </div>
   </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -207,22 +211,27 @@ export default {
 </script>
 
 <style>
-.form-check-label {
-  padding: 12px;
-
-  cursor: pointer;
-  margin: 12px 12px 12px 5px;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: gray;
-  font-size: 17px;
-}
+  .form-check-label {
+    cursor: pointer;
+    color: gray;
+    font-size: 15px;
+    font-family: Dubai;
+    font-weight: bold;
+  }
 
 .form-check {
   margin: 12px 12px 12px 45px;
 }
 
 #flexCheckChecked.form-check-input {
-  margin: 30px -10px 10px -25px;
   box-sizing: border-box;
+}
+
+#rowFlex{
+  width: 100%
+}
+
+#space{
+  margin: 10px;
 }
 </style>

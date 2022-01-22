@@ -1,5 +1,5 @@
 <template>
-  <div class="col ml-auto mr-auto ie-container-width-fix">
+  <div class="tm-bg-img mr-auto ie-container-width-fix" >
     <div class="card">
       <div class="card-horizontal">
         <div class="img-square-wrapper">

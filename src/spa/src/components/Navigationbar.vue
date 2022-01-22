@@ -4,7 +4,7 @@
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light">
           <img src="../assets/img/hotelschwarz.png" alt="logo" id="img" />
-          <h1>HOTEL SCHWARZ</h1>
+          <h1 id="nav">HOTEL SCHWARZ</h1>
           <button
             id="nav-toggle"
             class="navbar-toggler"
@@ -49,7 +49,8 @@ export default {
 #nav {
   color: #0062cc;
   font-family: Dubai;
-  font-size: 45px;
+  font-size: 35px;
+  font-weight: bold;
 }
 
 #img {
