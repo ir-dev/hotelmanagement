@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
-@CrossOrigin(origins = {"http://localhost:8081"})
+@CrossOrigin(origins = { "http://localhost:8080", "http://localhost:8081" } )
 public class BookingRestController {
     // bookings urls
     private static final String CATEGORIES_URL = "/categories";

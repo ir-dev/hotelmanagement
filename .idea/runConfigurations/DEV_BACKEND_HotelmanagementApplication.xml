@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DEV HotelmanagementApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="DEV">
+  <configuration default="false" name="DEV-BACKEND HotelmanagementApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="hotelmanagement.main" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
