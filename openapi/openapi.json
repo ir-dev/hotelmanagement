@@ -13,7 +13,9 @@
   "paths": {
     "/rest/bookings/create": {
       "post": {
-        "tags": ["booking-controller"],
+        "tags": [
+          "booking-rest-controller"
+        ],
         "operationId": "createBooking",
         "requestBody": {
           "content": {
@@ -41,8 +43,10 @@
     },
     "/rest/categories": {
       "get": {
-        "tags": ["booking-controller"],
-        "operationId": "categories",
+        "tags": [
+          "booking-rest-controller"
+        ],
+        "operationId": "availableCategoriesForBooking",
         "parameters": [
           {
             "name": "arrivalDate",
@@ -184,7 +188,9 @@
         }
       },
       "CreateBookingResponse": {
-        "required": ["status"],
+        "required": [
+          "status"
+        ],
         "type": "object",
         "properties": {
           "status": {
@@ -196,7 +202,13 @@
         }
       },
       "AvailableCategoryDTO": {
-        "required": ["availableRoomsCount", "description", "name"],
+        "required": [
+          "availableRoomsCount",
+          "description",
+          "imageUrl",
+          "name",
+          "price"
+        ],
         "type": "object",
         "properties": {
           "name": {
@@ -208,6 +220,45 @@
           "availableRoomsCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "price": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "Price": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "object",
+            "properties": {
+              "currencyCode": {
+                "type": "string"
+              },
+              "defaultFractionDigits": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "numericCode": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "numericCodeAsString": {
+                "type": "string"
+              }
+            }
           }
         }
       }
