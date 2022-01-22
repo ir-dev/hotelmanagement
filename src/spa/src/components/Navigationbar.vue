@@ -3,16 +3,16 @@
     <div class="container">
       <div class="row">
         <nav class="navbar navbar-expand-lg navbar-light">
-          <img src="../assets/img/hotelschwarz.png" alt="logo" id="img" />
+          <img src="../assets/img/hotelschwarz.png" alt="logo" id="img"/>
           <h1 id="nav">HOTEL SCHWARZ</h1>
           <button
-            id="nav-toggle"
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#mainNav"
-            aria-expanded="true"
-            aria-label="Toggle navigation"
+              id="nav-toggle"
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#mainNav"
+              aria-expanded="true"
+              aria-label="Toggle navigation"
           >
             <span class="navbar-toggler-icon"></span>
           </button>

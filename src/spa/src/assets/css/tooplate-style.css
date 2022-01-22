@@ -128,9 +128,10 @@ p {
 	padding-bottom: 80px;
 }
 
-#tm-section-1 {
+.tm-section-1 {
 	background-image: url("../img/Pub3.jpg");
 	height: 475px;
+	margin-bottom: 70px
 }
 
 .tm-bg-img {
@@ -191,7 +192,7 @@ p {
 .tm-form-element:last-child { margin-right: 0; }
 
 .tm-form-element-icon {
-	color: #5082ee;
+	color: #005cbf;
 	position: absolute;
 	top: 10px;
 	left: 15px;
@@ -230,7 +231,7 @@ select.tm-select::-ms-expand { display: none; }
 .tm-search-form .tm-form-element { width: 25%; }
 .tm-search-form .tm-form-element-2 { width: 33.333333%; }
 .tm-search-form-row { width: 900px; }
-.tm-btn-search { width: 100%; }
+.tm-btn-search { width: 910px; }
 
 /* https://css-tricks.com/creating-non-rectangular-headers/ */
 .tm-section-down-arrow {
@@ -244,10 +245,26 @@ select.tm-select::-ms-expand { display: none; }
 .tm-pb-4 { padding-bottom: 100px; }
 
 .tm-section-2 {
-	background: #5094ee;
-	padding-top: 50px;
-	position: relative;
-	margin-top: 20%;
+	background: white;
+	padding: 20px;
+	margin-top: 50px;
+	position: center;
+	font-family: Dubai;
+
+}
+
+.tm-section-3 {
+	background: white;
+	position: center;
+	font-family: Dubai;
+	margin: 80px;
+}
+
+.tm-section-4 {
+	background: white;
+	position: center;
+	font-family: Dubai;
+	margin: 80px;
 }
 
 .tm-section-title {
