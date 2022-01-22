@@ -22,8 +22,8 @@ public class CategoryRestController {
     @GetMapping(CATEGORIES_URL)
     @ResponseBody
     public List<AvailableCategoryDTO> availableCategoriesForBooking(
-            @RequestParam("arrivalDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate arrivalDate,
-            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate) {
+            @RequestParam("arrivalDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate arrivalDate,
+            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate departureDate) {
         return this.categoryService.availableCategoriesForBooking(arrivalDate, departureDate);
     }
 }

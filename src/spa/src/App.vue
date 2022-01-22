@@ -51,11 +51,16 @@ import RoomAssignment from "@/components/RoomAssignment";
 import GuestDetails from "@/components/GuestDetails";
 import PaymentDetails from "@/components/PaymentDetails";
 
+
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { createApp } from "vue";
 
 createApp().use(VueAxios, axios);
+
+import CategoryRestControllerApi from '../../openapi/js_openapi_client/src/api/CategoryRestControllerApi';
+import BookingRestControllerApi from '../../openapi/js_openapi_client/src/api/BookingRestControllerApi';
+import BookingForm from '../../openapi/js_openapi_client/src/model/BookingForm';
 
 export default {
   name: "App",
@@ -116,43 +121,31 @@ export default {
     },
     getCategories() {
       if (this.form.arrivalDate && this.form.departureDate) {
-        axios
-          .get(
-            "http://127.0.0.1:8080/rest/categories?arrivalDate=" +
-              this.form.arrivalDate +
-              "&departureDate=" +
-              this.form.departureDate
-          )
-          .then(
-            (response) => {
-              console.log(response.data);
-              this.categories = response.data;
-              if (response.data.message) alert(response.data.message);
-            },
-            (error) => {
-              console.log(error);
-              alert(error.message);
-            }
-          );
+        let arrivalDate = new Date(this.form.arrivalDate); // Date |
+        let departureDate = new Date(this.form.departureDate); // Date |
+        console.log(arrivalDate);
+        let apiInstance = new CategoryRestControllerApi();
+        apiInstance.availableCategoriesForBooking(arrivalDate, departureDate, (error, data, response) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('API called successfully. Returned data: ' + data);
+            this.categories = data
+          }
+        });
       }
     },
     submitForm() {
       if (this.form.selectedCategoriesRoomCount !== null) {
-        axios.post("http://127.0.0.1:8080/rest/bookings/create", this.form).then(
-          (response) => {
-            console.log(response.status);
-            if (!response.data.message) {
-              document.getElementById("bookingForm").reset();
-              alert("Buchung erfolgreich");
-            } else {
-              alert(response.data.message);
-            }
-          },
-          (error) => {
-            console.log(error);
-            alert(error.message);
+        let apiInstance = new BookingRestControllerApi();
+        let bookingForm = BookingForm.constructFromObject(this.form, null); // BookingForm
+        apiInstance.createBooking(bookingForm, (error, data, response) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('API called successfully. Returned data: ' + data);
           }
-        );
+        });
       } else {
         alert("Bitte wählen Sie Kategorien!");
       }

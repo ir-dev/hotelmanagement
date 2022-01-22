@@ -281,7 +281,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional(readOnly = true)
     @Override
-    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException, GenerateInvoiceException {
+    public InvoiceDTO chargeStayPreview(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException {
         Stay stay = this.stayRepository.findById(new StayId(stayId)).orElseThrow(() -> new EntityNotFoundException(Stay.class, stayId));
         Guest guest = this.guestRepository.findById(stay.getGuestId()).orElseThrow(() -> new EntityNotFoundException(Guest.class, stay.getGuestId().toString()));
         InvoiceRecipient invoiceRecipient = createInvoiceRecipient(invoiceRecipientForm);
@@ -293,7 +293,7 @@ public class StayServiceImpl implements StayService {
 
     @Transactional
     @Override
-    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException, IllegalStateException, GenerateInvoiceException {
+    public String chargeStay(String stayId, Map<String, Integer> selectedLineItemProductNamesCount, InvoiceRecipientForm invoiceRecipientForm) throws EntityNotFoundException, PriceCurrencyMismatchException {
         InvoiceRecipient invoiceRecipient = createInvoiceRecipient(invoiceRecipientForm);
         this.stayRepository.storeRecipient(invoiceRecipient);
 

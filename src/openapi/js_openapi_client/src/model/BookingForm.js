@@ -12,7 +12,6 @@
  */
 
 import ApiClient from '../ApiClient';
-import LocalTime from './LocalTime';
 
 /**
  * The BookingForm model module.
@@ -23,10 +22,27 @@ class BookingForm {
     /**
      * Constructs a new <code>BookingForm</code>.
      * @alias module:model/BookingForm
+     * @param arrivalDate {Date} 
+     * @param departureDate {Date} 
+     * @param numberOfPersons {Number} 
+     * @param selectedCategoriesRoomCount {Object.<String, Number>} 
+     * @param salutation {String} 
+     * @param firstName {String} 
+     * @param lastName {String} 
+     * @param dateOfBirth {Date} 
+     * @param street {String} 
+     * @param zipcode {String} 
+     * @param city {String} 
+     * @param country {String} 
+     * @param cardHolderName {String} 
+     * @param cardNumber {String} 
+     * @param cardValidThru {String} 
+     * @param cardCvc {String} 
+     * @param paymentType {String} 
      */
-    constructor() { 
+    constructor(arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, salutation, firstName, lastName, dateOfBirth, street, zipcode, city, country, cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType) { 
         
-        BookingForm.initialize(this);
+        BookingForm.initialize(this, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, salutation, firstName, lastName, dateOfBirth, street, zipcode, city, country, cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType);
     }
 
     /**
@@ -34,7 +50,24 @@ class BookingForm {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj) { 
+    static initialize(obj, arrivalDate, departureDate, numberOfPersons, selectedCategoriesRoomCount, salutation, firstName, lastName, dateOfBirth, street, zipcode, city, country, cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType) { 
+        obj['arrivalDate'] = arrivalDate;
+        obj['departureDate'] = departureDate;
+        obj['numberOfPersons'] = numberOfPersons;
+        obj['selectedCategoriesRoomCount'] = selectedCategoriesRoomCount;
+        obj['salutation'] = salutation;
+        obj['firstName'] = firstName;
+        obj['lastName'] = lastName;
+        obj['dateOfBirth'] = dateOfBirth;
+        obj['street'] = street;
+        obj['zipcode'] = zipcode;
+        obj['city'] = city;
+        obj['country'] = country;
+        obj['cardHolderName'] = cardHolderName;
+        obj['cardNumber'] = cardNumber;
+        obj['cardValidThru'] = cardValidThru;
+        obj['cardCvc'] = cardCvc;
+        obj['paymentType'] = paymentType;
     }
 
     /**
@@ -55,7 +88,7 @@ class BookingForm {
                 obj['departureDate'] = ApiClient.convertToType(data['departureDate'], 'Date');
             }
             if (data.hasOwnProperty('arrivalTime')) {
-                obj['arrivalTime'] = LocalTime.constructFromObject(data['arrivalTime']);
+                obj['arrivalTime'] = ApiClient.convertToType(data['arrivalTime'], 'String');
             }
             if (data.hasOwnProperty('numberOfPersons')) {
                 obj['numberOfPersons'] = ApiClient.convertToType(data['numberOfPersons'], 'Number');
@@ -132,7 +165,7 @@ BookingForm.prototype['arrivalDate'] = undefined;
 BookingForm.prototype['departureDate'] = undefined;
 
 /**
- * @member {module:model/LocalTime} arrivalTime
+ * @member {String} arrivalTime
  */
 BookingForm.prototype['arrivalTime'] = undefined;
 

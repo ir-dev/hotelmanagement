@@ -14,7 +14,7 @@
 
 import ApiClient from "../ApiClient";
 import BookingForm from '../model/BookingForm';
-import CreateBookingResponse from '../model/CreateBookingResponse';
+import BookingResponse from '../model/BookingResponse';
 
 /**
 * BookingRestController service.
@@ -39,14 +39,14 @@ export default class BookingRestControllerApi {
      * Callback function to receive the result of the createBooking operation.
      * @callback module:api/BookingRestControllerApi~createBookingCallback
      * @param {String} error Error message, if any.
-     * @param {module:model/CreateBookingResponse} data The data returned by the service call.
+     * @param {module:model/BookingResponse} data The data returned by the service call.
      * @param {String} response The complete HTTP response.
      */
 
     /**
      * @param {module:model/BookingForm} bookingForm 
      * @param {module:api/BookingRestControllerApi~createBookingCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CreateBookingResponse}
+     * data is of type: {@link module:model/BookingResponse}
      */
     createBooking(bookingForm, callback) {
       let postBody = bookingForm;
@@ -67,7 +67,7 @@ export default class BookingRestControllerApi {
       let authNames = [];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
-      let returnType = CreateBookingResponse;
+      let returnType = BookingResponse;
       return this.apiClient.callApi(
         '/rest/bookings/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,

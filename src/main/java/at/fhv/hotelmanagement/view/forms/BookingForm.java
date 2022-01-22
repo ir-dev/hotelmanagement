@@ -1,5 +1,6 @@
 package at.fhv.hotelmanagement.view.forms;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -10,30 +11,48 @@ import java.util.Map;
 
 public class BookingForm {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(required = true, format = "date")
     private LocalDate arrivalDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(required = true, format = "date")
     private LocalDate departureDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    @Schema(type = "string")
     private LocalTime arrivalTime;
+    @Schema(required = true)
     private Integer numberOfPersons;
+    @Schema(required = true)
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
     private BigDecimal discountRate;
+    @Schema(required = true)
     private String salutation;
+    @Schema(required = true)
     private String firstName;
+    @Schema(required = true)
     private String lastName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(required = true, format = "date")
     private LocalDate dateOfBirth;
+    @Schema(required = true)
     private String street;
+    @Schema(required = true)
     private String zipcode;
+    @Schema(required = true)
     private String city;
+    @Schema(required = true)
     private String country;
     private String specialNotes;
+    @Schema(required = true)
     private String cardHolderName;
+    @Schema(required = true)
     private String cardNumber;
+    @Schema(required = true)
     private String cardValidThru;
+    @Schema(required = true)
     private String cardCvc;
+    @Schema(required = true)
     private String paymentType;
 
     // default constructor required by spring/thymeleaf

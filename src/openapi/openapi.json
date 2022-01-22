@@ -33,7 +33,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateBookingResponse"
+                  "$ref": "#/components/schemas/BookingResponse"
                 }
               }
             }
@@ -88,6 +88,25 @@
   "components": {
     "schemas": {
       "BookingForm": {
+        "required": [
+          "arrivalDate",
+          "cardCvc",
+          "cardHolderName",
+          "cardNumber",
+          "cardValidThru",
+          "city",
+          "country",
+          "dateOfBirth",
+          "departureDate",
+          "firstName",
+          "lastName",
+          "numberOfPersons",
+          "paymentType",
+          "salutation",
+          "selectedCategoriesRoomCount",
+          "street",
+          "zipcode"
+        ],
         "type": "object",
         "properties": {
           "arrivalDate": {
@@ -99,7 +118,7 @@
             "format": "date"
           },
           "arrivalTime": {
-            "$ref": "#/components/schemas/LocalTime"
+            "type": "string"
           },
           "numberOfPersons": {
             "type": "integer",
@@ -166,28 +185,7 @@
           }
         }
       },
-      "LocalTime": {
-        "type": "object",
-        "properties": {
-          "hour": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "minute": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "second": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nano": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "CreateBookingResponse": {
+      "BookingResponse": {
         "required": [
           "status"
         ],
@@ -249,13 +247,13 @@
                 "type": "integer",
                 "format": "int32"
               },
-              "displayName": {
-                "type": "string"
-              },
               "symbol": {
                 "type": "string"
               },
               "numericCodeAsString": {
+                "type": "string"
+              },
+              "displayName": {
                 "type": "string"
               }
             }

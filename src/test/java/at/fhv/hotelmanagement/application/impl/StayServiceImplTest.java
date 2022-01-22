@@ -444,7 +444,7 @@ public class StayServiceImplTest extends AbstractTest {
 
 
     @Test
-    void given_previewinvoice_with_billableLineItems_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException, GenerateInvoiceException {
+    void given_previewinvoice_with_billableLineItems_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -501,7 +501,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_previewinvoice_with_selectedLineItems_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException, GenerateInvoiceException {
+    void given_previewinvoice_with_selectedLineItems_when_chargeStayPreview_then_returnequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();
@@ -566,7 +566,7 @@ public class StayServiceImplTest extends AbstractTest {
     }
 
     @Test
-    void given_invoiceNo_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException, GenerateInvoiceException {
+    void given_invoiceNo_when_chargeStay_then_invoiceNoequals() throws PriceCurrencyMismatchException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, CreateGuestException, EntityNotFoundException {
         //given
         Stay stay = createStayDummy();
         Guest guest = createGuestDummy();

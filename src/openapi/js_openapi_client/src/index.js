@@ -15,8 +15,7 @@
 import ApiClient from './ApiClient';
 import AvailableCategoryDTO from './model/AvailableCategoryDTO';
 import BookingForm from './model/BookingForm';
-import CreateBookingResponse from './model/CreateBookingResponse';
-import LocalTime from './model/LocalTime';
+import BookingResponse from './model/BookingResponse';
 import Price from './model/Price';
 import PriceCurrency from './model/PriceCurrency';
 import BookingRestControllerApi from './api/BookingRestControllerApi';
@@ -74,16 +73,10 @@ export {
     BookingForm,
 
     /**
-     * The CreateBookingResponse model constructor.
-     * @property {module:model/CreateBookingResponse}
+     * The BookingResponse model constructor.
+     * @property {module:model/BookingResponse}
      */
-    CreateBookingResponse,
-
-    /**
-     * The LocalTime model constructor.
-     * @property {module:model/LocalTime}
-     */
-    LocalTime,
+    BookingResponse,
 
     /**
      * The Price model constructor.

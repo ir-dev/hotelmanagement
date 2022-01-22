@@ -128,8 +128,7 @@ Class | Method | HTTP request | Description
 
  - [OpenApiDefinition.AvailableCategoryDTO](docs/AvailableCategoryDTO.md)
  - [OpenApiDefinition.BookingForm](docs/BookingForm.md)
- - [OpenApiDefinition.CreateBookingResponse](docs/CreateBookingResponse.md)
- - [OpenApiDefinition.LocalTime](docs/LocalTime.md)
+ - [OpenApiDefinition.BookingResponse](docs/BookingResponse.md)
  - [OpenApiDefinition.Price](docs/Price.md)
  - [OpenApiDefinition.PriceCurrency](docs/PriceCurrency.md)
 

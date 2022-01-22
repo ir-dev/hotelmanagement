@@ -1,23 +1,18 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Generate OpenAPI Client" type="SwaggerCodegen">
     <option name="activeConfigurationType" value="FILE" />
-    <option name="configurationPath" value="" />
+    <option name="configurationPath" value="C:\Users\husey\OneDrive\FH Dornbirn\3. Semester\Hotelsoftware\hotelmanagement_\src\openapi\js_openapi_client\.openapi-generator\configuration.json" />
     <option name="customJreEnabled" value="false" />
     <option name="customTemplatesPath" value="" />
     <option name="enableDebugLogging" value="false" />
-    <option name="generateToPath" value="$PROJECT_DIR$\src\openapi\js_openapi_client" />
+    <option name="generateToPath" value="$PROJECT_DIR$/../hotelmanagement_\src\openapi\js_openapi_client" />
     <option name="generationParameters">
-      <list>
-        <CliArgumentViewModel>
-          <option name="name" value="" />
-          <option name="value" value="" />
-        </CliArgumentViewModel>
-      </list>
+      <list />
     </option>
-    <option name="generatorPath" value="$PROJECT_DIR$\src\openapi\openapi-generator-cli.jar" />
+    <option name="generatorPath" value="$PROJECT_DIR$/../hotelmanagement_\src\openapi\openapi-generator-cli.jar" />
     <option name="jdkPath" value="Default" />
     <option name="language" value="javascript" />
-    <option name="specificationPath" value="$PROJECT_DIR$\src\openapi\openapi.json" />
+    <option name="specificationPath" value="$PROJECT_DIR$/../hotelmanagement_\src\openapi\openapi.json" />
     <method v="2" />
   </configuration>
 </component>

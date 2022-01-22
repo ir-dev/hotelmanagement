@@ -56,14 +56,14 @@ class PriceCurrency {
             if (data.hasOwnProperty('numericCode')) {
                 obj['numericCode'] = ApiClient.convertToType(data['numericCode'], 'Number');
             }
-            if (data.hasOwnProperty('displayName')) {
-                obj['displayName'] = ApiClient.convertToType(data['displayName'], 'String');
-            }
             if (data.hasOwnProperty('symbol')) {
                 obj['symbol'] = ApiClient.convertToType(data['symbol'], 'String');
             }
             if (data.hasOwnProperty('numericCodeAsString')) {
                 obj['numericCodeAsString'] = ApiClient.convertToType(data['numericCodeAsString'], 'String');
+            }
+            if (data.hasOwnProperty('displayName')) {
+                obj['displayName'] = ApiClient.convertToType(data['displayName'], 'String');
             }
         }
         return obj;
@@ -88,11 +88,6 @@ PriceCurrency.prototype['defaultFractionDigits'] = undefined;
 PriceCurrency.prototype['numericCode'] = undefined;
 
 /**
- * @member {String} displayName
- */
-PriceCurrency.prototype['displayName'] = undefined;
-
-/**
  * @member {String} symbol
  */
 PriceCurrency.prototype['symbol'] = undefined;
@@ -101,6 +96,11 @@ PriceCurrency.prototype['symbol'] = undefined;
  * @member {String} numericCodeAsString
  */
 PriceCurrency.prototype['numericCodeAsString'] = undefined;
+
+/**
+ * @member {String} displayName
+ */
+PriceCurrency.prototype['displayName'] = undefined;
 
 
 
