@@ -1,27 +1,19 @@
 <template>
-  <div class="tm-bg-img mr-auto ie-container-width-fix" >
+  <div class="tm-bg-img mr-auto ie-container-width-fix" id="card">
     <div class="card">
       <div class="card-horizontal">
         <div class="img-square-wrapper">
-          <img class="img" :src="category.imageUrl" alt="Card image cap" />
+          <img class="img" :src="category.imageUrl" alt="Card image cap"/>
         </div>
         <div style="width: 18rem; float: left">
           <div class="card-body">
-            <h5 class="card-title">{{ this.category.name }}</h5>
+            <h3 class="card-title">{{ this.category.name }}</h3>
             <p class="card-text">
               {{ this.category.description }}
             </p>
           </div>
         </div>
-        <div style="width: 15rem; float: right">
-          <div class="card-body">
-            <h4>Sum:</h4>
-            <h5 class="card-title">
-              {{ this.category.price.amount * roomCount }} {{ this.category.price.currency.code }}
-            </h5>
-          </div>
-        </div>
-        <div style="width: 25rem; float: right">
+        <div style="width: 20rem; float: right">
           <div class="card-body">
             <h4>Selected Rooms</h4>
             <table class="center">
@@ -32,7 +24,7 @@
                   </button>
                 </td>
                 <td>
-                  <input type="number" style="width: 50px; height: 30px" :value="roomCount" />
+                  <input type="number" style="width: 50px; height: 30px" :value="roomCount"/>
                 </td>
                 <td>
                   <button type="button" class="btn btn-outline-success" @click="incrementCounter">
@@ -43,11 +35,12 @@
             </table>
           </div>
         </div>
-        <div style="width: 10rem; float: right">
+        <div style="width: 20rem; float: right">
           <div class="card-body">
-            <h4>{{ this.category.price.amount }} {{ this.category.price.currency.code }}</h4>
-            <br />
-            <h5>per Night</h5>
+            <h6> Price per night: {{ this.category.price.amount }} {{ this.category.price.currency.code }}</h6>
+            <h4 class="card-title"> Sum:
+              {{ this.category.price.amount * roomCount }} {{ this.category.price.currency.code }}
+            </h4>
           </div>
         </div>
       </div>
@@ -104,8 +97,13 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+#card {
+  margin-top: 30px;
 }
 </style>
