@@ -102,8 +102,7 @@ var OpenApiDefinition = require('open_api_definition');
 
 
 var api = new OpenApiDefinition.BookingRestControllerApi()
-var arrivalDate = new Date("2013-10-20"); // {Date} 
-var departureDate = new Date("2013-10-20"); // {Date} 
+var bookingForm = new OpenApiDefinition.BookingForm(); // {BookingForm} 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -111,7 +110,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.availableCategoriesForBooking(arrivalDate, departureDate, callback);
+api.createBooking(bookingForm, callback);
 
 ```
 
@@ -121,8 +120,8 @@ All URIs are relative to *http://localhost:8080*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*OpenApiDefinition.BookingRestControllerApi* | [**availableCategoriesForBooking**](docs/BookingRestControllerApi.md#availableCategoriesForBooking) | **GET** /rest/categories | 
 *OpenApiDefinition.BookingRestControllerApi* | [**createBooking**](docs/BookingRestControllerApi.md#createBooking) | **POST** /rest/bookings/create | 
+*OpenApiDefinition.CategoryRestControllerApi* | [**availableCategoriesForBooking**](docs/CategoryRestControllerApi.md#availableCategoriesForBooking) | **GET** /rest/categories | 
 
 
 ## Documentation for Models

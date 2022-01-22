@@ -20,6 +20,7 @@ import LocalTime from './model/LocalTime';
 import Price from './model/Price';
 import PriceCurrency from './model/PriceCurrency';
 import BookingRestControllerApi from './api/BookingRestControllerApi';
+import CategoryRestControllerApi from './api/CategoryRestControllerApi';
 
 
 /**
@@ -100,5 +101,11 @@ export {
     * The BookingRestControllerApi service constructor.
     * @property {module:api/BookingRestControllerApi}
     */
-    BookingRestControllerApi
+    BookingRestControllerApi,
+
+    /**
+    * The CategoryRestControllerApi service constructor.
+    * @property {module:api/CategoryRestControllerApi}
+    */
+    CategoryRestControllerApi
 };

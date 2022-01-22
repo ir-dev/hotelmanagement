@@ -44,7 +44,7 @@
     "/rest/categories": {
       "get": {
         "tags": [
-          "booking-rest-controller"
+          "category-rest-controller"
         ],
         "operationId": "availableCategoriesForBooking",
         "parameters": [

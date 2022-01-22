@@ -13,7 +13,6 @@
 
 
 import ApiClient from "../ApiClient";
-import AvailableCategoryDTO from '../model/AvailableCategoryDTO';
 import BookingForm from '../model/BookingForm';
 import CreateBookingResponse from '../model/CreateBookingResponse';
 
@@ -35,53 +34,6 @@ export default class BookingRestControllerApi {
         this.apiClient = apiClient || ApiClient.instance;
     }
 
-
-    /**
-     * Callback function to receive the result of the availableCategoriesForBooking operation.
-     * @callback module:api/BookingRestControllerApi~availableCategoriesForBookingCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/AvailableCategoryDTO>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
-     * @param {Date} arrivalDate 
-     * @param {Date} departureDate 
-     * @param {module:api/BookingRestControllerApi~availableCategoriesForBookingCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/AvailableCategoryDTO>}
-     */
-    availableCategoriesForBooking(arrivalDate, departureDate, callback) {
-      let postBody = null;
-      // verify the required parameter 'arrivalDate' is set
-      if (arrivalDate === undefined || arrivalDate === null) {
-        throw new Error("Missing the required parameter 'arrivalDate' when calling availableCategoriesForBooking");
-      }
-      // verify the required parameter 'departureDate' is set
-      if (departureDate === undefined || departureDate === null) {
-        throw new Error("Missing the required parameter 'departureDate' when calling availableCategoriesForBooking");
-      }
-
-      let pathParams = {
-      };
-      let queryParams = {
-        'arrivalDate': arrivalDate,
-        'departureDate': departureDate
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = [];
-      let contentTypes = [];
-      let accepts = ['*/*'];
-      let returnType = [AvailableCategoryDTO];
-      return this.apiClient.callApi(
-        '/rest/categories', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
-    }
 
     /**
      * Callback function to receive the result of the createBooking operation.

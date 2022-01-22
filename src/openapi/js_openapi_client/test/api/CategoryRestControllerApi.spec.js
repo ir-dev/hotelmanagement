@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new OpenApiDefinition.BookingRestControllerApi();
+    instance = new OpenApiDefinition.CategoryRestControllerApi();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,11 +47,11 @@
       object[property] = value;
   }
 
-  describe('BookingRestControllerApi', function() {
-    describe('createBooking', function() {
-      it('should call createBooking successfully', function(done) {
-        //uncomment below and update the code to test createBooking
-        //instance.createBooking(function(error) {
+  describe('CategoryRestControllerApi', function() {
+    describe('availableCategoriesForBooking', function() {
+      it('should call availableCategoriesForBooking successfully', function(done) {
+        //uncomment below and update the code to test availableCategoriesForBooking
+        //instance.availableCategoriesForBooking(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});
