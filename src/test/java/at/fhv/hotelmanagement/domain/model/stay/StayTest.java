@@ -74,7 +74,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", LocalDate.now().minusYears(18L), address, "");
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
                 guest.getFirstName(),
                 guest.getLastName(),
@@ -125,7 +125,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", LocalDate.now().minusYears(18L), address, "");
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
                 guest.getFirstName(),
                 guest.getLastName(),
@@ -205,7 +205,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", LocalDate.now().minusYears(18L), address, "");
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
                 guest.getFirstName(),
                 guest.getLastName(),
@@ -386,7 +386,7 @@ class StayTest extends AbstractTest {
         GuestId guestId = new GuestId("3");
         Organization organization = new Organization("FHV", BigDecimal.valueOf(0.25));
         Address address = new Address("Straße", "6971", "Hard", String.valueOf(Country.AT));
-        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", getContextLocalDate().minusYears(18L), address, "");
+        Guest guest = GuestFactory.createGuest(guestId, organization, String.valueOf(Salutation.MR), "Lukas", "Kaufmann", LocalDate.now().minusYears(18L), address, "");
         InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
                 guest.getFirstName(),
                 guest.getLastName(),
