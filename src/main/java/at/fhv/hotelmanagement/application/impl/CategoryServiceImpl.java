@@ -13,7 +13,6 @@ import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.StayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -32,9 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
-
-    @Autowired
-    ResourceLoader resourceLoader;
 
     @Transactional(readOnly = true)
     @Override
@@ -181,8 +177,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private AvailableCategoryDTO buildAvailableCategoryDto(Category category, int availableRoomsCount) {
         String categoryNameBase64 = Base64.getUrlEncoder().encodeToString(category.getName().getBytes());
-        Resource resource = this.resourceLoader.getResource("classpath:static/assets/images/category/" +categoryNameBase64+ ".jpg");
-
         String resourceUrl = "/assets/images/category/" +categoryNameBase64+ ".jpg";
 
         return AvailableCategoryDTO.builder()
