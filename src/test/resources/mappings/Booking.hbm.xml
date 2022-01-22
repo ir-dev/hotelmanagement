@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-access="field" default-cascade="all">
+    <class name="at.fhv.hotelmanagement.domain.model.booking.Booking" table="booking" lazy="true">
+        <cache usage="read-write"/>
+
+        <id name="id" type="long" column="id" unsaved-value="-1">
+            <generator class="native"/>
+        </id>
+
+        <component name="bookingNo" class="at.fhv.hotelmanagement.domain.model.booking.BookingNo">
+            <property name="no" column="booking_no" type="java.lang.String" />
+        </component>
+
+        <property name="bookingState">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">at.fhv.hotelmanagement.domain.model.booking.BookingState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+        <property name="arrivalDate" column="arrival_date" type="java.time.LocalDate" />
+
+        <property name="departureDate" column="departure_date" type="java.time.LocalDate" />
+
+        <property name="arrivalTime" column="arrival_time" type="java.time.LocalTime" />
+
+        <property name="numberOfPersons" column="number_persons" type="java.lang.Integer" />
+
+        <map name="selectedCategoriesRoomCount" table="bookingSelectedCategoriesRoomCounts" cascade="all">
+            <key column="booking_id"></key>
+            <index column="category" type="java.lang.String"/>
+            <element column="number" type="java.lang.Integer"/>
+        </map>
+
+        <component name="guestId" class="at.fhv.hotelmanagement.domain.model.guest.GuestId">
+            <property name="id" column="guest_id" type="java.lang.String" />
+        </component>
+
+        <component name="paymentInformation" class="at.fhv.hotelmanagement.domain.model.guest.PaymentInformation">
+            <property name="cardHolderName" column="card_holder_name" type="java.lang.String" />
+            <property name="cardNumber" column="card_number" type="java.lang.String" />
+            <property name="cardValidThru" column="card_valid_thru" type="java.lang.String" />
+            <property name="cardCvc" column="card_cvc" type="java.lang.String" />
+            <property name="paymentType" column="payment_type" update="true" insert="true">
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">at.fhv.hotelmanagement.domain.model.guest.PaymentType</param>
+                    <param name="type">12</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
+        </component>
+    </class>
+</hibernate-mapping>

@@ -3,7 +3,7 @@ package at.fhv.hotelmanagement.infrastructure;
 import at.fhv.hotelmanagement.domain.model.guest.Guest;
 import at.fhv.hotelmanagement.domain.model.guest.GuestId;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class HibernateGuestRepository implements GuestRepository {
     @PersistenceContext
     private EntityManager em;

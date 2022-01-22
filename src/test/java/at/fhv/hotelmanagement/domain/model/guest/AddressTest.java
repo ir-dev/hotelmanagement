@@ -15,14 +15,15 @@ public class AddressTest extends AbstractTest {
         String street = "Bauerstraße 2";
         String zipcode = "6900";
         String city = "Bregenz";
+        Country country = Country.AT;
 
         //when
-        Address address = new Address(street, zipcode, city, String.valueOf(Country.AT));
+        Address address = new Address(street, zipcode, city, String.valueOf(country));
 
         //then
-        assertEquals(address.getStreet(), street);
-        assertEquals(address.getZipcode(), zipcode);
-        assertEquals(address.getCity(), city);
-        assertEquals(address.getCountry(), Country.AT);
+        assertEquals(street, address.getStreet());
+        assertEquals(zipcode, address.getZipcode());
+        assertEquals(city, address.getCity());
+        assertEquals(country, address.getCountry());
     }
 }

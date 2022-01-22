@@ -2,7 +2,6 @@ package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.domain.model.Price;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -19,29 +18,36 @@ public class Invoice {
     private Integer nights;
     private Price subTotalPerNight;
     private Price subTotal;
+    private BigDecimal discountRate;
+    private Price discountAmount;
+    private Price subTotalDiscounted;
     private Price grandTotal;
     private Price tax;
     private Set<InvoiceLine> lineItems;
-
+    private InvoiceRecipient invoiceRecipient;
     private double taxRate;
-    private long dueDateDays;
 
     // required for hibernate
     private Invoice() {}
 
-    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, double taxRate, long dueDateDays) throws PriceCurrencyMismatchException {
+    Invoice(Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, BigDecimal discountRate, double taxRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException {
+        this(new InvoiceNo("0"), lineItems, arrivalDate, departureDate, discountRate, taxRate, invoiceRecipient);
+    }
+
+    Invoice(InvoiceNo invoiceNo, Set<InvoiceLine> lineItems, LocalDate arrivalDate, LocalDate departureDate, BigDecimal discountRate, double taxRate, InvoiceRecipient invoiceRecipient) throws PriceCurrencyMismatchException {
         this.invoiceNo = invoiceNo;
         this.lineItems = lineItems;
         this.nights = (int) DAYS.between(arrivalDate, departureDate);
         this.createdDate = LocalDate.now();
+        this.dueDate = departureDate;
+        this.discountRate = discountRate;
+        this.invoiceRecipient = invoiceRecipient;
         this.taxRate = taxRate;
-        this.dueDateDays = dueDateDays;
-        this.dueDate = this.createdDate.plusDays(this.dueDateDays);
 
         if (lineItems.size() > 0) {
             determinePrices();
         } else {
-            this.subTotalPerNight = this.subTotal = this.tax = this.grandTotal = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
+            this.subTotalPerNight = this.subTotal = this.discountAmount = this.subTotalDiscounted = this.tax = this.grandTotal = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         }
     }
 
@@ -54,8 +60,10 @@ public class Invoice {
 
         this.subTotalPerNight = sum;
         this.subTotal = sum.multiply(this.nights);
-        this.tax = this.subTotal.multiply(BigDecimal.valueOf(this.taxRate));
-        this.grandTotal = this.subTotal.add(this.tax);
+        this.discountAmount = this.subTotal.multiply(this.discountRate);
+        this.subTotalDiscounted = this.subTotal.add(this.discountAmount.multiply(BigDecimal.valueOf(-1)));
+        this.tax = this.subTotalDiscounted.multiply(BigDecimal.valueOf(this.taxRate));
+        this.grandTotal = this.subTotalDiscounted.add(this.tax);
     }
 
     public InvoiceNo getInvoiceNo() {
@@ -78,6 +86,17 @@ public class Invoice {
         return this.subTotalPerNight;
     }
 
+    public BigDecimal getDiscountRate() {
+        return this.discountRate;
+    }
+
+    public Price getDiscountAmount() {
+        return this.discountAmount;
+    }
+
+    public Price getSubTotalDiscounted() {
+        return this.subTotalDiscounted;
+    }
 
     public Price getSubTotal() {
         return this.subTotal;
@@ -91,7 +110,7 @@ public class Invoice {
         return this.tax;
     }
 
-    public Set<InvoiceLine> getLineItems() {
-        return Collections.unmodifiableSet(this.lineItems);
-    }
+    public Set<InvoiceLine> getLineItems() {return Collections.unmodifiableSet(this.lineItems);}
+
+    public InvoiceRecipient getInvoiceRecipient() {return this.invoiceRecipient;}
 }

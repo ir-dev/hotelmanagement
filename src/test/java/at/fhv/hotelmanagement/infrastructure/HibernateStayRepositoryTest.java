@@ -12,10 +12,7 @@ import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
 import at.fhv.hotelmanagement.domain.model.category.RoomState;
-import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
-import at.fhv.hotelmanagement.domain.model.stay.Invoice;
-import at.fhv.hotelmanagement.domain.model.stay.Stay;
-import at.fhv.hotelmanagement.domain.model.stay.StayFactory;
+import at.fhv.hotelmanagement.domain.model.stay.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -55,9 +53,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 createStayDummy(),
                 createStayDummy()
         );
-        staysExpected.forEach(stay -> {
-            this.stayRepository.store(stay);
-        });
+        staysExpected.forEach(stay -> this.stayRepository.store(stay));
         this.em.flush();
 
         // when
@@ -83,7 +79,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
         // when
         this.stayRepository.store(stayExcepted);
         this.em.flush();
-        Stay stayActual = this.stayRepository.findById(stayExcepted.getStayId()).get();
+        Stay stayActual = this.stayRepository.findById(stayExcepted.getStayId()).orElseThrow();
 
         // then
         assertEquals(stayExcepted, stayActual);
@@ -119,6 +115,23 @@ class HibernateStayRepositoryTest extends AbstractTest {
         // then
         assertEquals(invoiceExcepted, invoiceActual);
         assertEquals(invoiceExcepted.getInvoiceNo(), invoiceActual.getInvoiceNo());
+    }
+
+    @Test
+    void given_invoicerecipient_when_addinvoicerecipienttorepository_then_returnequalsinvoicerecipient() throws CreateGuestException, CreateBookingException, CreateStayException, RoomAlreadyExistsException, PriceCurrencyMismatchException {
+        // given
+        Stay stayExcepted = createStayDummy();
+        Invoice invoiceExcepted = stayExcepted.getInvoices().stream().findFirst().orElseThrow();
+        InvoiceRecipient invoiceRecipientExpected = invoiceExcepted.getInvoiceRecipient();
+
+        // when
+        this.stayRepository.storeRecipient(invoiceRecipientExpected);
+        this.em.flush();
+        InvoiceRecipient invoiceRecipientActual = this.stayRepository.findRecipientById(invoiceRecipientExpected.getId()).orElseThrow();
+
+        // then
+        assertEquals(invoiceRecipientExpected, invoiceRecipientActual);
+        assertEquals(invoiceRecipientExpected.getId(), invoiceRecipientActual.getId());
     }
 
     private static Integer nextDummyCategoryIdentity = 1;
@@ -167,18 +180,24 @@ class HibernateStayRepositoryTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(
                 nextDummyGuestIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );
 
+        InvoiceRecipient invoiceRecipient = new InvoiceRecipient(
+                guest.getFirstName(),
+                guest.getLastName(),
+                guest.getAddress()
+        );
+
         Booking booking = BookingFactory.createBooking(
                 nextDummyBookingIdentity(),
-                getContextLocalDate(),
-                getContextLocalDate().plusDays(1L),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1L),
                 null,
                 2,
                 selectedCategoriesRoomCount,
@@ -198,7 +217,7 @@ class HibernateStayRepositoryTest extends AbstractTest {
                 paymentInformation
         );
 
-        stay.composeInvoice(selectedCategoriesRoomCount.keySet().stream().toList());
+        stay.finalizeInvoice(this.stayRepository.nextInvoiceSeq(), selectedCategoriesRoomCount, guest.getOrganizationDiscountRate(), invoiceRecipient);
 
         return stay;
     }

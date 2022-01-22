@@ -21,10 +21,10 @@ public class PaymentInformationTest extends AbstractTest {
         PaymentInformation paymentInformation = new PaymentInformation(cardHolderName, cardNumber, cardValidThru, cardCvc, paymentType.name());
 
         //then
-        assertEquals(paymentInformation.getCardHolderName(),cardHolderName);
-        assertEquals(paymentInformation.getCardNumber(),cardNumber);
-        assertEquals(paymentInformation.getCardValidThru(), cardValidThru);
-        assertEquals(paymentInformation.getCardCvc(), cardCvc);
-        assertEquals(paymentInformation.getPaymentType(), paymentType);
+        assertEquals(cardHolderName, paymentInformation.getCardHolderName());
+        assertEquals(cardNumber, paymentInformation.getCardNumber());
+        assertEquals(cardValidThru, paymentInformation.getCardValidThru());
+        assertEquals(cardCvc, paymentInformation.getCardCvc());
+        assertEquals(paymentType, paymentInformation.getPaymentType());
     }
 }

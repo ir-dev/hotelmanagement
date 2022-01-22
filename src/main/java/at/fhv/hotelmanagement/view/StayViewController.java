@@ -3,16 +3,15 @@ package at.fhv.hotelmanagement.view;
 import at.fhv.hotelmanagement.application.api.BookingsService;
 import at.fhv.hotelmanagement.application.api.CategoryService;
 import at.fhv.hotelmanagement.application.api.StayService;
-import at.fhv.hotelmanagement.application.dto.AvailableCategoryDTO;
-import at.fhv.hotelmanagement.application.dto.BookingDTO;
-import at.fhv.hotelmanagement.application.dto.InvoiceDTO;
-import at.fhv.hotelmanagement.application.dto.StayDTO;
+import at.fhv.hotelmanagement.application.dto.*;
 import at.fhv.hotelmanagement.application.impl.EntityNotFoundException;
 import at.fhv.hotelmanagement.domain.model.PriceCurrencyMismatchException;
 import at.fhv.hotelmanagement.domain.model.guest.CreateGuestException;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 import at.fhv.hotelmanagement.domain.model.category.RoomAssignmentException;
 import at.fhv.hotelmanagement.domain.model.stay.BillingOpenException;
+import at.fhv.hotelmanagement.view.forms.InvoiceRecipientForm;
+import at.fhv.hotelmanagement.view.forms.SelectedLineItemsForm;
 import at.fhv.hotelmanagement.view.forms.StayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,7 @@ public class StayViewController {
     // stays urls
     private static final String ALL_STAYS_URL = "/stays";
     private static final String ALL_STAY_INVOICES_URL = "/stays/invoices";
+    private static final String CREATE_INVOICE_RECIPIENT_URL = "/stays/invoices/invoiceRecipient";
     private static final String CREATE_STAY_INVOICE_URL = "/stays/invoices/create";
     private static final String STAY_INVOICE_URL = "/stays/invoice";
     private static final String CREATE_STAY_URL = "/checkin";
@@ -47,6 +47,7 @@ public class StayViewController {
     private static final String INVOICE_VIEW = "invoice";
     private static final String CREATE_STAY_VIEW = "createStay";
     private static final String STAY_VIEW = "stay";
+    private static final String INVOICE_RECIPIENT_VIEW = "invoiceRecipient";
 
     // create stay steps
     private static final String CREATE_STAY_STAY_DETAILS_STEP = "enterStayDetails";
@@ -192,6 +193,7 @@ public class StayViewController {
 
         Optional<StayDTO> stay = this.stayService.stayByStayId(stayId);
 
+
         if (stay.isEmpty()) {
             return redirectError("Stay with id.: " + stayId + " not found");
         }
@@ -239,30 +241,49 @@ public class StayViewController {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
         }
 
-        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).get().checkedOutAt());
+        model.addAttribute("isCheckedOut", this.stayService.stayByStayId(stayId).orElseThrow().isCheckedOut());
         model.addAttribute("openPositionsInvoicePreview", openPositionsInvoicePreview);
         model.addAttribute("invoices", invoices);
 
         return new ModelAndView(ALL_STAY_INVOICES_VIEW);
     }
 
+    @PostMapping(CREATE_INVOICE_RECIPIENT_URL)
+    public ModelAndView createInvoiceRecipient(
+            @RequestParam(value = "stayId", required = false) String stayId,
+            @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
+            Model model) {
+
+        final Optional<GuestDTO> guest = Optional.ofNullable(this.stayService.stayByStayId(stayId).orElseThrow().guest());
+
+        model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
+        model.addAttribute("guest", guest.orElseThrow());
+        model.addAttribute("stayId", stayId);
+        model.addAttribute("invoiceRecipientForm", new InvoiceRecipientForm());
+
+        return new ModelAndView(INVOICE_RECIPIENT_VIEW);
+    }
+
     // if flag "isPreview" is set to "true" no real invoice is created!
     @PostMapping(CREATE_STAY_INVOICE_URL)
     public ModelAndView createInvoice(
             @RequestParam("stayId") String stayId,
-            @RequestParam(value="preview", required = false) boolean isPreview,
+            @RequestParam(value = "preview", required = false) boolean isPreview,
+            @ModelAttribute("invoiceRecipientForm") InvoiceRecipientForm invoiceRecipientForm,
+            @ModelAttribute SelectedLineItemsForm selectedLineItemsForm,
             Model model) {
 
         InvoiceDTO invoiceDto = null;
         try {
             if (!isPreview) {
                 Map<String, String> redirectParams = new HashMap<>();
-                redirectParams.put("no", this.stayService.chargeStay(stayId));
+                redirectParams.put("no", this.stayService.chargeStay(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipientForm));
 
                 return redirect(STAY_INVOICE_URL, redirectParams);
             }
 
-            invoiceDto = this.stayService.chargeStayPreview(stayId);
+            model.addAttribute("selectedLineItemsForm", selectedLineItemsForm);
+            invoiceDto = this.stayService.chargeStayPreview(stayId, selectedLineItemsForm.getSelectedLineItemsCount(), invoiceRecipientForm);
 
         } catch (EntityNotFoundException e) {
             return redirectError(e.getMessage());
@@ -270,6 +291,7 @@ public class StayViewController {
             return redirectError("The invoice for this stay cannot currently be generated because the product prices set for the stay have different currencies.");
         }
 
+        model.addAttribute("invoiceRecipientForm", invoiceRecipientForm);
         model.addAttribute("invoice", invoiceDto);
 
         return new ModelAndView(INVOICE_INTERMEDIARY_VIEW);

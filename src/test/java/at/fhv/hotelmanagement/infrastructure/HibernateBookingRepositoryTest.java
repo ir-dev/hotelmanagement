@@ -2,14 +2,11 @@ package at.fhv.hotelmanagement.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingFactory;
 import at.fhv.hotelmanagement.domain.model.booking.CreateBookingException;
 import at.fhv.hotelmanagement.domain.model.category.*;
 import at.fhv.hotelmanagement.domain.model.guest.*;
-import at.fhv.hotelmanagement.domain.model.guest.PaymentType;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -125,18 +123,18 @@ class HibernateBookingRepositoryTest extends AbstractTest {
         Guest guest = GuestFactory.createGuest(
                 nextDummyGuestIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );
 
         return BookingFactory.createBooking(
                 this.bookingRepository.nextIdentity(),
-                getContextLocalDate(),
-                getContextLocalDate().plusDays(1L),
+                LocalDate.now(),
+                LocalDate.now().plusDays(1L),
                 null,
                 2,
                 selectedCategoriesRoomCount,

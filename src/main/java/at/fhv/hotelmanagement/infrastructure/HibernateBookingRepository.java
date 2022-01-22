@@ -3,21 +3,25 @@ package at.fhv.hotelmanagement.infrastructure;
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
 import at.fhv.hotelmanagement.domain.repositories.BookingRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class HibernateBookingRepository implements BookingRepository {
     @PersistenceContext
     private EntityManager em;
 
     @Override
     public BookingNo nextIdentity() {
-        return new BookingNo(java.util.UUID.randomUUID().toString().toUpperCase());
+        Query query = this.em.createNativeQuery("select next value for seq_bookingno");
+        String key = query.getSingleResult().toString();
+        return new BookingNo("B" + key);
     }
 
     @Override

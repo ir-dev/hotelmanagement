@@ -2,12 +2,15 @@ package at.fhv.hotelmanagement.domain.model;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PriceTest extends AbstractTest {
     @Test
@@ -37,6 +40,15 @@ public class PriceTest extends AbstractTest {
         assertEquals(expectedPrice.getAmount(), actualPrice.getAmount());
         assertEquals(expectedPrice.getCurrency(), actualPrice.getCurrency());
         assertEquals(expectedPrice, actualPrice);
+    }
+
+    @Test
+    void given_price_when_addprice_then_throw() {
+        // given
+        Price price = Price.of(BigDecimal.valueOf(10L), Currency.getInstance("EUR"));
+
+        // when..then
+        assertThrows(PriceCurrencyMismatchException.class,() -> price.add(Price.of(BigDecimal.valueOf(15L), Currency.getInstance("USD"))));
     }
 
     @Test

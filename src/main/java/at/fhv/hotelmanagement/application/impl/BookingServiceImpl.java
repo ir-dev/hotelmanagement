@@ -1,6 +1,7 @@
 package at.fhv.hotelmanagement.application.impl;
 
 import at.fhv.hotelmanagement.application.api.BookingsService;
+import at.fhv.hotelmanagement.application.converters.CategoryConverter;
 import at.fhv.hotelmanagement.application.dto.BookingDTO;
 import at.fhv.hotelmanagement.application.dto.BookingDetailsDTO;
 import at.fhv.hotelmanagement.application.dto.GuestDTO;
@@ -15,12 +16,14 @@ import at.fhv.hotelmanagement.domain.repositories.CategoryRepository;
 import at.fhv.hotelmanagement.domain.repositories.GuestRepository;
 import at.fhv.hotelmanagement.view.forms.BookingForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.*;
 
-@Component
+@Service
 public class BookingServiceImpl implements BookingsService {
     @Autowired
     BookingRepository bookingRepository;
@@ -34,7 +37,7 @@ public class BookingServiceImpl implements BookingsService {
     @Transactional(readOnly = true)
     @Override
     public List<BookingDTO> allBookings() {
-        List<Booking> bookings = bookingRepository.findAll();
+        List<Booking> bookings = this.bookingRepository.findAll();
         List<BookingDTO> bookingsDto = new ArrayList<>();
 
         for (Booking booking : bookings) {
@@ -65,7 +68,7 @@ public class BookingServiceImpl implements BookingsService {
             return Optional.empty();
         }
 
-        return Optional.of(buildBookingDetailsDto(booking.get()));
+        return Optional.of(buildBookingDetailsDto(booking.orElseThrow()));
     }
 
     private BookingDTO buildBookingDto(Booking booking) {
@@ -78,11 +81,11 @@ public class BookingServiceImpl implements BookingsService {
     private BookingDetailsDTO buildBookingDetailsDto(Booking booking) {
         return BookingDetailsDTO.builder()
                 .withBookingEntity(booking)
-                .withGuestDTO(guestByBooking(booking).get())
+                .withGuestDTO(guestByBooking(booking).orElseThrow())
                 .build();
     }
 
-    public Optional<GuestDTO> guestByBooking(Booking booking) {
+    private Optional<GuestDTO> guestByBooking(Booking booking) {
         Optional<Guest> guest = this.guestRepository.findById(booking.getGuestId());
         if (guest.isEmpty()) {
             return Optional.empty();
@@ -103,7 +106,10 @@ public class BookingServiceImpl implements BookingsService {
         // create booking value objects
         Organization organization = null;
         if (bookingForm.getIsOrganization()) {
-            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getOrganizationAgreementCode());
+            if (bookingForm.getDiscountRate().compareTo(BigDecimal.valueOf(0)) < 0 || bookingForm.getDiscountRate().compareTo(BigDecimal.valueOf(100)) > 0) {
+                throw new CreateGuestException("DiscountRate below 0 or above 100");
+            }
+            organization = new Organization(bookingForm.getOrganizationName(), bookingForm.getDiscountRate().divide(BigDecimal.valueOf(100)).round(new MathContext(2)));
         }
         Address address = new Address(
                 bookingForm.getStreet(),
@@ -119,10 +125,13 @@ public class BookingServiceImpl implements BookingsService {
                 bookingForm.getPaymentType()
         );
 
-        Map<Category, Integer> selectedCategoriesRoomCount = new HashMap<>();
-        for (Map.Entry<String, Integer> selectedCategoryNameRoomCount : bookingForm.getSelectedCategoriesRoomCount().entrySet()) {
-            selectedCategoriesRoomCount.put(this.categoryRepository.findByName(selectedCategoryNameRoomCount.getKey()).orElseThrow(), selectedCategoryNameRoomCount.getValue());
+        Map<Category, Integer> selectedCategoriesRoomCount = null;
+        try {
+            selectedCategoriesRoomCount = CategoryConverter.convertToSelectedCategoriesRoomCount(bookingForm.getSelectedCategoriesRoomCount());
+        } catch (EntityNotFoundException e) {
+            throw new NoSuchElementException(e.getMessage());
         }
+
         // create guest and booking entity
         Guest guest = GuestFactory.createGuest(
                 this.guestRepository.nextIdentity(),
@@ -130,7 +139,7 @@ public class BookingServiceImpl implements BookingsService {
                 bookingForm.getSalutation(),
                 bookingForm.getFirstName(),
                 bookingForm.getLastName(),
-                bookingForm.getBirthday(),
+                bookingForm.getDateOfBirth(),
                 address,
                 bookingForm.getSpecialNotes()
         );

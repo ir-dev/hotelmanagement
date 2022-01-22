@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,10 +85,10 @@ class HibernateGuestRepositoryTest extends AbstractTest {
         return GuestFactory.createGuest(
                 this.guestRepository.nextIdentity(),
                 null,
-                Salutation.MISTER.toString(),
+                Salutation.MR.toString(),
                 "Max",
                 "Mustermann",
-                getContextLocalDate().minusYears(18L),
+                LocalDate.now().minusYears(18L),
                 address,
                 ""
         );

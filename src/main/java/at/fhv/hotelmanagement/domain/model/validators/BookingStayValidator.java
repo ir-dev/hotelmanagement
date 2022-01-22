@@ -5,10 +5,10 @@ import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.stay.CreateStayException;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 public class BookingStayValidator {
+    private BookingStayValidator() {}
 
     public static void validateBooking(LocalDate arrivalDate, LocalDate departureDate, Integer numberOfPersons, Map<Category, Integer> selectedCategoriesRoomCount) throws CreateBookingException {
         // ArrivalDate is today or in the future
@@ -68,15 +68,5 @@ public class BookingStayValidator {
         if (!(numberOfPersons <= totalMaxPersons)) {
             throw new ValidationException("SelectedCategoryRoomCount Total: max. sum of all max. persons (for each category).");
         }
-    }
-
-    public static Map<String, Integer> convertToSelectedCategoryNamesRoomCount(Map<Category, Integer> selectedCategoriesRoomCount) {
-        Map<String, Integer> selectedCategoryNamesRoomCount = new HashMap<>();
-
-        for (Map.Entry<Category, Integer> selectedCategoryRoomCount : selectedCategoriesRoomCount.entrySet()) {
-            selectedCategoryNamesRoomCount.put(selectedCategoryRoomCount.getKey().getName(), selectedCategoryRoomCount.getValue());
-        }
-
-        return selectedCategoryNamesRoomCount;
     }
 }

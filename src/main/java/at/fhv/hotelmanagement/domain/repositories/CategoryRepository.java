@@ -2,14 +2,12 @@ package at.fhv.hotelmanagement.domain.repositories;
 
 import at.fhv.hotelmanagement.domain.model.category.Category;
 import at.fhv.hotelmanagement.domain.model.category.CategoryId;
-import at.fhv.hotelmanagement.domain.model.category.Room;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
-import org.springframework.stereotype.Repository;
+import at.fhv.hotelmanagement.domain.model.category.RoomNumber;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface CategoryRepository {
     CategoryId nextIdentity();
 
@@ -18,7 +16,7 @@ public interface CategoryRepository {
     // find by name is possible because name is unique
     Optional<Category> findByName(String categoryName);
 
-    List<Room> findCategoryRoomsByState(String categoryName, RoomState state);
+    List<RoomNumber> findRoomNumbersByStayId(StayId stayId);
 
     void store(Category category);
 }

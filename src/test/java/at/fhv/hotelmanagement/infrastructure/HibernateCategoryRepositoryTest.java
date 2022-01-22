@@ -2,19 +2,17 @@ package at.fhv.hotelmanagement.infrastructure;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.category.RoomAlreadyExistsException;
 import at.fhv.hotelmanagement.domain.model.category.*;
-import at.fhv.hotelmanagement.domain.model.category.RoomState;
+import at.fhv.hotelmanagement.domain.model.stay.StayId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
@@ -85,70 +83,44 @@ class HibernateCategoryRepositoryTest extends AbstractTest {
         assertEquals(categoryExcepted.getCategoryId(), categoryActual.getCategoryId());
     }
 
+
+
     @Test
-    void given_3categoryroomsandroomstate_when_findcategoryroomsbyroomstate_then_returnequalscategoryrooms() throws RoomAlreadyExistsException {
-        // given
+    void given_3categoryrooms_when_findroomsbystayid_then_returnequalscategoryrooms() throws RoomAlreadyExistsException {
+        //given
         RoomState roomState = RoomState.AVAILABLE;
-        List<Room> roomsExpected = Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
+        List<RoomNumber> roomNumbersExpected = Arrays.asList(
+                new RoomNumber("101"),
+                new RoomNumber("102"),
+                new RoomNumber("103")
         );
+
         Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
         Category category = CategoryFactory.createCategory(
                 this.categoryRepository.nextIdentity(),
-                "Family Suite MZ",
-                "A family suite ...",
-                3,
+                "Honeymoon Suite DZ",
+                "A honeymoon..",
+                2,
                 p,
                 p
         );
-        for (Room r : roomsExpected) {
-            category.createRoom(r);
+
+        for (RoomNumber rn : roomNumbersExpected) {
+            Room room = new Room(rn, roomState);
+            category.createRoom(room);
+            room.occupied(LocalDate.now(), LocalDate.now().plusDays(2), new StayId("1"));
         }
+
         this.categoryRepository.store(category);
         this.em.flush();
 
-        // when
-        List<Room> roomsActual = this.categoryRepository.findCategoryRoomsByState(category.getName(), roomState);
+        //when
+        List<RoomNumber> roomsNumbersActual = this.categoryRepository.findRoomNumbersByStayId(new StayId("1"));
 
-        // then
-        assertEquals(roomsExpected.size(), roomsActual.size());
-        for (Room r : roomsActual) {
-            assertTrue(roomsExpected.contains(r));
+        //then
+        for (RoomNumber rn : roomsNumbersActual) {
+            assertTrue(roomNumbersExpected.contains(rn));
         }
-    }
-
-    @Test
-    void given_3categoryroomsanddifferentroomstate_when_findcategoryroomsbyroomstate_then_returnemptycategoryrooms() throws RoomAlreadyExistsException {
-        // given
-        RoomState roomState = RoomState.AVAILABLE;
-        RoomState differentRoomState = RoomState.MAINTENANCE;
-        List<Room> roomsExpected = Arrays.asList(
-                new Room(new RoomNumber("101"), roomState),
-                new Room(new RoomNumber("102"), roomState),
-                new Room(new RoomNumber("103"), roomState)
-        );
-        Price p = Price.of(BigDecimal.ZERO, Currency.getInstance("EUR"));
-        Category category = CategoryFactory.createCategory(
-                this.categoryRepository.nextIdentity(),
-                "Family Suite MZ",
-                "A family suite ...",
-                3,
-                p,
-                p
-        );
-        for (Room r : roomsExpected) {
-            category.createRoom(r);
-        }
-        this.categoryRepository.store(category);
-        this.em.flush();
-
-        // when
-        List<Room> roomsActual = this.categoryRepository.findCategoryRoomsByState(category.getName(), differentRoomState);
-
-        // then
-        assertTrue(roomsActual.isEmpty());
     }
 }
 

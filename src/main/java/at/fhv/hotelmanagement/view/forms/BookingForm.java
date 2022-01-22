@@ -1,7 +1,9 @@
 package at.fhv.hotelmanagement.view.forms;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -9,30 +11,48 @@ import java.util.Map;
 
 public class BookingForm {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(required = true, format = "date")
     private LocalDate arrivalDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(required = true, format = "date")
     private LocalDate departureDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    @Schema(type = "string")
     private LocalTime arrivalTime;
+    @Schema(required = true)
     private Integer numberOfPersons;
+    @Schema(required = true)
     private Map<String, Integer> selectedCategoriesRoomCount;
     private Boolean isOrganization;
     private String organizationName;
-    private String organizationAgreementCode;
+    private BigDecimal discountRate;
+    @Schema(required = true)
     private String salutation;
+    @Schema(required = true)
     private String firstName;
+    @Schema(required = true)
     private String lastName;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate birthday;
+    @Schema(required = true, format = "date")
+    private LocalDate dateOfBirth;
+    @Schema(required = true)
     private String street;
+    @Schema(required = true)
     private String zipcode;
+    @Schema(required = true)
     private String city;
+    @Schema(required = true)
     private String country;
     private String specialNotes;
+    @Schema(required = true)
     private String cardHolderName;
+    @Schema(required = true)
     private String cardNumber;
+    @Schema(required = true)
     private String cardValidThru;
+    @Schema(required = true)
     private String cardCvc;
+    @Schema(required = true)
     private String paymentType;
 
     // default constructor required by spring/thymeleaf
@@ -97,12 +117,16 @@ public class BookingForm {
         this.organizationName = organizationName;
     }
 
-    public String getOrganizationAgreementCode() {
-        return this.organizationAgreementCode;
+    public BigDecimal getDiscountRate() {
+        if (this.discountRate != null) {
+            return this.discountRate;
+        } else {
+            return BigDecimal.valueOf(0);
+        }
     }
 
-    public void setOrganizationAgreementCode(String organizationAgreementCode) {
-        this.organizationAgreementCode = organizationAgreementCode;
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
     }
 
     public String getSalutation() {
@@ -129,12 +153,12 @@ public class BookingForm {
         this.lastName = lastName;
     }
 
-    public LocalDate getBirthday() {
-        return this.birthday;
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getStreet() {

@@ -2,6 +2,8 @@ package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
 import at.fhv.hotelmanagement.domain.model.guest.PaymentInformation;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.boot.jackson.JsonComponent;
 
 import java.util.Map;
 import java.util.Objects;

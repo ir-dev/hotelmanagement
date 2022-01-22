@@ -1,6 +1,8 @@
 package at.fhv.hotelmanagement.application.dto;
 
 import at.fhv.hotelmanagement.domain.model.booking.Booking;
+import org.springframework.boot.jackson.JsonComponent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,7 +10,6 @@ import java.util.Objects;
 
 public final class BookingDTO {
     private BookingDetailsDTO details;
-
     private String bookingNo;
     private String bookingState;
     private LocalDate arrivalDate;

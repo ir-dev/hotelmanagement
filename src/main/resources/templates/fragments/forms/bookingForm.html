@@ -5,6 +5,7 @@
         <div class="form-group">
             <label for="arrivalDate" class="col-form-label">Arrival Date</label>
             <input type="date" th:field="*{arrivalDate}" class="form-control" required>
+           <!-- <div class="alert alert-warning" th:if="${#validate.hasErrors('msg')}" th:errors="*{arrivalDate}"></div> -->
         </div>
         <div class="form-group">
             <label for="departureDate" class="col-form-label">Departure Date</label>
@@ -116,8 +117,8 @@
             <input type="text" th:field="*{organizationName}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="organizationAgreementCode" class="col-form-label">Agreement Code</label>
-            <input type="text" th:field="*{organizationAgreementCode}" class="form-control">
+            <label for="discountRate" class="col-form-label">Discount Rate</label>
+            <input type="number" th:field="*{discountRate}" class="form-control" min="0" max="100">
         </div>
     </div>
     <div class="card-body border-top">
@@ -135,8 +136,8 @@
             <input type="text" th:field="*{lastName}" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="birthday" class="col-form-label">Birthday</label>
-            <input type="date" th:field="*{birthday}" class="form-control" required>
+            <label for="dateOfBirth" class="col-form-label">Date of Birth</label>
+            <input type="date" th:field="*{dateOfBirth}" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="street" class="col-form-label">Street</label>
@@ -179,11 +180,11 @@
     </th:block>
     <input type="hidden" th:field="*{isOrganization}">
     <input type="hidden" th:field="*{organizationName}">
-    <input type="hidden" th:field="*{organizationAgreementCode}">
+    <input type="hidden" th:field="*{discountRate}">
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
-    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{dateOfBirth}">
     <input type="hidden" th:field="*{street}">
     <input type="hidden" th:field="*{zipcode}">
     <input type="hidden" th:field="*{city}">
@@ -205,7 +206,7 @@
         </div>
         <div class="form-group">
             <label for="cardCvc" class="col-form-label">CVC</label>
-            <input type="password" th:field="*{cardCvc}" class="form-control">
+            <input type="text" th:field="*{cardCvc}" class="form-control">
         </div>
     </div>
     <div class="card-body border-top">
@@ -234,11 +235,11 @@
     </th:block>
     <input type="hidden" th:field="*{isOrganization}">
     <input type="hidden" th:field="*{organizationName}">
-    <input type="hidden" th:field="*{organizationAgreementCode}">
+    <input type="hidden" th:field="*{discountRate}">
     <input type="hidden" th:field="*{salutation}">
     <input type="hidden" th:field="*{firstName}">
     <input type="hidden" th:field="*{lastName}">
-    <input type="hidden" th:field="*{birthday}">
+    <input type="hidden" th:field="*{dateOfBirth}">
     <input type="hidden" th:field="*{street}">
     <input type="hidden" th:field="*{zipcode}">
     <input type="hidden" th:field="*{city}">
@@ -262,24 +263,24 @@
                             <td><span th:text="*{organizationName}"/></td>
                         </tr>
                         <tr th:if="*{isOrganization}">
-                            <th scope="row">Agreement Code</th>
-                            <td><span th:text="*{organizationAgreementCode}"/></td>
+                            <th scope="row">Discount Rate</th>
+                            <td><span th:text="*{discountRate}"/></td>
                         </tr>
                         <tr>
                             <th scope="row">Salutation</th>
                             <td><span th:text="*{salutation}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Firstname</th>
+                            <th scope="row">First Name</th>
                             <td><span th:text="*{firstName}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Lastname</th>
+                            <th scope="row">Last Name</th>
                             <td><span th:text="*{lastName}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row">Birthday</th>
-                            <td><span th:text="*{birthday}"/></td>
+                            <th scope="row">Date of Birth</th>
+                            <td><span th:text="*{dateOfBirth}"/></td>
                         </tr>
                         <tr>
                             <th scope="row">Street</th>
@@ -380,7 +381,7 @@
                             <td><span th:text="*{arrivalTime}"/></td>
                         </tr>
                         <tr>
-                            <th scope="row"># of Persons</th>
+                            <th scope="row">Number of Persons</th>
                             <td><span th:text="*{numberOfPersons}"/></td>
                         </tr>
                         <tr th:each="count : *{getSelectedCategoriesRoomCount}">
@@ -428,7 +429,7 @@
         let categoryRoomsPlusButtons = document.querySelectorAll(".button-plus-category-rooms");
         let isOrganizationCheckbox = document.querySelector("#isOrganization1");
         let organizationNameText = document.querySelector("#organizationName");
-        let organizationAgreementCodeText = document.querySelector("#organizationAgreementCode");
+        let discountRate = document.querySelector("#discountRate");
         let arrivalDate = document.querySelector("#arrivalDate");
         let departureDate = document.querySelector("#departureDate");
         let nightsText = document.querySelector("#nights");
@@ -436,17 +437,17 @@
         function updateOrganizationInputs() {
             if (isOrganizationCheckbox.checked) {
                 organizationNameText.disabled = false;
-                organizationAgreementCodeText.disabled = false;
+                discountRate.disabled = false;
                 organizationNameText.required = true;
-                organizationAgreementCodeText.required = true;
+                discountRate.required = true;
             } else {
                 organizationNameText.disabled = true;
-                organizationAgreementCodeText.disabled = true;
+                discountRate.disabled = true;
                 organizationNameText.required = false;
-                organizationAgreementCodeText.required = false;
+                discountRate.required = false;
 
                 organizationNameText.value = "";
-                organizationAgreementCodeText.value = "";
+                discountRate.value = "";
             }
         }
 

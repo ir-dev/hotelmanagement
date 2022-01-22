@@ -1,7 +1,7 @@
 <th:block th:fragment="salutation">
   <option value="" disabled selected>Select gender ...</option>
-  <option value="MISTER">Mr.</option>
-  <option value="MISS">Ms.</option>
+  <option value="MR">Mr</option>
+  <option value="MS">Ms</option>
   <option value="DIVERSE">Diverse</option>
 </th:block>
 
@@ -13,6 +13,11 @@
 
 <th:block th:fragment="country">
   <option value="" disabled selected>Select a country ...</option>
+  <optgroup id="country-optgroup-mostSelected" label="">
+    <option value="AT">Austria</option>
+    <option value="DE">Germany</option>
+    <option value="CH">Switzerland</option>
+  </optgroup>
   <optgroup id="country-optgroup-Africa" label="Africa">
     <option value="DZ">Algeria</option>
     <option value="AO">Angola</option>

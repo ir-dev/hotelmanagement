@@ -6,7 +6,7 @@
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse ml-auto" id="navbarNav">
                 <ul class="navbar-nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" th:classappend="${#request.requestURI.equals('/')} ? active : ''" th:href="@{/}">
@@ -22,16 +22,18 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:classappend="${#request.requestURI.startsWith('/stay')} or ${#request.requestURI.startsWith('/checkin')} or ${#request.requestURI.startsWith('/checkout')} ? active : ''" th:href="@{/stays}">
+                        <a class="nav-link" th:classappend="(${#request.requestURI.startsWith('/stay')} or ${#request.requestURI.startsWith('/checkin')} or ${#request.requestURI.startsWith('/checkout')} ? active : '')" th:href="@{/stays}">
                             <i class="fas fa-fw fa-hotel"></i>Stays
                         </a>
                     </li>
-
-                    <!--
                     <li class="nav-divider">
                         Back-Office
                     </li>
-                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${#request.requestURI.startsWith('/room')} ? active : ''" th:href="@{/rooms}">
+                            <i class="fas fa-bed"></i>Rooms
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

@@ -29,6 +29,18 @@
             <property name="currency" column="subTotal_currency" type="java.util.Currency" />
         </component>
 
+        <property name="discountRate" column="discountrate" type="java.math.BigDecimal" />
+
+        <component name="discountAmount" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="discount_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="discount_currency" type="java.util.Currency" />
+        </component>
+
+        <component name="subTotalDiscounted" class="at.fhv.hotelmanagement.domain.model.Price">
+            <property name="amount" column="subTotalDiscounted_amount" type="java.math.BigDecimal" />
+            <property name="currency" column="subTotalDiscounted_currency" type="java.util.Currency" />
+        </component>
+
         <component name="tax" class="at.fhv.hotelmanagement.domain.model.Price">
             <property name="amount" column="tax_amount" type="java.math.BigDecimal" />
             <property name="currency" column="tax_currency" type="java.util.Currency" />
@@ -43,6 +55,8 @@
             <key column="invoice_no"/>
             <one-to-many class="at.fhv.hotelmanagement.domain.model.stay.InvoiceLine"/>
         </set>
+
+        <many-to-one name="invoiceRecipient" class="at.fhv.hotelmanagement.domain.model.stay.InvoiceRecipient" cascade="merge" unique="true"/>
 
     </class>
 </hibernate-mapping>

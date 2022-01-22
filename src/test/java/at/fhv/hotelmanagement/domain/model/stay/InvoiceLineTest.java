@@ -2,16 +2,12 @@ package at.fhv.hotelmanagement.domain.model.stay;
 
 import at.fhv.hotelmanagement.AbstractTest;
 import at.fhv.hotelmanagement.domain.model.Price;
-import at.fhv.hotelmanagement.domain.model.booking.BookingNo;
-import at.fhv.hotelmanagement.domain.model.guest.Address;
-import at.fhv.hotelmanagement.domain.model.guest.Country;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class InvoiceLineTest extends AbstractTest {
     @Test
@@ -27,10 +23,10 @@ public class InvoiceLineTest extends AbstractTest {
         InvoiceLine invoiceLine = new InvoiceLine(type, product, description, quantity, price);
 
         //then
-        assertEquals(invoiceLine.getType(), type);
-        assertEquals(invoiceLine.getProduct(), product);
-        assertEquals(invoiceLine.getDescription(), description);
-        assertEquals(invoiceLine.getQuantity(), quantity);
-        assertEquals(invoiceLine.getPrice(), price);
+        assertEquals(type, invoiceLine.getType());
+        assertEquals(product, invoiceLine.getProduct());
+        assertEquals(description, invoiceLine.getDescription());
+        assertEquals(quantity, invoiceLine.getQuantity());
+        assertEquals(price, invoiceLine.getPrice());
     }
 }

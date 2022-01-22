@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="/fragments/layout/page :: meta(description='View all Stays')"/>
-    <title>Stays | Hotel Management</title>
+    <title>Stays | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -15,7 +15,8 @@
         <div class="container-fluid dashboard-content">
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-success alert-dismissible fade show" th:if="${msg != null && msg.isPresent()}" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show"
+                         th:if="${msg != null && msg.isPresent()}" role="alert">
                         <th:block th:text="${msg.get()}"></th:block>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -31,9 +32,7 @@
                         <div class="page-breadcrumb">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <a th:href="@{/stays}" class="breadcrumb-link">Stays</a>
-                                    </li>
+                                    <li class="breadcrumb-item"><a th:href="@{/stays}" class="breadcrumb-link">Stays</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">View</li>
                                 </ol>
                             </nav>
@@ -49,26 +48,57 @@
                             <div class="row ml-0 mr-0">
                                 <a th:href="@{/checkin}" class="btn btn-primary ml-auto mr-0 mb-3">Create Stay (Check-In of Walk-In Guest)</a>
                             </div>
+                            <br>
+                            <input class="form-control" list="mostSearched" id="myInput" type="text" autocomplete=”on” placeholder="Search..."><br>
+
+                            <datalist id="mostSearched">
+                                <option value="CHECKED_IN">
+                                <option value="CHECKED_OUT">
+                            </datalist>
 
                             <div class="card">
-                                <table class="table" style="text-align: center">
+                                <table class="table" style="text-align: center" id="myTable2">
                                     <thead>
                                     <tr>
-                                        <th>ID #</th>
-                                        <th>Status</th>
+                                        <th onclick="sortTable(0)" style="cursor: pointer">Stay ID</th>
+                                        <th onclick="sortTable(1)" style="cursor: pointer">Guest</th>
+                                        <th onclick="sortTable(2)" style="cursor: pointer">Departure</th>
+                                        <th onclick="sortTable(3)" style="cursor: pointer">Room Number(s)</th>
+                                        <th onclick="sortTable(4)" style="cursor: pointer">Status</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="myTable">
                                     <tr th:if="${stays.isEmpty()}">
-                                        <td colspan="3"> no stays available</td>
+                                        <td colspan="6"> no stays available</td>
                                     </tr>
                                     <tr th:each="stay: ${stays}">
                                         <td><span th:text="${stay.stayId()}"/></td>
+                                        <td><span th:text="${stay.guest.firstName() + ' ' + stay.guest.lastName()}"/>
+                                        </td>
+                                        <td>
+                                            <div th:switch="${stay.stayStatus()}">
+                                                <p th:case="CHECKED_IN"><span th:text="${stay.departureDate()}"/></p>
+                                                <p th:case="CHECKED_OUT"><span th:text="${stay.checkOutDate()}"/></p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span th:each="roomNumber, state: *{stay.roomNumbers()}">
+                                                <span th:text="${roomNumber}"></span><span th:if="${!state.last}" th:text="', '"></span>
+                                            </span>
+                                        </td>
                                         <td><span th:text="${stay.stayStatus()}" th:classappend="${stay.getStayStateTextColorClass()}"/></td>
                                         <td style="width: 200px;">
-                                            <a class="btn btn-space btn-light" th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i class="fas fa-file-invoice"></i></a>
-                                            <a class="btn btn-space btn-danger" th:if="${stay.checkedOutAt() == null}" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                            <div th:switch="${stay.stayStatus()}">
+                                                <p th:case="CHECKED_IN">
+                                                    <a class="btn btn-space btn-light" th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i class="fas fa-file-invoice"></i></a>
+                                                    <a class="btn btn-space btn-danger" th:href="@{/checkout(stayId=${stay.stayId()})}"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                                </p>
+                                                <p th:case="CHECKED_OUT">
+                                                    <a class="btn btn-space btn-light" th:href="@{/stays/invoices(stayId=${stay.stayId()})}"><i class="fas fa-file-invoice"></i></a>
+                                                    <a class="btn btn-space, text-white" style="cursor: default"><i class="fas fa-sign-out-alt"></i> Check-Out</a>
+                                                </p>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -82,7 +112,6 @@
     </div>
 </div>
 <th:block th:replace="/fragments/layout/page :: js"/>
-
+<script>window.onload = sortTable(4); sortTable(4);</script>
 </body>
-
 </html>

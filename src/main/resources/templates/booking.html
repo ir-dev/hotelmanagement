@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="/fragments/layout/page :: meta(description='View all Bookings')"/>
-    <title>Booking | Hotel Management</title>
+    <title>Booking | Hotel Schwarz</title>
     <th:block th:replace="/fragments/layout/page :: css"/>
 </head>
 
@@ -34,52 +34,121 @@
             </div>
 
             <div class="row">
-                <div class="col-xl-10">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="card">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>Booking #</th>
-                                        <th>Guest #</th>
-                                        <th>Arrival</th>
-                                        <th>Arrival Time</th>
-                                        <th>Departure</th>
-                                        <th>Status</th>
-                                        <th># of Rooms</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><span th:text="${booking.bookingNo()}"/></td>
-                                        <td><span th:text="${booking.details.guest.firstName} + ' ' + ${booking.details.guest.lastName}"/></td>
-                                        <td><span th:text="${booking.arrivalDate}"/></td>
-                                        <td><span th:text="${booking.arrivalTime}"/></td>
-                                        <td><span th:text="${booking.departureDate}"/></td>
-                                        <td><span th:text="${booking.bookingState}"/></td>
-                                        <td><span th:text="${booking.numberOfBookedRooms}"/></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Guest Details</h5>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Salutation</th>
+                                    <td><span th:text="${guest.salutation()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">First Name</th>
+                                    <td><span th:text="${guest.firstName()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Last Name</th>
+                                    <td><span th:text="${guest.lastName()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Date of Birth</th>
+                                    <td><span th:text="${guest.dateOfBirth()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Street</th>
+                                    <td><span th:text="${guest.addressStreet()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Zip Code</th>
+                                    <td><span th:text="${guest.addressZipcode()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">City</th>
+                                    <td><span th:text="${guest.addressCity()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Country</th>
+                                    <td><span th:text="${guest.addressCountry()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Special Notes</th>
+                                    <td><span th:text="${guest.specialNotes()}"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <!--                <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-12">-->
-                <!--                    <ul class="list-group">-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterStayDetails')} ? active : ''">Stay Details</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterRoomCategories')} ? active : ''">Room Categories</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterGuestDetails')} ? active : ''">Guest Details</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'enterPayment')} ? active : ''">Payment</li>-->
-                <!--                        <li class="list-group-item" th:classappend="${#strings.equals(step, 'confirmSummary')} ? active : ''">Booking Summary</li>-->
-                <!--                    </ul>-->
-                <!--                </div>-->
+
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Credit Card Details</h5>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Card Holder Name</th>
+                                    <td><span th:text="${booking.details.cardHolderName}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Card Number</th>
+                                    <td><span th:text="${booking.details.cardNumber}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Valid Thru</th>
+                                    <td><span th:text="${booking.details.cardValidThru}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">CVC</th>
+                                    <td><span th:text="${booking.details.cardCvc}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Payment Type</th>
+                                    <td><span th:text="${booking.details.paymentType}"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Stay Details</h5>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Arrival Date</th>
+                                    <td><span th:text="${booking.arrivalDate()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Departure Date</th>
+                                    <td><span th:text="${booking.departureDate()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Arrival Time</th>
+                                    <td><span th:text="${booking.arrivalTime()}"/></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Number of Persons</th>
+                                    <td><span th:text="${booking.numberOfPersons()}"/></td>
+                                </tr>
+                                <tr th:each="selectedCategoryRoomCount : ${booking.details.selectedCategoriesRoomCount()}">
+                                    <th scope="row" th:text="${selectedCategoryRoomCount.key}">Category:</th>
+                                    <td><span th:text="${selectedCategoryRoomCount.value}"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<th:block th:replace="/fragments/layout/page :: js"/>
+    <th:block th:replace="/fragments/layout/page :: js"/>
 
 </body>
 
