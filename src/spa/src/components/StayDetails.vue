@@ -6,45 +6,46 @@
           <div class="form-group tm-form-element">
             <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
             <input
-              name="arrivalDate"
-              v-model="form.arrivalDate"
-              @change="updateForm"
-              type="date"
-              class="form-control"
-              id="arrivalDate"
+                name="arrivalDate"
+                v-model="form.arrivalDate"
+                @change="updateForm"
+                type="date"
+                class="form-control"
+                id="arrivalDate"
             />
           </div>
           <div class="form-group tm-form-element">
             <i class="fa fa-calendar fa-2x tm-form-element-icon"></i>
             <input
-              name="departureDate"
-              v-model="form.departureDate"
-              @change="updateForm"
-              type="date"
-              class="form-control"
-              id="departureDate"
+                name="departureDate"
+                v-model="form.departureDate"
+                @change="updateForm"
+                type="date"
+                class="form-control"
+                id="departureDate"
             />
           </div>
           <div class="form-group tm-form-element">
             <i class="fa fa-clock-o fa-2x tm-form-element-icon"></i>
             <input
-              name="arrivalTime"
-              v-model="form.arrivalTime"
-              @change="updateForm"
-              type="time"
-              class="form-control"
-              id="arrivalTime"
+                name="arrivalTime"
+                v-model="form.arrivalTime"
+                @change="updateForm"
+                type="time"
+                class="form-control"
+                id="arrivalTime"
             />
           </div>
           <div class="form-group tm-form-element">
             <i class="fa fa-2x fa-user tm-form-element-icon"></i>
             <input
-              type="number"
-              v-model="form.numberOfPersons"
-              @change="updateForm"
-              id="numberOfPersons"
-              class="form-control"
-              min="1"
+                type="number"
+                v-model="form.numberOfPersons"
+                @change="updateForm"
+                id="numberOfPersons"
+                class="form-control"
+                placeholder="Number of Person"
+                required
             />
           </div>
         </div>
