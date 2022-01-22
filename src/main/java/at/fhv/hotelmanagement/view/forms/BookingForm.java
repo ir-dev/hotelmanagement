@@ -99,7 +99,11 @@ public class BookingForm {
     }
 
     public BigDecimal getDiscountRate() {
-        return this.discountRate;
+        if (this.discountRate != null) {
+            return this.discountRate;
+        } else {
+            return BigDecimal.valueOf(0);
+        }
     }
 
     public void setDiscountRate(BigDecimal discountRate) {
