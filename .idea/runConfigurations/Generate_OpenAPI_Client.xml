@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Generate OpenAPI Client" type="SwaggerCodegen">
-    <option name="activeConfigurationType" value="FILE" />
+    <option name="activeConfigurationType" value="CLI_PARAMETERS" />
     <option name="configurationPath" value="C:\Users\husey\OneDrive\FH Dornbirn\3. Semester\Hotelsoftware\hotelmanagement_\src\openapi\js_openapi_client\.openapi-generator\configuration.json" />
     <option name="customJreEnabled" value="false" />
     <option name="customTemplatesPath" value="" />

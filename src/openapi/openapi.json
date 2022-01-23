@@ -53,8 +53,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "date"
+              "type": "string"
             }
           },
           {
@@ -62,8 +61,7 @@
             "in": "query",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "date"
+              "type": "string"
             }
           }
         ],
@@ -247,13 +245,13 @@
                 "type": "integer",
                 "format": "int32"
               },
+              "displayName": {
+                "type": "string"
+              },
               "symbol": {
                 "type": "string"
               },
               "numericCodeAsString": {
-                "type": "string"
-              },
-              "displayName": {
                 "type": "string"
               }
             }

@@ -14,19 +14,19 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The CreateBookingResponse model module.
- * @module model/CreateBookingResponse
+ * The BookingResponse model module.
+ * @module model/BookingResponse
  * @version v0
  */
-class CreateBookingResponse {
+class BookingResponse {
     /**
-     * Constructs a new <code>CreateBookingResponse</code>.
-     * @alias module:model/CreateBookingResponse
+     * Constructs a new <code>BookingResponse</code>.
+     * @alias module:model/BookingResponse
      * @param status {String} 
      */
     constructor(status) { 
         
-        CreateBookingResponse.initialize(this, status);
+        BookingResponse.initialize(this, status);
     }
 
     /**
@@ -39,15 +39,15 @@ class CreateBookingResponse {
     }
 
     /**
-     * Constructs a <code>CreateBookingResponse</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>BookingResponse</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/CreateBookingResponse} obj Optional instance to populate.
-     * @return {module:model/CreateBookingResponse} The populated <code>CreateBookingResponse</code> instance.
+     * @param {module:model/BookingResponse} obj Optional instance to populate.
+     * @return {module:model/BookingResponse} The populated <code>BookingResponse</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new CreateBookingResponse();
+            obj = obj || new BookingResponse();
 
             if (data.hasOwnProperty('status')) {
                 obj['status'] = ApiClient.convertToType(data['status'], 'String');
@@ -65,17 +65,17 @@ class CreateBookingResponse {
 /**
  * @member {String} status
  */
-CreateBookingResponse.prototype['status'] = undefined;
+BookingResponse.prototype['status'] = undefined;
 
 /**
  * @member {String} message
  */
-CreateBookingResponse.prototype['message'] = undefined;
+BookingResponse.prototype['message'] = undefined;
 
 
 
 
 
 
-export default CreateBookingResponse;
+export default BookingResponse;
 
