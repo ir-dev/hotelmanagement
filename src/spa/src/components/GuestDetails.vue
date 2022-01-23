@@ -46,7 +46,6 @@
                 <option value="" selected disabled hidden>Salutation</option>
                 <option value="MR">Mr</option>
                 <option value="MS">Ms</option>
-                <option value="DIV">Diverse</option>
               </select>
               <i class="fa fa-2x fa-user tm-form-element-icon"></i>
             </div>
