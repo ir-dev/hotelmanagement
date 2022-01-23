@@ -128,18 +128,15 @@ export default {
     },
     getCategories() {
       if (this.form.arrivalDate && this.form.departureDate) {
-        let arrivalDate = new Date(this.form.arrivalDate); // Date |
-        let departureDate = new Date(this.form.departureDate); // Date |
-        console.log(arrivalDate);
         let apiInstance = new CategoryRestControllerApi();
-        apiInstance.availableCategoriesForBooking(arrivalDate, departureDate, (error, data, response) => {
+        apiInstance.availableCategoriesForBooking(this.form.arrivalDate, this.form.departureDate, (error, data, response) => {
           if (error) {
             console.error(error);
             alert(error.message);
           } else {
             console.log('API called successfully. Returned data: ' + data);
             this.categories = data
-            if (response.data.message) alert(response.data.message);
+            if (data.message) alert(data.message);
           }
         });
       }
@@ -153,6 +150,13 @@ export default {
             console.error(error);
           } else {
             console.log('API called successfully. Returned data: ' + data);
+            if (!data.message) {
+              document.getElementById("bookingForm").reset();
+              alert("Booking successfully created!");
+              document.getElementById("bookingForm").reset();
+            } else {
+              alert(data.message);
+            }
           }
         });
       } else {

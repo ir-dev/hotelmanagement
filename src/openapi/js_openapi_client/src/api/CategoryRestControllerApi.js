@@ -43,8 +43,8 @@ export default class CategoryRestControllerApi {
      */
 
     /**
-     * @param {Date} arrivalDate 
-     * @param {Date} departureDate 
+     * @param {String} arrivalDate 
+     * @param {String} departureDate 
      * @param {module:api/CategoryRestControllerApi~availableCategoriesForBookingCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link Array.<module:model/AvailableCategoryDTO>}
      */

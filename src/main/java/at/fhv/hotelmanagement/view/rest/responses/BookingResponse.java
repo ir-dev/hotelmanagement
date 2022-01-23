@@ -3,6 +3,8 @@ package at.fhv.hotelmanagement.view.rest.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.boot.jackson.JsonComponent;
 
+import java.util.Objects;
+
 @JsonComponent
 public class BookingResponse {
     private static final String STATUS_OK = "ok";
@@ -37,5 +39,23 @@ public class BookingResponse {
     @JsonProperty
     public String message() {
         return this.message;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BookingResponse that = (BookingResponse) o;
+        return Objects.equals(this.status, that.status) && Objects.equals(this.message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.status, this.message);
     }
 }
